@@ -11,12 +11,16 @@
             <h6 class="font-weight-bolder mb-0">{{ $titlePage }}</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+            
+            <!-- search bar line -->
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                 <div class="input-group input-group-outline">
-                    <label class="form-label">Type here...</label>
-                    <input type="text" class="form-control">
+                    <!-- <label class="form-label">Type here...</label>
+                    <input type="text" class="form-control"> -->
                 </div>
             </div>
+            <!-- end search bar line -->
+
             <form method="POST" action="{{ route('logout') }}" class="d-none" id="logout-form">
                 @csrf
             </form>
@@ -29,7 +33,8 @@
                             Out</span>
                     </a>
                 </li>
-                <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+
+                <!-- <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
                         <div class="sidenav-toggler-inner">
                             <i class="sidenav-toggler-line"></i>
@@ -37,13 +42,18 @@
                             <i class="sidenav-toggler-line"></i>
                         </div>
                     </a>
-                </li>
-                <li class="nav-item px-3 d-flex align-items-center">
+                </li> -->
+
+                <!-- setting line -->
+                <!-- <li class="nav-item px-3 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0">
                         <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
                     </a>
-                </li>
-                <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                </li> -->
+                <!-- end setting line -->
+
+                <!-- notification line -->
+                <!-- <li class="nav-item dropdown pe-2 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-bell cursor-pointer"></i>
@@ -125,7 +135,8 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
+                <!-- end notification line -->
             </ul>
         </div>
     </div>

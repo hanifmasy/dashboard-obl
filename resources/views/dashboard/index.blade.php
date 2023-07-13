@@ -4,6 +4,8 @@
         <!-- Navbar -->
         <x-navbars.navs.auth titlePage="Dashboard"></x-navbars.navs.auth>
         <!-- End Navbar -->
+
+        <!-- CARDS TOP -->
         <div class="container-fluid py-4">
             <div class="row">
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -83,6 +85,9 @@
                     </div>
                 </div>
             </div>
+            <!-- END CARDS TOP -->
+
+            <!-- MAIN MIDDLE CARDS -->
             <div class="row mt-4">
                 <div class="col-lg-4 col-md-6 mt-4 mb-4">
                     <div class="card z-index-2 ">
@@ -146,7 +151,11 @@
                     </div>
                 </div>
             </div>
+            <!-- END MIDDLE CARDS -->
+
+            <!-- BOTTOM GROUND -->
             <div class="row mb-4">
+                <!-- BOTTOM CARDS - LEFT SIDE - LARGE -->
                 <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
                     <div class="card">
                         <div class="card-header pb-0">
@@ -482,6 +491,9 @@
                         </div>
                     </div>
                 </div>
+                <!-- END BOTTOM CARDS - LEFT SIDE - LARGE -->
+
+                <!-- BOTTOM CARDS - RIGHT SIDE - MID SIZE -->
                 <div class="col-lg-4 col-md-6">
                     <div class="card h-100">
                         <div class="card-header pb-0">
@@ -560,6 +572,8 @@
                         </div>
                     </div>
                 </div>
+                <!-- END BOTTOM CARDS - RIGHT SIDE - MID SIZE -->
+
             </div>
             <x-footers.auth></x-footers.auth>
         </div>
