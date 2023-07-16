@@ -1,4 +1,4 @@
-<footer class="footer py-4  ">
+<footer class="footer py-4">
     <div class="container-fluid">
         <div class="row align-items-center justify-content-lg-between">
             <div class="col-lg-6 mb-lg-0 mb-4">
@@ -8,8 +8,8 @@
 
                     </script>,
                     made with <i class="fa fa-heart"></i> by
-                    <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Partner Invoicing & SDA Support</a> of
-                    <a href="https://www.updivision.com" class="font-weight-bold" target="_blank"> SDA Unit</a>
+                    <a href="#" class="font-weight-bold" target="_blank">Solution, Delivery & Assurance (SDA)</a>
+                    <a href="#" class="font-weight-bold" target="_blank"></a>
                     for a better web.
                 </div>
             </div>

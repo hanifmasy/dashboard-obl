@@ -8,7 +8,7 @@
 
                     </script>,
                     made with <i class="fa fa-heart" aria-hidden="true"></i> by
-                    <a href="#" class="font-weight-bold text-white" target="_blank">Partner Invoicing & SDA Support</a>
+                    <a href="#" class="font-weight-bold text-white" target="_blank">Partner Invoice & SDA Support</a>
                     for a better web.
                 </div>
             </div>

@@ -1,17 +1,3 @@
-<!--
-=========================================================
-* Material Dashboard 2 - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com) & UPDIVISION (https://www.updivision.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by www.creative-tim.com & www.updivision.com
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 @props(['bodyClass'])
 <!DOCTYPE html>
 <html lang="en">
@@ -20,10 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets') }}/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="{{ asset('assets') }}/img/favicon.png">
+    <!-- <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets') }}/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="{{ asset('assets') }}/img/favicon.png"> -->
     <title>
-        Dashboard OBL by Partner Invoicing & SDA Support
+        Dashboard OBL by SDA
     </title>
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
@@ -39,9 +25,15 @@
     <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
 </head>
 <body class="{{ $bodyClass }}">
+<style>
+        .hidden-leaf {
+            display: none;
+        }
+</style>
 
 {{ $slot }}
 
+<script src="{{ asset('assets') }}/js/jquery.min.js"></script>
 <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
 <script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/perfect-scrollbar.min.js"></script>
