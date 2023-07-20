@@ -21,6 +21,15 @@
                                     </div>
                                 </div>
                                 @endif 
+                                @if( session('error') )
+                                <br>
+                                <div class="alert alert-danger alert-dismissible">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <div style="color:white;" class="text-center">
+                                        <strong>{{ session('error') }}</strong>
+                                    </div>
+                                </div>
+                                @endif 
                             </div>
                             
 
@@ -40,8 +49,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <tr class="filterKontrak"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterKontrak"><td colspan="2"><h6 class="ps-2 opacity-7 text-sm">SKEMA OBL:</h6></td></tr>
+                                            <tr class="filterKontrak"><td colspan="2">
+                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Work Order ( WO ) </h6></button>
+                                                <button type="button" id="lanjutFilter" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Kontrak Layanan ( KL ) </h6></button>
+                                            </td></tr>
                                             <tr class="filterAwal"><td colspan="2"><hr></td></tr>
-                                            <tr class="filterAwal"><td colspan="2"><h6 class="ps-2 opacity-7 text-sm">FILTER FORM</h6></td></tr>
+                                            <tr class="filterAwal"><td colspan="2"><h6 class="ps-2 opacity-7 text-sm">FILTER KL</h6></td></tr>
                                             <tr class="filterAwal">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -89,7 +104,8 @@
                                                 </td>
                                             </tr>
                                             <tr class="filterAwal"><td colspan="2">
-                                                <button type="button" id="lanjutP2" class="btn bg-gradient-info w-100 my-4 mb-2"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
+                                                <button type="button" id="backKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
+                                                <button type="button" id="lanjutP2" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
                                             </td></tr>
                                             <!-- P2 -->
                                             <tr class="formP2"><td colspan="2"><hr></td></tr>
@@ -189,7 +205,7 @@
                                                 </td>
                                             </tr>
                                             <tr class="formP2"><td colspan="2">
-                                                <button type="button" id="backFilter" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali ke Filter</h6></button>
+                                                <button type="button" id="backFilter" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter KL</h6></button>
                                                 <button type="button" id="lanjutP3" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P3</h6></button>
                                             </td></tr>
                                             <!-- P3 -->
@@ -646,6 +662,7 @@
                                                 </td>
                                             </tr>
                                             <tr class="formWO"><td colspan="2">
+                                                <button type="button" id="backKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
                                                 <button type="button" id="backP8" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P8</h6></button>
                                                 <button type="button" id="lanjutKL" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form KL</h6></button>
                                             </td></tr>
@@ -1002,25 +1019,25 @@
         </main>
         <x-plugins></x-plugins>
         @push('js')
-        <script src="{{ asset('assets') }}/js/alertboot.min.js"></script>
         <script>
             $( document ).ready(function() {
 
-                $('.filterAwal').show();
-                $('.formP2').hide();
-                $('.formP3').hide();
-                $('.formP4').hide();
-                $('.formP5').hide();
-                $('.formP6').hide();
-                $('.formP7').hide();
-                $('.formP8').hide();
-                $('.formWO').hide();
-                $('.formKL').hide();
-                $('.formP5-baru').hide();
-                $('.formP6-baru').hide();
-                $('.diatas-100').hide();
-                $('.dibawah-100').hide();
-                $('.status_rapat_pengadaan').hide();
+                //$('.filterKontrak').show();
+                // $('.filterAwal').hide();
+                // $('.formP2').hide();
+                // $('.formP3').hide();
+                // $('.formP4').hide();
+                // $('.formP5').hide();
+                // $('.formP6').hide();
+                // $('.formP7').hide();
+                // $('.formP8').hide();
+                // $('.formWO').hide();
+                // $('.formKL').hide();
+                // $('.formP5-baru').hide();
+                // $('.formP6-baru').hide();
+                // $('.diatas-100').hide();
+                // $('.dibawah-100').hide();
+                // $('.status_rapat_pengadaan').hide();
                 $('#formObl')[0].reset();
 
                 $('input[type=radio][name=status_rapat_pengadaan]').change(function() {
@@ -1052,7 +1069,19 @@
                     }
                 });
 
-                $('#lanjutP2').click(function(){ $('.filterAwal').hide(); $('.formP2').show(); }); 
+                var checkWO2 = false;
+                $('#lanjutWO2').click(function(){ 
+                    checkWO2 = true;
+                    $('.filterKontrak').hide(); $('.formWO').show(); 
+                    if(checkWO2 === true){ $('#backP8').hide(); $('#backKontrak').show(); }
+                });
+                $('#lanjutFilter').click(function(){ $('.filterKontrak').hide(); $('.filterAwal').show(); });
+                
+                $('#backKontrak').click(function(){ 
+                    if(checkWO2 === true){ $('.formWO').hide(); $('.filterKontrak').show(); checkWO2 = false; }
+                    else{ $('.filterAwal').hide(); $('.filterKontrak').show(); }
+                });
+                $('#lanjutP2').click(function(){ $('.filterAwal').hide(); $('.formP2').show(); });
                 
                 $('#backFilter').click(function(){ $('.formP2').hide(); $('.filterAwal').show(); }); 
                 $('#lanjutP3').click(function(){ $('.formP2').hide(); $('.formP3').show(); });
@@ -1092,7 +1121,10 @@
                     if(view_diatas_100=='1'){ $('.formP8').hide(); $('.formP7').show(); $('.dibawah-100').hide(); $('.diatas-100').show();   }
                     else if(view_diatas_100=='0'){ $('.formSP').hide(); $('.formP7').show(); $('.dibawah-100').show(); $('.diatas-100').hide();   }
                 });
-                $('#lanjutWO').click(function(){ $('.formP8').hide(); $('.formWO').show(); });
+                $('#lanjutWO').click(function(){
+                    $('.formP8').hide(); $('.formWO').show();
+                    $('#backKontrak').hide(); $('#backP8').show();
+                });
 
                 $('#backP8').click(function(){ $('.formWO').hide(); $('.formP8').show();  });
 

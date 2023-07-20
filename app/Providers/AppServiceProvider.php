@@ -24,9 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // URL::forceRootUrl(config('app.url'));
         // if(app()->environment('remote')){
         //     URL::forceScheme('https');
         // }
-        // setting di atas dilink pada folder config > file app.php
     }
 }

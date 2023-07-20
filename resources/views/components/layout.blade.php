@@ -26,7 +26,22 @@
 </head>
 <body class="{{ $bodyClass }}">
 <style>
-        .hidden-leaf {
+        .hidden-leaf,
+        .filterAwal,
+        .formP2,
+        .formP3,
+        .formP4,
+        .formP5,
+        .formP6,
+        .formP7,
+        .formP8,
+        .formWO,
+        .formKL,
+        .formP5-baru,
+        .formP6-baru,
+        .diatas-100,
+        .dibawah-100,
+        .status_rapat_pengadaan {
             display: none;
         }
 </style>
@@ -34,6 +49,7 @@
 {{ $slot }}
 
 <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
+<script src="{{ asset('assets') }}/js/alertboot.min.js"></script>
 <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
 <script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/perfect-scrollbar.min.js"></script>

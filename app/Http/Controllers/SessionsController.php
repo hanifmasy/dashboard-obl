@@ -34,7 +34,6 @@ class SessionsController extends Controller
 
         // return redirect('/dashboard');
         return redirect('inputs');
-
     }
 
     public function show(){
