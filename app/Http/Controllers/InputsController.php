@@ -51,6 +51,7 @@ class InputsController extends Controller
             $tgl_p2 = Carbon::create($Y,$m,$d,0)->addDay(1);
 
             $arr_tanggal_final = [];
+            $arr_tanggal_taken = [];
             $cek = null;
             $tanggal_cek = null;
             $tanggal_sebelum = $tgl_p2;
@@ -70,7 +71,7 @@ class InputsController extends Controller
                 if($query_takah){
                   $cek = true;
                   //array_push($arr_tanggal_final,[$string_tgl,$query_takah->id,$query_takah->takah_1]);
-                  array_push($arr_tanggal_final,[$string_tgl,$query_takah->takah_1]);
+                  array_push($arr_tanggal_final,[$query_takah->id,$string_tgl,$query_takah->takah_1]);
                   $tanggal_sebelum = $tanggal_cek->addDay(1);
                 }
                 else{
@@ -81,32 +82,33 @@ class InputsController extends Controller
             }
             // dd( $arr_tanggal_final );
 
+            $arr_tanggal_taken = $arr_tanggal_final;
             // append filtered array data
             // append user id
             $filtered->put('user_id',$user_id);
             // append tanggal dokumen
-            $filtered->put('p2_tgl_p2',$arr_tanggal_final[0][0]);
-            $filtered->put('p3_tgl_p3',$arr_tanggal_final[1][0]);
-            $filtered->put('p4_tgl_p4',$arr_tanggal_final[2][0]);
-            $filtered->put('p5_tgl_p5',$arr_tanggal_final[3][0]);
-            $filtered->put('p6_tgl_p6',$arr_tanggal_final[4][0]);
-            $filtered->put('p7_tgl_p7',$arr_tanggal_final[5][0]);
+            $filtered->put('p2_tgl_p2',$arr_tanggal_final[0][1]);
+            $filtered->put('p3_tgl_p3',$arr_tanggal_final[1][1]);
+            $filtered->put('p4_tgl_p4',$arr_tanggal_final[2][1]);
+            $filtered->put('p5_tgl_p5',$arr_tanggal_final[3][1]);
+            $filtered->put('p6_tgl_p6',$arr_tanggal_final[4][1]);
+            $filtered->put('p7_tgl_p7',$arr_tanggal_final[5][1]);
             if($request->submit){
-              if($request->submit === 'submit_wo'){ $filtered->put('wo_tgl_wo',$arr_tanggal_final[6][0]); }
-              if($request->submit === 'submit_sp'){ $filtered->put('sp_tgl_sp',$arr_tanggal_final[6][0]); }
+              if($request->submit === 'submit_wo'){ $filtered->put('wo_tgl_wo',$arr_tanggal_final[6][1]); }
+              if($request->submit === 'submit_sp'){ $filtered->put('sp_tgl_sp',$arr_tanggal_final[6][1]); }
               if($request->submit === 'submit_kl'){
-                $filtered->put('p8_tgl_p8',$arr_tanggal_final[6][0]);
-                $filtered->put('kl_tgl_kl',$arr_tanggal_final[7][0]);
+                $filtered->put('p8_tgl_p8',$arr_tanggal_final[6][1]);
+                $filtered->put('kl_tgl_kl',$arr_tanggal_final[7][1]);
               }
             }
             // append takah p3,p7,p8,wo,sp,kl
-            $arr_tanggal_final[1][0] = new Carbon( $arr_tanggal_final[1][0] );
-            $arr_tanggal_final[1][0] = $arr_tanggal_final[1][0]->year;
-            $filtered->put('p3_takah_p3', 'TEL.' . $arr_tanggal_final[1][1] . '/LG.220/TR6-603/' . $arr_tanggal_final[1][0]);
+            $arr_tanggal_final[1][1] = new Carbon( $arr_tanggal_final[1][1] );
+            $arr_tanggal_final[1][1] = $arr_tanggal_final[1][1]->year;
+            $filtered->put('p3_takah_p3', 'TEL.' . $arr_tanggal_final[1][2] . '/LG.220/TR6-603/' . $arr_tanggal_final[1][1]);
 
-            $arr_tanggal_final[5][0] = new Carbon( $arr_tanggal_final[5][0] );
-            $arr_tanggal_final[5][0] = $arr_tanggal_final[5][0]->year;
-            $filtered->put('p7_takah_p7', 'TEL.' . $arr_tanggal_final[5][1] . '/LG.270/TR6-603/' . $arr_tanggal_final[5][0]);
+            $arr_tanggal_final[5][1] = new Carbon( $arr_tanggal_final[5][1] );
+            $arr_tanggal_final[5][1] = $arr_tanggal_final[5][1]->year;
+            $filtered->put('p7_takah_p7', 'TEL.' . $arr_tanggal_final[5][2] . '/LG.270/TR6-603/' . $arr_tanggal_final[5][1]);
 
             // Kontrak Baru / Perpanjangan
             $jenis_kontrak = '';
@@ -125,31 +127,67 @@ class InputsController extends Controller
 
             if($request->submit){
               if($request->submit === 'submit_wo'){
-                $arr_tanggal_final[6][0] = new Carbon( $arr_tanggal_final[6][0] );
-                $arr_tanggal_final[6][0] = $arr_tanggal_final[6][0]->year;
-                $filtered->put('wo_takah_wo', 'K.TEL.' . $arr_tanggal_final[6][1] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][0]);
+                $arr_tanggal_final[6][1] = new Carbon( $arr_tanggal_final[6][1] );
+                $arr_tanggal_final[6][1] = $arr_tanggal_final[6][1]->year;
+                $filtered->put('wo_takah_wo', 'K.TEL.' . $arr_tanggal_final[6][2] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][1]);
               }
               if($request->submit === 'submit_sp'){
-                $arr_tanggal_final[6][0] = new Carbon( $arr_tanggal_final[6][0] );
-                $arr_tanggal_final[6][0] = $arr_tanggal_final[6][0]->year;
-                $filtered->put('sp_takah_sp', 'K.TEL.' . $arr_tanggal_final[6][1] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][0]);
+                $arr_tanggal_final[6][1] = new Carbon( $arr_tanggal_final[6][1] );
+                $arr_tanggal_final[6][1] = $arr_tanggal_final[6][1]->year;
+                $filtered->put('sp_takah_sp', 'K.TEL.' . $arr_tanggal_final[6][2] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][1]);
               }
               if($request->submit === 'submit_kl'){
-                $arr_tanggal_final[6][0] = new Carbon( $arr_tanggal_final[6][0] );
-                $arr_tanggal_final[6][0] = $arr_tanggal_final[6][0]->year;
-                $filtered->put('p8_takah_p8', 'TEL.' . $arr_tanggal_final[6][1] . '/LG.270/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][0]);
+                $arr_tanggal_final[6][1] = new Carbon( $arr_tanggal_final[6][1] );
+                $arr_tanggal_final[6][1] = $arr_tanggal_final[6][1]->year;
+                $filtered->put('p8_takah_p8', 'TEL.' . $arr_tanggal_final[6][2] . '/LG.270/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][1]);
 
-                $arr_tanggal_final[7][0] = new Carbon( $arr_tanggal_final[7][0] );
-                $arr_tanggal_final[7][0] = $arr_tanggal_final[7][0]->year;
-                $filtered->put('kl_takah_kl', 'K.TEL.' . $arr_tanggal_final[7][1] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[7][0]);
+                $arr_tanggal_final[7][1] = new Carbon( $arr_tanggal_final[7][1] );
+                $arr_tanggal_final[7][1] = $arr_tanggal_final[7][1]->year;
+                $filtered->put('kl_takah_kl', 'K.TEL.' . $arr_tanggal_final[7][2] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[7][1]);
               }
             }
 
-            // insert data to obl database
-            $id = DB::connection('pgsql')->table('form_obl')
+
+            // INSERT DATA TO OBL DATABASE
+            $obl_id = DB::connection('pgsql')->table('form_obl')
             ->insertGetId(
                 $filtered->all()
             );
+            // CHECK TABEL TAKAH
+            $arr_tanggal_checked = [];
+            foreach($arr_tanggal_taken as $value){
+              array_push($value,$obl_id);
+              array_push($value,'');
+              array_push( $arr_tanggal_checked, $value );
+            }
+            for($i = 0; $i < 6; $i++){
+              $arr_tanggal_checked[$i][3] = 'P' . ($i + 2);
+            }
+            if($request->submit){
+              if($request->submit === 'submit_wo'){
+                $arr_tanggal_checked[6][3] = 'WO';
+                array_splice($arr_tanggal_checked,7);
+              }
+              if($request->submit === 'submit_sp'){
+                $arr_tanggal_checked[6][3] = 'SP';
+                array_splice($arr_tanggal_checked,7);
+              }
+              if($request->submit === 'submit_kl'){
+                $arr_tanggal_checked[6][3] = 'P8';
+                $arr_tanggal_checked[7][3] = 'KL';
+              }
+            }
+            foreach($arr_tanggal_checked as $value){
+              DB::connection('pgsql')->table('form_takah')
+              ->where('id',$value[0])
+              ->update(
+                  [
+                    'status_taken' => true,
+                    'obl_id' => $value[2],
+                    'tipe_form' => $value[3]
+                  ]
+              );
+            }
 
             // INPUT P4 ATTENDEES
             if($request->p4_attendees){
@@ -158,7 +196,7 @@ class InputsController extends Controller
                     array_push(
                         $array_insert,
                         [
-                            'obl_id' => $id,
+                            'obl_id' => $obl_id,
                             'p4_attendees' => $value
                         ]
                     );
