@@ -27,15 +27,20 @@
 <body class="{{ $bodyClass }}">
 <style>
         .hidden-leaf,
+        /* .filterKontrak, */
         .filterAwal,
+        #lanjutP2,
         .formP2,
         .formP3,
         .formP4,
         .formP5,
         .formP6,
         .formP7,
+        .formSP,
         .formP8,
         .formWO,
+        #backKontrak2,
+        #tanggalFO,
         .formKL,
         .formP5-baru,
         .formP6-baru,
@@ -44,6 +49,7 @@
         .status_rapat_pengadaan {
             display: none;
         }
+
 </style>
 
 {{ $slot }}

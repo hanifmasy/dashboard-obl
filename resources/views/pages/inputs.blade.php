@@ -2,7 +2,7 @@
         <x-navbars.sidebar activePage="inputs"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="Input Form"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="Input Form OBL"></x-navbars.navs.auth>
             <!-- End Navbar -->
             <div class="container-fluid py-4">
                 <div class="row">
@@ -20,7 +20,7 @@
                                         <strong>{{ session('status') }}</strong>
                                     </div>
                                 </div>
-                                @endif 
+                                @endif
                                 @if( session('error') )
                                 <br>
                                 <div class="alert alert-danger alert-dismissible">
@@ -29,12 +29,12 @@
                                         <strong>{{ session('error') }}</strong>
                                     </div>
                                 </div>
-                                @endif 
+                                @endif
                             </div>
-                            
+
 
                             <form id="formObl" action="{{ route('inputs.create') }}" method="POST" enctype="multipart/form-data">
-                            @csrf 
+                            @csrf
                             <div class="card-body px-0 pb-2">
                                 <div class="table-responsive p-0">
                                     <table class="table align-items-center mb-0">
@@ -42,38 +42,238 @@
                                             <tr class="kepala">
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Nama Inputan</th>
+                                                    Nama Inputan
+                                                </th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                    Isian Inputan</th>
+                                                    Isian Inputan
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <!-- filter kontrak -->
                                             <tr class="filterKontrak"><td colspan="2"><hr></td></tr>
-                                            <tr class="filterKontrak"><td colspan="2"><h6 class="ps-2 opacity-7 text-sm">SKEMA OBL:</h6></td></tr>
-                                            <tr class="filterKontrak"><td colspan="2">
-                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Work Order ( WO ) </h6></button>
-                                                <button type="button" id="lanjutFilter" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Kontrak Layanan ( KL ) </h6></button>
-                                            </td></tr>
-                                            <tr class="filterAwal"><td colspan="2"><hr></td></tr>
-                                            <tr class="filterAwal"><td colspan="2"><h6 class="ps-2 opacity-7 text-sm">FILTER KL</h6></td></tr>
-                                            <tr class="filterAwal">
+                                            <tr class="filterKontrak">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
-                                                            <!-- <p class="text-xs text-secondary mb-0">
-                                                                laurent@creative-tim.com</p> -->
+                                                            <h6 class="mb-0 text-sm">Pelanggan</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="jenis_kotrak" name="jenis_kotrak" value="perpanjangan">
-                                                        <label for="jenis_kotrak"> Perpanjangan KL Eksisting</label><br>
-                                                        <input type="radio" id="jenis_kotrak" name="jenis_kotrak" value="baru">
-                                                        <label for="jenis_kotrak"> Kontrak Baru</label><br>
+                                                        <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN"><br><br>
+                                                        <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN"></textarea>
                                                 </td>
                                             </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Witel</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                        <select name="f1_witel" id="f1_witel">
+                                                            <option value="" disabled selected>Pilih Witel</option>
+                                                            <option value="BALIKPAPAN">BALIKPAPAN</option>
+                                                            <option value="KALBAR">KALBAR</option>
+                                                            <option value="KALTENG">KALTENG</option>
+                                                            <option value="KALSEL">KALSEL</option>
+                                                            <option value="KALTARA">KALTARA</option>
+                                                            <option value="SAMARINDA">SAMARINDA</option>
+                                                        </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Judul Projek</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Segmen</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="f1_segmen" id="f1_segmen">
+                                                        <option value="" disabled selected>Pilih Segmen</option>
+                                                        <option value="DES">DES</option>
+                                                        <option value="DGS">DGS</option>
+                                                        <option value="DBS">DBS</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nilai KB</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-"><br>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">No. KFS / SPK</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:350px;" type="text" name="f1_no_kfs_spk" id="f1_no_kfs_spk">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Quote</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor Akun</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                        <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan">
+                                                        <label for="jenis_kontrak"> Amandemen</label><br>
+                                                        <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru">
+                                                        <label for="jenis_kontrak"> Pasang Baru</label><br>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Skema Bayar</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                        <select name="f1_skema_bayar" id="f1_skema_bayar">
+                                                            <option value="" disabled selected>Pilih Skema</option>
+                                                            <option value="otc">OTC</option>
+                                                            <option value="recurring">Recurring</option>
+                                                            <option value="termin">Termin</option>
+                                                            <option value="otc_recurring">OTC Recurring</option>
+                                                        </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Status Order</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                        <select name="f1_status_order" id="f1_status_order">
+                                                            <option value="" disabled selected>Pilih Status</option>
+                                                            <option value="inprogress_provision_issued">In Progress - Provision Issued</option>
+                                                            <option value="inprogress_provision_start">In Progress - Provision Start</option>
+                                                            <option value="inprogress_provision_failed">In Progress - Provision Failed</option>
+                                                            <option value="inprogress_provision_complete">In Progress - Provision Complete</option>
+                                                            <option value="inprogress_pending_billing">In Progress - Pending Billing</option>
+                                                            <option value="inprogress_tsq_start">In Progress - TSQ Start</option>
+                                                            <option value="inprogress_provision_designed">In Progress - Provision Designed</option>
+                                                            <option value="approval">Approval</option>
+                                                            <option value="submit">Submit</option>
+                                                            <option value="failed_provision_failed">Failed - Provision Failed</option>
+                                                            <option value="inprogress_fullfill_billing_start">In Progress - Fullfill Billing Start</option>
+                                                            <option value="pending_baso">Pending BASO</option>
+                                                            <option value="failed_fullfill_billing_failed">Failed - Fullfill Billing Failed</option>
+                                                            <option value="fullfill_billing_complete">Fullfill Billing Complete</option>
+                                                            <option value="abandoned">Abandoned</option>
+                                                            <option value="pending_cancel">Pending Cancel</option>
+                                                            <option value="complete">Complete</option>
+                                                            <option value="cancel">Cancel</option>
+                                                        </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Keterangan</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nama Anak Perusahaan / Mitra</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:450px;" type="text" name="f1_nama_mitra" id="f1_nama_mitra">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">PIC Mitra</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:450px;" type="text" name="f1_pic_mitra" id="f1_pic_mitra">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterKontrak"><td colspan="2"><h6 class="ps-2">SKEMA OBL</h6></td></tr>
+                                            <tr class="filterKontrak"><td colspan="2">
+                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Work Order ( WO ) </h6></button>
+                                                <button type="button" id="lanjutFilter" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Kontrak Layanan ( KL ) </h6></button>
+                                                <button type="submit" name="submit" value="draf_filter_kontrak" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                            </td></tr>
+                                            <tr class="filterAwal"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterAwal"><td colspan="2" id="judulFilter"><h6 class="ps-2">FILTER KL</h6></td></tr>
                                             <tr class="filterAwal">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -85,13 +285,13 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="nilai_kontrak" name="nilai_kontrak" value="dibawah_100">
-                                                        <label for="nilai_kontrak"> < 100 Juta</label><br>
-                                                        <input type="radio" id="nilai_kontrak" name="nilai_kontrak" value="diatas_100">
-                                                        <label for="nilai_kontrak"> > 100 Juta</label><br>
+                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="dibawah_100">
+                                                        <label for="f2_nilai_kontrak"> < 100 Juta</label><br>
+                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="diatas_100">
+                                                        <label for="f2_nilai_kontrak"> > 100 Juta</label><br>
                                                 </td>
                                             </tr>
-                                            <tr class="filterAwal">
+                                            <tr class="filterAwal hide-filterkl">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
@@ -100,28 +300,19 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="tgl_p1" id="tgl_p1">
+                                                    <input type="date" name="f2_tgl_p1" id="f2_tgl_p1">
                                                 </td>
                                             </tr>
+                                            <tr class="filterAwal"><td colspan="2"><hr></td></tr>
                                             <tr class="filterAwal"><td colspan="2">
                                                 <button type="button" id="backKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
-                                                <button type="button" id="lanjutP2" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
+                                                <button type="button" id="lanjutP2" class="btn bg-gradient-info hide-filterkl"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
+                                                <button type="submit" name="submit" value="draf_filter_kl" id="saveDraf" class="hide-filterkl save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P2 -->
                                             <tr class="formP2"><td colspan="2"><hr></td></tr>
-                                            <tr class="formP2"><td colspan="2"><h6 class="opacity-7 text-sm">FORM P2 – EVALUASI DAN PENETAPAN BAKAL CALON MITRA PELAKSANA </h6></td></tr>
-                                            <tr class="formP2">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Judul Projek</h6> 
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <textarea type="text" cols="50" rows="2" name="judul_projek" id="judul_projek"></textarea>
-                                                </td>
-                                            </tr>
+                                            <tr class="formP2"><td colspan="2"><h6 class="ps-2">FORM P2 – EVALUASI DAN PENETAPAN BAKAL CALON MITRA PELAKSANA </h6></td></tr>
+
                                             <tr class="formP2">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -131,22 +322,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <textarea type="text" cols="50" rows="2" name="lingkup_kerja" id="lingkup_kerja"></textarea>
+                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja"></textarea>
                                                 </td>
                                             </tr>
-                                            <tr class="formP2">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nama Anak Perusahaan / Mitra</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="nama_mitra" id="nama_mitra" style="width:350px;">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP2">
+                                            <!-- <tr class="formP2">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
@@ -158,6 +337,18 @@
                                                     <input type="text" name="dibuat_oleh" id="dibuat_oleh" placeholder="NAMA/NIK">
                                                     <input type="text" name="dibuat_oleh_jabatan" id="dibuat_oleh_jabatan" placeholder="JABATAN">
                                                 </td>
+                                            </tr> -->
+                                            <tr class="formP2">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Justifikasi Kebutuhan Penyedia Jasa dan Barang</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="p2_tgl_justifikasi" id="p2_tgl_justifikasi">
+                                                </td>
                                             </tr>
                                             <tr class="formP2">
                                                 <td>
@@ -168,21 +359,28 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="dievaluasi_oleh" id="dievaluasi_oleh" placeholder="NAMA/NIK">
-                                                    <input type="text" name="dievaluasi_oleh_jabatan" id="dievaluasi_oleh_jabatan" placeholder="JABATAN">
+                                                    <select name="p2_dievaluasi_oleh" id="p2_dievaluasi_oleh">
+                                                        <option value="" disabled selected>Pilih dievaluasi oleh</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                    </select>
                                                 </td>
                                             </tr>
                                             <tr class="formP2">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Disetujui dan Ditetapkan Oleh</h6>
+                                                            <h6 class="mb-0 text-sm">Disetujui Oleh</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="disetujui_oleh" id="disetujui_oleh" placeholder="NAMA/NIK">
-                                                    <input type="text" name="disetujui_oleh_jabatan" id="disetujui_oleh_jabatan" placeholder="JABATAN">
+                                                    <select name="p2_disetujui_oleh" id="p2_disetujui_oleh">
+                                                        <option value="" disabled selected>Pilih disetujui oleh</option>
+                                                        <option value="Hariyadi_800031">Subroto Marzuki - 740130</option>
+                                                        <option value="Yayan_Nuryana_710516">Taufik - 730206</option>
+                                                    </select>
                                                 </td>
                                             </tr>
                                             <tr class="formP2">
@@ -194,23 +392,25 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="catatan_p2_pilihan" name="catatan_p2_pilihan" value="setuju">
-                                                        <label for="catatan_p2_pilihan"> Setuju</label><br>
-                                                        <input type="radio" id="catatan_p2_pilihan" name="catatan_p2_pilihan" value="setuju_dgn_catatan">
-                                                        <label for="catatan_p2_pilihan"> Setuju dengan Catatan</label><br>
-                                                        <input type="radio" id="catatan_p2_pilihan" name="catatan_p2_pilihan" value="tidak_setuju">
-                                                        <label for="catatan_p2_pilihan"> Tidak Setuju</label><br>
-                                                        <textarea name="catatan_p2" id="catatan_p2" cols="50" rows="5"></textarea>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju">
+                                                        <label for="p2_pilihan_catatan"> Setuju</label><br>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju_dgn_catatan">
+                                                        <label for="p2_pilihan_catatan"> Setuju dengan Catatan</label><br>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="tidak_setuju">
+                                                        <label for="p2_pilihan_catatan"> Tidak Setuju</label><br>
+                                                        <textarea name="p2_catatan" id="p2_catatan" cols="50" rows="2"></textarea>
 
                                                 </td>
                                             </tr>
+                                            <tr class="formP2"><td colspan="2"><hr></td></tr>
                                             <tr class="formP2"><td colspan="2">
                                                 <button type="button" id="backFilter" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter KL</h6></button>
                                                 <button type="button" id="lanjutP3" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P3</h6></button>
+                                                <button type="submit" name="submit" value="draf_p2" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P3 -->
                                             <tr class="formP3"><td colspan="2"><hr></td></tr>
-                                            <tr class="formP3"><td colspan="2"><h6 class="opacity-7 text-sm">FORM P3</h6></td></tr>
+                                            <tr class="formP3"><td colspan="2"><h6 class="ps-2">FORM P3 – UNDANGAN PERMINTAAN DAN PENAWARAN HARGA</h6></td></tr>
                                             <tr class="formP3">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -220,33 +420,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="pejabat_mitra_nama" id="pejabat_mitra_nama" style="width:350px;" placeholder="NAMA PEJABAT"><br>
-                                                    <input type="text" name="pejabat_mitra_alamat" id="pejabat_mitra_alamat" style="width:350px;" placeholder="ALAMAT"><br>
-                                                    <input type="text" name="pejabat_mitra_telepon" id="pejabat_mitra_telepon" style="width:350px;" placeholder="TELEPON">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP3">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nama Unit Bisnis Telkom</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="nama_unit_telkom" id="nama_unit_telkom" style="width:350px;">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP3">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nama Pelanggan Telkom</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="nama_plggn_telkom" id="nama_plggn_telkom" style="width:350px;">
+                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" placeholder="NAMA PEJABAT"><br>
+                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;" placeholder="ALAMAT"></textarea><br>
+                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" placeholder="TELEPON">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -260,10 +436,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="radio" name="status_rapat_pengadaan" id="status_rapat_pengadaan" value="ada"><label for="status_rapat_pengadaan">Ada</label><br>
-                                                    <input type="radio" name="status_rapat_pengadaan" id="status_rapat_pengadaan" value="nada"><label for="status_rapat_pengadaan">Tidak Ada</label><br>
-                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="tgl_rapat_pengadaan" id="tgl_rapat_pengadaan" style="width:350px;"> WIB</div>
-                                                    <input class="status_rapat_pengadaan" type="text" name="tmpt_rapat_pengadaan" id="tmpt_rapat_pengadaan" style="width:350px;" placeholder="TEMPAT RAPAT">
+                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada"><label for="p3_status_rapat_pengadaan">Ada</label><br>
+                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada"><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
+                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;"> WIB</div>
+                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" placeholder="TEMPAT RAPAT">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -272,172 +448,56 @@
                                                         <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Surat Penawaran Mitra</h6>
                                                             <p class="text-xs text-secondary mb-0">
-                                                                Tenggat Waktu Menerima Surat Penawaran Mitra ke Telkom</p>
+                                                                Tenggat Waktu Surat Penawaran Mitra ke Telkom</p>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="datetime-local" name="tgl_terima_sp" id="tgl_terima_sp" style="width:350px;"> WIB<br>
-                                                    <input type="text" name="alamat_terima_sp" id="alamat_terima_sp" style="width:350px;" placeholder="ALAMAT PENYERAHAN DOKUMEN">
+                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;"> WIB<br>
+                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" placeholder="ALAMAT PENYERAHAN DOKUMEN">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nama Manager OBL</h6>
+                                                            <h6 class="mb-0 text-sm">Manager</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="manager_obl" id="manager_obl" style="width:350px;" placeholder="">
+                                                    <select name="p3_manager_obl" id="p3_manager_obl">
+                                                        <option value="" disabled selected>Pilih manager</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                    </select>
                                                 </td>
                                             </tr>
+                                            <tr class="formP3"><td colspan="2"><hr></td></tr>
                                             <tr class="formP3"><td colspan="2">
                                                 <button type="button" id="backP2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P2</h6></button>
                                                 <button type="button" id="lanjutP4" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P4</h6></button>
+                                                <button type="submit" name="submit" value="draf_p3" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P4 -->
                                             <tr class="formP4"><td colspan="2"><hr></td></tr>
-                                            <tr class="formP4"><td colspan="2"><h6 class="opacity-7 text-sm">FORM P4 – BERITA ACARA RAPAT PENJELASAN</h6></td></tr>
+                                            <tr class="formP4"><td colspan="2"><h6 class="ps-2">FORM P4 – BERITA ACARA RAPAT PENJELASAN</h6></td></tr>
                                             <tr class="formP4">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nama Attendees</h6>
-                                                            <p class="text-xs text-secondary mb-0">
-                                                                Perwakilan yang Hadir Rapat Penjelasan Pengadaan</p>
+                                                            <h6 class="mb-0 text-sm">Tanggal SPH</h6>
+                                                            <!-- <p class="text-xs text-secondary mb-0">
+                                                                Perwakilan yang Hadir Rapat Penjelasan Pengadaan</p> -->
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="rapat_wakil_obl" id="rapat_wakil_obl" style="width:350px;" placeholder="Perwakilan Unit pelaksana OBL"><br>
-                                                    <input type="text" name="rapat_wakil_instalator" id="rapat_wakil_instalator" style="width:350px;" placeholder="Perwakilan Unit Instalator"><br>
-                                                    <input type="text" name="rapat_wakil_mitra" id="rapat_wakil_mitra" style="width:350px;" placeholder="Perwakilan Anak perusahaan / Mitra">
+                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph">
                                                 </td>
                                             </tr>
-                                            <tr class="formP4"><td colspan="2">
-                                                <button type="button" id="backP3" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P3</h6></button>
-                                                <button type="button" id="lanjutP5" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P5</h6></button>
-                                            </td></tr>
-                                            <!-- P5 -->
-                                            <tr class="formP5"><td colspan="2"><hr></td></tr>
-                                            <tr class="formP5"><td colspan="2"><h6 class="opacity-7 text-sm">FORM P5 – BERITA ACARA EVALUASI <i>INDICATIVE OFFERING</i></h6></td></tr>
-                                            <tr class="formP5">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Kelengkapan Administrasi</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="lengkap_admin" id="lengkap_admin" value="lengkap"><label for="lengkap_admin">Lengkap</label><br>
-                                                    <input type="radio" name="lengkap_admin" id="lengkap_admin" value="tidak_lengkap"><label for="lengkap_admin">Tidak Lengkap, </label>
-                                                    <textarea cols="30" rows="1" name="catatan_lengkap_admin" id="catatan_lengkap_admin" placeholder="CATATAN"></textarea>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP5">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Kesesuaian Teknis dengan permintaan Customer</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="sesuai_teknis" id="sesuai_teknis" value="sesuai"><label for="sesuai_teknis">Sesuai</label><br>
-                                                    <input type="radio" name="sesuai_teknis" id="sesuai_teknis" value="tidak_sesuai"><label for="sesuai_teknis">Tidak Sesuai, </label>
-                                                    <textarea cols="30" rows="1" name="catatan_sesuai_teknis" id="catatan_sesuai_teknis" placeholder="CATATAN"></textarea>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP5-baru">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Harga Penawaran Total (Sebelum PPN)</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td >
-                                                    <input class="rupiahs" type="text" name="harga_penawaran" id="harga_penawaran" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-"><br>
-                                                    <input type="radio" name="negosiasi" id="negosiasi" value="negosiasi"><label for="negosiasi">Negosiasi</label>
-                                                    <input type="radio" name="negosiasi" id="negosiasi" value="tidak_negosiasi"><label for="negosiasi">Tidak Perlu Negosiasi</label>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP5">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Klarifikasi Lebih Lanjut</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="klarifikasi_lanjut" id="klarifikasi_lanjut" value="perlu"><label for="klarifikasi_lanjut">Perlu</label>
-                                                    <input type="radio" name="klarifikasi_lanjut" id="klarifikasi_lanjut" value="tidak_perlu"><label for="klarifikasi_lanjut">Tidak Perlu</label><br>
-                                                    <textarea name="alt_lain" id="alt_lain" cols="50" rows="2" placeholder="REKOMENDASI ALTERNATIF LAIN"></textarea>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP5"><td colspan="2">
-                                                <button type="button" id="backP4" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P4</h6></button>
-                                                <button type="button" id="lanjutP6" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P6</h6></button>
-                                            </td></tr>
-                                            <!-- P6 -->
-                                            <tr class="formP6"><td colspan="2"><hr></td></tr>
-                                            <tr class="formP6"><td colspan="2"><h6 class="opacity-7 text-sm">FORM P6 – BERITA ACARA KLARIFIKASI DAN NEGOSIASI</h6></td></tr>
-                                            <tr class="formP6">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Peserta Rapat dari Mitra</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="rapat_wakil_mitra_1" id="rapat_wakil_mitra_1" style="width:350px;" placeholder="NAMA - JABATAN MITRA"><br>
-                                                    <input type="text" name="rapat_wakil_mitra_2" id="rapat_wakil_mitra_2" style="width:350px;" placeholder="NAMA - JABATAN MITRA"><br>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP6-baru">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Skema Bisnis</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="skema_bisnis" id="skema_bisnis" value="sewa_murni"><label for="skema_bisnis">Sewa Murni</label><br>
-                                                    <input type="radio" name="skema_bisnis" id="skema_bisnis" value="sewa_beli"><label for="skema_bisnis">Sewa Beli</label><br>
-                                                    <input type="radio" name="skema_bisnis" id="skema_bisnis" value="beli_putus"><label for="skema_bisnis">Pengadaan Beli Putus</label>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP6-baru">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Skema Pembayaran</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="skema_pembayaran" id="skema_pembayaran" style="width:350px;" placeholder="">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP6-baru">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Lokasi Instalasi / Layanan</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="lokasi_layanan" id="lokasi_layanan" style="width:350px;" placeholder="">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP6-baru">
+                                            <tr class="formP4">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
@@ -446,10 +506,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="waktu_layanan" id="waktu_layanan" style="width:350px;" placeholder="">
+                                                    <input type="date" name="p4_waktu_layanan" id="p4_waktu_layanan">
                                                 </td>
                                             </tr>
-                                            <tr class="formP6-baru">
+                                            <tr class="formP4">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
@@ -458,39 +518,109 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="masa_layanan" id="masa_layanan" min="0" style="width:80px;">
-                                                    <select name="satuan_masa_layanan" id="satuan_masa_layanan">
+                                                    <input type="number" name="p4_masa_layanan" id="p4_masa_layanan" min="0" style="width:80px;">
+                                                    <select name="p4_satuan_masa_layanan" id="p4_satuan_masa_layanan">
                                                         <option value="hari">hari</option>
                                                         <option value="bulan">bulan</option>
                                                         <option value="tahun">tahun</option>
                                                     </select>
                                                 </td>
                                             </tr>
-                                            <tr class="formP6-baru">
-                                                <td colspan="2"><hr></td>
-                                            </tr>
-                                            <tr class="formP6-baru">
+                                            <tr class="formP4">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Lampiran Spesifikasi Teknis</h6>
+                                                            <h6 class="mb-0 text-sm">Skema Bisnis</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="p4_skema_bisnis" id="p4_skema_bisnis">
+                                                        <option value="" disabled selected>Pilih Skema Bisnis</option>
+                                                        <option value="sewa_murni">Sewa Murni</option>
+                                                        <option value="sewa_beli">Sewa Beli</option>
+                                                        <option value="beli_putus">Pengadaan Beli Putus</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP4">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Mekanisme Pembayaran</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="p4_mekanisme_pembayaran" id="p4_mekanisme_pembayaran">
+                                                        <option value="" disabled selected>Pilih Mekanisme</option>
+                                                        <option value="back_to_back">Back To Back</option>
+                                                        <option value="non_back_to_back">Non Back To Back</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP4">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Service Level Guarantee (SLG)</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="number" min="0" name="p4_slg" id="p4_slg" style="width:100px;"> %
+                                                </td>
+                                            </tr>
+                                            <tr class="formP4">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Fasilitator</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="p4_fasilitator" id="p4_fasilitator">
+                                                        <option value="" disabled selected>Pilih Fasilitator</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP4">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Pengesahan</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="p4_pengesahan" id="p4_pengesahan">
+                                                        <option value="" disabled selected>Pilih Pengesahan</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP4">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Attendees</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr class="formP6-baru"><td colspan="2">
+                                            <tr class="formP4"><td colspan="2">
                                                 <div class="table-responsive">
-                                                    <table class="table" id="lampiranSpek">
+                                                    <table class="table" id="p4_attendees">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">#</th>
-                                                                <th scope="col">Layanan/Barang</th>
-                                                                <th scope="col">Spesifikasi</th>
-                                                                <th scope="col">Merek</th>
-                                                                <th scope="col">Volume</th>
-                                                                <th scope="col">Satuan</th>
-                                                                <th scope="col">Harga Satuan</th>
-                                                                <th scope="col">Harga Total</th>
+                                                                <th scope="col">Attendees</th>
                                                                 <th scope="col"></th>
                                                             </tr>
                                                         </thead>
@@ -499,54 +629,288 @@
                                                     </table>
                                                 </div>
                                                 <br>
-                                                <button type="button" class="btn bg-gradient-info" id="insertRow">Add new row</button>
+                                                <button type="button" class="btn bg-gradient-info" id="insertRow"><i class="fa fa-plus-square"></i></button>
                                             </td></tr>
+                                            <tr class="formP4"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP4"><td colspan="2">
+                                                <button type="button" id="backP3" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P3</h6></button>
+                                                <button type="button" id="lanjutP5" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P5</h6></button>
+                                                <button type="submit" name="submit" value="draf_p4" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                            </td></tr>
+                                            <!-- P5 -->
+                                            <tr class="formP5"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP5"><td colspan="2"><h6 class="ps-2">FORM P5 – BERITA ACARA EVALUASI <i>INDICATIVE OFFERING</i></h6></td></tr>
+                                            <tr class="formP5">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Harga Penawaran Total (Sebelum PPN)</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input class="rupiahs" type="text" name="p5_harga_penawaran" id="p5_harga_penawaran" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP5">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">TTD Tim Evaluator</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="p5_ttd_evaluator" id="p5_ttd_evaluator">
+                                                        <option value="" disabled selected>Pilih Evaluator</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP5"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP5"><td colspan="2">
+                                                <button type="button" id="backP4" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P4</h6></button>
+                                                <button type="button" id="lanjutP6" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P6</h6></button>
+                                                <button type="submit" name="submit" value="draf_p5" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                            </td></tr>
+                                            <!-- P6 -->
+                                            <tr class="formP6"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP6"><td colspan="2"><h6 class="ps-2">FORM P6 – BERITA ACARA KLARIFIKASI DAN NEGOSIASI</h6></td></tr>
+                                            <tr class="formP6">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Penandatangan BAST Telkom</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="p6_ttd_bast_telkom" name="p6_ttd_bast_telkom" style="width:350px;">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP6">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Penandatangan BAST Mitra</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="p6_ttd_bast_mitra" name="p6_ttd_bast_mitra" style="width:350px;">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP6">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Harga Negosiasi</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input class="rupiahs" type="text" name="p6_harga_negosiasi" id="p6_harga_negosiasi" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP6">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Peserta Rapat Mitra</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="p6_nama_peserta_mitra" id="p6_nama_peserta_mitra" style="width:350px;" placeholder="NAMA PESERTA MITRA"><br>
+                                                    <input type="text" style="width:350px;" placeholder="JABATAN PESERTA MITRA" id="p6_jabatan_peserta_mimtra" name="p6_jabatan_peserta_mimtra">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP6">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Peserta Rapat Telkom</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="p6_peserta_rapat_telkom" id="p6_peserta_rapat_telkom">
+                                                        <option value="" disabled selected>Pilih Peserta</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP6">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Pengesahan</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="p6_pengesahan" id="p6_pengesahan">
+                                                        <option value="" disabled selected>Pilih Pengesahan</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP6"><td colspan="2"><hr></td></tr>
                                             <tr class="formP6"><td colspan="2">
+                                                <button type="button" id="backKontrak2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
                                                 <button type="button" id="backP5" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P5</h6></button>
                                                 <button type="button" id="lanjutP7" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P7</h6></button>
+                                                <button type="button" id="lanjutWO3" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form WO</h6></button>
+                                                <button type="submit" name="submit" value="draf_p6" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P7 -->
                                             <tr class="formP7"><td colspan="2"><hr></td></tr>
-                                            <tr class="formP7"><td colspan="2"><h6 class="opacity-7 text-sm">FORM P7</h6></td></tr>
+                                            <tr class="formP7"><td colspan="2"><h6 class="ps-2">FORM P7 – PENETAPAN CALON MITRA PELAKSANA</h6></td></tr>
                                             <tr class="formP7">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Disetujui dan Diketahui</h6>
+                                                            <h6 class="mb-0 text-sm">Lampiran Berkas</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="osm_sda" id="osm_sda" style="width:370px;" placeholder="EGM SDA / DEGM SDA / OSM SDA">
+                                                    <input type="number" name="p7_lampiran_berkas" id="p7_lampiran_berkas" style="width:100px;" min="0" placeholder="">
                                                 </td>
                                             </tr>
-                                            <tr class="formP7"><td colspan="2">
-                                                <button type="button" id="backP6" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
-                                                <button type="button" id="lanjutP8" class="diatas-100 btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P8</h6></button>
-                                                <button type="submit" class="dibawah-100 btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Submit All Form</h6></button>
-                                            </td></tr>
-                                            <!-- P8 -->
-                                            <tr class="formP8"><td colspan="2"><hr></td></tr>
-                                            <tr class="formP8"><td colspan="2"><h6 class="opacity-7 text-sm">FORM P8</h6></td></tr>
-                                            <tr class="formP8">
+                                            <tr class="formP7">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nomor Kontrak Berlangganan</h6>
+                                                            <h6 class="mb-0 text-sm">Jumlah Harga Pekerjaan</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="nomor_kb" id="nomor_kb" style="width:370px;" placeholder="">
+                                                    <input class="rupiahs" type="text" name="p7_harga_pekerjaan" id="p7_harga_pekerjaan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-"><br>
                                                 </td>
                                             </tr>
+                                            <tr class="formP7">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">OTC</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" placeholder="RP xxx.xxx.xxx.-"><br>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP7">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nominal Rincian Bulanan</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-"><br>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP7"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP7">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Pemeriksa</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="p7_pemeriksa" id="p7_pemeriksa">
+                                                        <option value="" disabled selected>Pilih Pemeriksa</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP7">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tembusan</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" placeholder="Contoh: GM Witel Balikpapan"><br>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP7"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP7"><td colspan="2">
+                                                <button type="button" id="backP6" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
+                                                <button type="button" id="lanjutP8" class="diatas-100 btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P8</h6></button>
+                                                <button type="button" id="lanjutSP" class="dibawah-100 btn bg-gradient-info" ><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form SP</h6></button>
+                                                <button type="submit" name="submit" value="draf_p7" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                            </td></tr>
+                                            <!-- P8 -->
+                                            <tr class="formP8"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP8"><td colspan="2"><h6 class="ps-2">FORM P8</h6></td></tr>
+                                            <tr class="formP8">
+                                                <td colspan="2">
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <div id="suksesIsi" class="alert alert-success opacity-7" role="alert">
+                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P8 SUDAH TERISI ✅</h5>
+                                                                <p class="text-xs text-secondary mb-0 text-white">
+                                                                SILAHKAN LANJUT KE FORM WO</p>
+                                                            </div>
+                                                            <div id="gagalIsi" class="alert alert-danger opacity-7" role="alert">
+                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P8 BELUM TERISI ❌</h5>
+                                                                <p class="text-xs text-secondary mb-0 text-white">
+                                                                SILAHKAN KEMBALI KE FORM P7</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="formP8"><td colspan="2"><hr></td></tr>
                                             <tr class="formP8"><td colspan="2">
                                                 <button type="button" id="backP7" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
-                                                <button type="button" id="lanjutWO" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form WO</h6></button>
+                                                <button type="button" id="lanjutKL" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form KL</h6></button>
+                                                <button type="submit" name="submit" value="draf_p8" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- WO -->
                                             <tr class="formWO"><td colspan="2"><hr></td></tr>
-                                            <tr class="formWO"><td colspan="2"><h6 class="opacity-7 text-sm">FORM WORK ORDER</h6></td></tr>
+                                            <tr class="formWO"><td colspan="2"><h6 class="ps-2">WORK ORDER ( WO )</h6></td></tr>
+                                            <tr class="formWO">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal FO (P1)</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="wo_tgl_fo" id="wo_tgl_fo">
+                                                </td>
+                                            </tr>
+                                            <tr class="formWO">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor KB</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;">
+                                                </td>
+                                            </tr>
                                             <tr class="formWO">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -556,7 +920,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="" id="">
+                                                    <input type="text" name="wo_jenis_layanan" id="wo_jenis_layanan" style="width:350px;">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -568,23 +932,55 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="" id="" min="0">
+                                                    <input type="number" name="wo_jumlah_layanan" id="wo_jumlah_layanan" min="0" style="width:100px;">
+                                                </td>
+                                            </tr>
+                                            <tr class="formWO"><td colspan="2"><hr></td></tr>
+                                            <tr class="formWO">
+                                                <td colspan="2">
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Total Harga ( Ke Pelanggan) </h6>
+                                                            <p class="text-xs text-secondary mb-0">
+                                                                format: Rp. xxx.xxx.-</p>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Total Harga ke Pelanggan</h6>
-                                                            <p class="text-xs text-secondary mb-0">
-                                                                format: Rp. xxx.xxx.-</p>
+                                                            <h6 class="mb-0 text-sm">Total Harga</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="harga_ke_plggn" id="harga_ke_plggn" style="width:350px;" placeholder="TOTAL HARGA"><br>
-                                                    <input class="rupiahs" type="text" name="onetime_charge_plggn" id="onetime_charge_plggn" style="width:350px;" placeholder="ONE TIME CHARGE"><br>
-                                                    <input class="rupiahs" type="text" name="monthly_plggn" id="monthly_plggn" style="width:350px;" placeholder="MONTHLY / LOKASI">
+                                                    <input class="rupiahs" type="text" name="wo_harga_ke_plggn" id="wo_harga_ke_plggn" style="width:350px;" placeholder="RP xxx.xxx.-">
+                                                </td>
+                                            </tr>
+                                            <tr class="formWO">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">OTC</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_plggn" id="wo_onetime_charge_plggn" style="width:350px;" placeholder="RP xxx.xxx.-">
+                                                </td>
+                                            </tr>
+                                            <tr class="formWO">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Monthly</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input class="rupiahs" type="text" name="wo_monthly_plggn" id="wo_monthly_plggn" style="width:350px;" placeholder="RP xxx.xxx.-">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -608,7 +1004,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="onetime_charge_telkom" id="onetime_charge_telkom" style="width:350px;" placeholder="Rp xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_telkom" id="wo_onetime_charge_telkom" style="width:350px;" placeholder="Rp xxx.xxx.-">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -620,8 +1016,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="persen_telkom" id="persen_telkom" placeholder="PERSEN" style="width:100px;"> % atau sebesar
-                                                    <input type="text" name="monthly_telkom" id="monthly_telkom" placeholder="Rp xxx.xxx.-" style="width:300px;">
+                                                    <input type="number" min="0" name="wo_persen_telkom" id="wo_persen_telkom" placeholder="PERSEN" style="width:100px;"> % atau sebesar
+                                                    <input type="text" name="wo_monthly_telkom" id="wo_monthly_telkom" placeholder="Rp xxx.xxx.-" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -645,7 +1041,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="onetime_charge_mitra" id="onetime_charge_mitra" style="width:350px;" placeholder="Rp xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_mitra" id="wo_onetime_charge_mitra" style="width:350px;" placeholder="Rp xxx.xxx.-">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -657,40 +1053,50 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="persen_mitra" id="persen_mitra" placeholder="PERSEN" style="width:100px;"> % atau sebesar
-                                                    <input type="text" name="monthly_mitra" id="monthly_mitra" placeholder="Rp xxx.xxx.-" style="width:300px;">
+                                                    <input type="number" min="0" name="wo_persen_mitra" id="wo_persen_mitra" placeholder="PERSEN" style="width:100px;"> % atau sebesar
+                                                    <input type="text" name="wo_monthly_mitra" id="wo_monthly_mitra" placeholder="Rp xxx.xxx.-" style="width:300px;">
                                                 </td>
                                             </tr>
+                                            <tr class="formWO"><td colspan="2"><hr></td></tr>
                                             <tr class="formWO"><td colspan="2">
-                                                <button type="button" id="backKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
-                                                <button type="button" id="backP8" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P8</h6></button>
-                                                <button type="button" id="lanjutKL" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form KL</h6></button>
+                                                <button type="button" id="backP62" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
+                                                <button type="submit" name="submit" value="submit_wo" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema WO</h6></button>
+                                                <button type="submit" name="submit" value="draf_wo" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                            </td></tr>
+                                            <!-- SP -->
+                                            <tr class="formSP"><td colspan="2"><hr></td></tr>
+                                            <tr class="formSP"><td colspan="2"><h6 class="ps-2">Surat Pesanan (SP)</h6></td></tr>
+                                            <tr class="formSP">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor Kontrak Berlangganan (KB) </h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;">
+                                                </td>
+                                            </tr>
+                                            <tr class="formSP"><td colspan="2"><hr></td></tr>
+                                            <tr class="formSP"><td colspan="2">
+                                                <button type="button" id="backP72" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
+                                                <button type="submit" name="submit" value="submit_sp" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema SP</h6></button>
+                                                <button type="submit" name="submit" value="draf_sp" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- KL -->
                                             <tr class="formKL"><td colspan="2"><hr></td></tr>
-                                            <tr class="formKL"><td colspan="2"><h6 class="opacity-7 text-sm">FORM KL</h6></td></tr>
+                                            <tr class="formKL"><td colspan="2"><h6 class="ps-2">KONTRAK LAYANAN ( KL )</h6></td></tr>
                                             <tr class="formKL">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Layanan yang disediakan Mitra</h6>
+                                                            <h6 class="mb-0 text-sm">Nomor Kontrak Berlangganan (KB) </h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="layanan_sedia_mitra" id="layanan_sedia_mitra" style="width:300px;">
-                                                </td>
-                                            </tr>
-                                            <tr class="formKL">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nomor KL Telkom</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="no_kl_telkom" id="no_kl_telkom" style="width:300px;">
+                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -702,7 +1108,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="no_kl_mitra" id="no_kl_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_no_kl_mitra" id="kl_no_kl_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -714,7 +1120,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="tempat_ttd_kl" id="tempat_ttd_kl" style="width:300px;">
+                                                    <input type="text" name="kl_tempat_ttd_kl" id="kl_tempat_ttd_kl" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -726,7 +1132,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="notaris" id="notaris" style="width:300px;">
+                                                    <input type="text" name="kl_notaris" id="kl_notaris" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -738,7 +1144,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="akta_notaris" id="akta_notaris" style="width:300px;">
+                                                    <input type="text" name="kl_akta_notaris" id="kl_akta_notaris" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -750,7 +1156,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="tgl_akta_notaris" id="tgl_akta_notaris" style="width:300px;">
+                                                    <input type="date" name="kl_tgl_akta_notaris" id="kl_tgl_akta_notaris" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -762,7 +1168,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="nama_pejabat_telkom" id="nama_pejabat_telkom" style="width:300px;">
+                                                    <input type="text" name="kl_nama_pejabat_telkom" id="kl_nama_pejabat_telkom" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -774,7 +1180,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="jabatan_pejabat_telkom" id="jabatan_pejabat_telkom" style="width:300px;">
+                                                    <input type="text" name="kl_jabatan_pejabat_telkom" id="kl_jabatan_pejabat_telkom" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><hr></td></tr>
@@ -787,7 +1193,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="npwp_mitra" id="npwp_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_npwp_mitra" id="kl_npwp_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -799,7 +1205,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="no_anggaran_mitra" id="no_anggaran_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_no_anggaran_mitra" id="kl_no_anggaran_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -811,19 +1217,19 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="tgl_anggaran_mitra" id="tgl_anggaran_mitra" style="width:300px;">
+                                                    <input type="date" name="kl_tgl_anggaran_mitra" id="kl_tgl_anggaran_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nama Mitra</h6>
+                                                            <h6 class="mb-0 text-sm">Nama Pejabat Mitra</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="nama_pejabat_mitra" id="nama_pejabat_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_nama_pejabat_mitra" id="kl_nama_pejabat_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -835,7 +1241,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="jabatan_pejabat_mitra" id="jabatan_pejabat_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_jabatan_pejabat_mitra" id="kl_jabatan_pejabat_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -847,7 +1253,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="no_skm" id="no_skm" style="width:300px;">
+                                                    <input type="text" name="kl_no_skm" id="kl_no_skm" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -859,7 +1265,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="tgl_skm" id="tgl_skm" style="width:300px;">
+                                                    <input type="date" name="kl_tgl_skm" id="kl_tgl_skm" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -871,7 +1277,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="perihal_skm" id="perihal_skm" style="width:300px;">
+                                                    <input type="text" name="kl_perihal_skm" id="kl_perihal_skm" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><hr></td></tr>
@@ -884,7 +1290,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="tgl_akhir_kl" id="tgl_akhir_kl" style="width:300px;">
+                                                    <input type="date" name="kl_tgl_akhir_kl" id="kl_tgl_akhir_kl" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><hr></td></tr>
@@ -897,7 +1303,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="bayar_dp" id="bayar_dp" style="width:300px;">
+                                                    <input type="text" name="kl_bayar_dp" id="kl_bayar_dp" style="width:300px;" placeholder="RP xxx.xxx.xxx.-">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -909,7 +1315,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="nama_bank_mitra" id="nama_bank_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_nama_bank_mitra" id="kl_nama_bank_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -921,7 +1327,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="cabang_bank_mitra" id="cabang_bank_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_cabang_bank_mitra" id="kl_cabang_bank_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -933,7 +1339,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="rek_bank_mitra" id="rek_bank_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -945,49 +1351,14 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="an_bank_mitra" id="an_bank_mitra" style="width:300px;">
-                                                </td>
-                                            </tr>
-                                            <tr class="formKL">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Service Level Guarantee (SLG) Mitra</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="number" min="0" name="slg_mitra" id="slg_mitra" style="width:100px;"> %
+                                                    <input type="text" name="kl_an_bank_mitra" id="kl_an_bank_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><hr></td></tr>
-                                            <tr class="formKL">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Wakil Pihak Telkom</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="wakil_pihak_telkom" id="wakil_pihak_telkom" style="width:300px;" placeholder="NAMA : JABATAN">
-                                                </td>
-                                            </tr>
-                                            <tr class="formKL">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Wakil Pihak Mitra</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="wakil_pihak_mitra" id="wakil_pihak_mitra" style="width:300px;" placeholder="NAMA : JABATAN">
-                                                </td>
-                                            </tr>
                                             <tr class="formKL"><td colspan="2">
-                                                <button type="button" id="backWO" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form WO</h6></button>
-                                                <button type="submit" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Submit All Form</h6></button>
+                                                <button type="button" id="backP8" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P8</h6></button>
+                                                <button type="submit" name="submit" value="submit_kl" class="btn bg-gradient-info" ><h6 class="mb-0 text-sm" style="color:white;">Submit Skema KL</h6></button>
+                                                <button type="submit" name="submit" value="draf_kl" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
 
                                             <!-- <tr class="diatas-100">
@@ -1004,7 +1375,7 @@
                                                     <input type="text">
                                                 </td>
                                             </tr> -->
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -1021,26 +1392,10 @@
         @push('js')
         <script>
             $( document ).ready(function() {
-
-                //$('.filterKontrak').show();
-                // $('.filterAwal').hide();
-                // $('.formP2').hide();
-                // $('.formP3').hide();
-                // $('.formP4').hide();
-                // $('.formP5').hide();
-                // $('.formP6').hide();
-                // $('.formP7').hide();
-                // $('.formP8').hide();
-                // $('.formWO').hide();
-                // $('.formKL').hide();
-                // $('.formP5-baru').hide();
-                // $('.formP6-baru').hide();
-                // $('.diatas-100').hide();
-                // $('.dibawah-100').hide();
-                // $('.status_rapat_pengadaan').hide();
+                // clear form submit after refresh browser
                 $('#formObl')[0].reset();
 
-                $('input[type=radio][name=status_rapat_pengadaan]').change(function() {
+                $('input[type=radio][name=p3_status_rapat_pengadaan]').change(function() {
                     if (this.value == 'ada') {
                         $('.status_rapat_pengadaan').show();
                     }
@@ -1050,133 +1405,187 @@
                 });
 
                 var view_diatas_100='';
-                $('input[type=radio][name=nilai_kontrak]').change(function() {
+                $('input[type=radio][name=f2_nilai_kontrak]').change(function() {
                     if (this.value == 'dibawah_100') {
                         view_diatas_100='0';
+                        $('#lanjutP2').show(); $('.hide-filterkl').show();
+                        $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">SKEMA SP</h6>`);
                     }
                     else if (this.value == 'diatas_100') {
                         view_diatas_100='1';
+                        $('#lanjutP2').show(); $('.hide-filterkl').show();
+                        $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">SKEMA KL</h6>`);
                     }
                 });
 
-                var view_baru='';
-                $('input[type=radio][name=jenis_kotrak]').change(function() {
-                    if (this.value == 'perpanjangan') {
-                        view_baru = '0';
-                    }
-                    else if (this.value == 'baru') {
-                        view_baru = '1';
-                    }
+                // SKEMA OBL : WO
+                $('#lanjutWO2').click(function(){
+                  $('.filterKontrak').hide(); $('.formP6').show();
+                  $('#backP5').hide(); $('#lanjutP7').hide();
+                  $('#backKontrak2').show(); $('#lanjutWO3').show();
                 });
 
-                var checkWO2 = false;
-                $('#lanjutWO2').click(function(){ 
-                    checkWO2 = true;
-                    $('.filterKontrak').hide(); $('.formWO').show(); 
-                    if(checkWO2 === true){ $('#backP8').hide(); $('#backKontrak').show(); }
+                $('#backKontrak2').click(function(){
+                    $('.formP6').hide(); $('.filterKontrak').show();
                 });
-                $('#lanjutFilter').click(function(){ $('.filterKontrak').hide(); $('.filterAwal').show(); });
-                
-                $('#backKontrak').click(function(){ 
-                    if(checkWO2 === true){ $('.formWO').hide(); $('.filterKontrak').show(); checkWO2 = false; }
-                    else{ $('.filterAwal').hide(); $('.filterKontrak').show(); }
+                $('#lanjutWO3').click(function(){
+                  $('.formP6').hide(); $('.formWO').show();
                 });
+                $('#backP62').click(function(){
+                    $('.formWO').hide(); $('.formP6').show();
+                    $('#backP5').hide(); $('#lanjutP7').hide();
+                    $('#backKontrak2').show(); $('#lanjutWO3').show();
+                });
+                // END SKEMA OBL : WO
+
+                $('#lanjutFilter').click(function(){ $('.filterKontrak').hide(); $('.filterAwal').show(); $('.hide-filterkl').hide(); });
+                $('#backKontrak').click(function(){ $('.filterAwal').hide(); $('input[type=radio][name=f2_nilai_kontrak]').prop('checked',false); $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">FILTER KL</h6>`); $('.filterKontrak').show(); });
                 $('#lanjutP2').click(function(){ $('.filterAwal').hide(); $('.formP2').show(); });
-                
-                $('#backFilter').click(function(){ $('.formP2').hide(); $('.filterAwal').show(); }); 
+
+                $('#backFilter').click(function(){ $('.formP2').hide(); $('.filterAwal').show(); });
                 $('#lanjutP3').click(function(){ $('.formP2').hide(); $('.formP3').show(); });
 
-                $('#backP2').click(function(){ $('.formP3').hide(); $('.formP2').show(); }); 
-                $('#lanjutP4').click(function(){ $('.formP3').hide(); $('.formP4').show(); }); 
-                
-                $('#backP3').click(function(){ $('.formP4').hide(); $('.formP3').show(); });
-                $('#lanjutP5').click(function(){ 
-                    if(view_baru=='1'){ $('.formP4').hide(); $('.formP5').show(); $('.formP5-baru').show();  }
-                    else if(view_baru=='0'){ $('.formP4').hide(); $('.formP5').show(); $('.formP5-baru').hide(); }
-                }); 
-                
-                $('#backP4').click(function(){ $('.formP5').hide(); $('.formP5-baru').hide(); $('.formP4').show(); });
-                $('#lanjutP6').click(function(){
-                    if(view_baru=='1'){ $('.formP5').hide(); $('.formP5-baru').hide(); $('.formP6').show(); $('.formP6-baru').show(); }
-                    else if(view_baru=='0'){ $('.formP5').hide(); $('.formP5-baru').hide(); $('.formP6').show(); $('.formP6-baru').hide(); }
-                });
+                $('#backP2').click(function(){ $('.formP3').hide(); $('.formP2').show(); });
+                $('#lanjutP4').click(function(){ $('.formP3').hide(); $('.formP4').show(); });
 
-                $('#backP5').click(function(){
-                    if(view_baru=='1'){ $('.formP6').hide(); $('.formP6-baru').hide(); $('.formP5').show(); $('.formP5-baru').show();  }
-                    else if(view_baru=='0'){ $('.formP6').hide(); $('.formP6-baru').hide(); $('.formP5').show(); $('.formP5-baru').hide();  }
+                $('#backP3').click(function(){ $('.formP4').hide(); $('.formP3').show(); });
+                $('#lanjutP5').click(function(){
+                    $('.formP4').hide(); $('.formP5').show();
                 });
-                $('#lanjutP7').click(function(){ 
-                    $('.formP6').hide(); $('.formP6-baru').hide(); $('.formP7').show(); 
+                $('#backP4').click(function(){ $('.formP5').hide(); $('.formP4').show(); });
+                $('#lanjutP6').click(function(){
+                    $('.formP5').hide(); $('.formP6').show(); $('#backKontrak2').hide(); $('#lanjutWO3').hide(); $('#backP5').show(); $('#lanjutP7').show();
+                });
+                $('#backP5').click(function(){
+                    $('.formP6').hide(); $('.formP5').show();
+                });
+                $('#lanjutP7').click(function(){
+                    $('.formP6').hide(); $('.formP7').show();
                     if(view_diatas_100=='1'){ $('.dibawah-100').hide(); $('.diatas-100').show();  }
                     else if(view_diatas_100=='0'){ $('.diatas-100').hide(); $('.dibawah-100').show();  }
                 });
-
                 $('#backP6').click(function(){
-                    if(view_baru=='1'){ $('.formP7').hide(); $('.formP6').show(); $('.formP6-baru').show(); }
-                    else if(view_baru=='0'){ $('.formP7').hide(); $('.formP6').show(); $('.formP6-baru').hide(); }
+                    $('.formP7').hide(); $('.formP6').show();
                 });
-                $('#lanjutP8').click(function(){ $('.formP7').hide(); $('.formP8').show(); });
-                
+                // SKEMA OBL : SP
+                $('#lanjutSP').click(function(){
+                    $('.formP7').hide(); $('.formSP').show();
+                });
+                $('#backP72').click(function(){
+                    $('.formSP').hide(); $('.formP7').show(); $('.diatas-100').hide(); $('.dibawah-100').show();
+                });
+
+                // SKEMA OBL : KL
+                $('#lanjutP8').click(function(){
+                    $('.formP7').hide(); $('.formP8').show();
+                    if(
+                        $('#p7_lampiran_berkas').val() === '' ||
+                        $('#p7_harga_pekerjaan').val() === '' ||
+                        $('#p7_otc').val() === '' ||
+                        $('#p7_rincian_bulanan').val() === '' ||
+                        $('#p7_pemeriksa').val() === '' ||
+                        $('#p7_tembusan').val() === ''
+                    )
+                    { $('#lanjutKL').hide(); $('.save-draf').hide(); $('#suksesIsi').hide(); $('#gagalIsi').show(); }
+                    else{ $('#gagalIsi').hide(); $('#suksesIsi').show(); $('#lanjutKL').show(); $('.save-draf').show(); }
+                });
                 $('#backP7').click(function(){
-                    if(view_diatas_100=='1'){ $('.formP8').hide(); $('.formP7').show(); $('.dibawah-100').hide(); $('.diatas-100').show();   }
-                    else if(view_diatas_100=='0'){ $('.formSP').hide(); $('.formP7').show(); $('.dibawah-100').show(); $('.diatas-100').hide();   }
+                    $('.formP8').hide(); $('.formP7').show(); $('.dibawah-100').hide(); $('.diatas-100').show();
                 });
-                $('#lanjutWO').click(function(){
-                    $('.formP8').hide(); $('.formWO').show();
-                    $('#backKontrak').hide(); $('#backP8').show();
-                });
-
-                $('#backP8').click(function(){ $('.formWO').hide(); $('.formP8').show();  });
-
-                $('#backWO').click(function(){
-                    $('.dibawah-100').hide(); $('.diatas-100').hide(); $('.formKL').hide(); $('.formWO').show();  
+                $('#backP8').click(function(){
+                    $('.formKL').hide(); $('.formP8').show();
+                    if(
+                        $('#p7_lampiran_berkas').val() === '' ||
+                        $('#p7_harga_pekerjaan').val() === '' ||
+                        $('#p7_otc').val() === '' ||
+                        $('#p7_rincian_bulanan').val() === '' ||
+                        $('#p7_pemeriksa').val() === '' ||
+                        $('#p7_tembusan').val() === ''
+                    )
+                    { $('#lanjutKL').hide(); $('.save-draf').hide(); $('#suksesIsi').hide(); $('#gagalIsi').show(); }
+                    else{ $('#gagalIsi').hide(); $('#suksesIsi').show(); $('#lanjutKL').show(); $('.save-draf').show(); }
                 });
                 $('#lanjutKL').click(function(){
-                    $('.dibawah-100').hide(); $('.diatas-100').hide(); $('.formWO').hide(); $('.formKL').show();
+                    $('.formP8').hide(); $('.formKL').show();
+                });
+
+                // INPUT TEXT : NUMERIC TYPE ONLY
+                $("input[name='p7_lampiran_berkas']").on('input', function (e) {
+                    $(this).val($(this).val().replace(/[^0-9]/g, ''));
+                });
+                $("input[name='wo_jumlah_layanan']").on('input', function (e) {
+                    $(this).val($(this).val().replace(/[^0-9]/g, ''));
                 });
 
 
                 // STARTLINE: FORMAT RUPIAH FORM P5 Harga Penawaran
-                var rupiah = document.getElementById('harga_penawaran');
+                var rupiah = document.getElementById('f1_nilai_kb');
                 rupiah.addEventListener('keyup', function(e){
                     rupiah.value = formatRupiah(this.value, 'Rp. ');
                 });
-                var rupiah1 = document.getElementById('harga_ke_plggn');
-                rupiah1.addEventListener('keyup', function(e){
-                    rupiah1.value = formatRupiah(this.value, 'Rp. ');
-                });
-                var rupiah2 = document.getElementById('onetime_charge_plggn');
+                var rupiah2 = document.getElementById('p5_harga_penawaran');
                 rupiah2.addEventListener('keyup', function(e){
                     rupiah2.value = formatRupiah(this.value, 'Rp. ');
                 });
-                var rupiah3 = document.getElementById('monthly_plggn');
+                var rupiah3 = document.getElementById('p6_harga_negosiasi');
                 rupiah3.addEventListener('keyup', function(e){
                     rupiah3.value = formatRupiah(this.value, 'Rp. ');
                 });
-                
-                var rupiah4 = document.getElementById('onetime_charge_telkom');
+
+                var rupiah4 = document.getElementById('p7_harga_pekerjaan');
                 rupiah4.addEventListener('keyup', function(e){
                     rupiah4.value = formatRupiah(this.value, 'Rp. ');
                 });
-                
-                var rupiah5 = document.getElementById('monthly_telkom');
+
+                var rupiah5 = document.getElementById('p7_otc');
                 rupiah5.addEventListener('keyup', function(e){
                     rupiah5.value = formatRupiah(this.value, 'Rp. ');
                 });
-                
-                var rupiah6 = document.getElementById('onetime_charge_mitra');
+
+                var rupiah6 = document.getElementById('p7_rincian_bulanan');
                 rupiah6.addEventListener('keyup', function(e){
                     rupiah6.value = formatRupiah(this.value, 'Rp. ');
                 });
-                
-                var rupiah7 = document.getElementById('monthly_mitra');
+
+                var rupiah7 = document.getElementById('wo_harga_ke_plggn');
                 rupiah7.addEventListener('keyup', function(e){
                     rupiah7.value = formatRupiah(this.value, 'Rp. ');
                 });
-                var rupiah8 = document.getElementById('bayar_dp');
+
+                var rupiah8 = document.getElementById('wo_onetime_charge_plggn');
                 rupiah8.addEventListener('keyup', function(e){
                     rupiah8.value = formatRupiah(this.value, 'Rp. ');
                 });
+
+                var rupiah9 = document.getElementById('wo_monthly_plggn');
+                rupiah9.addEventListener('keyup', function(e){
+                    rupiah9.value = formatRupiah(this.value, 'Rp. ');
+                });
+
+                var rupiah10 = document.getElementById('wo_onetime_charge_telkom');
+                rupiah10.addEventListener('keyup', function(e){
+                    rupiah10.value = formatRupiah(this.value, 'Rp. ');
+                });
+
+                var rupiah11 = document.getElementById('wo_monthly_telkom');
+                rupiah11.addEventListener('keyup', function(e){
+                    rupiah11.value = formatRupiah(this.value, 'Rp. ');
+                });
+
+                var rupiah12 = document.getElementById('wo_onetime_charge_mitra');
+                rupiah12.addEventListener('keyup', function(e){
+                    rupiah12.value = formatRupiah(this.value, 'Rp. ');
+                });
+
+                var rupiah13 = document.getElementById('wo_monthly_mitra');
+                rupiah13.addEventListener('keyup', function(e){
+                    rupiah13.value = formatRupiah(this.value, 'Rp. ');
+                });
+                var rupiah14 = document.getElementById('kl_bayar_dp');
+                rupiah14.addEventListener('keyup', function(e){
+                    rupiah14.value = formatRupiah(this.value, 'Rp. ');
+                });
+
 
                 function formatRupiah(angka, prefix){
                     var number_string = angka.replace(/[^,\d]/g, '').toString(),
@@ -1194,35 +1603,24 @@
                 // ENDLINE: FORMAT RUPIAH FORM P5 Harga Penawaran
 
 
-                // Start dd rows table SP
+                // Start dd rows table p4 attendees
                 var counter = 1;
                 $("#insertRow").on("click", function (event) {
                     event.preventDefault();
                     var newRow = $("<tr>");
                     var cols = '';
-                    // Table columns
                     cols += '<th scrope="row">' + counter + '</th>';
-                    cols += '<td><textarea cols="10" rows="1" class="" type="text" name="lampiran_layanan_barang[]" id="lampiran_layanan_barang" placeholder=""></textarea></td>';
-                    cols += '<td><textarea cols="10" rows="1" class="" type="text" name="lampiran_spesifikasi[]" id="lampiran_spesifikasi" placeholder=""></textarea></td>';
-                    cols += '<td><textarea cols="10" rows="1" class="" type="text" name="lampiran_merek[]" id="lampiran_merek" placeholder=""></textarea></td>';
-                    cols += '<td><input style="width:100px;" class="" type="text" name="lampiran_volume[]" id="lampiran_volume" placeholder=""></td>';
-                    cols += '<td><input style="width:100px;" class="" type="text" name="lampiran_satuan[]" id="lampiran_satuan" placeholder=""></td>';
-                    cols += '<td><input style="width:100px;" class="" type="text" name="lampiran_harga_satuan[]" id="lampiran_harga_satuan" placeholder=""></td>';
-                    cols += '<td><input style="width:100px;" class="" type="text" name="lampiran_harga_total[]" id="lampiran_harga_total" placeholder=""></td>';
-                    cols += '<td><button style="width:35px;" type="button" class="btn btn-danger rounded-0" id="deleteRow"><i class="fa fa-trash"></i></button</td>';
-                    // Insert the columns inside a row
+                    cols += '<td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" placeholder="Masukkan Attendees"></td>';
+                    cols += '<td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>';
                     newRow.append(cols);
-                    // Insert the row inside a table
-                    $("#lampiranSpek").append(newRow);
-                    // Increase counter after each row insertion
+                    $("#p4_attendees").append(newRow);
                     counter++;
                 });
-                // Remove row when delete btn is clicked
-                $("#lampiranSpek").on("click", "#deleteRow", function (event) {
+                $("#p4_attendees").on("click", "#deleteRow", function (event) {
                     $(this).closest("tr").remove();
                     counter -= 1
                 });
-                // end add rows table SP
+                // end add rows table p4 attendees
 
             });
 
