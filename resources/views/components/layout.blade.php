@@ -46,9 +46,38 @@
         .formP6-baru,
         .diatas-100,
         .dibawah-100,
-        .status_rapat_pengadaan {
+        .status_rapat_pengadaan,
+        #modal-obl-sukses,
+        #modal-obl-gagal,
+        #modal-input-obl {
             display: none;
         }
+        .outline-input-merah {
+          outline: 6px solid red;
+        }
+        #table-input-obl {
+          border: 0px #ffffff;
+        }
+
+
+        /* modal alerts */
+        .modal {
+          text-align: center;
+        }
+        @media screen and (min-width: 768px) {
+          .modal:before {
+            display: inline-block;
+            vertical-align: middle;
+            content: " ";
+            height: 100%;
+          }
+        }
+        .modal-dialog {
+          display: inline-block;
+          text-align: left;
+          vertical-align: middle;
+        }
+        /* end modal alerts */
 
 </style>
 

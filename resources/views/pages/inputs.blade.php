@@ -4,6 +4,26 @@
             <!-- Navbar -->
             <x-navbars.navs.auth titlePage="Input Form OBL"></x-navbars.navs.auth>
             <!-- End Navbar -->
+
+            <!-- modal alerts -->
+            <div class="modal fade" id="modal-input-obl" tabindex="-1" aria-labelledby="modal-input-obl" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Status Submit Form OBL</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body" id="status-input-obl">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end modal alerts -->
+
+
             <div class="container-fluid py-4">
                 <div class="row">
                     <div class="col-12 mx-auto">
@@ -12,32 +32,28 @@
                                 <div class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3">
                                     <h6 class="text-white text-capitalize ps-3">Input Form OBL</h6>
                                 </div>
-                                @if( session('status') )
-                                <br>
-                                <div class="alert alert-success alert-dismissible">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <div style="color:white;" class="text-center">
-                                        <strong>{{ session('status') }}</strong>
-                                    </div>
-                                </div>
-                                @endif
-                                @if( session('error') )
-                                <br>
-                                <div class="alert alert-danger alert-dismissible">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <div style="color:white;" class="text-center">
-                                        <strong>{{ session('error') }}</strong>
-                                    </div>
-                                </div>
-                                @endif
                             </div>
 
+                            @if($errors->any())
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="border-radius-sm">
+                                  <div class="alert alert-danger alert-dismissible text-align-center">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                      <div style="color:white;" class="text-center">
+                                          <strong>INPUTAN BELUM VALID. CEK KEMBALI INPUTAN ANDA.</strong>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            @endif
 
                             <form id="formObl" action="{{ route('inputs.create') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body px-0 pb-2">
                                 <div class="table-responsive p-0">
-                                    <table class="table align-items-center mb-0">
+                                    <table id="table-input-obl" class="table align-items-center mb-0" cellspacing="0" cellpadding="0">
                                         <thead>
                                             <tr class="kepala">
                                                 <th
@@ -52,7 +68,7 @@
                                         </thead>
                                         <tbody>
                                             <!-- filter kontrak -->
-                                            <tr class="filterKontrak"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -124,7 +140,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-"><br>
+                                                    @if($errors->has('f1_nilai_kb'))
+                                                        <input class="rupiahs outline-input-merah" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-">
+                                                    @else
+                                                      <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-">
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -172,10 +192,17 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan">
-                                                        <label for="jenis_kontrak"> Amandemen</label><br>
-                                                        <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru">
-                                                        <label for="jenis_kontrak"> Pasang Baru</label><br>
+                                                    @if($errors->has('f1_jenis_kontrak'))
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan">
+                                                    <label class="outline-input-merah" for="jenis_kontrak"> Amandemen</label><br>
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru">
+                                                    <label class="outline-input-merah" for="jenis_kontrak"> Pasang Baru</label><br>
+                                                    @else
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan">
+                                                    <label for="jenis_kontrak"> Amandemen</label><br>
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru">
+                                                    <label for="jenis_kontrak"> Pasang Baru</label><br>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -240,7 +267,7 @@
                                                     <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan"></textarea>
                                                 </td>
                                             </tr>
-                                            <tr class="filterKontrak"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -265,14 +292,14 @@
                                                     <input style="width:450px;" type="text" name="f1_pic_mitra" id="f1_pic_mitra">
                                                 </td>
                                             </tr>
-                                            <tr class="filterKontrak"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak"><td colspan="2"><h6 class="ps-2">SKEMA OBL</h6></td></tr>
                                             <tr class="filterKontrak"><td colspan="2">
-                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Work Order ( WO ) </h6></button>
+                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Work Order ( WO ) </h6></button>
                                                 <button type="button" id="lanjutFilter" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Kontrak Layanan ( KL ) </h6></button>
                                                 <button type="submit" name="submit" value="draf_filter_kontrak" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
-                                            <tr class="filterAwal"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterAwal"><td colspan="2"><br></td></tr>
                                             <tr class="filterAwal"><td colspan="2" id="judulFilter"><h6 class="ps-2">FILTER KL</h6></td></tr>
                                             <tr class="filterAwal">
                                                 <td>
@@ -300,17 +327,21 @@
                                                     </div>
                                                 </td>
                                                 <td>
+                                                  @if($errors->has('f2_tgl_p1'))
+                                                    <input class="outline-input-merah" type="date" name="f2_tgl_p1" id="f2_tgl_p1">
+                                                  @else
                                                     <input type="date" name="f2_tgl_p1" id="f2_tgl_p1">
+                                                  @endif
                                                 </td>
                                             </tr>
-                                            <tr class="filterAwal"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterAwal"><td colspan="2"><br></td></tr>
                                             <tr class="filterAwal"><td colspan="2">
                                                 <button type="button" id="backKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
                                                 <button type="button" id="lanjutP2" class="btn bg-gradient-info hide-filterkl"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
                                                 <button type="submit" name="submit" value="draf_filter_kl" id="saveDraf" class="hide-filterkl save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P2 -->
-                                            <tr class="formP2"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP2"><td colspan="2"><br></td></tr>
                                             <tr class="formP2"><td colspan="2"><h6 class="ps-2">FORM P2 – EVALUASI DAN PENETAPAN BAKAL CALON MITRA PELAKSANA </h6></td></tr>
 
                                             <tr class="formP2">
@@ -402,14 +433,14 @@
 
                                                 </td>
                                             </tr>
-                                            <tr class="formP2"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP2"><td colspan="2"><br></td></tr>
                                             <tr class="formP2"><td colspan="2">
                                                 <button type="button" id="backFilter" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter KL</h6></button>
                                                 <button type="button" id="lanjutP3" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P3</h6></button>
                                                 <button type="submit" name="submit" value="draf_p2" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P3 -->
-                                            <tr class="formP3"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP3"><td colspan="2"><br></td></tr>
                                             <tr class="formP3"><td colspan="2"><h6 class="ps-2">FORM P3 – UNDANGAN PERMINTAAN DAN PENAWARAN HARGA</h6></td></tr>
                                             <tr class="formP3">
                                                 <td>
@@ -474,14 +505,14 @@
                                                     </select>
                                                 </td>
                                             </tr>
-                                            <tr class="formP3"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP3"><td colspan="2"><br></td></tr>
                                             <tr class="formP3"><td colspan="2">
                                                 <button type="button" id="backP2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P2</h6></button>
                                                 <button type="button" id="lanjutP4" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P4</h6></button>
                                                 <button type="submit" name="submit" value="draf_p3" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P4 -->
-                                            <tr class="formP4"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP4"><td colspan="2"><br></td></tr>
                                             <tr class="formP4"><td colspan="2"><h6 class="ps-2">FORM P4 – BERITA ACARA RAPAT PENJELASAN</h6></td></tr>
                                             <tr class="formP4">
                                                 <td>
@@ -631,14 +662,14 @@
                                                 <br>
                                                 <button type="button" class="btn bg-gradient-info" id="insertRow"><i class="fa fa-plus-square"></i></button>
                                             </td></tr>
-                                            <tr class="formP4"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP4"><td colspan="2"><br></td></tr>
                                             <tr class="formP4"><td colspan="2">
                                                 <button type="button" id="backP3" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P3</h6></button>
                                                 <button type="button" id="lanjutP5" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P5</h6></button>
                                                 <button type="submit" name="submit" value="draf_p4" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P5 -->
-                                            <tr class="formP5"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP5"><td colspan="2"><br></td></tr>
                                             <tr class="formP5"><td colspan="2"><h6 class="ps-2">FORM P5 – BERITA ACARA EVALUASI <i>INDICATIVE OFFERING</i></h6></td></tr>
                                             <tr class="formP5">
                                                 <td>
@@ -669,14 +700,14 @@
                                                     </select>
                                                 </td>
                                             </tr>
-                                            <tr class="formP5"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP5"><td colspan="2"><br></td></tr>
                                             <tr class="formP5"><td colspan="2">
                                                 <button type="button" id="backP4" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P4</h6></button>
                                                 <button type="button" id="lanjutP6" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P6</h6></button>
                                                 <button type="submit" name="submit" value="draf_p5" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P6 -->
-                                            <tr class="formP6"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP6"><td colspan="2"><br></td></tr>
                                             <tr class="formP6"><td colspan="2"><h6 class="ps-2">FORM P6 – BERITA ACARA KLARIFIKASI DAN NEGOSIASI</h6></td></tr>
                                             <tr class="formP6">
                                                 <td>
@@ -761,16 +792,16 @@
                                                     </select>
                                                 </td>
                                             </tr>
-                                            <tr class="formP6"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP6"><td colspan="2"><br></td></tr>
                                             <tr class="formP6"><td colspan="2">
                                                 <button type="button" id="backKontrak2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
                                                 <button type="button" id="backP5" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P5</h6></button>
                                                 <button type="button" id="lanjutP7" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P7</h6></button>
-                                                <button type="button" id="lanjutWO3" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form WO</h6></button>
+                                                <button type="button" id="lanjutWO3" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form WO</h6></button>
                                                 <button type="submit" name="submit" value="draf_p6" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P7 -->
-                                            <tr class="formP7"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP7"><td colspan="2"><br></td></tr>
                                             <tr class="formP7"><td colspan="2"><h6 class="ps-2">FORM P7 – PENETAPAN CALON MITRA PELAKSANA</h6></td></tr>
                                             <tr class="formP7">
                                                 <td>
@@ -820,7 +851,7 @@
                                                     <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-"><br>
                                                 </td>
                                             </tr>
-                                            <tr class="formP7"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP7"><td colspan="2"><br></td></tr>
                                             <tr class="formP7">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -850,7 +881,7 @@
                                                     <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" placeholder="Contoh: GM Witel Balikpapan"><br>
                                                 </td>
                                             </tr>
-                                            <tr class="formP7"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP7"><td colspan="2"><br></td></tr>
                                             <tr class="formP7"><td colspan="2">
                                                 <button type="button" id="backP6" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
                                                 <button type="button" id="lanjutP8" class="diatas-100 btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P8</h6></button>
@@ -858,7 +889,7 @@
                                                 <button type="submit" name="submit" value="draf_p7" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P8 -->
-                                            <tr class="formP8"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP8"><td colspan="2"><br></td></tr>
                                             <tr class="formP8"><td colspan="2"><h6 class="ps-2">FORM P8</h6></td></tr>
                                             <tr class="formP8">
                                                 <td colspan="2">
@@ -878,14 +909,14 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr class="formP8"><td colspan="2"><hr></td></tr>
+                                            <tr class="formP8"><td colspan="2"><br></td></tr>
                                             <tr class="formP8"><td colspan="2">
                                                 <button type="button" id="backP7" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
                                                 <button type="button" id="lanjutKL" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form KL</h6></button>
                                                 <button type="submit" name="submit" value="draf_p8" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- WO -->
-                                            <tr class="formWO"><td colspan="2"><hr></td></tr>
+                                            <tr class="formWO"><td colspan="2"><br></td></tr>
                                             <tr class="formWO"><td colspan="2"><h6 class="ps-2">WORK ORDER ( WO )</h6></td></tr>
                                             <tr class="formWO">
                                                 <td>
@@ -896,7 +927,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
+                                                  @if($errors->has('wo_tgl_fo'))
+                                                    <input class="outline-input-merah" type="date" name="wo_tgl_fo" id="wo_tgl_fo">
+                                                  @else
                                                     <input type="date" name="wo_tgl_fo" id="wo_tgl_fo">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -935,7 +971,7 @@
                                                     <input type="number" name="wo_jumlah_layanan" id="wo_jumlah_layanan" min="0" style="width:100px;">
                                                 </td>
                                             </tr>
-                                            <tr class="formWO"><td colspan="2"><hr></td></tr>
+                                            <tr class="formWO"><td colspan="2"><br></td></tr>
                                             <tr class="formWO">
                                                 <td colspan="2">
                                                     <div class="d-flex px-2 py-1">
@@ -984,7 +1020,7 @@
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
-                                                    <td colspan="2"><hr></td>
+                                                    <td colspan="2"><br></td>
                                             </tr>
                                             <tr class="formWO">
                                                 <td colspan="2">
@@ -1021,7 +1057,7 @@
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
-                                                    <td colspan="2"><hr></td>
+                                                    <td colspan="2"><br></td>
                                             </tr>
                                             <tr class="formWO">
                                                 <td colspan="2">
@@ -1057,14 +1093,14 @@
                                                     <input type="text" name="wo_monthly_mitra" id="wo_monthly_mitra" placeholder="Rp xxx.xxx.-" style="width:300px;">
                                                 </td>
                                             </tr>
-                                            <tr class="formWO"><td colspan="2"><hr></td></tr>
+                                            <tr class="formWO"><td colspan="2"><br></td></tr>
                                             <tr class="formWO"><td colspan="2">
                                                 <button type="button" id="backP62" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
-                                                <button type="submit" name="submit" value="submit_wo" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema WO</h6></button>
+                                                <button type="submit" name="submit" value="submit_wo" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema WO</h6></button>
                                                 <button type="submit" name="submit" value="draf_wo" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- SP -->
-                                            <tr class="formSP"><td colspan="2"><hr></td></tr>
+                                            <tr class="formSP"><td colspan="2"><br></td></tr>
                                             <tr class="formSP"><td colspan="2"><h6 class="ps-2">Surat Pesanan (SP)</h6></td></tr>
                                             <tr class="formSP">
                                                 <td>
@@ -1078,14 +1114,14 @@
                                                     <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;">
                                                 </td>
                                             </tr>
-                                            <tr class="formSP"><td colspan="2"><hr></td></tr>
+                                            <tr class="formSP"><td colspan="2"><br></td></tr>
                                             <tr class="formSP"><td colspan="2">
                                                 <button type="button" id="backP72" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
                                                 <button type="submit" name="submit" value="submit_sp" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema SP</h6></button>
                                                 <button type="submit" name="submit" value="draf_sp" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- KL -->
-                                            <tr class="formKL"><td colspan="2"><hr></td></tr>
+                                            <tr class="formKL"><td colspan="2"><br></td></tr>
                                             <tr class="formKL"><td colspan="2"><h6 class="ps-2">KONTRAK LAYANAN ( KL )</h6></td></tr>
                                             <tr class="formKL">
                                                 <td>
@@ -1183,7 +1219,7 @@
                                                     <input type="text" name="kl_jabatan_pejabat_telkom" id="kl_jabatan_pejabat_telkom" style="width:300px;">
                                                 </td>
                                             </tr>
-                                            <tr class="formKL"><td colspan="2"><hr></td></tr>
+                                            <tr class="formKL"><td colspan="2"><br></td></tr>
                                             <tr class="formKL">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -1280,7 +1316,7 @@
                                                     <input type="text" name="kl_perihal_skm" id="kl_perihal_skm" style="width:300px;">
                                                 </td>
                                             </tr>
-                                            <tr class="formKL"><td colspan="2"><hr></td></tr>
+                                            <tr class="formKL"><td colspan="2"><br></td></tr>
                                             <tr class="formKL">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -1293,7 +1329,7 @@
                                                     <input type="date" name="kl_tgl_akhir_kl" id="kl_tgl_akhir_kl" style="width:300px;">
                                                 </td>
                                             </tr>
-                                            <tr class="formKL"><td colspan="2"><hr></td></tr>
+                                            <tr class="formKL"><td colspan="2"><br></td></tr>
                                             <tr class="formKL">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -1354,7 +1390,7 @@
                                                     <input type="text" name="kl_an_bank_mitra" id="kl_an_bank_mitra" style="width:300px;">
                                                 </td>
                                             </tr>
-                                            <tr class="formKL"><td colspan="2"><hr></td></tr>
+                                            <tr class="formKL"><td colspan="2"><br></td></tr>
                                             <tr class="formKL"><td colspan="2">
                                                 <button type="button" id="backP8" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P8</h6></button>
                                                 <button type="submit" name="submit" value="submit_kl" class="btn bg-gradient-info" ><h6 class="mb-0 text-sm" style="color:white;">Submit Skema KL</h6></button>
@@ -1392,6 +1428,33 @@
         @push('js')
         <script>
             $( document ).ready(function() {
+                $("#modal-input-obl").modal({show:false});
+                var session_status = "{{ session('status') }}";
+                if(session_status && typeof session_status !== undefined){
+                  $('#status-input-obl').empty();
+                  if(session_status.includes('Sukses')){
+                    $('#status-input-obl').append(`
+                      <div class="alert alert-success alert-dismissible">
+                          <div class="text-center">
+                              <h5 class="text-white">`+session_status+`</h5>
+                          </div>
+                      </div>
+                    `);
+                    $('#modal-input-obl').modal('show');
+                  }
+                  else{
+                    $('#status-input-obl').append(`
+                      <div class="alert alert-danger alert-dismissible">
+                          <div class="text-center">
+                              <h5 class="text-white">`+session_status+`</h5>
+                          </div>
+                      </div>
+                    `);
+                    $('#modal-input-obl').modal('show');
+                  }
+                }
+
+
                 // clear form submit after refresh browser
                 $('#formObl')[0].reset();
 
@@ -1440,7 +1503,10 @@
 
                 $('#lanjutFilter').click(function(){ $('.filterKontrak').hide(); $('.filterAwal').show(); $('.hide-filterkl').hide(); });
                 $('#backKontrak').click(function(){ $('.filterAwal').hide(); $('input[type=radio][name=f2_nilai_kontrak]').prop('checked',false); $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">FILTER KL</h6>`); $('.filterKontrak').show(); });
-                $('#lanjutP2').click(function(){ $('.filterAwal').hide(); $('.formP2').show(); });
+                $('#lanjutP2').click(function(){
+                  if($('#f2_tgl_p1').val() === ''){ $('#f2_tgl_p1').addClass('outline-input-merah'); }
+                  else{ $('.filterAwal').hide(); $('#f2_tgl_p1').removeClass('outline-input-merah'); $('.formP2').show(); }
+                });
 
                 $('#backFilter').click(function(){ $('.formP2').hide(); $('.filterAwal').show(); });
                 $('#lanjutP3').click(function(){ $('.formP2').hide(); $('.formP3').show(); });
