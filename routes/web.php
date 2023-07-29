@@ -23,7 +23,7 @@ Route::post('verify', [SessionsController::class, 'show'])->middleware('guest');
 Route::post('reset-password', [SessionsController::class, 'update'])->middleware('guest')->name('password.update');
 Route::get('verify', function () {
 	return view('sessions.password.verify');
-})->middleware('guest')->name('verify'); 
+})->middleware('guest')->name('verify');
 Route::get('/reset-password/{token}', function ($token) {
 	return view('sessions.password.reset', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
@@ -35,31 +35,8 @@ Route::post('user-profile', [ProfileController::class, 'update'])->middleware('a
 Route::post('inputs/create', [InputsController::class, 'create'])->middleware('auth')->name('inputs.create');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::get('billing', function () {
-		return view('pages.billing');
-	})->name('billing');
-	Route::get('inputs', function () {
-		return view('pages.inputs');
-	})->name('inputs');
-	Route::get('rtl', function () {
-		return view('pages.rtl');
-	})->name('rtl');
-	Route::get('virtual-reality', function () {
-		return view('pages.virtual-reality');
-	})->name('virtual-reality');
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
-	Route::get('static-sign-in', function () {
-		return view('pages.static-sign-in');
-	})->name('static-sign-in');
-	Route::get('static-sign-up', function () {
-		return view('pages.static-sign-up');
-	})->name('static-sign-up');
-	Route::get('user-management', function () {
-		return view('pages.laravel-examples.user-management');
-	})->name('user-management');
-	// Route::get('user-profile', function () {
-	// 	return view('pages.laravel-examples.user-profile');
-	// })->name('user-profile');
+	Route::get('inputs', function () { return view('pages.inputs'); })->name('inputs');
+	Route::get('obl-drafs', function () { return view('pages.obls.drafs'); })->name('obl.drafs');
+	Route::get('obl-tables', function () { return view('pages.obls.tables'); })->name('obl.tables');
+
 });

@@ -2,7 +2,7 @@
         <x-navbars.sidebar activePage="inputs"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="Input Form OBL"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="OBL / Input Form"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <!-- modal alerts -->
