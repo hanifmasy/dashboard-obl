@@ -1,8 +1,8 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
-        <x-navbars.sidebar activePage="inputs"></x-navbars.sidebar>
+        <x-navbars.sidebar activePage="obl-drafs-edit"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="OBL / Input Form"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="OBL / Draf Dokumen / Edit"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <!-- modal alerts -->
@@ -23,14 +23,13 @@
             </div>
             <!-- end modal alerts -->
 
-
             <div class="container-fluid py-4">
                 <div class="row">
                     <div class="col-12 mx-auto">
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                                <div class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-white text-capitalize ps-3">Input Form OBL</h6>
+                                <div class="bg-gradient-primary shadow-info border-radius-lg pt-4 pb-3">
+                                    <h6 class="text-white text-capitalize ps-3">Draf Dokumen: Edit</h6>
                                 </div>
                             </div>
 
@@ -49,7 +48,7 @@
                             </div>
                             @endif
 
-                            <form id="formObl" action="{{ route('inputs.create') }}" method="POST" enctype="multipart/form-data">
+                            <form id="formObl" action="{{ route('obl.drafs.edit.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body px-0 pb-2">
                                 <div class="table-responsive p-0">
@@ -67,6 +66,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($draf_edit as $key => $value)
                                             <!-- filter kontrak -->
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak">
@@ -81,7 +81,7 @@
                                                     @if($errors->has('f1_nama_plggn'))
                                                       <input style="width:450px;" class="outline-input-merah" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN"><br><br>
                                                     @else
-                                                      <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN"><br><br>
+                                                      <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ $value['f1_nama_plggn'] }}"><br><br>
                                                     @endif
                                                     <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN"></textarea>
                                                 </td>
@@ -118,7 +118,7 @@
                                                     @if($errors->has('f1_judul_projek'))
                                                       <textarea type="text" cols="50" rows="2" class="outline-input-merah" name="f1_judul_projek" id="f1_judul_projek"></textarea>
                                                     @else
-                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek"></textarea>
+                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek">{{ $value['f1_judul_projek'] }}</textarea>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -1419,7 +1419,7 @@
                                                     <input type="text">
                                                 </td>
                                             </tr> -->
-
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -1475,6 +1475,15 @@
 
                 // clear form submit after refresh browser
                 $('#formObl')[0].reset();
+
+                var draf_edit = @json($draf_edit);
+                $("#formObl").submit( function(e) {
+                   $("<input />").attr("type", "hidden")
+                       .attr("name", "edit_draf_id")
+                       .attr("value", draf_edit[0]['id'])
+                       .appendTo("#formObl");
+                   return true;
+               });
 
                 $('input[type=radio][name=p3_status_rapat_pengadaan]').change(function() {
                     if (this.value == 'ada') {

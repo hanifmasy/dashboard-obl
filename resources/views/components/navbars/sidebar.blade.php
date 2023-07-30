@@ -7,7 +7,7 @@
         <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{ route('dashboard') }} ">
-            <!-- <img src="{{ asset('assets') }}/img/logo-ct.png" class="navbar-brand-img h-100" alt="main_logo"> -->
+            <img src="{{ asset('assets') }}/img/logo_mini_telkom.png" class="navbar-brand-img h-100" alt="main_logo">
             <span class="ms-2 font-weight-bold text-white">DASHBOARD OBL</span>
         </a>
     </div>
@@ -41,7 +41,7 @@
 
             <!-- TEST -->
             <li class="nav-item dropdown align-items-center">
-                <a href="javascript:;" class="nav-link text-white {{ $activePage == 'inputs' || $activePage == 'obl-tables'  || $activePage == 'obl-drafs' ? ' active bg-gradient-info' : '' }}"
+                <a href="javascript:;" class="nav-link text-white {{ $activePage == 'inputs' || $activePage == 'obl-tables'  || $activePage == 'obl-drafs' || $activePage == 'obl-drafs-edit' ? ' active bg-gradient-info' : '' }}"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">article</i>
@@ -64,6 +64,7 @@
                             </div>
                         </a>
                     </li>
+                    @if( isset($count_draf) and $count_draf > 0)
                     <li class="mb-2">
                         <a class="dropdown-item border-radius-md" href="{{ route('obl.drafs') }}">
                             <div class="d-flex py-1">
@@ -72,12 +73,13 @@
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
                                     <h6 class="text-sm font-weight-normal mb-1">
-                                        <span class="font-weight-bold">Draf Dokumen</span>
+                                          <span class="font-weight-bold">Draf Dokumen</span><span class="badge badge-primary ms-2" style="background-color:#d62d20;">{{ $count_draf }}</span>
                                     </h6>
                                 </div>
                             </div>
                         </a>
                     </li>
+                    @endif
                     <li class="mb-2">
                         <a class="dropdown-item border-radius-md" href="{{ route('obl.tables') }}">
                             <div class="d-flex py-1">

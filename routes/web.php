@@ -2,17 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/', function () {
-//     return view('welcome');
-//});
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\InputsController;
+use App\Http\Controllers\DrafsController;
 
 
+// AUTH USER PROCESSES
 Route::get('/', function () {return redirect('sign-in');})->middleware('guest');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 Route::get('sign-up', [RegisterController::class, 'create'])->middleware('guest')->name('register');
@@ -27,16 +25,22 @@ Route::get('verify', function () {
 Route::get('/reset-password/{token}', function ($token) {
 	return view('sessions.password.reset', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
-
-Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
-Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')->name('profile');
 Route::get('user-profile', [ProfileController::class, 'create'])->middleware('auth')->name('user-profile');
 Route::post('user-profile', [ProfileController::class, 'update'])->middleware('auth');
-Route::post('inputs/create', [InputsController::class, 'create'])->middleware('auth')->name('inputs.create');
+// Route::get('profile', [ProfileController::class, 'create'])->middleware('auth')->name('profile');
+Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
 
+// GET VIEW ( PAGES )
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('inputs', function () { return view('pages.inputs'); })->name('inputs');
-	Route::get('obl-drafs', function () { return view('pages.obls.drafs'); })->name('obl.drafs');
 	Route::get('obl-tables', function () { return view('pages.obls.tables'); })->name('obl.tables');
-
 });
+
+// GET VIEW WITH METHOD
+Route::get('obl-drafs', [DrafsController::class, 'drafs'])->middleware('auth')->name('obl.drafs');
+
+// POST METHOD ( PAGES )
+Route::post('inputs/create', [InputsController::class, 'create'])->middleware('auth')->name('inputs.create');
+Route::post('obl-drafs/edit', [DrafsController::class, 'edit'])->middleware('auth')->name('obl.drafs.edit');
+Route::post('obl-drafs/edit/update', [DrafsController::class, 'update'])->middleware('auth')->name('obl.drafs.edit.update');
+Route::post('obl-drafs/delete', [DrafsController::class, 'delete'])->middleware('auth')->name('obl.drafs.delete');

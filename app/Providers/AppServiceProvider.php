@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
     public function boot()
     {
         URL::forceRootUrl(config('app.url'));
@@ -31,5 +32,6 @@ class AppServiceProvider extends ServiceProvider
         // if(app()->environment('remote')){
         //     URL::forceScheme('https');
         // }
+
     }
 }

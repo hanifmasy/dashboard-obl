@@ -5,9 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets') }}/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="{{ asset('assets') }}/img/favicon.png"> -->
+    <link rel="icon" type="image/png" href="{{ asset('assets') }}/img/logo_telkom.png">
     <title>
         Dashboard OBL by SDA
     </title>
@@ -23,6 +21,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+    <link href="{{ asset('assets') }}/css/jquery_yajra.min.css" rel="stylesheet" />
 </head>
 <body class="{{ $bodyClass }}">
 <style>
@@ -84,9 +83,10 @@
 {{ $slot }}
 
 <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
+<script src="{{ asset('assets') }}/js/latest_boot.min.js"></script>
+<script src="{{ asset('assets') }}/js/jquery_yajra.min.js"></script>
 <script src="{{ asset('assets') }}/js/alertboot.min.js"></script>
 <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
-<script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/perfect-scrollbar.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/smooth-scrollbar.min.js"></script>
 @stack('js')

@@ -2,25 +2,95 @@
 
 namespace App\Http\Controllers;
 
-Use Str;
-Use Hash;
 use App\Exceptions\Handler;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\Events\PasswordReset;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Draf;
+use Carbon\Carbon;
+use DataTables;
 
-class InputsController extends Controller
+
+class DrafsController extends Controller
 {
-    public function create(Request $request): RedirectResponse
+    public function drafs(Request $request)
+    {
+      if($request->ajax()){
+        $data = Draf::select(
+                  'id',
+                  'f1_nama_plggn',
+                  'f1_judul_projek',
+                  DB::raw("replace( replace(submit,'draf_',''),'_',' ' ) as string_submit"),
+                  DB::raw("
+                  case
+                  when submit like 'draf_filter_%' then 'filter'
+                  when submit like 'draf_p%' then 'form'
+                  when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak'
+                  end as filter_submit
+                  "),
+                  DB::raw("to_char(created_at,'YYYY-MM-DD HH24:MI') as string_tgl_create"),
+                  DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI') as string_tgl_update"))
+                  ->where('user_id', Auth::user()->id)
+                  ->where('is_draf', 1)
+                  ->orderBy('created_at','DESC')
+                  ->get();
+        // dd($data);
+        return DataTables::of($data)->addIndexColumn()->make(true);
+      }
+      return view('pages.obls.drafs');
+    }
+
+    public function delete(Request $request)
     {
       // dd($request->all());
+      if($request->draf_action){
+        if(strpos($request->draf_action,'delete_') !== false){
+          $delete_id = substr($request->draf_action,7,strlen($request->draf_action)-7);
+          $delete_id = intval($delete_id);
+          Draf::where('id',$delete_id)->delete();
+          $cek_draf = Draf::select(DB::raw("count(1) as cek_draf"))
+          ->where('user_id', Auth::user()->id)
+          ->where('is_draf', 1)
+          ->get()->toArray();
+          if($cek_draf[0]['cek_draf'] > 0){ return redirect()->route('obl.drafs'); }
+          else{ return redirect()->route('inputs')->with('status', 'You Have Zero Draf!'); }
+        }
+        else {
+          return redirect('obl-drafs')->with('status', 'Oops! Wrong Routing.');
+        }
+      }
+      else{
+        return redirect('obl-drafs')->with('status', 'Oops! Something Went Wrong.');
+      }
+    }
+
+    public function edit(Request $request)
+    {
+      if($request->draf_action){
+        if(strpos($request->draf_action,'edit_') !== false){
+          $edit_id = substr($request->draf_action,5,strlen($request->draf_action)-5);
+          $edit_id = intval($edit_id);
+          $draf_edit = Draf::select('*')->where('id',$edit_id)->get()->toArray();
+          // dd($draf_edit);
+          return view('pages.obls.drafs_edit',compact('draf_edit'));
+        }
+        else {
+          return redirect('obl-drafs')->with('status', 'Oops! Wrong Routing.');
+        }
+      }
+      else{
+        return redirect('obl-drafs')->with('status', 'Oops! Something Went Wrong.');
+      }
+    }
+
+    public function update(Request $request)
+    {
+        // dd($request->all());
+        $edit_draf_id = $request->edit_draf_id;
         $user_id = Auth::id();
         $submit_sekarang = Carbon::now()->translatedFormat('Y-m-d H:i:s');
 
@@ -37,33 +107,41 @@ class InputsController extends Controller
             $collection_draf = collect($request->all());
             $filtered_draf = $collection_draf->except([
                 '_token',
-                'p4_attendees'
+                'p4_attendees',
+                'edit_draf_id'
             ]);
-            $filtered_draf->put('user_id',$user_id);
-            $filtered_draf->put('created_at',$submit_sekarang);
+            $filtered_draf->put('updated_at',$submit_sekarang);
             $filtered_draf->put('is_draf',1);
-            $obl_id_draf = DB::connection('pgsql')->table('form_obl')
-            ->insertGetId(
+
+            Draf::where('id',$edit_draf_id)
+            ->update(
                 $filtered_draf->all()
             );
+
             if($request->p4_attendees){
                 $arr_attendees_draf = [];
                 foreach($request->p4_attendees as $key => $value){
                     array_push(
                         $arr_attendees_draf,
                         [
-                            'obl_id' => $obl_id_draf,
+                            'obl_id' => $edit_draf_id,
                             'p4_attendees' => $value
                         ]
                     );
                 }
 
                 DB::connection('pgsql')->table('form_p4_attendees')
+                ->where('obl_id',$edit_draf_id)
+                ->delete();
+
+                DB::connection('pgsql')->table('form_p4_attendees')
                 ->insert(
                     $arr_attendees_draf
                 );
+
+
             }
-            return redirect('inputs')->with('status', 'Sukses Simpan Draf!');
+            return redirect()->route('obl.drafs')->with('status', 'Sukses Simpan Draf!');
           }
           catch(Throwable $e){
             return back()->with('status','Gagal Simpan Draf!');
@@ -88,7 +166,8 @@ class InputsController extends Controller
               $collection = collect($request->all());
               $filtered = $collection->except([
                   '_token',
-                  'p4_attendees'
+                  'p4_attendees',
+                  'edit_draf_id'
               ]);
               // dd($filtered);
 
@@ -149,8 +228,8 @@ class InputsController extends Controller
               $arr_tanggal_taken = $arr_tanggal_final;
               // append filtered array data
               // append user id
-              $filtered->put('user_id',$user_id);
               $filtered->put('created_at',$submit_sekarang);
+              $filtered->put('updated_at',$submit_sekarang);
               $filtered->put('is_draf',0);
               // append tanggal dokumen
               $filtered->put('p2_tgl_p2',$arr_tanggal_final[0][1]);
@@ -215,14 +294,15 @@ class InputsController extends Controller
 
 
               // INSERT DATA TO OBL DATABASE
-              $obl_id = DB::connection('pgsql')->table('form_obl')
-              ->insertGetId(
+              DB::connection('pgsql')->table('form_obl')
+              ->where('id',$edit_draf_id)
+              ->update(
                   $filtered->all()
               );
               // CHECK TABEL TAKAH
               $arr_tanggal_checked = [];
               foreach($arr_tanggal_taken as $value){
-                array_push($value,$obl_id);
+                array_push($value,$edit_draf_id);
                 array_push($value,'');
                 array_push( $arr_tanggal_checked, $value );
               }
@@ -262,7 +342,7 @@ class InputsController extends Controller
                       array_push(
                           $arr_attendees,
                           [
-                              'obl_id' => $obl_id,
+                              'obl_id' => $edit_draf_id,
                               'p4_attendees' => $value
                           ]
                       );
@@ -271,6 +351,10 @@ class InputsController extends Controller
                   // foreach($request->lampiran_spesifikasi as $key => $value){
                   //     $array_insert[$key]['lampiran_spesifikasi'] = $value;
                   // }
+
+                  DB::connection('pgsql')->table('form_p4_attendees')
+                  ->where('obl_id',$edit_draf_id)
+                  ->delete();
 
                   DB::connection('pgsql')->table('form_p4_attendees')
                   ->insert(
@@ -285,14 +369,20 @@ class InputsController extends Controller
                 if($request->submit === 'submit_kl'){ $dok_obl = 'KL'; }
               }
 
-              return redirect('inputs')->with('status', 'Sukses Simpan OBL : ' . $dok_obl);
+              // ketika update draf ? draf > 0 || draf == 0
+              $sisa_draf = DB::connection('pgsql')->table('form_obl')
+              ->where('user_id',$user_id)
+              ->where('is_draf',1)
+              ->count();
+              if($sisa_draf > 0){ return redirect()->route('obl.drafs')->with('status', 'Sukses Simpan OBL : ' . $dok_obl); }
+              else{ return redirect()->route('inputs')->with('status', 'Sukses Simpan OBL : ' . $dok_obl); }
           }
           catch(Throwable $e){
               // report($e);
               // return false;
               // return redirect()->back()->with('status',$e);
               // return redirect()->back()->with('status','Gagal Simpan OBL!');
-              return back()->with('status','Gagal Simpan OBL!');
+              return back()->with('status','Gagal Simpan Edit Draf!');
           }
         }
     }
