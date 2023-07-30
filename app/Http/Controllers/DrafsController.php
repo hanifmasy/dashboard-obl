@@ -111,6 +111,7 @@ class DrafsController extends Controller
                 'edit_draf_id'
             ]);
             $filtered_draf->put('updated_at',$submit_sekarang);
+            $filtered_draf->put('f1_tgl_keterangan',$submit_sekarang);
             $filtered_draf->put('is_draf',1);
 
             Draf::where('id',$edit_draf_id)
@@ -230,6 +231,7 @@ class DrafsController extends Controller
               // append user id
               $filtered->put('created_at',$submit_sekarang);
               $filtered->put('updated_at',$submit_sekarang);
+              $filtered->put('f1_tgl_keterangan',$submit_sekarang);
               $filtered->put('is_draf',0);
               // append tanggal dokumen
               $filtered->put('p2_tgl_p2',$arr_tanggal_final[0][1]);

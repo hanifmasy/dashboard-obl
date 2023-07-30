@@ -29,262 +29,91 @@
                     <div class="col-12">
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                                <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-white text-capitalize ps-3">Projects table</h6>
+                                <div class="bg-gradient-light shadow-dark border-radius-lg pt-4 pb-3">
+                                    <h6 class="text-capitalize ps-3">Tabel Dokumen OBL</h6>
                                 </div>
                             </div>
                             <div class="card-body px-0 pb-2">
-                                <div class="table-responsive p-0">
-                                    <table class="table align-items-center justify-content-center mb-0">
+                                <div class="table-responsive p-3">
+                                    <table id="table-data-obl" class="table align-items-center justify-content-center mb-0">
                                         <thead>
                                             <tr>
+                                                <th></th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Project</th>
+                                                    No.</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                    Progress</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                    Segmen</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                    Budget</th>
+                                                    Tanggal Submit</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                    Status</th>
+                                                    Tanggal Update</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
-                                                    Completion</th>
-                                                <th></th>
+                                                    Jenis SPK</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Witel</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Nama Pelanggan</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Layanan</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Nama Vendor</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Jangka Waktu</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Nilai KB</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    No. KFS / SPK</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    No. KL / WO / SP</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    PIC Mitra</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Jenis Kontrak</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Quote</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    No. Akun</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Cara Bayar</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Status Order</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Alamat Pelanggan</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Keterangan Updated</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Keterangan</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Updated By</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2">
-                                                        <div>
-                                                            <img src="{{ asset('assets') }}/img/small-logos/logo-asana.svg"
-                                                                class="avatar avatar-sm rounded-circle me-2"
-                                                                alt="spotify">
-                                                        </div>
-                                                        <div class="my-auto">
-                                                            <h6 class="mb-0 text-sm">Asana</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm font-weight-bold mb-0">$2,500</p>
-                                                </td>
-                                                <td>
-                                                    <span class="text-xs font-weight-bold">working</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="me-2 text-xs font-weight-bold">60%</span>
-                                                        <div>
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-gradient-info"
-                                                                    role="progressbar" aria-valuenow="60"
-                                                                    aria-valuemin="0" aria-valuemax="100"
-                                                                    style="width: 60%;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <button class="btn btn-link text-secondary mb-0">
-                                                        <i class="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2">
-                                                        <div>
-                                                            <img src="{{ asset('assets') }}/img/small-logos/github.svg"
-                                                                class="avatar avatar-sm rounded-circle me-2"
-                                                                alt="invision">
-                                                        </div>
-                                                        <div class="my-auto">
-                                                            <h6 class="mb-0 text-sm">Github</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm font-weight-bold mb-0">$5,000</p>
-                                                </td>
-                                                <td>
-                                                    <span class="text-xs font-weight-bold">done</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="me-2 text-xs font-weight-bold">100%</span>
-                                                        <div>
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-gradient-success"
-                                                                    role="progressbar" aria-valuenow="100"
-                                                                    aria-valuemin="0" aria-valuemax="100"
-                                                                    style="width: 100%;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <button class="btn btn-link text-secondary mb-0"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2">
-                                                        <div>
-                                                            <img src="{{ asset('assets') }}/img/small-logos/logo-atlassian.svg"
-                                                                class="avatar avatar-sm rounded-circle me-2" alt="jira">
-                                                        </div>
-                                                        <div class="my-auto">
-                                                            <h6 class="mb-0 text-sm">Atlassian</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm font-weight-bold mb-0">$3,400</p>
-                                                </td>
-                                                <td>
-                                                    <span class="text-xs font-weight-bold">canceled</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="me-2 text-xs font-weight-bold">30%</span>
-                                                        <div>
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-gradient-danger"
-                                                                    role="progressbar" aria-valuenow="30"
-                                                                    aria-valuemin="0" aria-valuemax="30"
-                                                                    style="width: 30%;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <button class="btn btn-link text-secondary mb-0"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2">
-                                                        <div>
-                                                            <img src="{{ asset('assets') }}/img/small-logos/bootstrap.svg"
-                                                                class="avatar avatar-sm rounded-circle me-2"
-                                                                alt="webdev">
-                                                        </div>
-                                                        <div class="my-auto">
-                                                            <h6 class="mb-0 text-sm">Bootstrap</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm font-weight-bold mb-0">$14,000</p>
-                                                </td>
-                                                <td>
-                                                    <span class="text-xs font-weight-bold">working</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="me-2 text-xs font-weight-bold">80%</span>
-                                                        <div>
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-gradient-info"
-                                                                    role="progressbar" aria-valuenow="80"
-                                                                    aria-valuemin="0" aria-valuemax="80"
-                                                                    style="width: 80%;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <button class="btn btn-link text-secondary mb-0"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2">
-                                                        <div>
-                                                            <img src="{{ asset('assets') }}/img/small-logos/logo-slack.svg"
-                                                                class="avatar avatar-sm rounded-circle me-2"
-                                                                alt="slack">
-                                                        </div>
-                                                        <div class="my-auto">
-                                                            <h6 class="mb-0 text-sm">Slack</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm font-weight-bold mb-0">$1,000</p>
-                                                </td>
-                                                <td>
-                                                    <span class="text-xs font-weight-bold">canceled</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="me-2 text-xs font-weight-bold">0%</span>
-                                                        <div>
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-gradient-success"
-                                                                    role="progressbar" aria-valuenow="0"
-                                                                    aria-valuemin="0" aria-valuemax="0"
-                                                                    style="width: 0%;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <button class="btn btn-link text-secondary mb-0"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2">
-                                                        <div>
-                                                            <img src="{{ asset('assets') }}/img/small-logos/devto.svg"
-                                                                class="avatar avatar-sm rounded-circle me-2" alt="xd">
-                                                        </div>
-                                                        <div class="my-auto">
-                                                            <h6 class="mb-0 text-sm">Devto</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm font-weight-bold mb-0">$2,300</p>
-                                                </td>
-                                                <td>
-                                                    <span class="text-xs font-weight-bold">done</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <span class="me-2 text-xs font-weight-bold">100%</span>
-                                                        <div>
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-gradient-success"
-                                                                    role="progressbar" aria-valuenow="100"
-                                                                    aria-valuemin="0" aria-valuemax="100"
-                                                                    style="width: 100%;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <button class="btn btn-link text-secondary mb-0"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                        <tbody class="align-middle text-center">
                                         </tbody>
                                     </table>
                                 </div>
@@ -314,7 +143,136 @@
                   $('#modal-status-table-obl').modal('show');
                 }
               }
+
+              // <div class="d-flex align-items-center justify-content-center">
+              //     <span class="me-2 text-xs font-weight-bold">60%</span>
+              //     <div>
+              //         <div class="progress">
+              //             <div class="progress-bar bg-gradient-info"
+              //                 role="progressbar" aria-valuenow="60"
+              //                 aria-valuemin="0" aria-valuemax="100"
+              //                 style="width: 60%;"></div>
+              //         </div>
+              //     </div>
+              // </div>
+
+              $('#table-data-obl').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                retrieve: true,
+                aaSorting: [],
+                ajax: "{{ route('obl.tables') }}",
+                columns: [
+                  {
+                     searchable:false,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<button type="button" class="btn btn-info btn-sm">Edit</button><button type="button" class="btn btn-warning btn-sm">Print</button><button type="button" class="btn btn-danger btn-sm" >Delete</button>';
+                     }
+                  },
+                  {
+                     data: 'DT_RowIndex',searchable:false,orderable:false
+                  },
+                  {
+                     data: 'string_submit',name: 'string_submit',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                        if(row.filter_submit==='kontrak1'){ return '<span class="badge badge-sm bg-gradient-success">'+data+'</span>'; }
+                        if(row.filter_submit==='kontrak2'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
+                        if(row.filter_submit==='filter'){ return '<span class="badge badge-sm bg-gradient-danger">'+data+'</span>'; }
+                        if(row.filter_submit==='form'){ return '<span class="badge badge-sm bg-gradient-warning">'+data+'</span>'; }
+                     }
+                  },
+                  {
+                     data: 'segmen',name: 'segmen',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
+                  },
+                  {
+                     data: 'string_tgl_submit',name: 'string_tgl_submit',searchable:true,orderable:true
+                  },
+                  {
+                     data: 'string_tgl_update',name: 'string_tgl_update',searchable:true,orderable:true
+                  },
+                  {
+                     data: 'jenis_spk',name: 'jenis_spk',searchable:true,orderable:true
+                  },
+                  {
+                     data: 'witel',name: 'witel',searchable:true,orderable:true
+                  },
+                  {
+                     data: 'nama_plggn',name: 'nama_plggn',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
+                  },
+                  {
+                     data: 'layanan',name: 'layanan',searchable:true,orderable:true
+                  },
+                  {
+                     data: 'nama_vendor',name: 'nama_vendor',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
+                  },
+                  {
+                     data: 'jangka_waktu',name: 'jangka_waktu',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
+                  },
+                  {
+                     data: 'nilai_kb',name: 'nilai_kb',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'no_kfs_spk',name: 'no_kfs_spk',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'no_kontrak',name: 'no_kontrak',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'pic_mitra',name: 'pic_mitra',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'jenis_kontrak',name: 'jenis_kontrak',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'quote_kontrak',name: 'quote_kontrak',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'nomor_akun',name: 'nomor_akun',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'skema_bayar',name: 'skema_bayar',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'status_order',name: 'status_order',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'alamat_plggn',name: 'alamat_plggn',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'tgl_keterangan',name: 'tgl_keterangan',searchable:true,orderable:true
+                  },
+                  {
+                     data: 'keterangan',name: 'keterangan',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'updated_by',name: 'updated_by',searchable:true,orderable:false
+                  }
+
+                ],
+                lengthChange:false,
+                paging:true,
+                orderCellsTop: true,
+                pageLength: 50,
+              });
+
+
           });
+          $.extend( $.fn.dataTable.defaults, {
+            responsive: true
+          } );
         </script>
         @endpush
 </x-layout>

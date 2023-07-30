@@ -41,6 +41,7 @@ class InputsController extends Controller
             ]);
             $filtered_draf->put('user_id',$user_id);
             $filtered_draf->put('created_at',$submit_sekarang);
+            $filtered_draf->put('f1_tgl_keterangan',$submit_sekarang);
             $filtered_draf->put('is_draf',1);
             $obl_id_draf = DB::connection('pgsql')->table('form_obl')
             ->insertGetId(
@@ -151,6 +152,7 @@ class InputsController extends Controller
               // append user id
               $filtered->put('user_id',$user_id);
               $filtered->put('created_at',$submit_sekarang);
+              $filtered->put('f1_tgl_keterangan',$submit_sekarang);
               $filtered->put('is_draf',0);
               // append tanggal dokumen
               $filtered->put('p2_tgl_p2',$arr_tanggal_final[0][1]);

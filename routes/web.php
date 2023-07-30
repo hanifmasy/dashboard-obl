@@ -8,6 +8,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\InputsController;
 use App\Http\Controllers\DrafsController;
+use App\Http\Controllers\TableOblController;
 
 
 // AUTH USER PROCESSES
@@ -33,11 +34,11 @@ Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('aut
 // GET VIEW ( PAGES )
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('inputs', function () { return view('pages.inputs'); })->name('inputs');
-	Route::get('obl-tables', function () { return view('pages.obls.tables'); })->name('obl.tables');
 });
 
 // GET VIEW WITH METHOD
 Route::get('obl-drafs', [DrafsController::class, 'drafs'])->middleware('auth')->name('obl.drafs');
+Route::get('obl-tables', [TableOblController::class, 'tables'])->middleware('auth')->name('obl.tables');
 
 // POST METHOD ( PAGES )
 Route::post('inputs/create', [InputsController::class, 'create'])->middleware('auth')->name('inputs.create');

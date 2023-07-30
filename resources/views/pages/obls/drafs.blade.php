@@ -61,6 +61,7 @@
                                       <table id="table-draf-obl" class="table align-items-center mb-0">
                                           <thead>
                                               <tr>
+                                                  <th class="text-secondary opacity-7"></th>
                                                   <th
                                                       class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                       No.</th>
@@ -79,8 +80,7 @@
                                                   <th
                                                       class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                       Tanggal Update</th>
-                                                  <th class="text-secondary opacity-7"></th>
-                                                  <th class="text-secondary opacity-7"></th>
+
                                               </tr>
                                           </thead>
                                           <tbody class="align-middle text-center">
@@ -140,9 +140,6 @@
                 }
               }
 
-              // <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
-              // <button type="submit" name="draf_action" value="delete" class="btn btn-danger">Delete</button>
-
 
 
               $('#table-draf-obl').DataTable({
@@ -153,6 +150,12 @@
                 aaSorting: [],
                 ajax: "{{ route('obl.drafs') }}",
                 columns: [
+                  {
+                     searchable:false,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<button type="submit" name="draf_action" value="edit_'+row.id+'" class="btn btn-info btn-sm">Edit</button><button type="button" class="btn btn-danger btn-sm" onclick="deleteDraf('+row.id+')">Delete</button>';
+                     }
+                  },
                   {
                      data: 'DT_RowIndex',searchable:false,orderable:false
                   },
@@ -181,19 +184,8 @@
                   },
                   {
                      data: 'string_tgl_update',name: 'string_tgl_update',searchable:true,orderable:true
-                  },
-                  {
-                     searchable:false,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<button type="submit" name="draf_action" value="edit_'+row.id+'" class="btn btn-info btn-sm">Edit</button>';
-                     }
-                  },
-                  {
-                     searchable:false,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<button type="button" class="btn btn-danger btn-sm" onclick="deleteDraf('+row.id+')">Delete</button>';
-                     }
                   }
+
                 ],
                 lengthChange:false,
                 paging:true,
