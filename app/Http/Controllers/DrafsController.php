@@ -74,9 +74,23 @@ class DrafsController extends Controller
         if(strpos($request->draf_action,'edit_') !== false){
           $edit_id = substr($request->draf_action,5,strlen($request->draf_action)-5);
           $edit_id = intval($edit_id);
-          $draf_edit = Draf::select('*')->where('id',$edit_id)->get()->toArray();
+          $draf_edit = Draf::select(
+            '*',
+            DB::raw("to_char(f2_tgl_p1,'yyyy-mm-dd') as tgl_p1 "),
+            DB::raw("to_char(p2_tgl_justifikasi,'yyyy-mm-dd') as tgl_justifikasi "),
+            DB::raw("to_char(p3_tgl_rapat_pengadaan,'yyyy-mm-dd hh24:i') as tgl_rapat_pengadaan "),
+            DB::raw("to_char(p3_tgl_terima_sp,'yyyy-mm-dd hh24:i') as tgl_terima_sp "),
+            DB::raw("to_char(p4_tgl_sph,'yyyy-mm-dd') as tgl_sph "),
+            DB::raw("to_char(p4_waktu_layanan,'yyyy-mm-dd') as waktu_layanan "),
+            DB::raw("to_char(wo_tgl_fo,'yyyy-mm-dd') as tgl_fo "),
+            DB::raw("to_char(kl_tgl_akta_notaris,'yyyy-mm-dd') as tgl_akta_notaris "),
+            DB::raw("to_char(kl_tgl_anggaran_mitra,'yyyy-mm-dd') as tgl_anggaran_mitra "),
+            DB::raw("to_char(kl_tgl_skm,'yyyy-mm-dd') as tgl_skm "),
+            DB::raw("to_char(kl_tgl_akhir_kl,'yyyy-mm-dd') as tgl_akhir_kl ")
+            )->where('id',$edit_id)->get()->toArray();
+          $draf_edit_p4_attendees = DB::connection('pgsql')->table('form_p4_attendees')->select('*')->where('obl_id',$edit_id)->get()->toArray();
           // dd($draf_edit);
-          return view('pages.obls.drafs_edit',compact('draf_edit'));
+          return view('pages.obls.drafs_edit',compact('draf_edit','draf_edit_p4_attendees'));
         }
         else {
           return redirect('obl-drafs')->with('status', 'Oops! Wrong Routing.');

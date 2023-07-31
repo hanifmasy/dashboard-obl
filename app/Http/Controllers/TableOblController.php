@@ -37,13 +37,13 @@ class TableOblController extends Controller
                   DB::raw("case when f1_nama_plggn is null or f1_nama_plggn = '' then '' else f1_nama_plggn end as nama_plggn"),
                   DB::raw("
                   case
-                  when p2_lingkup_kerja is null or p2_lingkup_kerja = '' then wo_jenis_layanan
-                  when wo_jenis_layanan is null or wo_jenis_layanan = '' then p2_lingkup_kerja
+                  when f1_jenis_spk = 'WO' then wo_jenis_layanan
+                  when f1_jenis_spk = 'SP' or f1_jenis_spk = 'KL' then p2_lingkup_kerja
                   else '-'
                   end as layanan
                   "),
                   DB::raw("case when f1_nama_mitra is null or f1_nama_mitra = '' then '' else f1_nama_mitra end as nama_vendor"),
-                  DB::raw("case when p4_masa_layanan is null or p4_masa_layanan = '' then '' else concat(p4_masa_layanan,' ',p4_satuan_masa_layanan) end as jangka_waktu"),
+                  DB::raw("case when f1_masa_layanan is null or f1_masa_layanan = '' then '' else concat(f1_masa_layanan,' ',f1_satuan_masa_layanan) end as jangka_waktu"),
                   DB::raw("case when f1_nilai_kb is null or f1_nilai_kb = '' then '' else f1_nilai_kb end as nilai_kb"),
                   DB::raw("case when f1_no_kfs_spk is null or f1_no_kfs_spk = '' then '' else f1_no_kfs_spk end as no_kfs_spk"),
                   DB::raw("

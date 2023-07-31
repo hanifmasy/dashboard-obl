@@ -20,7 +20,7 @@ class InputsController extends Controller
 {
     public function create(Request $request): RedirectResponse
     {
-      // dd($request->all());
+        // dd($request->all());
         $user_id = Auth::id();
         $submit_sekarang = Carbon::now()->translatedFormat('Y-m-d H:i:s');
 
@@ -37,12 +37,14 @@ class InputsController extends Controller
             $collection_draf = collect($request->all());
             $filtered_draf = $collection_draf->except([
                 '_token',
-                'p4_attendees'
+                'p4_attendees',
+                'global_jenis_spk'
             ]);
             $filtered_draf->put('user_id',$user_id);
             $filtered_draf->put('created_at',$submit_sekarang);
             $filtered_draf->put('f1_tgl_keterangan',$submit_sekarang);
             $filtered_draf->put('is_draf',1);
+            $filtered_draf->put('f1_jenis_spk',$request->global_jenis_spk);
             $obl_id_draf = DB::connection('pgsql')->table('form_obl')
             ->insertGetId(
                 $filtered_draf->all()
@@ -89,7 +91,8 @@ class InputsController extends Controller
               $collection = collect($request->all());
               $filtered = $collection->except([
                   '_token',
-                  'p4_attendees'
+                  'p4_attendees',
+                  'global_jenis_spk'
               ]);
               // dd($filtered);
 
@@ -154,6 +157,7 @@ class InputsController extends Controller
               $filtered->put('created_at',$submit_sekarang);
               $filtered->put('f1_tgl_keterangan',$submit_sekarang);
               $filtered->put('is_draf',0);
+              $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
               // append tanggal dokumen
               $filtered->put('p2_tgl_p2',$arr_tanggal_final[0][1]);
               $filtered->put('p3_tgl_p3',$arr_tanggal_final[1][1]);

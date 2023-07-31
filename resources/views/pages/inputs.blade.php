@@ -217,6 +217,24 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Masa Kontrak Layanan</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;">
+                                                    <select name="f1_satuan_masa_layanan" id="f1_satuan_masa_layanan">
+                                                        <option value="" disabled selected>Pilih Satuan Masa</option>
+                                                        <option value="hari">hari</option>
+                                                        <option value="bulan">bulan</option>
+                                                        <option value="tahun">tahun</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Skema Bayar</h6>
                                                         </div>
                                                     </div>
@@ -546,23 +564,6 @@
                                                 </td>
                                                 <td>
                                                     <input type="date" name="p4_waktu_layanan" id="p4_waktu_layanan">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP4">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Masa Kontrak Layanan</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="p4_masa_layanan" id="p4_masa_layanan" min="0" style="width:80px;">
-                                                    <select name="p4_satuan_masa_layanan" id="p4_satuan_masa_layanan">
-                                                        <option value="hari">hari</option>
-                                                        <option value="bulan">bulan</option>
-                                                        <option value="tahun">tahun</option>
-                                                    </select>
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -1436,8 +1437,12 @@
         @push('js')
         <script>
             $( document ).ready(function() {
+                var global_jenis_spk = '';
+                var view_diatas_100='';
+
                 $("#modal-input-obl").modal({show:false});
                 var session_status = "{{ session('status') }}";
+
                 if(session_status && typeof session_status !== undefined){
                   $('#status-input-obl').empty();
                   if(session_status.includes('Sukses')){
@@ -1475,6 +1480,13 @@
 
                 // clear form submit after refresh browser
                 $('#formObl')[0].reset();
+                $("#formObl").submit( function(e) {
+                   $("<input />").attr("type", "hidden")
+                       .attr("name", "global_jenis_spk")
+                       .attr("value", global_jenis_spk)
+                       .appendTo("#formObl");
+                   return true;
+               });
 
                 $('input[type=radio][name=p3_status_rapat_pengadaan]').change(function() {
                     if (this.value == 'ada') {
@@ -1485,14 +1497,16 @@
                     }
                 });
 
-                var view_diatas_100='';
+
                 $('input[type=radio][name=f2_nilai_kontrak]').change(function() {
                     if (this.value == 'dibawah_100') {
+                        global_jenis_spk = 'SP';
                         view_diatas_100='0';
                         $('#lanjutP2').show(); $('.hide-filterkl').show();
                         $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">SKEMA SP</h6>`);
                     }
                     else if (this.value == 'diatas_100') {
+                        global_jenis_spk = 'KL';
                         view_diatas_100='1';
                         $('#lanjutP2').show(); $('.hide-filterkl').show();
                         $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">SKEMA KL</h6>`);
@@ -1501,12 +1515,14 @@
 
                 // SKEMA OBL : WO
                 $('#lanjutWO2').click(function(){
+                  global_jenis_spk = 'WO';
                   $('.filterKontrak').hide(); $('.formP6').show();
                   $('#backP5').hide(); $('#lanjutP7').hide();
                   $('#backKontrak2').show(); $('#lanjutWO3').show();
                 });
 
                 $('#backKontrak2').click(function(){
+                  global_jenis_spk = '';
                     $('.formP6').hide(); $('.filterKontrak').show();
                 });
                 $('#lanjutWO3').click(function(){
@@ -1520,7 +1536,7 @@
                 // END SKEMA OBL : WO
 
                 $('#lanjutFilter').click(function(){ $('.filterKontrak').hide(); $('.filterAwal').show(); $('.hide-filterkl').hide(); });
-                $('#backKontrak').click(function(){ $('.filterAwal').hide(); $('input[type=radio][name=f2_nilai_kontrak]').prop('checked',false); $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">FILTER KL</h6>`); $('.filterKontrak').show(); });
+                $('#backKontrak').click(function(){ global_jenis_spk = ''; $('.filterAwal').hide(); $('input[type=radio][name=f2_nilai_kontrak]').prop('checked',false); $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">FILTER KL</h6>`); $('.filterKontrak').show(); });
                 $('#lanjutP2').click(function(){
                   if($('#f2_tgl_p1').val() === ''){ $('#f2_tgl_p1').addClass('outline-input-merah'); }
                   else{ $('.filterAwal').hide(); $('#f2_tgl_p1').removeClass('outline-input-merah'); $('.formP2').show(); }
