@@ -10,7 +10,7 @@
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Status Draf</h5>
+                    <h5 class="modal-title">Dokumen OBL:</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body" id="status-table-obl">
@@ -18,6 +18,28 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="modal-status-table-obl-delete" tabindex="-1" aria-labelledby="modal-status-table-obl-delete" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Dokumen OBL:</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="">
+                        <div class="text-center">
+                            <h5 class="">Anda Yakin Hapus Dokumen OBL?</h5>
+                        </div>
+                    </div>
+                  </div>
+                  <form action="{{ route('obl.tables.delete') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-footer" id="modal-pilihan-table-obl-hapus">
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -127,6 +149,18 @@
         <x-plugins></x-plugins>
         @push('js')
         <script type="text/javascript">
+            $("#modal-status-table-obl-delete").modal({show:false});
+            function deleteDoc(delete_id){
+                if(delete_id && typeof delete_id !== undefined){
+                  $('#modal-pilihan-table-obl-hapus').empty();
+                    $('#modal-pilihan-table-obl-hapus').append(`
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+                      <button type="submit" name="obl_doc_action" value="delete_`+delete_id+`" class="btn btn-danger">DELETE</button>
+                    `);
+                    $('#modal-status-table-obl-delete').modal('show');
+                }
+            }
+
           $(document).ready(function () {
               $("#modal-status-table-obl").modal({show:false});
               var status_table_obl = "{{ session('status') }}";
@@ -135,6 +169,16 @@
                 if(status_table_obl.includes('Draf')){
                   $('#status-table-obl').append(`
                     <div class="alert alert-warning alert-dismissible">
+                        <div class="text-center">
+                            <h5 class="text-white">`+status_table_obl+`</h5>
+                        </div>
+                    </div>
+                  `);
+                  $('#modal-status-table-obl').modal('show');
+                }
+                if(status_table_obl.includes('Oops')){
+                  $('#status-table-obl').append(`
+                    <div class="alert alert-danger alert-dismissible">
                         <div class="text-center">
                             <h5 class="text-white">`+status_table_obl+`</h5>
                         </div>
@@ -167,7 +211,7 @@
                   {
                      searchable:false,orderable:false,
                      "render": function ( data, type, row ) {
-                       return '<button type="button" class="btn btn-info btn-sm">Edit</button><button type="button" class="btn btn-warning btn-sm">Print</button><button type="button" class="btn btn-danger btn-sm" >Delete</button>';
+                       return '<button type="button" class="btn btn-info btn-sm">Edit</button><button type="button" class="btn btn-warning btn-sm">Print</button><button type="button" class="btn btn-danger btn-sm" onclick="deleteDoc('+row.obl_id+')">Delete</button>';
                      }
                   },
                   {

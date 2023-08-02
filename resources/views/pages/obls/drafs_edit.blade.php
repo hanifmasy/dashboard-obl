@@ -78,8 +78,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ $value['f1_nama_plggn'] }}" disabled><br><br>
-                                                    <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN">{{ $value['f1_alamat_plggn'] }}</textarea>
+                                                    <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn',$value['f1_nama_plggn']) }}" disabled><br><br>
+                                                    <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN">{{ old('f1_alamat_plggn',$value['f1_alamat_plggn']) }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -111,7 +111,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek" disabled>{{ $value['f1_judul_projek'] }}</textarea>
+                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek" disabled>{{ old('f1_judul_projek',$value['f1_judul_projek']) }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -125,9 +125,9 @@
                                                 <td>
                                                     <select name="f1_segmen" id="f1_segmen">
                                                         <option value="" disabled selected>Pilih Segmen</option>
-                                                        <option value="DES" {{ $value['f1_segmen'] == 'DES' ? ' selected="selected"' : '' }}>DES</option>
-                                                        <option value="DGS" {{ $value['f1_segmen'] == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>
-                                                        <option value="DBS" {{ $value['f1_segmen'] == 'DBS' ? ' selected="selected"' : '' }}>DBS</option>
+                                                        <option value="DES" {{ old('f1_segmen',$value['f1_segmen']) == 'DES' ? ' selected="selected"' : '' }}>DES</option>
+                                                        <option value="DGS" {{ old('f1_segmen',$value['f1_segmen']) == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>
+                                                        <option value="DBS" {{ old('f1_segmen',$value['f1_segmen']) == 'DBS' ? ' selected="selected"' : '' }}>DBS</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -143,7 +143,7 @@
                                                     @if($errors->has('f1_nilai_kb'))
                                                         <input class="rupiahs outline-input-merah" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb') }}">
                                                     @else
-                                                      <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ $value['f1_nilai_kb'] }}">
+                                                      <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb',$value['f1_nilai_kb']) }}">
                                                     @endif
                                                 </td>
                                             </tr>
@@ -156,11 +156,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;" value="{{ $value['f1_masa_layanan'] }}">
+                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;" value="{{ old('f1_masa_layanan',$value['f1_masa_layanan']) }}">
                                                     <select name="f1_satuan_masa_layanan" id="f1_satuan_masa_layanan">
-                                                        <option value="hari" {{ $value['f1_satuan_masa_layanan'] == 'hari' ? ' selected="selected"' : '' }}>hari</option>
-                                                        <option value="bulan" {{ $value['f1_satuan_masa_layanan'] == 'bulan' ? ' selected="selected"' : '' }}>bulan</option>
-                                                        <option value="tahun" {{ $value['f1_satuan_masa_layanan'] == 'tahun' ? ' selected="selected"' : '' }}>tahun</option>
+                                                        <option value="hari" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'hari' ? ' selected="selected"' : '' }}>hari</option>
+                                                        <option value="bulan" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'bulan' ? ' selected="selected"' : '' }}>bulan</option>
+                                                        <option value="tahun" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'tahun' ? ' selected="selected"' : '' }}>tahun</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -173,7 +173,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:350px;" type="text" name="f1_no_kfs_spk" id="f1_no_kfs_spk" value="{{ $value['f1_no_kfs_spk'] }}">
+                                                    <input style="width:350px;" type="text" name="f1_no_kfs_spk" id="f1_no_kfs_spk" value="{{ old('f1_no_kfs_spk',$value['f1_no_kfs_spk']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -185,7 +185,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ $value['f1_quote_kontrak'] }}">
+                                                    <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak',$value['f1_quote_kontrak']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -197,7 +197,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun" value="{{ $value['f1_nomor_akun'] }}">
+                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun" value="{{ old('f1_nomor_akun',$value['f1_nomor_akun']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -215,9 +215,9 @@
                                                     <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" {{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}>
                                                     <label class="outline-input-merah" for="jenis_kontrak"> Pasang Baru</label><br>
                                                     @else
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" {{ $value['f1_jenis_kontrak'] == 'perpanjangan' ? "checked" : "" }}>
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" {{ old('f1_jenis_kontrak',$value['f1_jenis_kontrak']) == 'perpanjangan' ? "checked" : "" }}>
                                                     <label for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" {{ $value['f1_jenis_kontrak'] == 'baru' ? "checked" : "" }}>
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" {{ old('f1_jenis_kontrak',$value['f1_jenis_kontrak']) == 'baru' ? "checked" : "" }}>
                                                     <label for="jenis_kontrak"> Pasang Baru</label><br>
                                                     @endif
                                                 </td>
@@ -233,10 +233,10 @@
                                                 <td>
                                                         <select name="f1_skema_bayar" id="f1_skema_bayar">
                                                             <option value="" disabled selected>Pilih Skema</option>
-                                                            <option value="otc" {{ $value['f1_skema_bayar'] == 'otc' ? ' selected="selected"' : '' }}>OTC</option>
-                                                            <option value="recurring" {{ $value['f1_skema_bayar'] == 'recurring' ? ' selected="selected"' : '' }}>Recurring</option>
-                                                            <option value="termin" {{ $value['f1_skema_bayar'] == 'termin' ? ' selected="selected"' : '' }}>Termin</option>
-                                                            <option value="otc_recurring" {{ $value['f1_skema_bayar'] == 'otc_recurring' ? ' selected="selected"' : '' }}>OTC Recurring</option>
+                                                            <option value="otc" {{ old('f1_skema_bayar',$value['f1_skema_bayar']) == 'otc' ? ' selected="selected"' : '' }}>OTC</option>
+                                                            <option value="recurring" {{ old('f1_skema_bayar',$value['f1_skema_bayar']) == 'recurring' ? ' selected="selected"' : '' }}>Recurring</option>
+                                                            <option value="termin" {{ old('f1_skema_bayar',$value['f1_skema_bayar']) == 'termin' ? ' selected="selected"' : '' }}>Termin</option>
+                                                            <option value="otc_recurring" {{ old('f1_skema_bayar',$value['f1_skema_bayar']) == 'otc_recurring' ? ' selected="selected"' : '' }}>OTC Recurring</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -251,24 +251,24 @@
                                                 <td>
                                                         <select name="f1_status_order" id="f1_status_order">
                                                             <option value="" disabled selected>Pilih Status</option>
-                                                            <option value="inprogress_provision_issued" {{ $value['f1_status_order'] == 'inprogress_provision_issued' ? ' selected="selected"' : '' }}>In Progress - Provision Issued</option>
-                                                            <option value="inprogress_provision_start" {{ $value['f1_status_order'] == 'inprogress_provision_start' ? ' selected="selected"' : '' }}>In Progress - Provision Start</option>
-                                                            <option value="inprogress_provision_failed" {{ $value['f1_status_order'] == 'inprogress_provision_failed' ? ' selected="selected"' : '' }}>In Progress - Provision Failed</option>
-                                                            <option value="inprogress_provision_complete" {{ $value['f1_status_order'] == 'inprogress_provision_complete' ? ' selected="selected"' : '' }}>In Progress - Provision Complete</option>
-                                                            <option value="inprogress_pending_billing" {{ $value['f1_status_order'] == 'inprogress_pending_billing' ? ' selected="selected"' : '' }}>In Progress - Pending Billing</option>
-                                                            <option value="inprogress_tsq_start" {{ $value['f1_status_order'] == 'inprogress_tsq_start' ? ' selected="selected"' : '' }}>In Progress - TSQ Start</option>
-                                                            <option value="inprogress_provision_designed" {{ $value['f1_status_order'] == 'inprogress_provision_designed' ? ' selected="selected"' : '' }}>In Progress - Provision Designed</option>
-                                                            <option value="approval" {{ $value['f1_status_order'] == 'approval' ? ' selected="selected"' : '' }}>Approval</option>
-                                                            <option value="submit" {{ $value['f1_status_order'] == 'submit' ? ' selected="selected"' : '' }}>Submit</option>
-                                                            <option value="failed_provision_failed" {{ $value['f1_status_order'] == 'failed_provision_failed' ? ' selected="selected"' : '' }}>Failed - Provision Failed</option>
-                                                            <option value="inprogress_fullfill_billing_start" {{ $value['f1_status_order'] == 'inprogress_fullfill_billing_start' ? ' selected="selected"' : '' }}>In Progress - Fullfill Billing Start</option>
-                                                            <option value="pending_baso" {{ $value['f1_status_order'] == 'pending_baso' ? ' selected="selected"' : '' }}>Pending BASO</option>
-                                                            <option value="failed_fullfill_billing_failed" {{ $value['f1_status_order'] == 'failed_fullfill_billing_failed' ? ' selected="selected"' : '' }}>Failed - Fullfill Billing Failed</option>
-                                                            <option value="fullfill_billing_complete" {{ $value['f1_status_order'] == 'fullfill_billing_complete' ? ' selected="selected"' : '' }}>Fullfill Billing Complete</option>
-                                                            <option value="abandoned" {{ $value['f1_status_order'] == 'abandoned' ? ' selected="selected"' : '' }}>Abandoned</option>
-                                                            <option value="pending_cancel" {{ $value['f1_status_order'] == 'pending_cancel' ? ' selected="selected"' : '' }}>Pending Cancel</option>
-                                                            <option value="complete" {{ $value['f1_status_order'] == 'complete' ? ' selected="selected"' : '' }}>Complete</option>
-                                                            <option value="cancel" {{ $value['f1_status_order'] == 'cancel' ? ' selected="selected"' : '' }}>Cancel</option>
+                                                            <option value="inprogress_provision_issued" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_issued' ? ' selected="selected"' : '' }}>In Progress - Provision Issued</option>
+                                                            <option value="inprogress_provision_start" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_start' ? ' selected="selected"' : '' }}>In Progress - Provision Start</option>
+                                                            <option value="inprogress_provision_failed" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_failed' ? ' selected="selected"' : '' }}>In Progress - Provision Failed</option>
+                                                            <option value="inprogress_provision_complete" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_complete' ? ' selected="selected"' : '' }}>In Progress - Provision Complete</option>
+                                                            <option value="inprogress_pending_billing" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_pending_billing' ? ' selected="selected"' : '' }}>In Progress - Pending Billing</option>
+                                                            <option value="inprogress_tsq_start" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_tsq_start' ? ' selected="selected"' : '' }}>In Progress - TSQ Start</option>
+                                                            <option value="inprogress_provision_designed" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_designed' ? ' selected="selected"' : '' }}>In Progress - Provision Designed</option>
+                                                            <option value="approval" {{ old('f1_status_order',$value['f1_status_order']) == 'approval' ? ' selected="selected"' : '' }}>Approval</option>
+                                                            <option value="submit" {{ old('f1_status_order',$value['f1_status_order']) == 'submit' ? ' selected="selected"' : '' }}>Submit</option>
+                                                            <option value="failed_provision_failed" {{ old('f1_status_order',$value['f1_status_order']) == 'failed_provision_failed' ? ' selected="selected"' : '' }}>Failed - Provision Failed</option>
+                                                            <option value="inprogress_fullfill_billing_start" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_fullfill_billing_start' ? ' selected="selected"' : '' }}>In Progress - Fullfill Billing Start</option>
+                                                            <option value="pending_baso" {{ old('f1_status_order',$value['f1_status_order']) == 'pending_baso' ? ' selected="selected"' : '' }}>Pending BASO</option>
+                                                            <option value="failed_fullfill_billing_failed" {{ old('f1_status_order',$value['f1_status_order']) == 'failed_fullfill_billing_failed' ? ' selected="selected"' : '' }}>Failed - Fullfill Billing Failed</option>
+                                                            <option value="fullfill_billing_complete" {{ old('f1_status_order',$value['f1_status_order']) == 'fullfill_billing_complete' ? ' selected="selected"' : '' }}>Fullfill Billing Complete</option>
+                                                            <option value="abandoned" {{ old('f1_status_order',$value['f1_status_order']) == 'abandoned' ? ' selected="selected"' : '' }}>Abandoned</option>
+                                                            <option value="pending_cancel" {{ old('f1_status_order',$value['f1_status_order']) == 'pending_cancel' ? ' selected="selected"' : '' }}>Pending Cancel</option>
+                                                            <option value="complete" {{ old('f1_status_order',$value['f1_status_order']) == 'complete' ? ' selected="selected"' : '' }}>Complete</option>
+                                                            <option value="cancel" {{ old('f1_status_order',$value['f1_status_order']) == 'cancel' ? ' selected="selected"' : '' }}>Cancel</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -281,7 +281,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan">{{ $value['f1_keterangan'] }}</textarea>
+                                                    <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan">{{ old('f1_keterangan',$value['f1_keterangan']) }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
@@ -326,9 +326,9 @@
                                                 </td>
                                                 <td>
                                                   @if($errors->has('f2_tgl_p1'))
-                                                    <input class="outline-input-merah" type="date" name="f2_tgl_p1" id="f2_tgl_p1">
+                                                    <input class="outline-input-merah" type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1') }}">
                                                   @else
-                                                    <input type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ $value['tgl_p1'] }}">
+                                                    <input type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1',$value['tgl_p1']) }}">
                                                   @endif
                                                 </td>
                                             </tr>
@@ -350,22 +350,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja">{{ $value['p2_lingkup_kerja'] }}</textarea>
+                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja">{{ old('p2_lingkup_kerja',$value['p2_lingkup_kerja']) }}</textarea>
                                                 </td>
                                             </tr>
-                                            <!-- <tr class="formP2">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Dibuat Oleh</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="dibuat_oleh" id="dibuat_oleh" placeholder="NAMA/NIK">
-                                                    <input type="text" name="dibuat_oleh_jabatan" id="dibuat_oleh_jabatan" placeholder="JABATAN">
-                                                </td>
-                                            </tr> -->
                                             <tr class="formP2">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -375,7 +362,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p2_tgl_justifikasi" id="p2_tgl_justifikasi" value="{{ $value['tgl_justifikasi'] }}">
+                                                    <input type="date" name="p2_tgl_justifikasi" id="p2_tgl_justifikasi" value="{{ old('p2_tgl_justifikasi',$value['tgl_justifikasi']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP2">
@@ -389,9 +376,9 @@
                                                 <td>
                                                     <select name="p2_dievaluasi_oleh" id="p2_dievaluasi_oleh">
                                                         <option value="" disabled selected>Pilih dievaluasi oleh</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ $value['p2_dievaluasi_oleh'] == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p2_dievaluasi_oleh'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p2_dievaluasi_oleh'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p2_dievaluasi_oleh',$value['p2_dievaluasi_oleh']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p2_dievaluasi_oleh',$value['p2_dievaluasi_oleh']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p2_dievaluasi_oleh',$value['p2_dievaluasi_oleh']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -406,8 +393,8 @@
                                                 <td>
                                                     <select name="p2_disetujui_oleh" id="p2_disetujui_oleh">
                                                         <option value="" disabled selected>Pilih disetujui oleh</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p2_disetujui_oleh'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Subroto Marzuki - 740130</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p2_disetujui_oleh'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Taufik - 730206</option>
+                                                        <option value="Hariyadi_800031" {{ old('p2_disetujui_oleh',$value['p2_disetujui_oleh']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Subroto Marzuki - 740130</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p2_disetujui_oleh',$value['p2_disetujui_oleh']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Taufik - 730206</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -420,13 +407,13 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju" {{ $value['p2_pilihan_catatan'] == 'setuju' ? "checked" : "" }}>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju" {{ old('p2_pilihan_catatan',$value['p2_pilihan_catatan']) == 'setuju' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Setuju</label><br>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju_dgn_catatan" {{ $value['p2_pilihan_catatan'] == 'setuju_dgn_catatan' ? "checked" : "" }}>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju_dgn_catatan" {{ old('p2_pilihan_catatan',$value['p2_pilihan_catatan']) == 'setuju_dgn_catatan' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Setuju dengan Catatan</label><br>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="tidak_setuju" {{ $value['p2_pilihan_catatan'] == 'tidak_setuju' ? "checked" : "" }}>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="tidak_setuju" {{ old('p2_pilihan_catatan',$value['p2_pilihan_catatan']) == 'tidak_setuju' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Tidak Setuju</label><br>
-                                                        <textarea name="p2_catatan" id="p2_catatan" cols="50" rows="2"></textarea>
+                                                        <textarea name="p2_catatan" id="p2_catatan" cols="50" rows="2">{{ old('p2_catatan',$value['p2_catatan']) }}</textarea>
 
                                                 </td>
                                             </tr>
@@ -447,9 +434,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" value="{{ $value['p3_pejabat_mitra_nama'] }}"><br>
-                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;">{{ $value['p3_pejabat_mitra_alamat'] }}</textarea><br>
-                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" value="{{ $value['p3_pejabat_mitra_telepon'] }}">
+                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" value="{{ old('p3_pejabat_mitra_nama',$value['p3_pejabat_mitra_nama']) }}"><br>
+                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;">{{ old('p3_pejabat_mitra_alamat',$value['p3_pejabat_mitra_alamat']) }}</textarea><br>
+                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" value="{{ old('p3_pejabat_mitra_telepon',$value['p3_pejabat_mitra_telepon']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -463,10 +450,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada" {{ $value['p3_status_rapat_pengadaan'] == 'ada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Ada</label><br>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada" {{ $value['p3_status_rapat_pengadaan'] == 'nada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
-                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;" value="{{ $value['tgl_rapat_pengadaan'] }}"> WIB</div>
-                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" value="{{ $value['p3_tmpt_rapat_pengadaan'] }}" >
+                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada" {{ old('p3_status_rapat_pengadaan',$value['p3_status_rapat_pengadaan']) == 'ada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Ada</label><br>
+                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada" {{ old('p3_status_rapat_pengadaan',$value['p3_status_rapat_pengadaan']) == 'nada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
+                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tgl_rapat_pengadaan',$value['tgl_rapat_pengadaan']) }}"> WIB</div>
+                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tmpt_rapat_pengadaan',$value['p3_tmpt_rapat_pengadaan']) }}" >
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -480,8 +467,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;" value="{{ $value['tgl_terima_sp'] }}"> WIB<br>
-                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" value="{{ $value['p3_alamat_terima_sp'] }}">
+                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;" value="{{ old('p3_tgl_terima_sp',$value['tgl_terima_sp']) }}"> WIB<br>
+                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" value="{{ old('p3_alamat_terima_sp',$value['p3_alamat_terima_sp']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -495,9 +482,9 @@
                                                 <td>
                                                     <select name="p3_manager_obl" id="p3_manager_obl">
                                                         <option value="" disabled selected>Pilih manager</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ $value['p3_manager_obl'] == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p3_manager_obl'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p3_manager_obl'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -520,7 +507,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph" value="{{ $value['tgl_sph'] }}">
+                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph" value="{{ old('p4_tgl_sph',$value['tgl_sph']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -532,7 +519,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p4_waktu_layanan" id="p4_waktu_layanan" value="{{ $value['waktu_layanan'] }}">
+                                                    <input type="date" name="p4_waktu_layanan" id="p4_waktu_layanan" value="{{ old('p4_waktu_layanan',$value['waktu_layanan']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -546,9 +533,9 @@
                                                 <td>
                                                     <select name="p4_skema_bisnis" id="p4_skema_bisnis">
                                                         <option value="" disabled selected>Pilih Skema Bisnis</option>
-                                                        <option value="sewa_murni" {{ $value['p4_skema_bisnis'] == 'sewa_murni' ? ' selected="selected"' : '' }}>Sewa Murni</option>
-                                                        <option value="sewa_beli" {{ $value['p4_skema_bisnis'] == 'sewa_beli' ? ' selected="selected"' : '' }}>Sewa Beli</option>
-                                                        <option value="beli_putus" {{ $value['p4_skema_bisnis'] == 'beli_putus' ? ' selected="selected"' : '' }}>Pengadaan Beli Putus</option>
+                                                        <option value="sewa_murni" {{ old('p4_skema_bisnis',$value['p4_skema_bisnis']) == 'sewa_murni' ? ' selected="selected"' : '' }}>Sewa Murni</option>
+                                                        <option value="sewa_beli" {{ old('p4_skema_bisnis',$value['p4_skema_bisnis']) == 'sewa_beli' ? ' selected="selected"' : '' }}>Sewa Beli</option>
+                                                        <option value="beli_putus" {{ old('p4_skema_bisnis',$value['p4_skema_bisnis']) == 'beli_putus' ? ' selected="selected"' : '' }}>Pengadaan Beli Putus</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -563,8 +550,8 @@
                                                 <td>
                                                     <select name="p4_mekanisme_pembayaran" id="p4_mekanisme_pembayaran">
                                                         <option value="" disabled selected>Pilih Mekanisme</option>
-                                                        <option value="back_to_back" {{ $value['p4_mekanisme_pembayaran'] == 'back_to_back' ? ' selected="selected"' : '' }}>Back To Back</option>
-                                                        <option value="non_back_to_back" {{ $value['p4_mekanisme_pembayaran'] == 'non_back_to_back' ? ' selected="selected"' : '' }}>Non Back To Back</option>
+                                                        <option value="back_to_back" {{ old('p4_mekanisme_pembayaran',$value['p4_mekanisme_pembayaran']) == 'back_to_back' ? ' selected="selected"' : '' }}>Back To Back</option>
+                                                        <option value="non_back_to_back" {{ old('p4_mekanisme_pembayaran',$value['p4_mekanisme_pembayaran']) == 'non_back_to_back' ? ' selected="selected"' : '' }}>Non Back To Back</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -577,7 +564,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="p4_slg" id="p4_slg" style="width:100px;" value="{{ $value['p4_slg'] }}"> %
+                                                    <input type="number" min="0" name="p4_slg" id="p4_slg" style="width:100px;" value="{{ old('p4_slg',$value['p4_slg']) }}"> %
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -591,9 +578,9 @@
                                                 <td>
                                                     <select name="p4_fasilitator" id="p4_fasilitator">
                                                         <option value="" disabled selected>Pilih Fasilitator</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ $value['p4_fasilitator'] == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p4_fasilitator'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p4_fasilitator'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p4_fasilitator',$value['p4_fasilitator']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p4_fasilitator',$value['p4_fasilitator']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p4_fasilitator',$value['p4_fasilitator']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -608,9 +595,9 @@
                                                 <td>
                                                     <select name="p4_pengesahan" id="p4_pengesahan">
                                                         <option value="" disabled selected>Pilih Pengesahan</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ $value['p4_pengesahan'] == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p4_pengesahan'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p4_pengesahan'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p4_pengesahan',$value['p4_pengesahan']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p4_pengesahan',$value['p4_pengesahan']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p4_pengesahan',$value['p4_pengesahan']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -634,14 +621,26 @@
                                                           </tr>
                                                         </thead>
                                                         <tbody>
-                                                          @if( isset($draf_edit_p4_attendees) && $draf_edit_p4_attendees )
-                                                            @foreach($draf_edit_p4_attendees as $tunjuk => $nilai)
-                                                              <tr>
-                                                                <th scrope="row">{{ ($tunjuk + 1) }}</th>
-                                                                <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" value="{{ $nilai['p4_attendees'] }}"></td>
-                                                                <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
-                                                              </tr>
-                                                            @endforeach
+                                                          @if($errors->has('p4_attendees'))
+                                                              @if( old('p4_attendees') )
+                                                                @for($i = 0; $i < count(old('p4_attendees')); $i++ )
+                                                                  <tr>
+                                                                    <th scrope="row">{{ ($i + 1) }}</th>
+                                                                    <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" value="{{ old('p4_attendees.'.$i) }}"></td>
+                                                                    <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
+                                                                  </tr>
+                                                                @endfor
+                                                              @endif
+                                                          @else
+                                                              @if( isset($draf_edit_p4_attendees) && $draf_edit_p4_attendees )
+                                                                @foreach($draf_edit_p4_attendees as $tunjuk => $nilai)
+                                                                  <tr>
+                                                                    <th scrope="row">{{ ($tunjuk + 1) }}</th>
+                                                                    <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" value="{{ old('p4_attendees.'.$tunjuk,$nilai['p4_attendees']) }}"></td>
+                                                                    <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
+                                                                  </tr>
+                                                                @endforeach
+                                                              @endif
                                                           @endif
                                                         </tbody>
                                                     </table>
@@ -666,7 +665,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p5_harga_penawaran" id="p5_harga_penawaran" style="width:350px;" value="{{ $value['p5_harga_penawaran'] }}">
+                                                    <input class="rupiahs" type="text" name="p5_harga_penawaran" id="p5_harga_penawaran" style="width:350px;" value="{{ old('p5_harga_penawaran',$value['p5_harga_penawaran']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP5">
@@ -680,9 +679,9 @@
                                                 <td>
                                                     <select name="p5_ttd_evaluator" id="p5_ttd_evaluator">
                                                         <option value="" disabled selected>Pilih Evaluator</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ $value['p5_ttd_evaluator'] == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p5_ttd_evaluator'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p5_ttd_evaluator'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p5_ttd_evaluator',$value['p5_ttd_evaluator']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p5_ttd_evaluator',$value['p5_ttd_evaluator']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p5_ttd_evaluator',$value['p5_ttd_evaluator']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -703,7 +702,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="p6_ttd_bast_telkom" name="p6_ttd_bast_telkom" style="width:350px;" value="{{ $value['p6_ttd_bast_telkom'] }}">
+                                                    <input type="text" id="p6_ttd_bast_telkom" name="p6_ttd_bast_telkom" style="width:350px;" value="{{ old('p6_ttd_bast_telkom',$value['p6_ttd_bast_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -715,7 +714,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="p6_ttd_bast_mitra" name="p6_ttd_bast_mitra" style="width:350px;" value="{{ $value['p6_ttd_bast_mitra'] }}">
+                                                    <input type="text" id="p6_ttd_bast_mitra" name="p6_ttd_bast_mitra" style="width:350px;" value="{{ old('p6_ttd_bast_mitra',$value['p6_ttd_bast_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -727,7 +726,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p6_harga_negosiasi" id="p6_harga_negosiasi" style="width:350px;" value="{{ $value['p6_harga_negosiasi'] }}">
+                                                    <input class="rupiahs" type="text" name="p6_harga_negosiasi" id="p6_harga_negosiasi" style="width:350px;" value="{{ old('p6_harga_negosiasi',$value['p6_harga_negosiasi']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -739,8 +738,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p6_nama_peserta_mitra" id="p6_nama_peserta_mitra" style="width:350px;" value="{{ $value['p6_nama_peserta_mitra'] }}"><br>
-                                                    <input type="text" style="width:350px;" id="p6_jabatan_peserta_mitra" name="p6_jabatan_peserta_mitra" value="{{ $value['p6_jabatan_peserta_mitra'] }}">
+                                                    <input type="text" name="p6_nama_peserta_mitra" id="p6_nama_peserta_mitra" style="width:350px;" value="{{ old('p6_nama_peserta_mitra',$value['p6_nama_peserta_mitra']) }}"><br>
+                                                    <input type="text" style="width:350px;" id="p6_jabatan_peserta_mitra" name="p6_jabatan_peserta_mitra" value="{{ old('p6_jabatan_peserta_mitra',$value['p6_jabatan_peserta_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -754,9 +753,9 @@
                                                 <td>
                                                     <select name="p6_peserta_rapat_telkom" id="p6_peserta_rapat_telkom">
                                                         <option value="" disabled selected>Pilih Peserta</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ $value['p6_peserta_rapat_telkom'] == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p6_peserta_rapat_telkom'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p6_peserta_rapat_telkom'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p6_peserta_rapat_telkom',$value['p6_peserta_rapat_telkom']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p6_peserta_rapat_telkom',$value['p6_peserta_rapat_telkom']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p6_peserta_rapat_telkom',$value['p6_peserta_rapat_telkom']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -771,9 +770,9 @@
                                                 <td>
                                                     <select name="p6_pengesahan" id="p6_pengesahan">
                                                         <option value="" disabled selected>Pilih Pengesahan</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ $value['p6_pengesahan'] == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p6_pengesahan'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p6_pengesahan'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p6_pengesahan',$value['p6_pengesahan']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p6_pengesahan',$value['p6_pengesahan']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p6_pengesahan',$value['p6_pengesahan']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -796,7 +795,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="p7_lampiran_berkas" id="p7_lampiran_berkas" style="width:100px;" min="0" value="{{ $value['p7_lampiran_berkas'] }}">
+                                                    <input type="number" name="p7_lampiran_berkas" id="p7_lampiran_berkas" style="width:100px;" min="0" value="{{ old('p7_lampiran_berkas',$value['p7_lampiran_berkas']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -808,7 +807,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_harga_pekerjaan" id="p7_harga_pekerjaan" style="width:350px;" value="{{ $value['p7_harga_pekerjaan'] }}"><br>
+                                                    <input class="rupiahs" type="text" name="p7_harga_pekerjaan" id="p7_harga_pekerjaan" style="width:350px;" value="{{ old('p7_harga_pekerjaan',$value['p7_harga_pekerjaan']) }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -820,7 +819,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" value="{{ $value['p7_otc'] }}"><br>
+                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" value="{{ old('p7_otc',$value['p7_otc']) }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -832,7 +831,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" value="{{ $value['p7_rincian_bulanan'] }}"><br>
+                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" value="{{ old('p7_rincian_bulanan',$value['p7_rincian_bulanan']) }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -847,9 +846,9 @@
                                                 <td>
                                                     <select name="p7_pemeriksa" id="p7_pemeriksa">
                                                         <option value="" disabled selected>Pilih Pemeriksa</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ $value['p7_pemeriksa'] == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ $value['p7_pemeriksa'] == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ $value['p7_pemeriksa'] == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p7_pemeriksa',$value['p7_pemeriksa']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p7_pemeriksa',$value['p7_pemeriksa']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p7_pemeriksa',$value['p7_pemeriksa']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -862,7 +861,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" value="{{ $value['p7_tembusan'] }}"><br>
+                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" value="{{ old('p7_tembusan',$value['p7_tembusan']) }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -912,7 +911,7 @@
                                                   @if($errors->has('wo_tgl_fo'))
                                                     <input class="outline-input-merah" type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo') }}">
                                                   @else
-                                                    <input type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ $value['tgl_fo'] }}">
+                                                    <input type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo',$value['tgl_fo']) }}">
                                                   @endif
 
                                                 </td>
@@ -926,7 +925,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ $value['wo_nomor_kb'] }}">
+                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb',$value['wo_nomor_kb']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -938,7 +937,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="wo_jenis_layanan" id="wo_jenis_layanan" style="width:350px;" value="{{ $value['wo_jenis_layanan'] }}">
+                                                    <input type="text" name="wo_jenis_layanan" id="wo_jenis_layanan" style="width:350px;" value="{{ old('wo_jenis_layanan',$value['wo_jenis_layanan']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -950,7 +949,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="wo_jumlah_layanan" id="wo_jumlah_layanan" min="0" style="width:100px;" value="{{ $value['wo_jumlah_layanan'] }}">
+                                                    <input type="number" name="wo_jumlah_layanan" id="wo_jumlah_layanan" min="0" style="width:100px;" value="{{ old('wo_jumlah_layanan',$value['wo_jumlah_layanan']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -974,7 +973,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_harga_ke_plggn" id="wo_harga_ke_plggn" style="width:350px;" value="{{ $value['wo_harga_ke_plggn'] }}">
+                                                    <input class="rupiahs" type="text" name="wo_harga_ke_plggn" id="wo_harga_ke_plggn" style="width:350px;" value="{{ old('wo_harga_ke_plggn',$value['wo_harga_ke_plggn']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -986,7 +985,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_plggn" id="wo_onetime_charge_plggn" style="width:350px;" value="{{ $value['wo_onetime_charge_plggn'] }}">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_plggn" id="wo_onetime_charge_plggn" style="width:350px;" value="{{ old('wo_onetime_charge_plggn',$value['wo_onetime_charge_plggn']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -998,7 +997,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_monthly_plggn" id="wo_monthly_plggn" style="width:350px;" value="{{ $value['wo_monthly_plggn'] }}">
+                                                    <input class="rupiahs" type="text" name="wo_monthly_plggn" id="wo_monthly_plggn" style="width:350px;" value="{{ old('wo_monthly_plggn',$value['wo_monthly_plggn']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1022,7 +1021,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_telkom" id="wo_onetime_charge_telkom" style="width:350px;" value="{{ $value['wo_onetime_charge_telkom'] }}">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_telkom" id="wo_onetime_charge_telkom" style="width:350px;" value="{{ old('wo_onetime_charge_telkom',$value['wo_onetime_charge_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1034,8 +1033,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="wo_persen_telkom" id="wo_persen_telkom" style="width:100px;" value="{{ $value['wo_persen_telkom'] }}"> % atau sebesar
-                                                    <input type="text" name="wo_monthly_telkom" id="wo_monthly_telkom" style="width:300px;" value="{{ $value['wo_monthly_telkom'] }}">
+                                                    <input type="number" min="0" name="wo_persen_telkom" id="wo_persen_telkom" style="width:100px;" value="{{ old('wo_persen_telkom',$value['wo_persen_telkom']) }}"> % atau sebesar
+                                                    <input type="text" name="wo_monthly_telkom" id="wo_monthly_telkom" style="width:300px;" value="{{ old('wo_monthly_telkom',$value['wo_monthly_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1059,7 +1058,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_mitra" id="wo_onetime_charge_mitra" style="width:350px;" value="{{ $value['wo_onetime_charge_mitra'] }}">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_mitra" id="wo_onetime_charge_mitra" style="width:350px;" value="{{ old('wo_onetime_charge_mitra',$value['wo_onetime_charge_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1071,8 +1070,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="wo_persen_mitra" id="wo_persen_mitra" style="width:100px;" value="{{ $value['wo_persen_mitra'] }}"> % atau sebesar
-                                                    <input type="text" name="wo_monthly_mitra" id="wo_monthly_mitra" style="width:300px;" value="{{ $value['wo_monthly_mitra'] }}">
+                                                    <input type="number" min="0" name="wo_persen_mitra" id="wo_persen_mitra" style="width:100px;" value="{{ old('wo_persen_mitra',$value['wo_persen_mitra']) }}"> % atau sebesar
+                                                    <input type="text" name="wo_monthly_mitra" id="wo_monthly_mitra" style="width:300px;" value="{{ old('wo_monthly_mitra',$value['wo_monthly_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -1092,7 +1091,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ $value['sp_nomor_kb'] }}">
+                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ old('sp_nomor_kb',$value['sp_nomor_kb']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formSP"><td colspan="2"><br></td></tr>
@@ -1112,7 +1111,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ $value['kl_nomor_kb'] }}">
+                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ old('kl_nomor_kb',$value['kl_nomor_kb']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1124,7 +1123,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_kl_mitra" id="kl_no_kl_mitra" style="width:300px;" value="{{ $value['kl_no_kl_mitra'] }}">
+                                                    <input type="text" name="kl_no_kl_mitra" id="kl_no_kl_mitra" style="width:300px;" value="{{ old('kl_no_kl_mitra',$value['kl_no_kl_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1136,7 +1135,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_tempat_ttd_kl" id="kl_tempat_ttd_kl" style="width:300px;" value="{{ $value['kl_tempat_ttd_kl'] }}">
+                                                    <input type="text" name="kl_tempat_ttd_kl" id="kl_tempat_ttd_kl" style="width:300px;" value="{{ old('kl_tempat_ttd_kl',$value['kl_tempat_ttd_kl']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1148,7 +1147,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_notaris" id="kl_notaris" style="width:300px;" value="{{ $value['kl_notaris'] }}">
+                                                    <input type="text" name="kl_notaris" id="kl_notaris" style="width:300px;" value="{{ old('kl_notaris',$value['kl_notaris']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1160,7 +1159,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_akta_notaris" id="kl_akta_notaris" style="width:300px;" value="{{ $value['kl_akta_notaris'] }}">
+                                                    <input type="text" name="kl_akta_notaris" id="kl_akta_notaris" style="width:300px;" value="{{ old('kl_akta_notaris',$value['kl_akta_notaris']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1172,7 +1171,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_akta_notaris" id="kl_tgl_akta_notaris" style="width:300px;" value="{{ $value['tgl_akta_notaris'] }}">
+                                                    <input type="date" name="kl_tgl_akta_notaris" id="kl_tgl_akta_notaris" style="width:300px;" value="{{ old('kl_tgl_akta_notaris',$value['tgl_akta_notaris']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1184,7 +1183,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_pejabat_telkom" id="kl_nama_pejabat_telkom" style="width:300px;" value="{{ $value['kl_nama_pejabat_telkom'] }}">
+                                                    <input type="text" name="kl_nama_pejabat_telkom" id="kl_nama_pejabat_telkom" style="width:300px;" value="{{ old('kl_nama_pejabat_telkom',$value['kl_nama_pejabat_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1196,7 +1195,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_jabatan_pejabat_telkom" id="kl_jabatan_pejabat_telkom" style="width:300px;" value="{{ $value['kl_jabatan_pejabat_telkom'] }}">
+                                                    <input type="text" name="kl_jabatan_pejabat_telkom" id="kl_jabatan_pejabat_telkom" style="width:300px;" value="{{ old('kl_jabatan_pejabat_telkom',$value['kl_jabatan_pejabat_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1209,7 +1208,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_npwp_mitra" id="kl_npwp_mitra" style="width:300px;" value="{{ $value['kl_npwp_mitra'] }}">
+                                                    <input type="text" name="kl_npwp_mitra" id="kl_npwp_mitra" style="width:300px;" value="{{ old('kl_npwp_mitra',$value['kl_npwp_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1221,7 +1220,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_anggaran_mitra" id="kl_no_anggaran_mitra" style="width:300px;" value="{{ $value['kl_no_anggaran_mitra'] }}">
+                                                    <input type="text" name="kl_no_anggaran_mitra" id="kl_no_anggaran_mitra" style="width:300px;" value="{{ old('kl_no_anggaran_mitra',$value['kl_no_anggaran_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1233,7 +1232,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_anggaran_mitra" id="kl_tgl_anggaran_mitra" style="width:300px;" value="{{ $value['tgl_anggaran_mitra'] }}">
+                                                    <input type="date" name="kl_tgl_anggaran_mitra" id="kl_tgl_anggaran_mitra" style="width:300px;" value="{{ old('kl_tgl_anggaran_mitra',$value['tgl_anggaran_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1245,7 +1244,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_pejabat_mitra" id="kl_nama_pejabat_mitra" style="width:300px;" value="{{ $value['kl_nama_pejabat_mitra'] }}">
+                                                    <input type="text" name="kl_nama_pejabat_mitra" id="kl_nama_pejabat_mitra" style="width:300px;" value="{{ old('kl_nama_pejabat_mitra',$value['kl_nama_pejabat_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1257,7 +1256,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_jabatan_pejabat_mitra" id="kl_jabatan_pejabat_mitra" style="width:300px;" value="{{ $value['kl_jabatan_pejabat_mitra'] }}">
+                                                    <input type="text" name="kl_jabatan_pejabat_mitra" id="kl_jabatan_pejabat_mitra" style="width:300px;" value="{{ old('kl_jabatan_pejabat_mitra',$value['kl_jabatan_pejabat_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1269,7 +1268,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_skm" id="kl_no_skm" style="width:300px;" value="{{ $value['kl_no_skm'] }}">
+                                                    <input type="text" name="kl_no_skm" id="kl_no_skm" style="width:300px;" value="{{ old('kl_no_skm',$value['kl_no_skm']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1281,7 +1280,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_skm" id="kl_tgl_skm" style="width:300px;" value="{{ $value['tgl_skm'] }}">
+                                                    <input type="date" name="kl_tgl_skm" id="kl_tgl_skm" style="width:300px;" value="{{ old('kl_tgl_skm',$value['tgl_skm']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1293,7 +1292,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_perihal_skm" id="kl_perihal_skm" style="width:300px;" value="{{ $value['kl_perihal_skm'] }}">
+                                                    <input type="text" name="kl_perihal_skm" id="kl_perihal_skm" style="width:300px;" value="{{ old('kl_perihal_skm',$value['kl_perihal_skm']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1306,7 +1305,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_akhir_kl" id="kl_tgl_akhir_kl" style="width:300px;" value="{{ $value['tgl_akhir_kl'] }}">
+                                                    <input type="date" name="kl_tgl_akhir_kl" id="kl_tgl_akhir_kl" style="width:300px;" value="{{ old('kl_tgl_akhir_kl',$value['tgl_akhir_kl']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1319,7 +1318,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_bayar_dp" id="kl_bayar_dp" style="width:300px;" value="{{ $value['kl_bayar_dp'] }}">
+                                                    <input type="text" name="kl_bayar_dp" id="kl_bayar_dp" style="width:300px;" value="{{ old('kl_bayar_dp',$value['kl_bayar_dp']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1331,7 +1330,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_bank_mitra" id="kl_nama_bank_mitra" style="width:300px;" value="{{ $value['kl_nama_bank_mitra'] }}">
+                                                    <input type="text" name="kl_nama_bank_mitra" id="kl_nama_bank_mitra" style="width:300px;" value="{{ old('kl_nama_bank_mitra',$value['kl_nama_bank_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1343,7 +1342,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_cabang_bank_mitra" id="kl_cabang_bank_mitra" style="width:300px;" value="{{ $value['kl_cabang_bank_mitra'] }}">
+                                                    <input type="text" name="kl_cabang_bank_mitra" id="kl_cabang_bank_mitra" style="width:300px;" value="{{ old('kl_cabang_bank_mitra',$value['kl_cabang_bank_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1355,7 +1354,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;" value="{{ $value['kl_rek_bank_mitra'] }}">
+                                                    <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;" value="{{ old('kl_rek_bank_mitra',$value['kl_rek_bank_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1367,7 +1366,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_an_bank_mitra" id="kl_an_bank_mitra" style="width:300px;" value="{{ $value['kl_an_bank_mitra'] }}">
+                                                    <input type="text" name="kl_an_bank_mitra" id="kl_an_bank_mitra" style="width:300px;" value="{{ old('kl_an_bank_mitra',$value['kl_an_bank_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1676,8 +1675,8 @@
 
                 // Start dd rows table p4 attendees
                 var draf_edit_p4_attendees = @json($draf_edit_p4_attendees);
-                var draf_edit_p4_attendees_length = 1;
-                if(draf_edit_p4_attendees && draf_edit_p4_attendees.length > 0){ draf_edit_p4_attendees_length = draf_edit_p4_attendees.length; }
+                var draf_edit_p4_attendees_length = 0;
+                if(draf_edit_p4_attendees && draf_edit_p4_attendees_length > 0){ draf_edit_p4_attendees_length = draf_edit_p4_attendees.length; }
                 var counter = (draf_edit_p4_attendees_length+1);
                 $("#insertRow").on("click", function (event) {
                     event.preventDefault();

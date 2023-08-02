@@ -60,11 +60,11 @@ class DrafsController extends Controller
           else{ return redirect()->route('inputs')->with('status', 'You Have Zero Draf!'); }
         }
         else {
-          return redirect('obl-drafs')->with('status', 'Oops! Wrong Routing.');
+          return redirect('obl-drafs')->with('status', 'Oops! Something Went Wrong.');
         }
       }
       else{
-        return redirect('obl-drafs')->with('status', 'Oops! Something Went Wrong.');
+        return redirect('obl-drafs')->with('status', 'Oops! Wrong Routing.');
       }
     }
 
@@ -76,28 +76,30 @@ class DrafsController extends Controller
           $edit_id = intval($edit_id);
           $draf_edit = Draf::select(
             '*',
-            DB::raw("to_char(f2_tgl_p1,'yyyy-mm-dd') as tgl_p1 "),
-            DB::raw("to_char(p2_tgl_justifikasi,'yyyy-mm-dd') as tgl_justifikasi "),
-            DB::raw("to_char(p3_tgl_rapat_pengadaan,'yyyy-mm-dd hh24:i') as tgl_rapat_pengadaan "),
-            DB::raw("to_char(p3_tgl_terima_sp,'yyyy-mm-dd hh24:i') as tgl_terima_sp "),
-            DB::raw("to_char(p4_tgl_sph,'yyyy-mm-dd') as tgl_sph "),
-            DB::raw("to_char(p4_waktu_layanan,'yyyy-mm-dd') as waktu_layanan "),
-            DB::raw("to_char(wo_tgl_fo,'yyyy-mm-dd') as tgl_fo "),
-            DB::raw("to_char(kl_tgl_akta_notaris,'yyyy-mm-dd') as tgl_akta_notaris "),
-            DB::raw("to_char(kl_tgl_anggaran_mitra,'yyyy-mm-dd') as tgl_anggaran_mitra "),
-            DB::raw("to_char(kl_tgl_skm,'yyyy-mm-dd') as tgl_skm "),
-            DB::raw("to_char(kl_tgl_akhir_kl,'yyyy-mm-dd') as tgl_akhir_kl ")
-            )->where('id',$edit_id)->get()->toArray();
+            DB::raw("TO_CHAR(f2_tgl_p1,'yyyy-mm-dd') AS tgl_p1 "),
+            DB::raw("TO_CHAR(p2_tgl_justifikasi,'yyyy-mm-dd') AS tgl_justifikasi "),
+            DB::raw("TO_CHAR(p3_tgl_rapat_pengadaan,'yyyy-mm-dd hh24:mi:ss') AS tgl_rapat_pengadaan "),
+            DB::raw("TO_CHAR(p3_tgl_terima_sp,'yyyy-mm-dd hh24:mi:ss') AS tgl_terima_sp "),
+            DB::raw("TO_CHAR(p4_tgl_sph,'yyyy-mm-dd') AS tgl_sph "),
+            DB::raw("TO_CHAR(p4_waktu_layanan,'yyyy-mm-dd') AS waktu_layanan "),
+            DB::raw("TO_CHAR(wo_tgl_fo,'yyyy-mm-dd') AS tgl_fo "),
+            DB::raw("TO_CHAR(kl_tgl_akta_notaris,'yyyy-mm-dd') AS tgl_akta_notaris "),
+            DB::raw("TO_CHAR(kl_tgl_anggaran_mitra,'yyyy-mm-dd') AS tgl_anggaran_mitra "),
+            DB::raw("TO_CHAR(kl_tgl_skm,'yyyy-mm-dd') AS tgl_skm "),
+            DB::raw("TO_CHAR(kl_tgl_akhir_kl,'yyyy-mm-dd') AS tgl_akhir_kl ")
+            )
+            ->where('id',$edit_id)
+            ->get()->toArray();
           $draf_edit_p4_attendees = DB::connection('pgsql')->table('form_p4_attendees')->select('*')->where('obl_id',$edit_id)->get()->toArray();
           // dd($draf_edit);
           return view('pages.obls.drafs_edit',compact('draf_edit','draf_edit_p4_attendees'));
         }
         else {
-          return redirect('obl-drafs')->with('status', 'Oops! Wrong Routing.');
+          return redirect('obl-drafs')->with('status', 'Oops! Something Went Wrong.');
         }
       }
       else{
-        return redirect('obl-drafs')->with('status', 'Oops! Something Went Wrong.');
+        return redirect('obl-drafs')->with('status', 'Oops! Wrong Routing.');
       }
     }
 
@@ -171,6 +173,8 @@ class DrafsController extends Controller
           }
           $inputan_masuk['f1_nilai_kb'] = 'required';
           $inputan_masuk['f1_jenis_kontrak'] = 'required';
+          $inputan_masuk['f1_judul_projek'] = 'required';
+          $inputan_masuk['f1_nama_plggn'] = 'required';
           $validasi = $request->all();
           $validator = Validator::make($validasi,$inputan_masuk);
           if($validator->fails()){ return back()->withErrors($validator)->withInput(); }

@@ -45,3 +45,4 @@ Route::post('inputs/create', [InputsController::class, 'create'])->middleware('a
 Route::post('obl-drafs/edit', [DrafsController::class, 'edit'])->middleware('auth')->name('obl.drafs.edit');
 Route::post('obl-drafs/edit/update', [DrafsController::class, 'update'])->middleware('auth')->name('obl.drafs.edit.update');
 Route::post('obl-drafs/delete', [DrafsController::class, 'delete'])->middleware('auth')->name('obl.drafs.delete');
+Route::post('obl-tables/delete', [TableOblController::class, 'delete'])->middleware('auth')->name('obl.tables.delete');

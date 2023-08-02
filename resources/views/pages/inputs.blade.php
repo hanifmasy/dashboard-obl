@@ -79,11 +79,11 @@
                                                 </td>
                                                 <td>
                                                     @if($errors->has('f1_nama_plggn'))
-                                                      <input style="width:450px;" class="outline-input-merah" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN"><br><br>
+                                                      <input style="width:450px;" class="outline-input-merah" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn','') }}"><br><br>
                                                     @else
-                                                      <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN"><br><br>
+                                                      <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn','') }}"><br><br>
                                                     @endif
-                                                    <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN"></textarea>
+                                                    <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN">{{ old('f1_alamat_plggn','') }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -97,12 +97,12 @@
                                                 <td>
                                                         <select name="f1_witel" id="f1_witel">
                                                             <option value="" disabled selected>Pilih Witel</option>
-                                                            <option value="BALIKPAPAN">BALIKPAPAN</option>
-                                                            <option value="KALBAR">KALBAR</option>
-                                                            <option value="KALTENG">KALTENG</option>
-                                                            <option value="KALSEL">KALSEL</option>
-                                                            <option value="KALTARA">KALTARA</option>
-                                                            <option value="SAMARINDA">SAMARINDA</option>
+                                                            <option value="BALIKPAPAN" {{ old('f1_witel') == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
+                                                            <option value="KALBAR" {{ old('f1_witel') == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
+                                                            <option value="KALTENG" {{ old('f1_witel') == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
+                                                            <option value="KALSEL" {{ old('f1_witel') == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
+                                                            <option value="KALTARA" {{ old('f1_witel') == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
+                                                            <option value="SAMARINDA" {{ old('f1_witel') == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -116,9 +116,9 @@
                                                 </td>
                                                 <td>
                                                     @if($errors->has('f1_judul_projek'))
-                                                      <textarea type="text" cols="50" rows="2" class="outline-input-merah" name="f1_judul_projek" id="f1_judul_projek"></textarea>
+                                                      <textarea type="text" cols="50" rows="2" class="outline-input-merah" name="f1_judul_projek" id="f1_judul_projek">{{ old('f1_judul_projek','') }}</textarea>
                                                     @else
-                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek"></textarea>
+                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek">{{ old('f1_judul_projek','') }}</textarea>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -133,9 +133,9 @@
                                                 <td>
                                                     <select name="f1_segmen" id="f1_segmen">
                                                         <option value="" disabled selected>Pilih Segmen</option>
-                                                        <option value="DES">DES</option>
-                                                        <option value="DGS">DGS</option>
-                                                        <option value="DBS">DBS</option>
+                                                        <option value="DES" {{ old('f1_segmen') == 'DES' ? ' selected="selected"' : '' }}>DES</option>
+                                                        <option value="DGS" {{ old('f1_segmen') == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>
+                                                        <option value="DBS" {{ old('f1_segmen') == 'DBS' ? ' selected="selected"' : '' }}>DBS</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -149,9 +149,9 @@
                                                 </td>
                                                 <td>
                                                     @if($errors->has('f1_nilai_kb'))
-                                                        <input class="rupiahs outline-input-merah" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-">
+                                                        <input class="rupiahs outline-input-merah" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb','') }}">
                                                     @else
-                                                      <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-">
+                                                      <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb','') }}">
                                                     @endif
                                                 </td>
                                             </tr>
@@ -164,7 +164,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:350px;" type="text" name="f1_no_kfs_spk" id="f1_no_kfs_spk">
+                                                    <input style="width:350px;" type="text" name="f1_no_kfs_spk" id="f1_no_kfs_spk" value="{{ old('f1_no_kfs_spk','') }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -176,7 +176,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak">
+                                                    <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak','') }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -188,7 +188,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun">
+                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun" value="{{ old('f1_nomor_akun','') }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -201,14 +201,14 @@
                                                 </td>
                                                 <td>
                                                     @if($errors->has('f1_jenis_kontrak'))
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan">
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" value="{{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}">
                                                     <label class="outline-input-merah" for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru">
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" value="{{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}">
                                                     <label class="outline-input-merah" for="jenis_kontrak"> Pasang Baru</label><br>
                                                     @else
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan">
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" value="{{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}">
                                                     <label for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru">
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" value="{{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}">
                                                     <label for="jenis_kontrak"> Pasang Baru</label><br>
                                                     @endif
                                                 </td>
@@ -222,12 +222,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;">
+                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;" value="{{ old('f1_masa_layanan','') }}">
                                                     <select name="f1_satuan_masa_layanan" id="f1_satuan_masa_layanan">
                                                         <option value="" disabled selected>Pilih Satuan Masa</option>
-                                                        <option value="hari">hari</option>
-                                                        <option value="bulan">bulan</option>
-                                                        <option value="tahun">tahun</option>
+                                                        <option value="hari" {{ old('f1_satuan_masa_layanan') == 'hari' ? ' selected="selected"' : '' }}>hari</option>
+                                                        <option value="bulan" {{ old('f1_satuan_masa_layanan') == 'bulan' ? ' selected="selected"' : '' }}>bulan</option>
+                                                        <option value="tahun" {{ old('f1_satuan_masa_layanan') == 'tahun' ? ' selected="selected"' : '' }}>tahun</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -242,10 +242,10 @@
                                                 <td>
                                                         <select name="f1_skema_bayar" id="f1_skema_bayar">
                                                             <option value="" disabled selected>Pilih Skema</option>
-                                                            <option value="otc">OTC</option>
-                                                            <option value="recurring">Recurring</option>
-                                                            <option value="termin">Termin</option>
-                                                            <option value="otc_recurring">OTC Recurring</option>
+                                                            <option value="otc" {{ old('f1_skema_bayar') == 'otc' ? ' selected="selected"' : '' }}>OTC</option>
+                                                            <option value="recurring" {{ old('f1_skema_bayar') == 'recurring' ? ' selected="selected"' : '' }}>Recurring</option>
+                                                            <option value="termin" {{ old('f1_skema_bayar') == 'termin' ? ' selected="selected"' : '' }}>Termin</option>
+                                                            <option value="otc_recurring" {{ old('f1_skema_bayar') == 'otc_recurring' ? ' selected="selected"' : '' }}>OTC Recurring</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -260,24 +260,24 @@
                                                 <td>
                                                         <select name="f1_status_order" id="f1_status_order">
                                                             <option value="" disabled selected>Pilih Status</option>
-                                                            <option value="inprogress_provision_issued">In Progress - Provision Issued</option>
-                                                            <option value="inprogress_provision_start">In Progress - Provision Start</option>
-                                                            <option value="inprogress_provision_failed">In Progress - Provision Failed</option>
-                                                            <option value="inprogress_provision_complete">In Progress - Provision Complete</option>
-                                                            <option value="inprogress_pending_billing">In Progress - Pending Billing</option>
-                                                            <option value="inprogress_tsq_start">In Progress - TSQ Start</option>
-                                                            <option value="inprogress_provision_designed">In Progress - Provision Designed</option>
-                                                            <option value="approval">Approval</option>
-                                                            <option value="submit">Submit</option>
-                                                            <option value="failed_provision_failed">Failed - Provision Failed</option>
-                                                            <option value="inprogress_fullfill_billing_start">In Progress - Fullfill Billing Start</option>
-                                                            <option value="pending_baso">Pending BASO</option>
-                                                            <option value="failed_fullfill_billing_failed">Failed - Fullfill Billing Failed</option>
-                                                            <option value="fullfill_billing_complete">Fullfill Billing Complete</option>
-                                                            <option value="abandoned">Abandoned</option>
-                                                            <option value="pending_cancel">Pending Cancel</option>
-                                                            <option value="complete">Complete</option>
-                                                            <option value="cancel">Cancel</option>
+                                                            <option value="inprogress_provision_issued" {{ old('f1_status_order') == 'inprogress_provision_issued' ? ' selected="selected"' : '' }}>In Progress - Provision Issued</option>
+                                                            <option value="inprogress_provision_start" {{ old('f1_status_order') == 'inprogress_provision_start' ? ' selected="selected"' : '' }}>In Progress - Provision Start</option>
+                                                            <option value="inprogress_provision_failed" {{ old('f1_status_order') == 'inprogress_provision_failed' ? ' selected="selected"' : '' }}>In Progress - Provision Failed</option>
+                                                            <option value="inprogress_provision_complete" {{ old('f1_status_order') == 'inprogress_provision_complete' ? ' selected="selected"' : '' }}>In Progress - Provision Complete</option>
+                                                            <option value="inprogress_pending_billing" {{ old('f1_status_order') == 'inprogress_pending_billing' ? ' selected="selected"' : '' }}>In Progress - Pending Billing</option>
+                                                            <option value="inprogress_tsq_start" {{ old('f1_status_order') == 'inprogress_tsq_start' ? ' selected="selected"' : '' }}>In Progress - TSQ Start</option>
+                                                            <option value="inprogress_provision_designed" {{ old('f1_status_order') == 'inprogress_provision_designed' ? ' selected="selected"' : '' }}>In Progress - Provision Designed</option>
+                                                            <option value="approval" {{ old('f1_status_order') == 'approval' ? ' selected="selected"' : '' }}>Approval</option>
+                                                            <option value="submit" {{ old('f1_status_order') == 'submit' ? ' selected="selected"' : '' }}>Submit</option>
+                                                            <option value="failed_provision_failed" {{ old('f1_status_order') == 'failed_provision_failed' ? ' selected="selected"' : '' }}>Failed - Provision Failed</option>
+                                                            <option value="inprogress_fullfill_billing_start" {{ old('f1_status_order') == 'inprogress_fullfill_billing_start' ? ' selected="selected"' : '' }}>In Progress - Fullfill Billing Start</option>
+                                                            <option value="pending_baso" {{ old('f1_status_order') == 'pending_baso' ? ' selected="selected"' : '' }}>Pending BASO</option>
+                                                            <option value="failed_fullfill_billing_failed" {{ old('f1_status_order') == 'failed_fullfill_billing_failed' ? ' selected="selected"' : '' }}>Failed - Fullfill Billing Failed</option>
+                                                            <option value="fullfill_billing_complete" {{ old('f1_status_order') == 'fullfill_billing_complete' ? ' selected="selected"' : '' }}>Fullfill Billing Complete</option>
+                                                            <option value="abandoned" {{ old('f1_status_order') == 'abandoned' ? ' selected="selected"' : '' }}>Abandoned</option>
+                                                            <option value="pending_cancel" {{ old('f1_status_order') == 'pending_cancel' ? ' selected="selected"' : '' }}>Pending Cancel</option>
+                                                            <option value="complete" {{ old('f1_status_order') == 'complete' ? ' selected="selected"' : '' }}>Complete</option>
+                                                            <option value="cancel" {{ old('f1_status_order') == 'cancel' ? ' selected="selected"' : '' }}>Cancel</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -290,7 +290,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan"></textarea>
+                                                    <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan">{{ old('f1_keterangan') }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
@@ -303,7 +303,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:450px;" type="text" name="f1_nama_mitra" id="f1_nama_mitra">
+                                                    <input style="width:450px;" type="text" name="f1_nama_mitra" id="f1_nama_mitra" value="{{ old('f1_nama_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -315,7 +315,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:450px;" type="text" name="f1_pic_mitra" id="f1_pic_mitra">
+                                                    <input style="width:450px;" type="text" name="f1_pic_mitra" id="f1_pic_mitra" value="{{ old('f1_pic_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
@@ -338,9 +338,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="dibawah_100">
+                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="dibawah_100" {{ old('f2_nilai_kontrak') == 'dibawah_100' ? "checked" : "" }}>
                                                         <label for="f2_nilai_kontrak"> < 100 Juta</label><br>
-                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="diatas_100">
+                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="diatas_100" {{ old('f2_nilai_kontrak') == 'diatas_100' ? "checked" : "" }}>
                                                         <label for="f2_nilai_kontrak"> > 100 Juta</label><br>
                                                 </td>
                                             </tr>
@@ -354,9 +354,9 @@
                                                 </td>
                                                 <td>
                                                   @if($errors->has('f2_tgl_p1'))
-                                                    <input class="outline-input-merah" type="date" name="f2_tgl_p1" id="f2_tgl_p1">
+                                                    <input class="outline-input-merah" type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1') }}">
                                                   @else
-                                                    <input type="date" name="f2_tgl_p1" id="f2_tgl_p1">
+                                                    <input type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1') }}">
                                                   @endif
                                                 </td>
                                             </tr>
@@ -379,22 +379,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja"></textarea>
+                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja">{{ old('p2_lingkup_kerja') }}</textarea>
                                                 </td>
                                             </tr>
-                                            <!-- <tr class="formP2">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Dibuat Oleh</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="dibuat_oleh" id="dibuat_oleh" placeholder="NAMA/NIK">
-                                                    <input type="text" name="dibuat_oleh_jabatan" id="dibuat_oleh_jabatan" placeholder="JABATAN">
-                                                </td>
-                                            </tr> -->
                                             <tr class="formP2">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -404,7 +391,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p2_tgl_justifikasi" id="p2_tgl_justifikasi">
+                                                    <input type="date" name="p2_tgl_justifikasi" id="p2_tgl_justifikasi" value="{{ old('p2_tgl_justifikasi') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP2">
@@ -418,9 +405,9 @@
                                                 <td>
                                                     <select name="p2_dievaluasi_oleh" id="p2_dievaluasi_oleh">
                                                         <option value="" disabled selected>Pilih dievaluasi oleh</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p2_dievaluasi_oleh') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p2_dievaluasi_oleh') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p2_dievaluasi_oleh') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -435,8 +422,8 @@
                                                 <td>
                                                     <select name="p2_disetujui_oleh" id="p2_disetujui_oleh">
                                                         <option value="" disabled selected>Pilih disetujui oleh</option>
-                                                        <option value="Hariyadi_800031">Subroto Marzuki - 740130</option>
-                                                        <option value="Yayan_Nuryana_710516">Taufik - 730206</option>
+                                                        <option value="Hariyadi_800031" {{ old('p2_disetujui_oleh') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Subroto Marzuki - 740130</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p2_disetujui_oleh') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Taufik - 730206</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -449,13 +436,13 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju">
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju" {{ old('p2_pilihan_catatan') == 'setuju' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Setuju</label><br>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju_dgn_catatan">
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju_dgn_catatan" {{ old('p2_pilihan_catatan') == 'setuju_dgn_catatan' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Setuju dengan Catatan</label><br>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="tidak_setuju">
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="tidak_setuju" {{ old('p2_pilihan_catatan') == 'tidak_setuju' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Tidak Setuju</label><br>
-                                                        <textarea name="p2_catatan" id="p2_catatan" cols="50" rows="2"></textarea>
+                                                        <textarea name="p2_catatan" id="p2_catatan" cols="50" rows="2">{{ old('p2_catatan') }}</textarea>
 
                                                 </td>
                                             </tr>
@@ -477,9 +464,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" placeholder="NAMA PEJABAT"><br>
-                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;" placeholder="ALAMAT"></textarea><br>
-                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" placeholder="TELEPON">
+                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" placeholder="NAMA PEJABAT" value="{{ old('p3_pejabat_mitra_nama') }}"><br>
+                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;" placeholder="ALAMAT">{{ old('p3_pejabat_mitra_alamat') }}</textarea><br>
+                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" placeholder="TELEPON" value="{{ old('p3_pejabat_mitra_telepon') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -493,10 +480,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada"><label for="p3_status_rapat_pengadaan">Ada</label><br>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada"><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
-                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;"> WIB</div>
-                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" placeholder="TEMPAT RAPAT">
+                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada" {{ old('p3_status_rapat_pengadaan') == 'ada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Ada</label><br>
+                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada" {{ old('p3_status_rapat_pengadaan') == 'nada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
+                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tgl_rapat_pengadaan') }}"> WIB</div>
+                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" placeholder="TEMPAT RAPAT" value="{{ old('p3_tmpt_rapat_pengadaan') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -510,8 +497,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;"> WIB<br>
-                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" placeholder="ALAMAT PENYERAHAN DOKUMEN">
+                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;" value="{{ old('p3_tgl_terima_sp') }}"> WIB<br>
+                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" placeholder="ALAMAT PENYERAHAN DOKUMEN" value="{{ old('p3_alamat_terima_sp') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -525,9 +512,9 @@
                                                 <td>
                                                     <select name="p3_manager_obl" id="p3_manager_obl">
                                                         <option value="" disabled selected>Pilih manager</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p3_manager_obl') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p3_manager_obl') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p3_manager_obl') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -551,7 +538,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph">
+                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph" value="{{ old('p4_tgl_sph') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -563,7 +550,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p4_waktu_layanan" id="p4_waktu_layanan">
+                                                    <input type="date" name="p4_waktu_layanan" id="p4_waktu_layanan" value="{{ old('p4_waktu_layanan') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -577,9 +564,9 @@
                                                 <td>
                                                     <select name="p4_skema_bisnis" id="p4_skema_bisnis">
                                                         <option value="" disabled selected>Pilih Skema Bisnis</option>
-                                                        <option value="sewa_murni">Sewa Murni</option>
-                                                        <option value="sewa_beli">Sewa Beli</option>
-                                                        <option value="beli_putus">Pengadaan Beli Putus</option>
+                                                        <option value="sewa_murni" {{ old('p4_skema_bisnis') == 'sewa_murni' ? ' selected="selected"' : '' }}>Sewa Murni</option>
+                                                        <option value="sewa_beli" {{ old('p4_skema_bisnis') == 'sewa_beli' ? ' selected="selected"' : '' }}>Sewa Beli</option>
+                                                        <option value="beli_putus" {{ old('p4_skema_bisnis') == 'beli_putus' ? ' selected="selected"' : '' }}>Pengadaan Beli Putus</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -594,8 +581,8 @@
                                                 <td>
                                                     <select name="p4_mekanisme_pembayaran" id="p4_mekanisme_pembayaran">
                                                         <option value="" disabled selected>Pilih Mekanisme</option>
-                                                        <option value="back_to_back">Back To Back</option>
-                                                        <option value="non_back_to_back">Non Back To Back</option>
+                                                        <option value="back_to_back" {{ old('p4_mekanisme_pembayaran') == 'back_to_back' ? ' selected="selected"' : '' }}>Back To Back</option>
+                                                        <option value="non_back_to_back" {{ old('p4_mekanisme_pembayaran') == 'non_back_to_back' ? ' selected="selected"' : '' }}>Non Back To Back</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -608,7 +595,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="p4_slg" id="p4_slg" style="width:100px;"> %
+                                                    <input type="number" min="0" name="p4_slg" id="p4_slg" style="width:100px;" value="{{ old('p4_slg') }}"> %
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -622,9 +609,9 @@
                                                 <td>
                                                     <select name="p4_fasilitator" id="p4_fasilitator">
                                                         <option value="" disabled selected>Pilih Fasilitator</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p4_fasilitator') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p4_fasilitator') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p4_fasilitator') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -639,9 +626,9 @@
                                                 <td>
                                                     <select name="p4_pengesahan" id="p4_pengesahan">
                                                         <option value="" disabled selected>Pilih Pengesahan</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p4_pengesahan') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p4_pengesahan') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p4_pengesahan') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -665,6 +652,13 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                          @if( old('p4_attendees') )
+                                                            @for( $i = 0; $i < count(old('p4_attendees')); $i++ )
+                                                              <th scrope="row"> {{ ($i+1) }} </th>
+                                                              <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" placeholder="Masukkan Attendees" value="{{ old('p4_attendees.'.$i) }}"></td>
+                                                              <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
+                                                            @endfor
+                                                          @endif
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -689,7 +683,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p5_harga_penawaran" id="p5_harga_penawaran" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="p5_harga_penawaran" id="p5_harga_penawaran" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('p5_harga_penawaran') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP5">
@@ -703,9 +697,9 @@
                                                 <td>
                                                     <select name="p5_ttd_evaluator" id="p5_ttd_evaluator">
                                                         <option value="" disabled selected>Pilih Evaluator</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p5_ttd_evaluator') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p5_ttd_evaluator') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p5_ttd_evaluator') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -727,7 +721,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="p6_ttd_bast_telkom" name="p6_ttd_bast_telkom" style="width:350px;">
+                                                    <input type="text" id="p6_ttd_bast_telkom" name="p6_ttd_bast_telkom" style="width:350px;" value="{{ old('p6_ttd_bast_telkom') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -739,7 +733,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="p6_ttd_bast_mitra" name="p6_ttd_bast_mitra" style="width:350px;">
+                                                    <input type="text" id="p6_ttd_bast_mitra" name="p6_ttd_bast_mitra" style="width:350px;" value="{{ old('p6_ttd_bast_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -751,7 +745,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p6_harga_negosiasi" id="p6_harga_negosiasi" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="p6_harga_negosiasi" id="p6_harga_negosiasi" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('p6_harga_negosiasi') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -763,8 +757,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p6_nama_peserta_mitra" id="p6_nama_peserta_mitra" style="width:350px;" placeholder="NAMA PESERTA MITRA"><br>
-                                                    <input type="text" style="width:350px;" placeholder="JABATAN PESERTA MITRA" id="p6_jabatan_peserta_mimtra" name="p6_jabatan_peserta_mimtra">
+                                                    <input type="text" name="p6_nama_peserta_mitra" id="p6_nama_peserta_mitra" style="width:350px;" placeholder="NAMA PESERTA MITRA" value="{{ old('p6_nama_peserta_mitra') }}"><br>
+                                                    <input type="text" style="width:350px;" placeholder="JABATAN PESERTA MITRA" id="p6_jabatan_peserta_mitra" name="p6_jabatan_peserta_mitra" value="{{ old('p6_jabatan_peserta_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -778,9 +772,9 @@
                                                 <td>
                                                     <select name="p6_peserta_rapat_telkom" id="p6_peserta_rapat_telkom">
                                                         <option value="" disabled selected>Pilih Peserta</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p6_peserta_rapat_telkom') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p6_peserta_rapat_telkom') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p6_peserta_rapat_telkom') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -795,9 +789,9 @@
                                                 <td>
                                                     <select name="p6_pengesahan" id="p6_pengesahan">
                                                         <option value="" disabled selected>Pilih Pengesahan</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p6_pengesahan') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p6_pengesahan') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p6_pengesahan') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -821,7 +815,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="p7_lampiran_berkas" id="p7_lampiran_berkas" style="width:100px;" min="0" placeholder="">
+                                                    <input type="number" name="p7_lampiran_berkas" id="p7_lampiran_berkas" style="width:100px;" min="0" placeholder="" value="{{ old('p7_lampiran_berkas') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -833,7 +827,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_harga_pekerjaan" id="p7_harga_pekerjaan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-"><br>
+                                                    <input class="rupiahs" type="text" name="p7_harga_pekerjaan" id="p7_harga_pekerjaan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('p7_harga_pekerjaan') }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -845,7 +839,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" placeholder="RP xxx.xxx.xxx.-"><br>
+                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('p7_otc') }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -857,7 +851,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-"><br>
+                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('p7_rincian_bulanan') }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -872,9 +866,9 @@
                                                 <td>
                                                     <select name="p7_pemeriksa" id="p7_pemeriksa">
                                                         <option value="" disabled selected>Pilih Pemeriksa</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113">Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031">Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516">Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p7_pemeriksa') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p7_pemeriksa') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p7_pemeriksa') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -887,7 +881,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" placeholder="Contoh: GM Witel Balikpapan"><br>
+                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" placeholder="Contoh: GM Witel Balikpapan" value="{{ old('p7_tembusan') }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -937,9 +931,9 @@
                                                 </td>
                                                 <td>
                                                   @if($errors->has('wo_tgl_fo'))
-                                                    <input class="outline-input-merah" type="date" name="wo_tgl_fo" id="wo_tgl_fo">
+                                                    <input class="outline-input-merah" type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo') }}">
                                                   @else
-                                                    <input type="date" name="wo_tgl_fo" id="wo_tgl_fo">
+                                                    <input type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo') }}">
                                                   @endif
 
                                                 </td>
@@ -953,7 +947,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;">
+                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -965,7 +959,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="wo_jenis_layanan" id="wo_jenis_layanan" style="width:350px;">
+                                                    <input type="text" name="wo_jenis_layanan" id="wo_jenis_layanan" style="width:350px;" value="{{ old('wo_jenis_layanan') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -977,7 +971,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="wo_jumlah_layanan" id="wo_jumlah_layanan" min="0" style="width:100px;">
+                                                    <input type="number" name="wo_jumlah_layanan" id="wo_jumlah_layanan" min="0" style="width:100px;" value="{{ old('wo_jumlah_layanan') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -1001,7 +995,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_harga_ke_plggn" id="wo_harga_ke_plggn" style="width:350px;" placeholder="RP xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="wo_harga_ke_plggn" id="wo_harga_ke_plggn" style="width:350px;" placeholder="RP xxx.xxx.-" value="{{ old('wo_harga_ke_plggn') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1013,7 +1007,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_plggn" id="wo_onetime_charge_plggn" style="width:350px;" placeholder="RP xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_plggn" id="wo_onetime_charge_plggn" style="width:350px;" placeholder="RP xxx.xxx.-" value="{{ old('wo_onetime_charge_plggn') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1025,7 +1019,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_monthly_plggn" id="wo_monthly_plggn" style="width:350px;" placeholder="RP xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="wo_monthly_plggn" id="wo_monthly_plggn" style="width:350px;" placeholder="RP xxx.xxx.-" value="{{ old('wo_monthly_plggn') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1049,7 +1043,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_telkom" id="wo_onetime_charge_telkom" style="width:350px;" placeholder="Rp xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_telkom" id="wo_onetime_charge_telkom" style="width:350px;" placeholder="Rp xxx.xxx.-" value="{{ old('wo_onetime_charge_telkom') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1061,8 +1055,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="wo_persen_telkom" id="wo_persen_telkom" placeholder="PERSEN" style="width:100px;"> % atau sebesar
-                                                    <input type="text" name="wo_monthly_telkom" id="wo_monthly_telkom" placeholder="Rp xxx.xxx.-" style="width:300px;">
+                                                    <input type="number" min="0" name="wo_persen_telkom" id="wo_persen_telkom" placeholder="PERSEN" style="width:100px;" value="{{ old('wo_persen_telkom') }}"> % atau sebesar
+                                                    <input type="text" name="wo_monthly_telkom" id="wo_monthly_telkom" placeholder="Rp xxx.xxx.-" style="width:300px;" value="{{ old('wo_monthly_telkom') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1086,7 +1080,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_mitra" id="wo_onetime_charge_mitra" style="width:350px;" placeholder="Rp xxx.xxx.-">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_mitra" id="wo_onetime_charge_mitra" style="width:350px;" placeholder="Rp xxx.xxx.-" value="{{ old('wo_onetime_charge_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1098,8 +1092,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="wo_persen_mitra" id="wo_persen_mitra" placeholder="PERSEN" style="width:100px;"> % atau sebesar
-                                                    <input type="text" name="wo_monthly_mitra" id="wo_monthly_mitra" placeholder="Rp xxx.xxx.-" style="width:300px;">
+                                                    <input type="number" min="0" name="wo_persen_mitra" id="wo_persen_mitra" placeholder="PERSEN" style="width:100px;" value="{{ old('wo_persen_mitra') }}"> % atau sebesar
+                                                    <input type="text" name="wo_monthly_mitra" id="wo_monthly_mitra" placeholder="Rp xxx.xxx.-" style="width:300px;" value="{{ old('wo_monthly_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -1120,7 +1114,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;">
+                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ old('sp_nomor_kb') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formSP"><td colspan="2"><br></td></tr>
@@ -1141,7 +1135,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;">
+                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ old('kl_nomor_kb') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1153,7 +1147,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_kl_mitra" id="kl_no_kl_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_no_kl_mitra" id="kl_no_kl_mitra" style="width:300px;" value="{{ old('kl_no_kl_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1165,7 +1159,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_tempat_ttd_kl" id="kl_tempat_ttd_kl" style="width:300px;">
+                                                    <input type="text" name="kl_tempat_ttd_kl" id="kl_tempat_ttd_kl" style="width:300px;" value="{{ old('kl_tempat_ttd_kl') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1177,7 +1171,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_notaris" id="kl_notaris" style="width:300px;">
+                                                    <input type="text" name="kl_notaris" id="kl_notaris" style="width:300px;" value="{{ old('kl_notaris') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1189,7 +1183,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_akta_notaris" id="kl_akta_notaris" style="width:300px;">
+                                                    <input type="text" name="kl_akta_notaris" id="kl_akta_notaris" style="width:300px;" value="{{ old('kl_akta_notaris') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1201,7 +1195,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_akta_notaris" id="kl_tgl_akta_notaris" style="width:300px;">
+                                                    <input type="date" name="kl_tgl_akta_notaris" id="kl_tgl_akta_notaris" style="width:300px;" value="{{ old('kl_tgl_akta_notaris') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1213,7 +1207,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_pejabat_telkom" id="kl_nama_pejabat_telkom" style="width:300px;">
+                                                    <input type="text" name="kl_nama_pejabat_telkom" id="kl_nama_pejabat_telkom" style="width:300px;" value="{{ old('kl_nama_pejabat_telkom') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1225,7 +1219,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_jabatan_pejabat_telkom" id="kl_jabatan_pejabat_telkom" style="width:300px;">
+                                                    <input type="text" name="kl_jabatan_pejabat_telkom" id="kl_jabatan_pejabat_telkom" style="width:300px;" value="{{ old('kl_jabatan_pejabat_telkom') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1238,7 +1232,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_npwp_mitra" id="kl_npwp_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_npwp_mitra" id="kl_npwp_mitra" style="width:300px;" value="{{ old('kl_npwp_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1250,7 +1244,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_anggaran_mitra" id="kl_no_anggaran_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_no_anggaran_mitra" id="kl_no_anggaran_mitra" style="width:300px;" value="{{ old('kl_no_anggaran_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1262,7 +1256,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_anggaran_mitra" id="kl_tgl_anggaran_mitra" style="width:300px;">
+                                                    <input type="date" name="kl_tgl_anggaran_mitra" id="kl_tgl_anggaran_mitra" style="width:300px;" value="{{ old('kl_tgl_anggaran_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1274,7 +1268,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_pejabat_mitra" id="kl_nama_pejabat_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_nama_pejabat_mitra" id="kl_nama_pejabat_mitra" style="width:300px;" value="{{ old('kl_nama_pejabat_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1286,7 +1280,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_jabatan_pejabat_mitra" id="kl_jabatan_pejabat_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_jabatan_pejabat_mitra" id="kl_jabatan_pejabat_mitra" style="width:300px;" value="{{ old('kl_jabatan_pejabat_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1298,7 +1292,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_skm" id="kl_no_skm" style="width:300px;">
+                                                    <input type="text" name="kl_no_skm" id="kl_no_skm" style="width:300px;" value="{{ old('kl_no_skm') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1310,7 +1304,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_skm" id="kl_tgl_skm" style="width:300px;">
+                                                    <input type="date" name="kl_tgl_skm" id="kl_tgl_skm" style="width:300px;" value="{{ old('kl_tgl_skm') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1322,7 +1316,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_perihal_skm" id="kl_perihal_skm" style="width:300px;">
+                                                    <input type="text" name="kl_perihal_skm" id="kl_perihal_skm" style="width:300px;" value="{{ old('kl_perihal_skm') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1335,7 +1329,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_akhir_kl" id="kl_tgl_akhir_kl" style="width:300px;">
+                                                    <input type="date" name="kl_tgl_akhir_kl" id="kl_tgl_akhir_kl" style="width:300px;" value="{{ old('kl_tgl_akhir_kl') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1348,7 +1342,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_bayar_dp" id="kl_bayar_dp" style="width:300px;" placeholder="RP xxx.xxx.xxx.-">
+                                                    <input type="text" name="kl_bayar_dp" id="kl_bayar_dp" style="width:300px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('kl_bayar_dp') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1360,7 +1354,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_bank_mitra" id="kl_nama_bank_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_nama_bank_mitra" id="kl_nama_bank_mitra" style="width:300px;" value="{{ old('kl_nama_bank_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1372,7 +1366,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_cabang_bank_mitra" id="kl_cabang_bank_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_cabang_bank_mitra" id="kl_cabang_bank_mitra" style="width:300px;" value="{{ old('kl_cabang_bank_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1384,7 +1378,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;" value="{{ old('kl_rek_bank_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1396,7 +1390,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_an_bank_mitra" id="kl_an_bank_mitra" style="width:300px;">
+                                                    <input type="text" name="kl_an_bank_mitra" id="kl_an_bank_mitra" style="width:300px;" value="{{ old('kl_an_bank_mitra') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>

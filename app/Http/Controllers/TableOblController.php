@@ -75,4 +75,26 @@ class TableOblController extends Controller
       }
       return view('pages.obls.tables');
     }
+
+    public function delete(Request $request)
+    {
+      // dd($request->all());
+      if($request->obl_doc_action){
+        if(strpos($request->obl_doc_action,'delete_') !== false){
+          $delete_id = substr($request->obl_doc_action,7,strlen($request->obl_doc_action)-7);
+          $delete_id = intval($delete_id);
+          $delete_status = DocObl::where('id',$delete_id)->delete();
+
+          if($delete_status){ return redirect()->route('obl.tables'); }
+          else{ return redirect()->route('obl.tables')->with('status', 'Oops! Gagal Hapus Dokumen OBL.'); }
+        }
+        else {
+          return redirect('obl-tables')->with('status', 'Oops! Something Went Wrong.');
+        }
+      }
+      else{
+        return redirect('obl-tables')->with('status', 'Oops! Wrong Routing.');
+      }
+    }
+
 }

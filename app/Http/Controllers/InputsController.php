@@ -81,9 +81,11 @@ class InputsController extends Controller
           }
           $inputan_masuk['f1_nilai_kb'] = 'required';
           $inputan_masuk['f1_jenis_kontrak'] = 'required';
+          $inputan_masuk['f1_judul_projek'] = 'required';
+          $inputan_masuk['f1_nama_plggn'] = 'required';
           $validasi = $request->all();
           $validator = Validator::make($validasi,$inputan_masuk);
-          if($validator->fails()){ return back()->withErrors($validator)->withInput(); }
+          if($validator->fails()){ return back()->withInput()->withErrors($validator); }
           // $validated = $validator->validated();
           // dd($validated);
 
