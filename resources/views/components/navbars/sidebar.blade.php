@@ -64,22 +64,6 @@
                             </div>
                         </a>
                     </li>
-                    @if( isset($count_draf) and $count_draf > 0)
-                    <li class="mb-2">
-                        <a class="dropdown-item border-radius-md" href="{{ route('obl.drafs') }}">
-                            <div class="d-flex py-1">
-                                <div class="my-auto">
-                                    <i class="material-icons opacity-10 me-2">content_paste</i>
-                                </div>
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="text-sm font-weight-normal mb-1">
-                                          <span class="font-weight-bold">Draf Dokumen</span><span class="badge badge-primary ms-2" style="background-color:#d62d20;">{{ $count_draf }}</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    @endif
                     <li class="mb-2">
                         <a class="dropdown-item border-radius-md" href="{{ route('obl.tables') }}">
                             <div class="d-flex py-1">

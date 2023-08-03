@@ -57,6 +57,8 @@
                             </div>
                             <div class="card-body px-0 pb-2">
                                 <div class="table-responsive p-3">
+                                  <form id="formObl" method="POST" enctype="multipart/form-data">
+                                    @csrf
                                     <table id="table-data-obl" class="table align-items-center justify-content-center mb-0">
                                         <thead>
                                             <tr>
@@ -66,7 +68,7 @@
                                                     No.</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Progress</th>
+                                                    Status OBL</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Segmen</th>
@@ -132,12 +134,16 @@
                                                     Keterangan</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Created By</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
                                                     Updated By</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="align-middle text-center">
+                                        <tbody class="align-middle">
                                         </tbody>
                                     </table>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -159,6 +165,13 @@
                     `);
                     $('#modal-status-table-obl-delete').modal('show');
                 }
+            }
+            function editDoc(edit_obl_id){
+              $("<input />").attr("type", "hidden")
+                .attr("name", "edit_obl_id")
+                .attr("value", edit_obl_id)
+                .appendTo("#formObl");
+              $('#formObl').attr('action', "{{ route('obl.tables.edit') }}").submit();
             }
 
           $(document).ready(function () {
@@ -188,18 +201,6 @@
                 }
               }
 
-              // <div class="d-flex align-items-center justify-content-center">
-              //     <span class="me-2 text-xs font-weight-bold">60%</span>
-              //     <div>
-              //         <div class="progress">
-              //             <div class="progress-bar bg-gradient-info"
-              //                 role="progressbar" aria-valuenow="60"
-              //                 aria-valuemin="0" aria-valuemax="100"
-              //                 style="width: 60%;"></div>
-              //         </div>
-              //     </div>
-              // </div>
-
               $('#table-data-obl').DataTable({
                 destroy: true,
                 processing: true,
@@ -211,7 +212,7 @@
                   {
                      searchable:false,orderable:false,
                      "render": function ( data, type, row ) {
-                       return '<button type="button" class="btn btn-info btn-sm">Edit</button><button type="button" class="btn btn-warning btn-sm">Print</button><button type="button" class="btn btn-danger btn-sm" onclick="deleteDoc('+row.obl_id+')">Delete</button>';
+                       return '<button type="button" class="btn btn-info btn-sm" onclick="editDoc('+row.obl_id+')">Edit</button><button type="button" class="btn btn-warning btn-sm">Print</button><button type="button" class="btn btn-danger btn-sm" onclick="deleteDoc('+row.obl_id+')">Delete</button>';
                      }
                   },
                   {
@@ -220,8 +221,8 @@
                   {
                      data: 'string_submit',name: 'string_submit',searchable:true,orderable:false,
                      "render": function ( data, type, row ) {
-                        if(row.filter_submit==='kontrak1'){ return '<span class="badge badge-sm bg-gradient-success">'+data+'</span>'; }
-                        if(row.filter_submit==='kontrak2'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
+                        if(row.filter_submit==='kontrak1'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
+                        if(row.filter_submit==='kontrak2'){ return '<span class="badge badge-sm bg-gradient-success">'+data+'</span>'; }
                         if(row.filter_submit==='filter'){ return '<span class="badge badge-sm bg-gradient-danger">'+data+'</span>'; }
                         if(row.filter_submit==='form'){ return '<span class="badge badge-sm bg-gradient-warning">'+data+'</span>'; }
                      }
@@ -302,7 +303,10 @@
                      data: 'keterangan',name: 'keterangan',searchable:true,orderable:false
                   },
                   {
-                     data: 'updated_by',name: 'updated_by',searchable:true,orderable:false
+                     data: 'user_create',name: 'user_create',searchable:true,orderable:false
+                  },
+                  {
+                     data: 'user_update',name: 'user_update',searchable:true,orderable:false
                   }
 
                 ],

@@ -5,24 +5,26 @@ namespace App\Http\Controllers;
 Use Str;
 Use Hash;
 use App\Exceptions\Handler;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\PasswordReset;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\RedirectResponse;
+use App\Models\User;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class InputsController extends Controller
 {
     public function create(Request $request): RedirectResponse
     {
         // dd($request->all());
-        $user_id = Auth::id();
-        $submit_sekarang = Carbon::now()->translatedFormat('Y-m-d H:i:s');
+        $created_by = Auth::id();
+        $created_at = Carbon::now()->translatedFormat('Y-m-d H:i:s');
 
         if($request->submit && str_contains($request->submit,'draf')){
           try{
@@ -40,9 +42,9 @@ class InputsController extends Controller
                 'p4_attendees',
                 'global_jenis_spk'
             ]);
-            $filtered_draf->put('user_id',$user_id);
-            $filtered_draf->put('created_at',$submit_sekarang);
-            $filtered_draf->put('f1_tgl_keterangan',$submit_sekarang);
+            $filtered_draf->put('created_by',$created_by);
+            $filtered_draf->put('created_at',$created_at);
+            if($request->keterangan && $request->keterangan !== ''){ $filtered_draf->put('f1_tgl_keterangan',$created_at); }
             $filtered_draf->put('is_draf',1);
             $filtered_draf->put('f1_jenis_spk',$request->global_jenis_spk);
             $obl_id_draf = DB::connection('pgsql')->table('form_obl')
@@ -76,8 +78,8 @@ class InputsController extends Controller
           // SUBMIT WO,SP,KL (DENGAN VALIDASI)
           $inputan_masuk = [];
           if($request->submit){
-            if($request->submit=='submit_wo'){ $inputan_masuk = ['wo_tgl_fo' => 'required']; }
-            if($request->submit=='submit_sp' || $request->submit=='submit_kl'){ $inputan_masuk = ['f2_tgl_p1' => 'required']; }
+            if($request->submit=='submit_wo'){ $inputan_masuk['wo_tgl_fo'] = 'required'; }
+            if($request->submit=='submit_sp' || $request->submit=='submit_kl'){ $inputan_masuk['f2_tgl_p1'] = 'required'; }
           }
           $inputan_masuk['f1_nilai_kb'] = 'required';
           $inputan_masuk['f1_jenis_kontrak'] = 'required';
@@ -103,7 +105,7 @@ class InputsController extends Controller
               // submit kl,sp, dan wo : tanggal dokumen dan takah terbit
               // obl hari efektif : 9 hari kerja ( P1 s.d. WO/SP/KL )
               $hari_efektif = 9;
-              $hari_efektif = $hari_efektif - 1; // pengecualian tanggal P1
+              $hari_efektif = $hari_efektif - 1; // pengecualian form P1
               $cek_per_tanggal = null;
 
               // tanggal (AM) FO / P1
@@ -120,69 +122,154 @@ class InputsController extends Controller
               $d = $tanggal_mulai->day;
               $m = $tanggal_mulai->month;
               $Y = $tanggal_mulai->year;
-              $tgl_p2 = Carbon::create($Y,$m,$d,0)->addDay(1);
+              $tgl_p1 = Carbon::create($Y,$m,$d,0);
 
-              $arr_tanggal_final = [];
+              $tahun = $tgl_p1->translatedFormat('Y');
+              $is_december = $tgl_p1->translatedFormat('m');
+              $libur_nasional_res1 = null;
+              $libur_nasional_res2 = null;
+              $cuti_bersama_res3 = null;
+              $cuti_bersama_res4 = null;
+              $weekend = ['Sabtu','Minggu'];
+              $hari_kerja = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+
+              $client1 = new Client();
+              $client2 = new Client();
+              $client3 = new Client();
+              $client4 = new Client();
+
+              try {
+                $res1 = $client1->request('GET', 'https://api-harilibur.vercel.app/api?year='.$tahun);
+                $libur_nasional_res1 = json_decode($res1->getBody()->getContents());
+              }catch(ClientException $e){
+                    $res1 = $e->getResponse();
+                    if($res1->getStatusCode() !== 200){ $libur_nasional_res1 = []; }
+              }
+              try {
+                $res3 = $client3->request('GET', 'https://dayoffapi.vercel.app/api?year='.$tahun);
+                $cuti_bersama_res3 = json_decode($res3->getBody()->getContents());
+              }catch(ClientException $e){
+                    $res3 = $e->getResponse();
+                    if($res3->getStatusCode() !== 200){ $cuti_bersama_res3 = []; }
+              }
+
+              if( $is_december == '12'){
+                try {
+                  $res2 = $client2->request('GET', 'https://api-harilibur.vercel.app/api?year='.((int)$tahun + 1));
+                  $libur_nasional_res2 = json_decode($res2->getBody()->getContents());
+                }catch(ClientException $e){
+                      $res2 = $e->getResponse();
+                      if($res2->getStatusCode() !== 200){ $libur_nasional_res2 = []; }
+                }
+                try {
+                  $res4 = $client4->request('GET', 'https://dayoffapi.vercel.app/api?year='.((int)$tahun + 1));
+                  $cuti_bersama_res4 = json_decode($res4->getBody()->getContents());
+                }catch(ClientException $e){
+                      $res4 = $e->getResponse();
+                      if($res4->getStatusCode() !== 200){ $cuti_bersama_res4 = []; }
+                }
+              }
+
+              $libur_nasional = [];
+              $cuti_bersama = [];
+              if($libur_nasional_res1){
+                foreach($libur_nasional_res1 as $key => $value){
+                  if($value->is_national_holiday == true){ array_push($libur_nasional,$value->holiday_date); }
+                }
+              }
+              if($libur_nasional_res2){
+                foreach($libur_nasional_res2 as $key => $value){
+                  if($value->is_national_holiday == true){ array_push($libur_nasional,$value->holiday_date); }
+                }
+              }
+              if($cuti_bersama_res3){
+                foreach($cuti_bersama_res3 as $key => $value){
+                  if($value->is_cuti == true){ array_push($cuti_bersama,$value->tanggal); }
+                }
+              }
+              if($cuti_bersama_res4){
+                foreach($cuti_bersama_res4 as $key => $value){
+                  if($value->is_cuti == true){ array_push($cuti_bersama,$value->tanggal); }
+                }
+              }
+
+              $tgl_p2 = $tgl_p1->addDay(1);
+              $docs = 40; // 1 hari = 40 dokumen
               $cek = null;
+              $arr_tanggal = [];
+              $arr_insert_form_takah = [];
               $tanggal_cek = null;
               $tanggal_sebelum = $tgl_p2;
               for($i = 0; $i < $hari_efektif; $i++){
                 do{
                   $tanggal_cek = $tanggal_sebelum;
+                  $dayOfYear = $tanggal_cek->dayOfYear;
                   $string_tgl = $tanggal_cek->translatedFormat('Y-m-d');
-                  $query_takah = DB::connection('pgsql')->table('form_takah')->select('id','takah_1')
-                  ->whereRaw("
-                  TO_CHAR(tanggal,'yyyy-mm-dd') = '$string_tgl'
-                  AND ket_tgl NOT IN ('weekend','libur_nasional','cuti_bersama')
-                  AND status_taken IS FALSE
-                  AND obl_id IS NULL
-                  AND tipe_form IS NULL
-                  ")->first();
-                  if($query_takah){
-                    $cek = true;
-                    //array_push($arr_tanggal_final,[$string_tgl,$query_takah->id,$query_takah->takah_1]);
-                    array_push($arr_tanggal_final,[$query_takah->id,$string_tgl,$query_takah->takah_1]);
-                    $tanggal_sebelum = $tanggal_cek->addDay(1);
-                  }
-                  else{
+                  $string_hari = $tanggal_cek->translatedFormat('l');
+                  if( in_array($string_tgl,$cuti_bersama) ){
                     $cek = false;
                     $tanggal_sebelum = $tanggal_cek->addDay(1);
                   }
-                }while($cek == false);
+                  if( in_array($string_tgl,$libur_nasional) ){
+                    $cek = false;
+                    $tanggal_sebelum = $tanggal_cek->addDay(1);
+                  }
+                  else if( in_array($string_hari,$weekend) ){
+                    $cek = false;
+                    $tanggal_sebelum = $tanggal_cek->addDay(1);
+                  }
+                  else if( in_array($string_hari,$hari_kerja) ){
+                    $cek = true;
+                    $skip = null;
+                    $takah_1 = null;
+                    if($i==1||$i==5||$i==6||$i==7){
+                      $takah_1 = ((($dayOfYear-1)*$docs)+1);
+                      $takah_1 = sprintf("%04d", $takah_1);
+                      do{
+                        $cek_form_takah = DB::connection('pgsql')->table('form_takah')->select('*')->where(DB::raw("to_char(tanggal::date,'yyyy')"),'=',DB::raw("to_char('$string_tgl_submit'::date,'yyyy')"))->where('takah_1',$takah_1)->get()->toArray();
+                        if( count($cek_form_takah) > 0 ){ $skip = true; $takah_1++; }
+                        else{ $skip = false; array_push($arr_tanggal,[$string_tgl,$takah_1]); array_push($arr_insert_form_takah,['obl_id'=> 0,'tanggal'=>$string_tgl,'takah_1'=>$takah_1]); }
+                      }while($skip==true);
+                    }
+                    else{
+                      array_push($arr_tanggal,[$string_tgl,$takah_1]);
+                    }
+                    $tanggal_sebelum = $tanggal_cek->addDay(1);
+                  }
+                }while($cek==false);
               }
-              // dd( $arr_tanggal_final );
+              // dd($arr_tanggal);
 
-              $arr_tanggal_taken = $arr_tanggal_final;
               // append filtered array data
               // append user id
-              $filtered->put('user_id',$user_id);
-              $filtered->put('created_at',$submit_sekarang);
-              $filtered->put('f1_tgl_keterangan',$submit_sekarang);
+              $filtered->put('created_by',$created_by);
+              $filtered->put('created_at',$created_at);
+              $filtered->put('f1_tgl_keterangan',$created_at);
               $filtered->put('is_draf',0);
               $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
               // append tanggal dokumen
-              $filtered->put('p2_tgl_p2',$arr_tanggal_final[0][1]);
-              $filtered->put('p3_tgl_p3',$arr_tanggal_final[1][1]);
-              $filtered->put('p4_tgl_p4',$arr_tanggal_final[2][1]);
-              $filtered->put('p5_tgl_p5',$arr_tanggal_final[3][1]);
-              $filtered->put('p6_tgl_p6',$arr_tanggal_final[4][1]);
-              $filtered->put('p7_tgl_p7',$arr_tanggal_final[5][1]);
+              $filtered->put('p2_tgl_p2',$arr_tanggal[0][0]);
+              $filtered->put('p3_tgl_p3',$arr_tanggal[1][0]);
+              $filtered->put('p4_tgl_p4',$arr_tanggal[2][0]);
+              $filtered->put('p5_tgl_p5',$arr_tanggal[3][0]);
+              $filtered->put('p6_tgl_p6',$arr_tanggal[4][0]);
+              $filtered->put('p7_tgl_p7',$arr_tanggal[5][0]);
               if($request->submit){
-                if($request->submit === 'submit_wo'){ $filtered->put('wo_tgl_wo',$arr_tanggal_final[6][1]); }
-                if($request->submit === 'submit_sp'){ $filtered->put('sp_tgl_sp',$arr_tanggal_final[6][1]); }
+                if($request->submit === 'submit_wo'){ $filtered->put('wo_tgl_wo',$arr_tanggal[6][0]); }
+                if($request->submit === 'submit_sp'){ $filtered->put('sp_tgl_sp',$arr_tanggal[6][0]); }
                 if($request->submit === 'submit_kl'){
-                  $filtered->put('p8_tgl_p8',$arr_tanggal_final[6][1]);
-                  $filtered->put('kl_tgl_kl',$arr_tanggal_final[7][1]);
+                  $filtered->put('p8_tgl_p8',$arr_tanggal[6][0]);
+                  $filtered->put('kl_tgl_kl',$arr_tanggal[7][0]);
                 }
               }
               // append takah p3,p7,p8,wo,sp,kl
-              $arr_tanggal_final[1][1] = new Carbon( $arr_tanggal_final[1][1] );
-              $arr_tanggal_final[1][1] = $arr_tanggal_final[1][1]->year;
-              $filtered->put('p3_takah_p3', 'TEL.' . $arr_tanggal_final[1][2] . '/LG.220/TR6-603/' . $arr_tanggal_final[1][1]);
+              $arr_tanggal[1][0] = new Carbon( $arr_tanggal[1][0] );
+              $arr_tanggal[1][0] = $arr_tanggal[1][0]->year;
+              $filtered->put('p3_takah_p3', 'TEL.' . $arr_tanggal[1][1] . '/LG.220/TR6-603/' . $arr_tanggal[1][0]);
 
-              $arr_tanggal_final[5][1] = new Carbon( $arr_tanggal_final[5][1] );
-              $arr_tanggal_final[5][1] = $arr_tanggal_final[5][1]->year;
-              $filtered->put('p7_takah_p7', 'TEL.' . $arr_tanggal_final[5][2] . '/LG.270/TR6-603/' . $arr_tanggal_final[5][1]);
+              $arr_tanggal[5][0] = new Carbon( $arr_tanggal[5][0] );
+              $arr_tanggal[5][0] = $arr_tanggal[5][0]->year;
+              $filtered->put('p7_takah_p7', 'TEL.' . $arr_tanggal[5][1] . '/LG.270/TR6-603/' . $arr_tanggal[5][0]);
 
               // Kontrak Baru / Perpanjangan
               $jenis_kontrak = '';
@@ -201,23 +288,24 @@ class InputsController extends Controller
 
               if($request->submit){
                 if($request->submit === 'submit_wo'){
-                  $arr_tanggal_final[6][1] = new Carbon( $arr_tanggal_final[6][1] );
-                  $arr_tanggal_final[6][1] = $arr_tanggal_final[6][1]->year;
-                  $filtered->put('wo_takah_wo', 'K.TEL.' . $arr_tanggal_final[6][2] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][1]);
+                  $arr_tanggal[6][0] = new Carbon( $arr_tanggal[6][0] );
+                  $arr_tanggal[6][0] = $arr_tanggal[6][0]->year;
+                  $filtered->put('wo_takah_wo', 'K.TEL.' . $arr_tanggal[6][1] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal[6][0]);
+                  array_splice($arr_insert_form_takah,3);
                 }
                 if($request->submit === 'submit_sp'){
-                  $arr_tanggal_final[6][1] = new Carbon( $arr_tanggal_final[6][1] );
-                  $arr_tanggal_final[6][1] = $arr_tanggal_final[6][1]->year;
-                  $filtered->put('sp_takah_sp', 'K.TEL.' . $arr_tanggal_final[6][2] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][1]);
+                  $arr_tanggal[6][0] = new Carbon( $arr_tanggal[6][0] );
+                  $arr_tanggal[6][0] = $arr_tanggal[6][0]->year;
+                  $filtered->put('sp_takah_sp', 'K.TEL.' . $arr_tanggal[6][1] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal[6][0]);
+                  array_splice($arr_insert_form_takah,3);
                 }
                 if($request->submit === 'submit_kl'){
-                  $arr_tanggal_final[6][1] = new Carbon( $arr_tanggal_final[6][1] );
-                  $arr_tanggal_final[6][1] = $arr_tanggal_final[6][1]->year;
-                  $filtered->put('p8_takah_p8', 'TEL.' . $arr_tanggal_final[6][2] . '/LG.270/' . $kode_pimpinan . '/' . $arr_tanggal_final[6][1]);
-
-                  $arr_tanggal_final[7][1] = new Carbon( $arr_tanggal_final[7][1] );
-                  $arr_tanggal_final[7][1] = $arr_tanggal_final[7][1]->year;
-                  $filtered->put('kl_takah_kl', 'K.TEL.' . $arr_tanggal_final[7][2] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal_final[7][1]);
+                  $arr_tanggal[6][0] = new Carbon( $arr_tanggal[6][0] );
+                  $arr_tanggal[6][0] = $arr_tanggal[6][0]->year;
+                  $filtered->put('p8_takah_p8', 'TEL.' . $arr_tanggal[6][1] . '/LG.270/' . $kode_pimpinan . '/' . $arr_tanggal[6][0]);
+                  $arr_tanggal[7][0] = new Carbon( $arr_tanggal[7][0] );
+                  $arr_tanggal[7][0] = $arr_tanggal[7][0]->year;
+                  $filtered->put('kl_takah_kl', 'K.TEL.' . $arr_tanggal[7][1] . '/' . $jenis_kontrak . '/' . $kode_pimpinan . '/' . $arr_tanggal[7][0]);
                 }
               }
 
@@ -227,41 +315,23 @@ class InputsController extends Controller
               ->insertGetId(
                   $filtered->all()
               );
-              // CHECK TABEL TAKAH
-              $arr_tanggal_checked = [];
-              foreach($arr_tanggal_taken as $value){
-                array_push($value,$obl_id);
-                array_push($value,'');
-                array_push( $arr_tanggal_checked, $value );
-              }
-              for($i = 0; $i < ($hari_efektif - 2); $i++){
-                $arr_tanggal_checked[$i][4] = 'P' . ($i + 2);
-              }
-              if($request->submit){
-                if($request->submit === 'submit_wo'){
-                  $arr_tanggal_checked[6][4] = 'WO';
-                  array_splice($arr_tanggal_checked,7);
-                }
-                if($request->submit === 'submit_sp'){
-                  $arr_tanggal_checked[6][4] = 'SP';
-                  array_splice($arr_tanggal_checked,7);
-                }
-                if($request->submit === 'submit_kl'){
-                  $arr_tanggal_checked[6][4] = 'P8';
-                  $arr_tanggal_checked[7][4] = 'KL';
-                }
-              }
-              foreach($arr_tanggal_checked as $value){
-                DB::connection('pgsql')->table('form_takah')
-                ->where('id',$value[0])
-                ->update(
+
+              $insert_takah_1 = [];
+              foreach($arr_insert_form_takah as $value){
+                  array_push($insert_takah_1,
                     [
-                      'status_taken' => true,
-                      'obl_id' => $value[3],
-                      'tipe_form' => $value[4]
+                      'obl_id' => $obl_id,
+                      'tanggal' => $value['tanggal'],
+                      'takah_1' => $value['takah_1']
                     ]
-                );
+                  );
               }
+
+              DB::connection('pgsql')->table('form_takah')
+              ->insert(
+                  $insert_takah_1
+              );
+
 
               // INPUT P4 ATTENDEES
               if($request->p4_attendees){

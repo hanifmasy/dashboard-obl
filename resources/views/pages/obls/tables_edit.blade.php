@@ -1,8 +1,8 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
-        <x-navbars.sidebar activePage="inputs"></x-navbars.sidebar>
+        <x-navbars.sidebar activePage="obl-drafs-edit"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="OBL / Input Form"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="OBL / Tabel Dokumen / Edit"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <!-- modal alerts -->
@@ -23,14 +23,13 @@
             </div>
             <!-- end modal alerts -->
 
-
             <div class="container-fluid py-4">
                 <div class="row">
                     <div class="col-12 mx-auto">
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                                <div class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-white text-capitalize ps-3">Input Form OBL</h6>
+                                <div class="bg-gradient-light shadow-dark border-radius-lg pt-4 pb-3">
+                                    <h6 class="text-capitalize ps-3">Tabel Dokumen: Edit</h6>
                                 </div>
                             </div>
 
@@ -49,7 +48,7 @@
                             </div>
                             @endif
 
-                            <form id="formObl" action="{{ route('inputs.create') }}" method="POST" enctype="multipart/form-data">
+                            <form id="formObl" action="{{ route('obl.tables.edit.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body px-0 pb-2">
                                 <div class="table-responsive p-0">
@@ -67,6 +66,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($table_edit as $key => $value)
                                             <!-- filter kontrak -->
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak">
@@ -78,12 +78,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    @if($errors->has('f1_nama_plggn'))
-                                                      <input style="width:450px;" class="outline-input-merah" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn','') }}"><br><br>
-                                                    @else
-                                                      <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn','') }}"><br><br>
-                                                    @endif
-                                                    <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN">{{ old('f1_alamat_plggn','') }}</textarea>
+                                                    <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn',$value['f1_nama_plggn']) }}" disabled><br><br>
+                                                    <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN">{{ old('f1_alamat_plggn',$value['f1_alamat_plggn']) }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -97,12 +93,12 @@
                                                 <td>
                                                         <select name="f1_witel" id="f1_witel">
                                                             <option value="" disabled selected>Pilih Witel</option>
-                                                            <option value="BALIKPAPAN" {{ old('f1_witel') == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
-                                                            <option value="KALBAR" {{ old('f1_witel') == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
-                                                            <option value="KALTENG" {{ old('f1_witel') == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
-                                                            <option value="KALSEL" {{ old('f1_witel') == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
-                                                            <option value="KALTARA" {{ old('f1_witel') == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
-                                                            <option value="SAMARINDA" {{ old('f1_witel') == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
+                                                            <option value="BALIKPAPAN" {{ $value['f1_witel'] == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
+                                                            <option value="KALBAR" {{ $value['f1_witel'] == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
+                                                            <option value="KALTENG" {{ $value['f1_witel'] == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
+                                                            <option value="KALSEL" {{ $value['f1_witel'] == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
+                                                            <option value="KALTARA" {{ $value['f1_witel'] == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
+                                                            <option value="SAMARINDA" {{ $value['f1_witel'] == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -115,11 +111,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    @if($errors->has('f1_judul_projek'))
-                                                      <textarea type="text" cols="50" rows="2" class="outline-input-merah" name="f1_judul_projek" id="f1_judul_projek">{{ old('f1_judul_projek','') }}</textarea>
-                                                    @else
-                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek">{{ old('f1_judul_projek','') }}</textarea>
-                                                    @endif
+                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek" disabled>{{ old('f1_judul_projek',$value['f1_judul_projek']) }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -133,9 +125,9 @@
                                                 <td>
                                                     <select name="f1_segmen" id="f1_segmen">
                                                         <option value="" disabled selected>Pilih Segmen</option>
-                                                        <option value="DES" {{ old('f1_segmen') == 'DES' ? ' selected="selected"' : '' }}>DES</option>
-                                                        <option value="DGS" {{ old('f1_segmen') == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>
-                                                        <option value="DBS" {{ old('f1_segmen') == 'DBS' ? ' selected="selected"' : '' }}>DBS</option>
+                                                        <option value="DES" {{ old('f1_segmen',$value['f1_segmen']) == 'DES' ? ' selected="selected"' : '' }}>DES</option>
+                                                        <option value="DGS" {{ old('f1_segmen',$value['f1_segmen']) == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>
+                                                        <option value="DBS" {{ old('f1_segmen',$value['f1_segmen']) == 'DBS' ? ' selected="selected"' : '' }}>DBS</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -150,13 +142,13 @@
                                                 <td>
                                                     <select name="f1_proses" id="f1_proses">
                                                         <option value="" disabled selected>Pilih Proses</option>
-                                                        <option value="witel" {{ old('f1_proses') == 'witel' ? ' selected="selected"' : '' }}>WITEL</option>
-                                                        <option value="obl" {{ old('f1_proses') == 'obl' ? ' selected="selected"' : '' }}>OBL</option>
-                                                        <option value="legal" {{ old('f1_proses') == 'legal' ? ' selected="selected"' : '' }}>LEGAL</option>
-                                                        <option value="mitra_obl" {{ old('f1_proses') == 'mitra_obl' ? ' selected="selected"' : '' }}>MITRA OBL</option>
-                                                        <option value="close_sm" {{ old('f1_proses') == 'close_sm' ? ' selected="selected"' : '' }}>CLOSE SM</option>
-                                                        <option value="done" {{ old('f1_proses') == 'done' ? ' selected="selected"' : '' }}>DONE</option>
-                                                        <option value="cancel" {{ old('f1_proses') == 'cancel' ? ' selected="selected"' : '' }}>CANCEL</option>
+                                                        <option value="witel" {{ old('f1_proses',$value['f1_proses']) == 'witel' ? ' selected="selected"' : '' }}>WITEL</option>
+                                                        <option value="obl" {{ old('f1_proses',$value['f1_proses']) == 'obl' ? ' selected="selected"' : '' }}>OBL</option>
+                                                        <option value="legal" {{ old('f1_proses',$value['f1_proses']) == 'legal' ? ' selected="selected"' : '' }}>LEGAL</option>
+                                                        <option value="mitra_obl" {{ old('f1_proses',$value['f1_proses']) == 'mitra_obl' ? ' selected="selected"' : '' }}>MITRA OBL</option>
+                                                        <option value="close_sm" {{ old('f1_proses',$value['f1_proses']) == 'close_sm' ? ' selected="selected"' : '' }}>CLOSE SM</option>
+                                                        <option value="done" {{ old('f1_proses',$value['f1_proses']) == 'done' ? ' selected="selected"' : '' }}>DONE</option>
+                                                        <option value="cancel" {{ old('f1_proses',$value['f1_proses']) == 'cancel' ? ' selected="selected"' : '' }}>CANCEL</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -169,7 +161,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" style="width:200px;" name="f1_folder" id="f1_folder" value="{{ old('f1_folder') }}">
+                                                    <input type="text" style="width:200px;" name="f1_folder" id="f1_folder" value="{{ old('f1_folder',$value['f1_folder']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -182,67 +174,9 @@
                                                 </td>
                                                 <td>
                                                     @if($errors->has('f1_nilai_kb'))
-                                                        <input class="rupiahs outline-input-merah" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb','') }}">
+                                                        <input class="rupiahs outline-input-merah" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb') }}">
                                                     @else
-                                                      <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb','') }}">
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            <tr class="filterKontrak">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">No. KFS / SPK</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input style="width:350px;" type="text" name="f1_no_kfs_spk" id="f1_no_kfs_spk" value="{{ old('f1_no_kfs_spk','') }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="filterKontrak">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Quote</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak','') }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="filterKontrak">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nomor Akun</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun" value="{{ old('f1_nomor_akun','') }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="filterKontrak">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @if($errors->has('f1_jenis_kontrak'))
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" value="{{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}">
-                                                    <label class="outline-input-merah" for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" value="{{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}">
-                                                    <label class="outline-input-merah" for="jenis_kontrak"> Pasang Baru</label><br>
-                                                    @else
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" value="{{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}">
-                                                    <label for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" value="{{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}">
-                                                    <label for="jenis_kontrak"> Pasang Baru</label><br>
+                                                      <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb',$value['f1_nilai_kb']) }}">
                                                     @endif
                                                 </td>
                                             </tr>
@@ -255,13 +189,71 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;" value="{{ old('f1_masa_layanan','') }}">
+                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;" value="{{ old('f1_masa_layanan',$value['f1_masa_layanan']) }}">
                                                     <select name="f1_satuan_masa_layanan" id="f1_satuan_masa_layanan">
                                                         <option value="" disabled selected>Pilih Satuan</option>
-                                                        <option value="hari" {{ old('f1_satuan_masa_layanan') == 'hari' ? ' selected="selected"' : '' }}>hari</option>
-                                                        <option value="bulan" {{ old('f1_satuan_masa_layanan') == 'bulan' ? ' selected="selected"' : '' }}>bulan</option>
-                                                        <option value="tahun" {{ old('f1_satuan_masa_layanan') == 'tahun' ? ' selected="selected"' : '' }}>tahun</option>
+                                                        <option value="hari" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'hari' ? ' selected="selected"' : '' }}>hari</option>
+                                                        <option value="bulan" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'bulan' ? ' selected="selected"' : '' }}>bulan</option>
+                                                        <option value="tahun" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'tahun' ? ' selected="selected"' : '' }}>tahun</option>
                                                     </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">No. KFS / SPK</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:350px;" type="text" name="f1_no_kfs_spk" id="f1_no_kfs_spk" value="{{ old('f1_no_kfs_spk',$value['f1_no_kfs_spk']) }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Quote</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak',$value['f1_quote_kontrak']) }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor Akun</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun" value="{{ old('f1_nomor_akun',$value['f1_nomor_akun']) }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if($errors->has('f1_jenis_kontrak'))
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" {{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}>
+                                                    <label class="outline-input-merah" for="jenis_kontrak"> Amandemen</label><br>
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" {{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}>
+                                                    <label class="outline-input-merah" for="jenis_kontrak"> Pasang Baru</label><br>
+                                                    @else
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" {{ old('f1_jenis_kontrak',$value['f1_jenis_kontrak']) == 'perpanjangan' ? "checked" : "" }}>
+                                                    <label for="jenis_kontrak"> Amandemen</label><br>
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" {{ old('f1_jenis_kontrak',$value['f1_jenis_kontrak']) == 'baru' ? "checked" : "" }}>
+                                                    <label for="jenis_kontrak"> Pasang Baru</label><br>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -275,10 +267,10 @@
                                                 <td>
                                                         <select name="f1_skema_bayar" id="f1_skema_bayar">
                                                             <option value="" disabled selected>Pilih Skema</option>
-                                                            <option value="otc" {{ old('f1_skema_bayar') == 'otc' ? ' selected="selected"' : '' }}>OTC</option>
-                                                            <option value="recurring" {{ old('f1_skema_bayar') == 'recurring' ? ' selected="selected"' : '' }}>Recurring</option>
-                                                            <option value="termin" {{ old('f1_skema_bayar') == 'termin' ? ' selected="selected"' : '' }}>Termin</option>
-                                                            <option value="otc_recurring" {{ old('f1_skema_bayar') == 'otc_recurring' ? ' selected="selected"' : '' }}>OTC Recurring</option>
+                                                            <option value="otc" {{ old('f1_skema_bayar',$value['f1_skema_bayar']) == 'otc' ? ' selected="selected"' : '' }}>OTC</option>
+                                                            <option value="recurring" {{ old('f1_skema_bayar',$value['f1_skema_bayar']) == 'recurring' ? ' selected="selected"' : '' }}>Recurring</option>
+                                                            <option value="termin" {{ old('f1_skema_bayar',$value['f1_skema_bayar']) == 'termin' ? ' selected="selected"' : '' }}>Termin</option>
+                                                            <option value="otc_recurring" {{ old('f1_skema_bayar',$value['f1_skema_bayar']) == 'otc_recurring' ? ' selected="selected"' : '' }}>OTC Recurring</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -293,24 +285,24 @@
                                                 <td>
                                                         <select name="f1_status_order" id="f1_status_order">
                                                             <option value="" disabled selected>Pilih Status</option>
-                                                            <option value="inprogress_provision_issued" {{ old('f1_status_order') == 'inprogress_provision_issued' ? ' selected="selected"' : '' }}>In Progress - Provision Issued</option>
-                                                            <option value="inprogress_provision_start" {{ old('f1_status_order') == 'inprogress_provision_start' ? ' selected="selected"' : '' }}>In Progress - Provision Start</option>
-                                                            <option value="inprogress_provision_failed" {{ old('f1_status_order') == 'inprogress_provision_failed' ? ' selected="selected"' : '' }}>In Progress - Provision Failed</option>
-                                                            <option value="inprogress_provision_complete" {{ old('f1_status_order') == 'inprogress_provision_complete' ? ' selected="selected"' : '' }}>In Progress - Provision Complete</option>
-                                                            <option value="inprogress_pending_billing" {{ old('f1_status_order') == 'inprogress_pending_billing' ? ' selected="selected"' : '' }}>In Progress - Pending Billing</option>
-                                                            <option value="inprogress_tsq_start" {{ old('f1_status_order') == 'inprogress_tsq_start' ? ' selected="selected"' : '' }}>In Progress - TSQ Start</option>
-                                                            <option value="inprogress_provision_designed" {{ old('f1_status_order') == 'inprogress_provision_designed' ? ' selected="selected"' : '' }}>In Progress - Provision Designed</option>
-                                                            <option value="approval" {{ old('f1_status_order') == 'approval' ? ' selected="selected"' : '' }}>Approval</option>
-                                                            <option value="submit" {{ old('f1_status_order') == 'submit' ? ' selected="selected"' : '' }}>Submit</option>
-                                                            <option value="failed_provision_failed" {{ old('f1_status_order') == 'failed_provision_failed' ? ' selected="selected"' : '' }}>Failed - Provision Failed</option>
-                                                            <option value="inprogress_fullfill_billing_start" {{ old('f1_status_order') == 'inprogress_fullfill_billing_start' ? ' selected="selected"' : '' }}>In Progress - Fullfill Billing Start</option>
-                                                            <option value="pending_baso" {{ old('f1_status_order') == 'pending_baso' ? ' selected="selected"' : '' }}>Pending BASO</option>
-                                                            <option value="failed_fullfill_billing_failed" {{ old('f1_status_order') == 'failed_fullfill_billing_failed' ? ' selected="selected"' : '' }}>Failed - Fullfill Billing Failed</option>
-                                                            <option value="fullfill_billing_complete" {{ old('f1_status_order') == 'fullfill_billing_complete' ? ' selected="selected"' : '' }}>Fullfill Billing Complete</option>
-                                                            <option value="abandoned" {{ old('f1_status_order') == 'abandoned' ? ' selected="selected"' : '' }}>Abandoned</option>
-                                                            <option value="pending_cancel" {{ old('f1_status_order') == 'pending_cancel' ? ' selected="selected"' : '' }}>Pending Cancel</option>
-                                                            <option value="complete" {{ old('f1_status_order') == 'complete' ? ' selected="selected"' : '' }}>Complete</option>
-                                                            <option value="cancel" {{ old('f1_status_order') == 'cancel' ? ' selected="selected"' : '' }}>Cancel</option>
+                                                            <option value="inprogress_provision_issued" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_issued' ? ' selected="selected"' : '' }}>In Progress - Provision Issued</option>
+                                                            <option value="inprogress_provision_start" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_start' ? ' selected="selected"' : '' }}>In Progress - Provision Start</option>
+                                                            <option value="inprogress_provision_failed" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_failed' ? ' selected="selected"' : '' }}>In Progress - Provision Failed</option>
+                                                            <option value="inprogress_provision_complete" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_complete' ? ' selected="selected"' : '' }}>In Progress - Provision Complete</option>
+                                                            <option value="inprogress_pending_billing" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_pending_billing' ? ' selected="selected"' : '' }}>In Progress - Pending Billing</option>
+                                                            <option value="inprogress_tsq_start" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_tsq_start' ? ' selected="selected"' : '' }}>In Progress - TSQ Start</option>
+                                                            <option value="inprogress_provision_designed" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_provision_designed' ? ' selected="selected"' : '' }}>In Progress - Provision Designed</option>
+                                                            <option value="approval" {{ old('f1_status_order',$value['f1_status_order']) == 'approval' ? ' selected="selected"' : '' }}>Approval</option>
+                                                            <option value="submit" {{ old('f1_status_order',$value['f1_status_order']) == 'submit' ? ' selected="selected"' : '' }}>Submit</option>
+                                                            <option value="failed_provision_failed" {{ old('f1_status_order',$value['f1_status_order']) == 'failed_provision_failed' ? ' selected="selected"' : '' }}>Failed - Provision Failed</option>
+                                                            <option value="inprogress_fullfill_billing_start" {{ old('f1_status_order',$value['f1_status_order']) == 'inprogress_fullfill_billing_start' ? ' selected="selected"' : '' }}>In Progress - Fullfill Billing Start</option>
+                                                            <option value="pending_baso" {{ old('f1_status_order',$value['f1_status_order']) == 'pending_baso' ? ' selected="selected"' : '' }}>Pending BASO</option>
+                                                            <option value="failed_fullfill_billing_failed" {{ old('f1_status_order',$value['f1_status_order']) == 'failed_fullfill_billing_failed' ? ' selected="selected"' : '' }}>Failed - Fullfill Billing Failed</option>
+                                                            <option value="fullfill_billing_complete" {{ old('f1_status_order',$value['f1_status_order']) == 'fullfill_billing_complete' ? ' selected="selected"' : '' }}>Fullfill Billing Complete</option>
+                                                            <option value="abandoned" {{ old('f1_status_order',$value['f1_status_order']) == 'abandoned' ? ' selected="selected"' : '' }}>Abandoned</option>
+                                                            <option value="pending_cancel" {{ old('f1_status_order',$value['f1_status_order']) == 'pending_cancel' ? ' selected="selected"' : '' }}>Pending Cancel</option>
+                                                            <option value="complete" {{ old('f1_status_order',$value['f1_status_order']) == 'complete' ? ' selected="selected"' : '' }}>Complete</option>
+                                                            <option value="cancel" {{ old('f1_status_order',$value['f1_status_order']) == 'cancel' ? ' selected="selected"' : '' }}>Cancel</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -325,8 +317,8 @@
                                                 <td>
                                                         <select name="f1_status_sm" id="f1_status_sm">
                                                             <option value="" disabled selected>Pilih Status</option>
-                                                            <option value="close" {{ old('f1_status_sm') == 'close' ? ' selected="selected"' : '' }}>CLOSE</option>
-                                                            <option value="not_close" {{ old('f1_status_sm') == 'not_close' ? ' selected="selected"' : '' }}>NOT CLOSE</option>
+                                                            <option value="close" {{ old('f1_status_sm',$value['f1_status_sm']) == 'close' ? ' selected="selected"' : '' }}>CLOSE</option>
+                                                            <option value="not_close" {{ old('f1_status_sm',$value['f1_status_sm']) == 'not_close' ? ' selected="selected"' : '' }}>NOT CLOSE</option>
                                                         </select>
                                                 </td>
                                             </tr>
@@ -339,7 +331,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan">{{ old('f1_keterangan') }}</textarea>
+                                                    <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan">{{ old('f1_keterangan',$value['f1_keterangan']) }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
@@ -352,7 +344,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:450px;" type="text" name="f1_nama_mitra" id="f1_nama_mitra" value="{{ old('f1_nama_mitra') }}">
+                                                    <input style="width:450px;" type="text" name="f1_nama_mitra" id="f1_nama_mitra" value="{{ old('f1_nama_mitra',$value['f1_nama_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -364,14 +356,13 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:450px;" type="text" name="f1_pic_mitra" id="f1_pic_mitra" value="{{ old('f1_pic_mitra') }}">
+                                                    <input style="width:450px;" type="text" name="f1_pic_mitra" id="f1_pic_mitra" value="{{ old('f1_pic_mitra',$value['f1_pic_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
-                                            <tr class="filterKontrak"><td colspan="2"><h6 class="ps-2">SKEMA OBL</h6></td></tr>
                                             <tr class="filterKontrak"><td colspan="2">
-                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Work Order ( WO ) </h6></button>
-                                                <button type="button" id="lanjutFilter" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Kontrak Layanan ( KL ) </h6></button>
+                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success jenis_spk_wo"><h6 class="mb-0 text-sm" style="color:white;">Lanjutkan WO </h6></button>
+                                                <button type="button" id="lanjutFilter" class="btn bg-gradient-info jenis_spk_klsp"><h6 class="mb-0 text-sm" style="color:white;">Lanjutkan KL / SP</h6></button>
                                                 <button type="submit" name="submit" value="draf_filter_kontrak" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <tr class="filterAwal"><td colspan="2"><br></td></tr>
@@ -387,9 +378,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="dibawah_100" {{ old('f2_nilai_kontrak') == 'dibawah_100' ? "checked" : "" }}>
+                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="dibawah_100" {{ old('f2_nilai_kontrak',$value['f2_nilai_kontrak']) == 'dibawah_100' ? "checked" : "" }}>
                                                         <label for="f2_nilai_kontrak"> < 100 Juta</label><br>
-                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="diatas_100" {{ old('f2_nilai_kontrak') == 'diatas_100' ? "checked" : "" }}>
+                                                        <input type="radio" id="f2_nilai_kontrak" name="f2_nilai_kontrak" value="diatas_100" {{ old('f2_nilai_kontrak',$value['f2_nilai_kontrak']) == 'diatas_100' ? "checked" : "" }}>
                                                         <label for="f2_nilai_kontrak"> > 100 Juta</label><br>
                                                 </td>
                                             </tr>
@@ -405,7 +396,7 @@
                                                   @if($errors->has('f2_tgl_p1'))
                                                     <input class="outline-input-merah" type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1') }}">
                                                   @else
-                                                    <input type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1') }}">
+                                                    <input type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1',$value['tgl_p1']) }}">
                                                   @endif
                                                 </td>
                                             </tr>
@@ -428,7 +419,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja">{{ old('p2_lingkup_kerja') }}</textarea>
+                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja">{{ old('p2_lingkup_kerja',$value['p2_lingkup_kerja']) }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="formP2">
@@ -440,7 +431,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p2_tgl_justifikasi" id="p2_tgl_justifikasi" value="{{ old('p2_tgl_justifikasi') }}">
+                                                    <input type="date" name="p2_tgl_justifikasi" id="p2_tgl_justifikasi" value="{{ old('p2_tgl_justifikasi',$value['tgl_justifikasi']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP2">
@@ -454,9 +445,9 @@
                                                 <td>
                                                     <select name="p2_dievaluasi_oleh" id="p2_dievaluasi_oleh">
                                                         <option value="" disabled selected>Pilih dievaluasi oleh</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p2_dievaluasi_oleh') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p2_dievaluasi_oleh') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p2_dievaluasi_oleh') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p2_dievaluasi_oleh',$value['p2_dievaluasi_oleh']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p2_dievaluasi_oleh',$value['p2_dievaluasi_oleh']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p2_dievaluasi_oleh',$value['p2_dievaluasi_oleh']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -471,8 +462,8 @@
                                                 <td>
                                                     <select name="p2_disetujui_oleh" id="p2_disetujui_oleh">
                                                         <option value="" disabled selected>Pilih disetujui oleh</option>
-                                                        <option value="Hariyadi_800031" {{ old('p2_disetujui_oleh') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Subroto Marzuki - 740130</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p2_disetujui_oleh') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Taufik - 730206</option>
+                                                        <option value="Hariyadi_800031" {{ old('p2_disetujui_oleh',$value['p2_disetujui_oleh']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Subroto Marzuki - 740130</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p2_disetujui_oleh',$value['p2_disetujui_oleh']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Taufik - 730206</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -485,13 +476,13 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju" {{ old('p2_pilihan_catatan') == 'setuju' ? "checked" : "" }}>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju" {{ old('p2_pilihan_catatan',$value['p2_pilihan_catatan']) == 'setuju' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Setuju</label><br>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju_dgn_catatan" {{ old('p2_pilihan_catatan') == 'setuju_dgn_catatan' ? "checked" : "" }}>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="setuju_dgn_catatan" {{ old('p2_pilihan_catatan',$value['p2_pilihan_catatan']) == 'setuju_dgn_catatan' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Setuju dengan Catatan</label><br>
-                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="tidak_setuju" {{ old('p2_pilihan_catatan') == 'tidak_setuju' ? "checked" : "" }}>
+                                                        <input type="radio" id="p2_pilihan_catatan" name="p2_pilihan_catatan" value="tidak_setuju" {{ old('p2_pilihan_catatan',$value['p2_pilihan_catatan']) == 'tidak_setuju' ? "checked" : "" }}>
                                                         <label for="p2_pilihan_catatan"> Tidak Setuju</label><br>
-                                                        <textarea name="p2_catatan" id="p2_catatan" cols="50" rows="2">{{ old('p2_catatan') }}</textarea>
+                                                        <textarea name="p2_catatan" id="p2_catatan" cols="50" rows="2">{{ old('p2_catatan',$value['p2_catatan']) }}</textarea>
 
                                                 </td>
                                             </tr>
@@ -513,9 +504,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" placeholder="NAMA PEJABAT" value="{{ old('p3_pejabat_mitra_nama') }}"><br>
-                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;" placeholder="ALAMAT">{{ old('p3_pejabat_mitra_alamat') }}</textarea><br>
-                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" placeholder="TELEPON" value="{{ old('p3_pejabat_mitra_telepon') }}">
+                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" value="{{ old('p3_pejabat_mitra_nama',$value['p3_pejabat_mitra_nama']) }}"><br>
+                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;">{{ old('p3_pejabat_mitra_alamat',$value['p3_pejabat_mitra_alamat']) }}</textarea><br>
+                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" value="{{ old('p3_pejabat_mitra_telepon',$value['p3_pejabat_mitra_telepon']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -529,10 +520,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada" {{ old('p3_status_rapat_pengadaan') == 'ada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Ada</label><br>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada" {{ old('p3_status_rapat_pengadaan') == 'nada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
-                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tgl_rapat_pengadaan') }}"> WIB</div>
-                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" placeholder="TEMPAT RAPAT" value="{{ old('p3_tmpt_rapat_pengadaan') }}">
+                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada" {{ old('p3_status_rapat_pengadaan',$value['p3_status_rapat_pengadaan']) == 'ada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Ada</label><br>
+                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada" {{ old('p3_status_rapat_pengadaan',$value['p3_status_rapat_pengadaan']) == 'nada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
+                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tgl_rapat_pengadaan',$value['tgl_rapat_pengadaan']) }}"> WIB</div>
+                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tmpt_rapat_pengadaan',$value['p3_tmpt_rapat_pengadaan']) }}" >
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -546,8 +537,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;" value="{{ old('p3_tgl_terima_sp') }}"> WIB<br>
-                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" placeholder="ALAMAT PENYERAHAN DOKUMEN" value="{{ old('p3_alamat_terima_sp') }}">
+                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;" value="{{ old('p3_tgl_terima_sp',$value['tgl_terima_sp']) }}"> WIB<br>
+                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" value="{{ old('p3_alamat_terima_sp',$value['p3_alamat_terima_sp']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -561,9 +552,9 @@
                                                 <td>
                                                     <select name="p3_manager_obl" id="p3_manager_obl">
                                                         <option value="" disabled selected>Pilih manager</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p3_manager_obl') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p3_manager_obl') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p3_manager_obl') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -587,7 +578,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph" value="{{ old('p4_tgl_sph') }}">
+                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph" value="{{ old('p4_tgl_sph',$value['tgl_sph']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -599,7 +590,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p4_waktu_layanan" id="p4_waktu_layanan" value="{{ old('p4_waktu_layanan') }}">
+                                                    <input type="date" name="p4_waktu_layanan" id="p4_waktu_layanan" value="{{ old('p4_waktu_layanan',$value['waktu_layanan']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -613,9 +604,9 @@
                                                 <td>
                                                     <select name="p4_skema_bisnis" id="p4_skema_bisnis">
                                                         <option value="" disabled selected>Pilih Skema Bisnis</option>
-                                                        <option value="sewa_murni" {{ old('p4_skema_bisnis') == 'sewa_murni' ? ' selected="selected"' : '' }}>Sewa Murni</option>
-                                                        <option value="sewa_beli" {{ old('p4_skema_bisnis') == 'sewa_beli' ? ' selected="selected"' : '' }}>Sewa Beli</option>
-                                                        <option value="beli_putus" {{ old('p4_skema_bisnis') == 'beli_putus' ? ' selected="selected"' : '' }}>Pengadaan Beli Putus</option>
+                                                        <option value="sewa_murni" {{ old('p4_skema_bisnis',$value['p4_skema_bisnis']) == 'sewa_murni' ? ' selected="selected"' : '' }}>Sewa Murni</option>
+                                                        <option value="sewa_beli" {{ old('p4_skema_bisnis',$value['p4_skema_bisnis']) == 'sewa_beli' ? ' selected="selected"' : '' }}>Sewa Beli</option>
+                                                        <option value="beli_putus" {{ old('p4_skema_bisnis',$value['p4_skema_bisnis']) == 'beli_putus' ? ' selected="selected"' : '' }}>Pengadaan Beli Putus</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -630,8 +621,8 @@
                                                 <td>
                                                     <select name="p4_mekanisme_pembayaran" id="p4_mekanisme_pembayaran">
                                                         <option value="" disabled selected>Pilih Mekanisme</option>
-                                                        <option value="back_to_back" {{ old('p4_mekanisme_pembayaran') == 'back_to_back' ? ' selected="selected"' : '' }}>Back To Back</option>
-                                                        <option value="non_back_to_back" {{ old('p4_mekanisme_pembayaran') == 'non_back_to_back' ? ' selected="selected"' : '' }}>Non Back To Back</option>
+                                                        <option value="back_to_back" {{ old('p4_mekanisme_pembayaran',$value['p4_mekanisme_pembayaran']) == 'back_to_back' ? ' selected="selected"' : '' }}>Back To Back</option>
+                                                        <option value="non_back_to_back" {{ old('p4_mekanisme_pembayaran',$value['p4_mekanisme_pembayaran']) == 'non_back_to_back' ? ' selected="selected"' : '' }}>Non Back To Back</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -644,7 +635,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="p4_slg" id="p4_slg" style="width:100px;" value="{{ old('p4_slg') }}"> %
+                                                    <input type="number" min="0" name="p4_slg" id="p4_slg" style="width:100px;" value="{{ old('p4_slg',$value['p4_slg']) }}"> %
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -658,9 +649,9 @@
                                                 <td>
                                                     <select name="p4_fasilitator" id="p4_fasilitator">
                                                         <option value="" disabled selected>Pilih Fasilitator</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p4_fasilitator') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p4_fasilitator') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p4_fasilitator') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p4_fasilitator',$value['p4_fasilitator']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p4_fasilitator',$value['p4_fasilitator']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p4_fasilitator',$value['p4_fasilitator']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -675,9 +666,9 @@
                                                 <td>
                                                     <select name="p4_pengesahan" id="p4_pengesahan">
                                                         <option value="" disabled selected>Pilih Pengesahan</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p4_pengesahan') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p4_pengesahan') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p4_pengesahan') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p4_pengesahan',$value['p4_pengesahan']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p4_pengesahan',$value['p4_pengesahan']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p4_pengesahan',$value['p4_pengesahan']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -694,19 +685,33 @@
                                                 <div class="table-responsive">
                                                     <table class="table" id="p4_attendees">
                                                         <thead>
-                                                            <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">Attendees</th>
-                                                                <th scope="col"></th>
-                                                            </tr>
+                                                          <tr>
+                                                              <th scope="col">#</th>
+                                                              <th scope="col">Attendees</th>
+                                                              <th scope="col"></th>
+                                                          </tr>
                                                         </thead>
                                                         <tbody>
-                                                          @if( old('p4_attendees') )
-                                                            @for( $i = 0; $i < count(old('p4_attendees')); $i++ )
-                                                              <th scrope="row"> {{ ($i+1) }} </th>
-                                                              <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" placeholder="Masukkan Attendees" value="{{ old('p4_attendees.'.$i) }}"></td>
-                                                              <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
-                                                            @endfor
+                                                          @if($errors->has('p4_attendees'))
+                                                              @if( old('p4_attendees') )
+                                                                @for($i = 0; $i < count(old('p4_attendees')); $i++ )
+                                                                  <tr>
+                                                                    <th scrope="row">{{ ($i + 1) }}</th>
+                                                                    <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" value="{{ old('p4_attendees.'.$i) }}"></td>
+                                                                    <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
+                                                                  </tr>
+                                                                @endfor
+                                                              @endif
+                                                          @else
+                                                              @if( isset($table_edit_p4_attendees) && $table_edit_p4_attendees )
+                                                                @foreach($table_edit_p4_attendees as $tunjuk => $nilai)
+                                                                  <tr>
+                                                                    <th scrope="row">{{ ($tunjuk + 1) }}</th>
+                                                                    <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" value="{{ old('p4_attendees.'.$tunjuk,$nilai['p4_attendees']) }}"></td>
+                                                                    <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
+                                                                  </tr>
+                                                                @endforeach
+                                                              @endif
                                                           @endif
                                                         </tbody>
                                                     </table>
@@ -732,7 +737,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p5_harga_penawaran" id="p5_harga_penawaran" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('p5_harga_penawaran') }}">
+                                                    <input class="rupiahs" type="text" name="p5_harga_penawaran" id="p5_harga_penawaran" style="width:350px;" value="{{ old('p5_harga_penawaran',$value['p5_harga_penawaran']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP5">
@@ -746,9 +751,9 @@
                                                 <td>
                                                     <select name="p5_ttd_evaluator" id="p5_ttd_evaluator">
                                                         <option value="" disabled selected>Pilih Evaluator</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p5_ttd_evaluator') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p5_ttd_evaluator') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p5_ttd_evaluator') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p5_ttd_evaluator',$value['p5_ttd_evaluator']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p5_ttd_evaluator',$value['p5_ttd_evaluator']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p5_ttd_evaluator',$value['p5_ttd_evaluator']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -770,7 +775,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="p6_ttd_bast_telkom" name="p6_ttd_bast_telkom" style="width:350px;" value="{{ old('p6_ttd_bast_telkom') }}">
+                                                    <input type="text" id="p6_ttd_bast_telkom" name="p6_ttd_bast_telkom" style="width:350px;" value="{{ old('p6_ttd_bast_telkom',$value['p6_ttd_bast_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -782,7 +787,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="p6_ttd_bast_mitra" name="p6_ttd_bast_mitra" style="width:350px;" value="{{ old('p6_ttd_bast_mitra') }}">
+                                                    <input type="text" id="p6_ttd_bast_mitra" name="p6_ttd_bast_mitra" style="width:350px;" value="{{ old('p6_ttd_bast_mitra',$value['p6_ttd_bast_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -794,7 +799,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p6_harga_negosiasi" id="p6_harga_negosiasi" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('p6_harga_negosiasi') }}">
+                                                    <input class="rupiahs" type="text" name="p6_harga_negosiasi" id="p6_harga_negosiasi" style="width:350px;" value="{{ old('p6_harga_negosiasi',$value['p6_harga_negosiasi']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -806,8 +811,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p6_nama_peserta_mitra" id="p6_nama_peserta_mitra" style="width:350px;" placeholder="NAMA PESERTA MITRA" value="{{ old('p6_nama_peserta_mitra') }}"><br>
-                                                    <input type="text" style="width:350px;" placeholder="JABATAN PESERTA MITRA" id="p6_jabatan_peserta_mitra" name="p6_jabatan_peserta_mitra" value="{{ old('p6_jabatan_peserta_mitra') }}">
+                                                    <input type="text" name="p6_nama_peserta_mitra" id="p6_nama_peserta_mitra" style="width:350px;" value="{{ old('p6_nama_peserta_mitra',$value['p6_nama_peserta_mitra']) }}"><br>
+                                                    <input type="text" style="width:350px;" id="p6_jabatan_peserta_mitra" name="p6_jabatan_peserta_mitra" value="{{ old('p6_jabatan_peserta_mitra',$value['p6_jabatan_peserta_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -821,9 +826,9 @@
                                                 <td>
                                                     <select name="p6_peserta_rapat_telkom" id="p6_peserta_rapat_telkom">
                                                         <option value="" disabled selected>Pilih Peserta</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p6_peserta_rapat_telkom') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p6_peserta_rapat_telkom') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p6_peserta_rapat_telkom') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p6_peserta_rapat_telkom',$value['p6_peserta_rapat_telkom']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p6_peserta_rapat_telkom',$value['p6_peserta_rapat_telkom']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p6_peserta_rapat_telkom',$value['p6_peserta_rapat_telkom']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -838,9 +843,9 @@
                                                 <td>
                                                     <select name="p6_pengesahan" id="p6_pengesahan">
                                                         <option value="" disabled selected>Pilih Pengesahan</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p6_pengesahan') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p6_pengesahan') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p6_pengesahan') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p6_pengesahan',$value['p6_pengesahan']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p6_pengesahan',$value['p6_pengesahan']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p6_pengesahan',$value['p6_pengesahan']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -864,7 +869,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="p7_lampiran_berkas" id="p7_lampiran_berkas" style="width:100px;" min="0" placeholder="" value="{{ old('p7_lampiran_berkas') }}">
+                                                    <input type="number" name="p7_lampiran_berkas" id="p7_lampiran_berkas" style="width:100px;" min="0" value="{{ old('p7_lampiran_berkas',$value['p7_lampiran_berkas']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -876,7 +881,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_harga_pekerjaan" id="p7_harga_pekerjaan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('p7_harga_pekerjaan') }}"><br>
+                                                    <input class="rupiahs" type="text" name="p7_harga_pekerjaan" id="p7_harga_pekerjaan" style="width:350px;" value="{{ old('p7_harga_pekerjaan',$value['p7_harga_pekerjaan']) }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -888,7 +893,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('p7_otc') }}"><br>
+                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" value="{{ old('p7_otc',$value['p7_otc']) }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -900,7 +905,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('p7_rincian_bulanan') }}"><br>
+                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" value="{{ old('p7_rincian_bulanan',$value['p7_rincian_bulanan']) }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -915,9 +920,9 @@
                                                 <td>
                                                     <select name="p7_pemeriksa" id="p7_pemeriksa">
                                                         <option value="" disabled selected>Pilih Pemeriksa</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p7_pemeriksa') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p7_pemeriksa') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p7_pemeriksa') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
+                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p7_pemeriksa',$value['p7_pemeriksa']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
+                                                        <option value="Hariyadi_800031" {{ old('p7_pemeriksa',$value['p7_pemeriksa']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
+                                                        <option value="Yayan_Nuryana_710516" {{ old('p7_pemeriksa',$value['p7_pemeriksa']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -930,7 +935,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" placeholder="Contoh: GM Witel Balikpapan" value="{{ old('p7_tembusan') }}"><br>
+                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" value="{{ old('p7_tembusan',$value['p7_tembusan']) }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -982,7 +987,7 @@
                                                   @if($errors->has('wo_tgl_fo'))
                                                     <input class="outline-input-merah" type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo') }}">
                                                   @else
-                                                    <input type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo') }}">
+                                                    <input type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo',$value['tgl_fo']) }}">
                                                   @endif
 
                                                 </td>
@@ -996,7 +1001,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb') }}">
+                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb',$value['wo_nomor_kb']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1008,7 +1013,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="wo_jenis_layanan" id="wo_jenis_layanan" style="width:350px;" value="{{ old('wo_jenis_layanan') }}">
+                                                    <input type="text" name="wo_jenis_layanan" id="wo_jenis_layanan" style="width:350px;" value="{{ old('wo_jenis_layanan',$value['wo_jenis_layanan']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1020,7 +1025,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="wo_jumlah_layanan" id="wo_jumlah_layanan" min="0" style="width:100px;" value="{{ old('wo_jumlah_layanan') }}">
+                                                    <input type="number" name="wo_jumlah_layanan" id="wo_jumlah_layanan" min="0" style="width:100px;" value="{{ old('wo_jumlah_layanan',$value['wo_jumlah_layanan']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -1044,7 +1049,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_harga_ke_plggn" id="wo_harga_ke_plggn" style="width:350px;" placeholder="RP xxx.xxx.-" value="{{ old('wo_harga_ke_plggn') }}">
+                                                    <input class="rupiahs" type="text" name="wo_harga_ke_plggn" id="wo_harga_ke_plggn" style="width:350px;" value="{{ old('wo_harga_ke_plggn',$value['wo_harga_ke_plggn']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1056,7 +1061,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_plggn" id="wo_onetime_charge_plggn" style="width:350px;" placeholder="RP xxx.xxx.-" value="{{ old('wo_onetime_charge_plggn') }}">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_plggn" id="wo_onetime_charge_plggn" style="width:350px;" value="{{ old('wo_onetime_charge_plggn',$value['wo_onetime_charge_plggn']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1068,7 +1073,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_monthly_plggn" id="wo_monthly_plggn" style="width:350px;" placeholder="RP xxx.xxx.-" value="{{ old('wo_monthly_plggn') }}">
+                                                    <input class="rupiahs" type="text" name="wo_monthly_plggn" id="wo_monthly_plggn" style="width:350px;" value="{{ old('wo_monthly_plggn',$value['wo_monthly_plggn']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1092,7 +1097,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_telkom" id="wo_onetime_charge_telkom" style="width:350px;" placeholder="Rp xxx.xxx.-" value="{{ old('wo_onetime_charge_telkom') }}">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_telkom" id="wo_onetime_charge_telkom" style="width:350px;" value="{{ old('wo_onetime_charge_telkom',$value['wo_onetime_charge_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1104,8 +1109,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="wo_persen_telkom" id="wo_persen_telkom" placeholder="PERSEN" style="width:100px;" value="{{ old('wo_persen_telkom') }}"> % atau sebesar
-                                                    <input type="text" name="wo_monthly_telkom" id="wo_monthly_telkom" placeholder="Rp xxx.xxx.-" style="width:300px;" value="{{ old('wo_monthly_telkom') }}">
+                                                    <input type="number" min="0" name="wo_persen_telkom" id="wo_persen_telkom" style="width:100px;" value="{{ old('wo_persen_telkom',$value['wo_persen_telkom']) }}"> % atau sebesar
+                                                    <input type="text" name="wo_monthly_telkom" id="wo_monthly_telkom" style="width:300px;" value="{{ old('wo_monthly_telkom',$value['wo_monthly_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1129,7 +1134,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_mitra" id="wo_onetime_charge_mitra" style="width:350px;" placeholder="Rp xxx.xxx.-" value="{{ old('wo_onetime_charge_mitra') }}">
+                                                    <input class="rupiahs" type="text" name="wo_onetime_charge_mitra" id="wo_onetime_charge_mitra" style="width:350px;" value="{{ old('wo_onetime_charge_mitra',$value['wo_onetime_charge_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1141,8 +1146,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="wo_persen_mitra" id="wo_persen_mitra" placeholder="PERSEN" style="width:100px;" value="{{ old('wo_persen_mitra') }}"> % atau sebesar
-                                                    <input type="text" name="wo_monthly_mitra" id="wo_monthly_mitra" placeholder="Rp xxx.xxx.-" style="width:300px;" value="{{ old('wo_monthly_mitra') }}">
+                                                    <input type="number" min="0" name="wo_persen_mitra" id="wo_persen_mitra" style="width:100px;" value="{{ old('wo_persen_mitra',$value['wo_persen_mitra']) }}"> % atau sebesar
+                                                    <input type="text" name="wo_monthly_mitra" id="wo_monthly_mitra" style="width:300px;" value="{{ old('wo_monthly_mitra',$value['wo_monthly_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -1163,7 +1168,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ old('sp_nomor_kb') }}">
+                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ old('sp_nomor_kb',$value['sp_nomor_kb']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formSP"><td colspan="2"><br></td></tr>
@@ -1184,7 +1189,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ old('kl_nomor_kb') }}">
+                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ old('kl_nomor_kb',$value['kl_nomor_kb']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1196,7 +1201,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_kl_mitra" id="kl_no_kl_mitra" style="width:300px;" value="{{ old('kl_no_kl_mitra') }}">
+                                                    <input type="text" name="kl_no_kl_mitra" id="kl_no_kl_mitra" style="width:300px;" value="{{ old('kl_no_kl_mitra',$value['kl_no_kl_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1208,7 +1213,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_tempat_ttd_kl" id="kl_tempat_ttd_kl" style="width:300px;" value="{{ old('kl_tempat_ttd_kl') }}">
+                                                    <input type="text" name="kl_tempat_ttd_kl" id="kl_tempat_ttd_kl" style="width:300px;" value="{{ old('kl_tempat_ttd_kl',$value['kl_tempat_ttd_kl']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1220,7 +1225,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_notaris" id="kl_notaris" style="width:300px;" value="{{ old('kl_notaris') }}">
+                                                    <input type="text" name="kl_notaris" id="kl_notaris" style="width:300px;" value="{{ old('kl_notaris',$value['kl_notaris']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1232,7 +1237,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_akta_notaris" id="kl_akta_notaris" style="width:300px;" value="{{ old('kl_akta_notaris') }}">
+                                                    <input type="text" name="kl_akta_notaris" id="kl_akta_notaris" style="width:300px;" value="{{ old('kl_akta_notaris',$value['kl_akta_notaris']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1244,7 +1249,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_akta_notaris" id="kl_tgl_akta_notaris" style="width:300px;" value="{{ old('kl_tgl_akta_notaris') }}">
+                                                    <input type="date" name="kl_tgl_akta_notaris" id="kl_tgl_akta_notaris" style="width:300px;" value="{{ old('kl_tgl_akta_notaris',$value['tgl_akta_notaris']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1256,7 +1261,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_pejabat_telkom" id="kl_nama_pejabat_telkom" style="width:300px;" value="{{ old('kl_nama_pejabat_telkom') }}">
+                                                    <input type="text" name="kl_nama_pejabat_telkom" id="kl_nama_pejabat_telkom" style="width:300px;" value="{{ old('kl_nama_pejabat_telkom',$value['kl_nama_pejabat_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1268,7 +1273,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_jabatan_pejabat_telkom" id="kl_jabatan_pejabat_telkom" style="width:300px;" value="{{ old('kl_jabatan_pejabat_telkom') }}">
+                                                    <input type="text" name="kl_jabatan_pejabat_telkom" id="kl_jabatan_pejabat_telkom" style="width:300px;" value="{{ old('kl_jabatan_pejabat_telkom',$value['kl_jabatan_pejabat_telkom']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1281,7 +1286,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_npwp_mitra" id="kl_npwp_mitra" style="width:300px;" value="{{ old('kl_npwp_mitra') }}">
+                                                    <input type="text" name="kl_npwp_mitra" id="kl_npwp_mitra" style="width:300px;" value="{{ old('kl_npwp_mitra',$value['kl_npwp_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1293,7 +1298,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_anggaran_mitra" id="kl_no_anggaran_mitra" style="width:300px;" value="{{ old('kl_no_anggaran_mitra') }}">
+                                                    <input type="text" name="kl_no_anggaran_mitra" id="kl_no_anggaran_mitra" style="width:300px;" value="{{ old('kl_no_anggaran_mitra',$value['kl_no_anggaran_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1305,7 +1310,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_anggaran_mitra" id="kl_tgl_anggaran_mitra" style="width:300px;" value="{{ old('kl_tgl_anggaran_mitra') }}">
+                                                    <input type="date" name="kl_tgl_anggaran_mitra" id="kl_tgl_anggaran_mitra" style="width:300px;" value="{{ old('kl_tgl_anggaran_mitra',$value['tgl_anggaran_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1317,7 +1322,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_pejabat_mitra" id="kl_nama_pejabat_mitra" style="width:300px;" value="{{ old('kl_nama_pejabat_mitra') }}">
+                                                    <input type="text" name="kl_nama_pejabat_mitra" id="kl_nama_pejabat_mitra" style="width:300px;" value="{{ old('kl_nama_pejabat_mitra',$value['kl_nama_pejabat_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1329,7 +1334,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_jabatan_pejabat_mitra" id="kl_jabatan_pejabat_mitra" style="width:300px;" value="{{ old('kl_jabatan_pejabat_mitra') }}">
+                                                    <input type="text" name="kl_jabatan_pejabat_mitra" id="kl_jabatan_pejabat_mitra" style="width:300px;" value="{{ old('kl_jabatan_pejabat_mitra',$value['kl_jabatan_pejabat_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1341,7 +1346,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_no_skm" id="kl_no_skm" style="width:300px;" value="{{ old('kl_no_skm') }}">
+                                                    <input type="text" name="kl_no_skm" id="kl_no_skm" style="width:300px;" value="{{ old('kl_no_skm',$value['kl_no_skm']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1353,7 +1358,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_skm" id="kl_tgl_skm" style="width:300px;" value="{{ old('kl_tgl_skm') }}">
+                                                    <input type="date" name="kl_tgl_skm" id="kl_tgl_skm" style="width:300px;" value="{{ old('kl_tgl_skm',$value['tgl_skm']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1365,7 +1370,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_perihal_skm" id="kl_perihal_skm" style="width:300px;" value="{{ old('kl_perihal_skm') }}">
+                                                    <input type="text" name="kl_perihal_skm" id="kl_perihal_skm" style="width:300px;" value="{{ old('kl_perihal_skm',$value['kl_perihal_skm']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1378,7 +1383,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_akhir_kl" id="kl_tgl_akhir_kl" style="width:300px;" value="{{ old('kl_tgl_akhir_kl') }}">
+                                                    <input type="date" name="kl_tgl_akhir_kl" id="kl_tgl_akhir_kl" style="width:300px;" value="{{ old('kl_tgl_akhir_kl',$value['tgl_akhir_kl']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1391,7 +1396,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_bayar_dp" id="kl_bayar_dp" style="width:300px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('kl_bayar_dp') }}">
+                                                    <input type="text" name="kl_bayar_dp" id="kl_bayar_dp" style="width:300px;" value="{{ old('kl_bayar_dp',$value['kl_bayar_dp']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1403,7 +1408,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nama_bank_mitra" id="kl_nama_bank_mitra" style="width:300px;" value="{{ old('kl_nama_bank_mitra') }}">
+                                                    <input type="text" name="kl_nama_bank_mitra" id="kl_nama_bank_mitra" style="width:300px;" value="{{ old('kl_nama_bank_mitra',$value['kl_nama_bank_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1415,7 +1420,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_cabang_bank_mitra" id="kl_cabang_bank_mitra" style="width:300px;" value="{{ old('kl_cabang_bank_mitra') }}">
+                                                    <input type="text" name="kl_cabang_bank_mitra" id="kl_cabang_bank_mitra" style="width:300px;" value="{{ old('kl_cabang_bank_mitra',$value['kl_cabang_bank_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1427,7 +1432,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;" value="{{ old('kl_rek_bank_mitra') }}">
+                                                    <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;" value="{{ old('kl_rek_bank_mitra',$value['kl_rek_bank_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1439,7 +1444,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_an_bank_mitra" id="kl_an_bank_mitra" style="width:300px;" value="{{ old('kl_an_bank_mitra') }}">
+                                                    <input type="text" name="kl_an_bank_mitra" id="kl_an_bank_mitra" style="width:300px;" value="{{ old('kl_an_bank_mitra',$value['kl_an_bank_mitra']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1463,7 +1468,7 @@
                                                     <input type="text">
                                                 </td>
                                             </tr> -->
-
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -1481,11 +1486,35 @@
         <script>
             $( document ).ready(function() {
                 var global_jenis_spk = '';
-                var view_diatas_100='';
+
+                // clear form submit after refresh browser
+                $('#formObl')[0].reset();
+                $("#formObl").submit( function(e) {
+                   $("<input />").attr("type", "hidden")
+                       .attr("name", "global_jenis_spk")
+                       .attr("value", global_jenis_spk)
+                       .appendTo("#formObl");
+                   return true;
+               });
+
+                var table_edit = @json($table_edit);
+
+                if(table_edit[0]['f1_jenis_spk']==='WO'){ $('.jenis_spk_klsp').hide(); }
+                else if(table_edit[0]['f1_jenis_spk']==='KL'||table_edit[0]['f1_jenis_spk']==='SP'){ $('.jenis_spk_wo').hide(); $('#lanjutP2').show(); }
+                else{ $('.jenis_spk_wo').show(); $('.jenis_spk_klsp').show(); }
+
+                $("#formObl").submit( function(e) {
+                   $("<input />").attr("type", "hidden")
+                       .attr("name", "edit_draf_id")
+                       .attr("value", table_edit[0]['id'])
+                       .appendTo("#formObl");
+                   return true;
+               });
+
+               // table_edit[0]['f1_jenis_spk']
 
                 $("#modal-input-obl").modal({show:false});
                 var session_status = "{{ session('status') }}";
-
                 if(session_status && typeof session_status !== undefined){
                   $('#status-input-obl').empty();
                   if(session_status.includes('Sukses')){
@@ -1521,16 +1550,6 @@
                 }
 
 
-                // clear form submit after refresh browser
-                $('#formObl')[0].reset();
-                $("#formObl").submit( function(e) {
-                   $("<input />").attr("type", "hidden")
-                       .attr("name", "global_jenis_spk")
-                       .attr("value", global_jenis_spk)
-                       .appendTo("#formObl");
-                   return true;
-               });
-
                 $('input[type=radio][name=p3_status_rapat_pengadaan]').change(function() {
                     if (this.value == 'ada') {
                         $('.status_rapat_pengadaan').show();
@@ -1540,7 +1559,7 @@
                     }
                 });
 
-
+                var view_diatas_100='';
                 $('input[type=radio][name=f2_nilai_kontrak]').change(function() {
                     if (this.value == 'dibawah_100') {
                         global_jenis_spk = 'SP';
@@ -1565,7 +1584,7 @@
                 });
 
                 $('#backKontrak2').click(function(){
-                  global_jenis_spk = '';
+                    global_jenis_spk = '';
                     $('.formP6').hide(); $('.filterKontrak').show();
                 });
                 $('#lanjutWO3').click(function(){
@@ -1578,7 +1597,7 @@
                 });
                 // END SKEMA OBL : WO
 
-                $('#lanjutFilter').click(function(){ $('.filterKontrak').hide(); $('.filterAwal').show(); $('.hide-filterkl').hide(); });
+                $('#lanjutFilter').click(function(){ $('.filterKontrak').hide(); $('.filterAwal').show(); });
                 $('#backKontrak').click(function(){ global_jenis_spk = ''; $('.filterAwal').hide(); $('input[type=radio][name=f2_nilai_kontrak]').prop('checked',false); $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">FILTER KL</h6>`); $('.filterKontrak').show(); });
                 $('#lanjutP2').click(function(){
                   if($('#f2_tgl_p1').val() === ''){ $('#f2_tgl_p1').addClass('outline-input-merah'); }
@@ -1604,8 +1623,8 @@
                 });
                 $('#lanjutP7').click(function(){
                     $('.formP6').hide(); $('.formP7').show();
-                    if(view_diatas_100=='1'){ $('.dibawah-100').hide(); $('.diatas-100').show();  }
-                    else if(view_diatas_100=='0'){ $('.diatas-100').hide(); $('.dibawah-100').show();  }
+                    if(table_edit[0]['f1_jenis_spk']==='KL'){ $('.dibawah-100').hide(); $('.diatas-100').show();  }
+                    else if(table_edit[0]['f1_jenis_spk']==='SP'){ $('.diatas-100').hide(); $('.dibawah-100').show();  }
                 });
                 $('#backP6').click(function(){
                     $('.formP7').hide(); $('.formP6').show();
@@ -1747,7 +1766,10 @@
 
 
                 // Start dd rows table p4 attendees
-                var counter = 1;
+                var table_edit_p4_attendees = @json($table_edit_p4_attendees);
+                var table_edit_p4_attendees_length = 0;
+                if(table_edit_p4_attendees && table_edit_p4_attendees_length > 0){ table_edit_p4_attendees_length = table_edit_p4_attendees.length; }
+                var counter = (table_edit_p4_attendees_length+1);
                 $("#insertRow").on("click", function (event) {
                     event.preventDefault();
                     var newRow = $("<tr>");

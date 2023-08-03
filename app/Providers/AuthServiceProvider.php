@@ -29,15 +29,15 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // View::share('count_draf', $count_draf);
-        view()->composer('*', function($view)
-        {
-            if (Auth::check()) {
-                $count_draf = Draf::where('user_id',Auth::user()->id)->where('is_draf',1)->count();
-                $view->with('count_draf', $count_draf);
-            }else {
-                $view->with('count_draf', 0);
-            }
-        });
+        // view()->composer('*', function($view)
+        // {
+        //     if (Auth::check()) {
+        //         $count_draf = Draf::where('user_id',Auth::user()->id)->where('is_draf',1)->count();
+        //         $view->with('count_draf', $count_draf);
+        //     }else {
+        //         $view->with('count_draf', 0);
+        //     }
+        // });
         //
     }
 }

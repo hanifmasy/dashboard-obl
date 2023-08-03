@@ -9,6 +9,7 @@ use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\InputsController;
 use App\Http\Controllers\DrafsController;
 use App\Http\Controllers\TableOblController;
+use App\Http\Controllers\TestingController;
 
 
 // AUTH USER PROCESSES
@@ -37,12 +38,15 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // GET VIEW WITH METHOD
-Route::get('obl-drafs', [DrafsController::class, 'drafs'])->middleware('auth')->name('obl.drafs');
+// Route::get('obl-drafs', [DrafsController::class, 'drafs'])->middleware('auth')->name('obl.drafs');
 Route::get('obl-tables', [TableOblController::class, 'tables'])->middleware('auth')->name('obl.tables');
+Route::get('testing', [TestingController::class, 'index'])->middleware('auth')->name('testing.index');
 
 // POST METHOD ( PAGES )
 Route::post('inputs/create', [InputsController::class, 'create'])->middleware('auth')->name('inputs.create');
-Route::post('obl-drafs/edit', [DrafsController::class, 'edit'])->middleware('auth')->name('obl.drafs.edit');
-Route::post('obl-drafs/edit/update', [DrafsController::class, 'update'])->middleware('auth')->name('obl.drafs.edit.update');
-Route::post('obl-drafs/delete', [DrafsController::class, 'delete'])->middleware('auth')->name('obl.drafs.delete');
+// Route::post('obl-drafs/edit', [DrafsController::class, 'edit'])->middleware('auth')->name('obl.drafs.edit');
+// Route::post('obl-drafs/edit/update', [DrafsController::class, 'update'])->middleware('auth')->name('obl.drafs.edit.update');
+// Route::post('obl-drafs/delete', [DrafsController::class, 'delete'])->middleware('auth')->name('obl.drafs.delete');
 Route::post('obl-tables/delete', [TableOblController::class, 'delete'])->middleware('auth')->name('obl.tables.delete');
+Route::post('obl-tables/edit', [TableOblController::class, 'edit'])->middleware('auth')->name('obl.tables.edit');
+Route::post('obl-tables/edit/update', [TableOblController::class, 'update'])->middleware('auth')->name('obl.tables.edit.update');
