@@ -156,18 +156,6 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Folder</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" style="width:200px;" name="f1_folder" id="f1_folder" value="{{ old('f1_folder',$value['f1_folder']) }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="filterKontrak">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Nilai KB</h6>
                                                         </div>
                                                     </div>

@@ -80,6 +80,46 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item dropdown align-items-center">
+                <a href="javascript:;" class="nav-link text-white {{ $activePage == 'witels' || $activePage == 'obl-tables' ? ' active bg-gradient-primary' : '' }}"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">article</i>
+                    </div>
+                    <span class="nav-link-text ms-1">WITEL</span>
+                </a>
+                <ul class="dropdown-menu  dropdown-menu-end"
+                    aria-labelledby="dropdownMenuButton">
+                    <li class="mb-2">
+                        <a class="dropdown-item border-radius-md" href="{{ route('witels') }}">
+                            <div class="d-flex py-1">
+                                <div class="my-auto">
+                                    <i class="material-icons opacity-10 me-2">note_add</i>
+                                </div>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h6 class="text-sm font-weight-normal mb-1">
+                                        <span class="font-weight-bold">Input Form</span>
+                                    </h6>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a class="dropdown-item border-radius-md" href="{{ route('obl.tables') }}">
+                            <div class="d-flex py-1">
+                                <div class="my-auto">
+                                    <i class="material-icons opacity-10 me-2">table_view</i>
+                                </div>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h6 class="text-sm font-weight-normal mb-1">
+                                        <span class="font-weight-bold">Tabel Dokumen</span>
+                                    </h6>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <!-- END TEST -->
         </ul>
     </div>

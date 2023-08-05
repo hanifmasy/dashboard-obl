@@ -26,6 +26,24 @@ class InputsController extends Controller
         $created_by = Auth::id();
         $created_at = Carbon::now()->translatedFormat('Y-m-d H:i:s');
 
+        // PENAMAAN FOLDER
+        $nama_folder = '';
+        if($request->f1_segmen){
+            $hari = Carbon::now();
+            $hari_ini = $hari->dayOfNumber;
+            $tahun_ini = $hari->year;
+            $tahun_ini = strval($tahun_ini);
+            $hari_ini = ($hari_ini*40);
+            $skip_folder = null;
+            do{
+              $string_hari_ini = sprintf("%04d", $hari_ini);
+              $nama_folder = $request->f1_segmen . '_' . $string_hari_ini;
+              $cek_nama_folder = DB::connection()->table()->select('id','nama_folder')->where(DB::raw("to_char(created_at,'yyyy')"),'=',$tahun_ini)->where('nama_folder',$nama_folder)->get()->toArray();
+              if( count($cek_nama_folder) > 0 ){ skip = true; $hari_ini++; }
+              else{ skip = false; }
+            }while($skip_folder==true);
+        }
+
         if($request->submit && str_contains($request->submit,'draf')){
           try{
             // SUBMIT DRAF (VALIDASI: JUDUL PROJEK)
@@ -47,6 +65,7 @@ class InputsController extends Controller
             if($request->keterangan && $request->keterangan !== ''){ $filtered_draf->put('f1_tgl_keterangan',$created_at); }
             $filtered_draf->put('is_draf',1);
             $filtered_draf->put('f1_jenis_spk',$request->global_jenis_spk);
+            $filtered_draf->put('f1_folder',$nama_folder);
             $obl_id_draf = DB::connection('pgsql')->table('form_obl')
             ->insertGetId(
                 $filtered_draf->all()
@@ -247,6 +266,7 @@ class InputsController extends Controller
               $filtered->put('f1_tgl_keterangan',$created_at);
               $filtered->put('is_draf',0);
               $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
+              $filtered->put('f1_folder',$nama_folder);
               // append tanggal dokumen
               $filtered->put('p2_tgl_p2',$arr_tanggal[0][0]);
               $filtered->put('p3_tgl_p3',$arr_tanggal[1][0]);
