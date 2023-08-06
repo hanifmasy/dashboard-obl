@@ -26,7 +26,7 @@ class SessionsController extends Controller
 
         if (! auth()->attempt($attributes)) {
             throw ValidationException::withMessages([
-                'username' => 'Your provided credentials could not be verified.'
+                'username' => 'NO USER EXISTS.'
             ]);
         }
 

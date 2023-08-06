@@ -26,6 +26,7 @@
 <body class="{{ $bodyClass }}">
 <style>
         .hidden-leaf,
+        #f1_nama_mitra_lain,
         /* .filterKontrak, */
         .filterAwal,
         #lanjutP2,

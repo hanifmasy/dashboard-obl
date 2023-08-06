@@ -9,6 +9,10 @@ class MitraVendor extends Model
 {
     use HasFactory;
 
+    protected $connection = 'pgsql';
+    protected $table = 'mitras';
+
+
     public const NamaVendor = [
       [ 'kode_vendor'=>'','nama_vendor'=>'PT PUTRA BISTEL SOLUSINDO'],
       [ 'kode_vendor'=>'','nama_vendor'=>'CEMITEL'],

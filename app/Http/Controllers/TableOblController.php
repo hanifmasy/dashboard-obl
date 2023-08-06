@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\MitraVendor;
 use App\Models\DocObl;
 use Carbon\Carbon;
 use DataTables;
@@ -18,19 +19,30 @@ class TableOblController extends Controller
 {
     public function tables(Request $request){
       if($request->ajax()){
-        $data = DocObl::leftJoin('users as u','u.id','=','obl.created_by')
+        $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')->leftJoin('witels','witels.id','=','users.witel_id')->leftJoin('mitras','mitras.user_id','=','users.id')
+        ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
+
+        $query = DocObl::leftJoin('users as u','u.id','=','obl.created_by')
         ->leftJoin('users as uu','uu.id','=','obl.updated_by')
+        ->leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
         ->select(
                   'obl.id as obl_id',
+                  DB::raw("
+                  case
+                  when f1_proses is null or f1_proses = '' then ''
+                  else f1_proses
+                  end as proses"),
                   DB::raw("
                   case
                   when submit like 'draf_filter_%' then 'filter'
                   when submit like 'draf_p%' then 'form'
                   when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
                   when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
+                  else ''
                   end as filter_submit"),
                   DB::raw("replace(submit,'_',' ') as string_submit"),
                   DB::raw("case when f1_segmen is null or f1_segmen = '' then '' else f1_segmen end as segmen"),
+                  DB::raw("case when f1_folder is null or f1_folder = '' then '' else substring(f1_folder,5,(length(f1_folder)-4)) end as folder"),
                   DB::raw("to_char(obl.created_at,'YYYY-MM-DD HH24:MI') as string_tgl_submit"),
                   DB::raw("to_char(obl.updated_at,'YYYY-MM-DD HH24:MI') as string_tgl_update"),
                   DB::raw("case when f1_jenis_spk is null or f1_jenis_spk = '' then '' else f1_jenis_spk end as jenis_spk"),
@@ -43,7 +55,7 @@ class TableOblController extends Controller
                   else '-'
                   end as layanan
                   "),
-                  DB::raw("case when f1_nama_mitra is null or f1_nama_mitra = '' then '' else f1_nama_mitra end as nama_vendor"),
+                  DB::raw("case when mitras.nama_mitra is null or mitras.nama_mitra = '' then '' else mitras.nama_mitra end as nama_vendor"),
                   DB::raw("case when f1_masa_layanan is null or f1_masa_layanan = '' then '' else concat(f1_masa_layanan,' ',f1_satuan_masa_layanan) end as jangka_waktu"),
                   DB::raw("case when f1_nilai_kb is null or f1_nilai_kb = '' then '' else f1_nilai_kb end as nilai_kb"),
                   DB::raw("case when f1_no_kfs_spk is null or f1_no_kfs_spk = '' then '' else f1_no_kfs_spk end as no_kfs_spk"),
@@ -66,8 +78,18 @@ class TableOblController extends Controller
                   DB::raw("case when f1_keterangan is null or f1_keterangan = '' then '' else f1_keterangan end as keterangan"),
                   DB::raw("u.nama_lengkap as user_create"),
                   DB::raw("uu.nama_lengkap as user_update")
-                )
-          ->whereRaw("obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = ''")
+                );
+
+        // WITEL
+        if($user_in_is->role_id == 4 || $user_in_is->role_id == 5 ){
+            $query->where('obl.f1_witel',$user_in_is->nama_witel);
+        }
+        // MITRA
+        else if($user_in_is->role_id == 6){
+            $query->where('obl.f1_mitra_id',$user_in_is->mitra_id);
+        }
+
+        $data = $query->whereRaw("obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = ''")
           ->orderBy('obl.created_at','DESC')
           ->orderBy('obl.updated_at','DESC')
           ->get();
@@ -123,8 +145,10 @@ class TableOblController extends Controller
             ->where('id',$edit_obl_id)
             ->get()->toArray();
           $table_edit_p4_attendees = DB::connection('pgsql')->table('form_p4_attendees')->select('*')->where('obl_id',$edit_obl_id)->get()->toArray();
+          $mitra_vendor = DB::connection('pgsql')->table('mitras')->select('*')->get()->toArray();
+
           // dd($draf_edit);
-          return view('pages.obls.tables_edit',compact('table_edit','table_edit_p4_attendees'));
+          return view('pages.obls.tables_edit',compact('table_edit','table_edit_p4_attendees','mitra_vendor'));
       }
       else{
         return redirect('obl-tables')->with('status', 'Oops! Wrong Routing.');
@@ -583,17 +607,8 @@ class TableOblController extends Controller
 
             // INPUT P4 ATTENDEES
             if($request->p4_attendees){
-                $form_p4_attendees_histori = DB::connection('pgsql')->table('form_p4_attendees')->select('obl_id','p4_attendees')
-                ->where('obl_id',$edit_draf_id)
-                ->get();
-                $form_p4_attendees_histori->put('updated_at',$submit_sekarang);
-                DB::connection('pgsql')->table('form_p4_attendees_histori')
-                ->insert(
-                    $form_p4_attendees_histori->all()
-                );
-                DB::connection('pgsql')->table('form_p4_attendees')
-                ->where('obl_id',$edit_draf_id)->delete();
-
+                $cek_p4_attendees = DB::connection('pgsql')->table('form_p4_attendees')->where('obl_id',$edit_draf_id)->get()->toArray();
+                if( count($cek_p4_attendees) > 0 ){ DB::connection('pgsql')->table('form_p4_attendees')->where('obl_id',$edit_draf_id)->delete(); }
 
                 $arr_attendees = [];
                 foreach($request->p4_attendees as $key => $value){
@@ -605,14 +620,6 @@ class TableOblController extends Controller
                         ]
                     );
                 }
-
-                // foreach($request->lampiran_spesifikasi as $key => $value){
-                //     $array_insert[$key]['lampiran_spesifikasi'] = $value;
-                // }
-
-                DB::connection('pgsql')->table('form_p4_attendees')
-                ->where('obl_id',$edit_draf_id)
-                ->delete();
 
                 DB::connection('pgsql')->table('form_p4_attendees')
                 ->insert(

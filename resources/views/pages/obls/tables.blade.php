@@ -2,10 +2,11 @@
         <x-navbars.sidebar activePage="obl-tables"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="OBL / Tabel Dokumen"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="Tabel Dokumen"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <!-- modal alerts -->
+            @if( $is_user->role_id !== 1 || $is_user->role_id !== 3 || $is_user->role_id !== 4 || $is_user->role_id !== 5 || $is_user->role_id !== 6 || $is_user->role_id !== 7 )
             <div class="modal fade" id="modal-status-table-obl" tabindex="-1" aria-labelledby="modal-status-table-obl" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -43,6 +44,7 @@
                 </div>
               </div>
             </div>
+            @endif
             <!-- end modal alerts -->
 
 
@@ -68,10 +70,16 @@
                                                     No.</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                    Proses</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Status OBL</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Segmen</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                    Folder</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                     Tanggal Submit</th>
@@ -128,10 +136,7 @@
                                                     Alamat Pelanggan</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
-                                                    Keterangan Updated</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
-                                                    Keterangan</th>
+                                                    Keterangan Terbaru</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
                                                     Created By</th>
@@ -201,6 +206,7 @@
                 }
               }
 
+              var is_user = "{{ $is_user->role_id }}";
               $('#table-data-obl').DataTable({
                 destroy: true,
                 processing: true,
@@ -212,11 +218,25 @@
                   {
                      searchable:false,orderable:false,
                      "render": function ( data, type, row ) {
-                       return '<button type="button" class="btn btn-info btn-sm" onclick="editDoc('+row.obl_id+')">Edit</button><button type="button" class="btn btn-warning btn-sm">Print</button><button type="button" class="btn btn-danger btn-sm" onclick="deleteDoc('+row.obl_id+')">Delete</button>';
+                       if(is_user === '1' || is_user === '3' || is_user === '4' || is_user === '5' ||  is_user === '6' ||  is_user === '7'){ return ''; }
+                       else{ return '<button type="button" class="btn btn-info btn-sm" onclick="editDoc('+row.obl_id+')">Edit</button><button type="button" class="btn btn-warning btn-sm">Print</button><button type="button" class="btn btn-danger btn-sm" onclick="deleteDoc('+row.obl_id+')">Delete</button>'; }
                      }
                   },
                   {
                      data: 'DT_RowIndex',searchable:false,orderable:false
+                  },
+                  {
+                     data: 'proses',name: 'proses',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       if(data==='witel'){ return '<span class="badge badge-sm bg-gradient-primary">WITEL</span>'; }
+                       else if(data==='obl'){ return '<span class="badge badge-sm bg-gradient-info">OBL</span>'; }
+                       else if(data==='legal'){ return '<span class="badge badge-sm bg-gradient-secondary">LEGAL</span>'; }
+                       else if(data==='mitra_obl'){ return '<span class="badge badge-sm bg-gradient-warning">MITRA OBL</span>'; }
+                       else if(data==='close_sm'){ return '<span class="badge badge-sm bg-gradient-light" style="color: #444444 !important;">CLOSE SM</span>'; }
+                       else if(data==='done'){ return '<span class="badge badge-sm bg-gradient-success">DONE</span>'; }
+                       else if(data==='cancel'){ return '<span class="badge badge-sm bg-gradient-danger">CANCEL</span>'; }
+                       else{ return '<span class="badge badge-sm bg-gradient-dark">'+data+'</span>'; }
+                     }
                   },
                   {
                      data: 'string_submit',name: 'string_submit',searchable:true,orderable:false,
@@ -225,10 +245,17 @@
                         if(row.filter_submit==='kontrak2'){ return '<span class="badge badge-sm bg-gradient-success">'+data+'</span>'; }
                         if(row.filter_submit==='filter'){ return '<span class="badge badge-sm bg-gradient-danger">'+data+'</span>'; }
                         if(row.filter_submit==='form'){ return '<span class="badge badge-sm bg-gradient-warning">'+data+'</span>'; }
+                        if(row.filter_submit===''){ return ''; }
                      }
                   },
                   {
                      data: 'segmen',name: 'segmen',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
+                  },
+                  {
+                     data: 'folder',name: 'folder',searchable:true,orderable:false,
                      "render": function ( data, type, row ) {
                        return '<span style="white-space:normal">'+data+'</span>';
                      }
@@ -297,10 +324,11 @@
                      data: 'alamat_plggn',name: 'alamat_plggn',searchable:true,orderable:false
                   },
                   {
-                     data: 'tgl_keterangan',name: 'tgl_keterangan',searchable:true,orderable:true
-                  },
-                  {
-                     data: 'keterangan',name: 'keterangan',searchable:true,orderable:false
+                     data: 'keterangan',name: 'keterangan',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       if(row.tgl_keterangan){ return '<span style="white-space:normal">'+row.tgl_keterangan+': '+data+'</span>'; }
+                       else{ return '<span style="white-space:normal"></span>'; }
+                     }
                   },
                   {
                      data: 'user_create',name: 'user_create',searchable:true,orderable:false

@@ -36,8 +36,8 @@ Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('aut
 
 // GET VIEW ( PAGES )
 Route::group(['middleware' => 'auth'], function () {
-	Route::get('inputs', function () { return view('pages.inputs'); })->name('inputs');
-	Route::get('witels', function () { $mitra_vendor = MitraVendor::getNamaVendor(); return view('pages.witels',compact('mitra_vendor')); })->name('witels');
+	Route::get('inputs', function () { $mitra_vendor = MitraVendor::get()->toArray(); return view('pages.inputs',compact('mitra_vendor')); })->name('inputs');
+	Route::get('witels', function () { $mitra_vendor = MitraVendor::get()->toArray(); return view('pages.witels',compact('mitra_vendor')); })->name('witels');
 });
 
 // GET VIEW WITH METHOD

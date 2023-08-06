@@ -131,12 +131,21 @@
                                                     </div>
                                                 </td>
                                                 <td>
+                                                    @if($errors->has('f1_segmen'))
+                                                    <select name="f1_segmen" id="f1_segmen" class="outline-input-merah">
+                                                        <option value="" disabled selected>Pilih Segmen</option>
+                                                        <option value="DES" {{ old('f1_segmen') == 'DES' ? ' selected="selected"' : '' }}>DES</option>
+                                                        <option value="DGS" {{ old('f1_segmen') == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>
+                                                        <option value="DBS" {{ old('f1_segmen') == 'DBS' ? ' selected="selected"' : '' }}>DBS</option>
+                                                    </select>
+                                                    @else
                                                     <select name="f1_segmen" id="f1_segmen">
                                                         <option value="" disabled selected>Pilih Segmen</option>
                                                         <option value="DES" {{ old('f1_segmen') == 'DES' ? ' selected="selected"' : '' }}>DES</option>
                                                         <option value="DGS" {{ old('f1_segmen') == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>
                                                         <option value="DBS" {{ old('f1_segmen') == 'DBS' ? ' selected="selected"' : '' }}>DBS</option>
                                                     </select>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -340,7 +349,28 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:450px;" type="text" name="f1_nama_mitra" id="f1_nama_mitra" value="{{ old('f1_nama_mitra') }}">
+                                                  @if($errors->has('f1_mitra_id'))
+                                                  <select class="outline-input-merah" id="f1_mitra_id" name="f1_mitra_id">
+                                                    <option value="" disabled selected>Pilih Vendor</option>
+                                                    @if(isset($mitra_vendor))
+                                                      @foreach($mitra_vendor as $key => $value)
+                                                        <option value="{{ $value['id'] }}" {{ old('f1_mitra_id') == $value['id'] ? ' selected="selected"' : '' }}>{{ $value['nama_mitra'] }}</option>
+                                                      @endforeach
+                                                    @endif
+                                                    <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
+                                                  </select>
+                                                  @else
+                                                  <select class="" id="f1_mitra_id" name="f1_mitra_id" >
+                                                    <option value="" disabled selected>Pilih Vendor</option>
+                                                    @if(isset($mitra_vendor))
+                                                      @foreach($mitra_vendor as $key => $value)
+                                                        <option value="{{ $value['id'] }}" {{ old('f1_mitra_id') == $value['id'] ? ' selected="selected"' : '' }}>{{ $value['nama_mitra'] }}</option>
+                                                      @endforeach
+                                                    @endif
+                                                    <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
+                                                  </select>
+                                                  @endif
+                                                  <input type="text" name="f1_nama_mitra_lain" id="f1_nama_mitra_lain" value="" style="width:350px;" placeholder="NAMA MITRA BARU">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -385,7 +415,7 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Tanggal Form P1</h6>
+                                                            <h6 class="mb-0 text-sm">Tanggal Terbit Form P1</h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -962,7 +992,7 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Tanggal FO (P1)</h6>
+                                                            <h6 class="mb-0 text-sm">Tanggal Terbit FO (P1)</h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -1517,6 +1547,13 @@
                        .attr("value", global_jenis_spk)
                        .appendTo("#formObl");
                    return true;
+               });
+
+               $('#f1_mitra_id').change(function() {
+                   if (this.value == 'lainnya') {
+                       $('#f1_nama_mitra_lain').show();
+                   }
+                   else{ $('#f1_nama_mitra_lain').hide(); }
                });
 
                 $('input[type=radio][name=p3_status_rapat_pengadaan]').change(function() {

@@ -26,22 +26,71 @@ class InputsController extends Controller
         $created_by = Auth::id();
         $created_at = Carbon::now()->translatedFormat('Y-m-d H:i:s');
 
-        // PENAMAAN FOLDER
+        // PENAMAAN FOLDER & SUBFOLDER
         $nama_folder = '';
         if($request->f1_segmen){
             $hari = Carbon::now();
-            $hari_ini = $hari->dayOfNumber;
+            $hari_ini = $hari->dayOfYear;
             $tahun_ini = $hari->year;
             $tahun_ini = strval($tahun_ini);
             $hari_ini = ($hari_ini*40);
-            $skip_folder = null;
-            do{
-              $string_hari_ini = sprintf("%04d", $hari_ini);
-              $nama_folder = $request->f1_segmen . '_' . $string_hari_ini;
-              $cek_nama_folder = DB::connection()->table()->select('id','nama_folder')->where(DB::raw("to_char(created_at,'yyyy')"),'=',$tahun_ini)->where('nama_folder',$nama_folder)->get()->toArray();
-              if( count($cek_nama_folder) > 0 ){ skip = true; $hari_ini++; }
-              else{ skip = false; }
-            }while($skip_folder==true);
+            if($request->f1_quote_kontrak){
+              try{
+                $cek_quote_kontrak = DB::connection('pgsql')->table('form_obl')->select('id','f1_quote_kontrak')->where('f1_quote_kontrak',$request->f1_quote_kontrak)->orderBy('created_at','ASC')->get()->toArray();
+                $nama_subfolder = '';
+                if( count($cek_quote_kontrak) > 0 ){
+                    $tambah_subfolder = 'A';
+                    $digits_subfolder = strlen(strval(count($cek_quote_kontrak)));
+                    for($i = 0; $i < $digits_subfolder; $i++){ $nama_subfolder = $nama_subfolder . $tambah_subfolder; }
+                    $skip_subfolder = null;
+                    $string_hari_ini = sprintf("%04d", $hari_ini);
+                    do{
+                      $nama_folder = $request->f1_segmen . '_' . $string_hari_ini . $nama_subfolder;
+                      $cek_nama_folder = DB::connection('pgsql')->table('form_obl')->select('id','f1_folder')->where(DB::raw("to_char(created_at,'yyyy')"),'=',$tahun_ini)->where('f1_folder',$nama_folder)->get()->toArray();
+                      if( count($cek_nama_folder) > 0 ){ $skip_subfolder = true; $nama_subfolder++; }
+                      else{ $skip_subfolder = false; }
+                    }while($skip_subfolder==true);
+                }
+                else{
+                  $skip_folder = null;
+                  do{
+                    $string_hari_ini = sprintf("%04d", $hari_ini);
+                    $nama_folder = $request->f1_segmen . '_' . $string_hari_ini;
+                    $cek_nama_folder = DB::connection('pgsql')->table('obl_form')->select('id','f1_folder')->where(DB::raw("to_char(created_at,'yyyy')"),'=',$tahun_ini)->where('f1_folder',$nama_folder)->get()->toArray();
+                    if( count($cek_nama_folder) > 0 ){ $skip_folder = true; $hari_ini++; }
+                    else{ $skip_folder = false; }
+                  }while($skip_folder==true);
+                }
+              }
+              catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check Quote Kontrak.'); }
+            }
+            else{
+              $skip_folder = null;
+              do{
+                $string_hari_ini = sprintf("%04d", $hari_ini);
+                $nama_folder = $request->f1_segmen . '_' . $string_hari_ini;
+                $cek_nama_folder = DB::connection('pgsql')->table('form_obl')->select('id','f1_folder')->where(DB::raw("to_char(created_at,'yyyy')"),'=',$tahun_ini)->where('f1_folder',$nama_folder)->get()->toArray();
+                if( count($cek_nama_folder) > 0 ){ $skip_folder = true; $hari_ini++; }
+                else{ $skip_folder = false; }
+              }while($skip_folder==true);
+            }
+        }
+
+        // PENAMAAN MITRA BARU
+        $f1_mitra_id = null;
+        if($request->f1_nama_mitra_lain){
+          if($request->f1_nama_mitra_lain !== ''){
+            try{
+              $cek_nama_mitra = DB::connection('pgsql')->table('mitras')->select('*')->where('nama_mitra',$request->f1_nama_mitra_lain)->get()->toArray();
+              if( count($cek_nama_mitra) > 0 ){ return back()->withInput()->with('status','Oops! Nama Mitra Sudah Digunakan.'); }
+              else{
+                $f1_mitra_id = DB::connection('pgsql')->table('mitras')->insertGetId([
+                  'nama_mitra' => $request->f1_nama_mitra_lain
+                ]);
+              }
+            }
+            catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check Nama Mitra.'); }
+          }
         }
 
         if($request->submit && str_contains($request->submit,'draf')){
@@ -50,6 +99,7 @@ class InputsController extends Controller
             $inputan_masuk_draf = [];
             $inputan_masuk_draf['f1_judul_projek'] = 'required';
             $inputan_masuk_draf['f1_nama_plggn'] = 'required';
+            $inputan_masuk_draf['f1_segmen'] = 'required';
             $validasi_draf = $request->all();
             $validator_draf = Validator::make($validasi_draf,$inputan_masuk_draf);
             if($validator_draf->fails()){ return back()->withErrors($validator_draf)->withInput(); }
@@ -58,7 +108,9 @@ class InputsController extends Controller
             $filtered_draf = $collection_draf->except([
                 '_token',
                 'p4_attendees',
-                'global_jenis_spk'
+                'global_jenis_spk',
+                'f1_mitra_id',
+                'f1_nama_mitra_lain'
             ]);
             $filtered_draf->put('created_by',$created_by);
             $filtered_draf->put('created_at',$created_at);
@@ -66,6 +118,7 @@ class InputsController extends Controller
             $filtered_draf->put('is_draf',1);
             $filtered_draf->put('f1_jenis_spk',$request->global_jenis_spk);
             $filtered_draf->put('f1_folder',$nama_folder);
+            $filtered_draf->put('f1_mitra_id',$f1_mitra_id);
             $obl_id_draf = DB::connection('pgsql')->table('form_obl')
             ->insertGetId(
                 $filtered_draf->all()
@@ -104,6 +157,7 @@ class InputsController extends Controller
           $inputan_masuk['f1_jenis_kontrak'] = 'required';
           $inputan_masuk['f1_judul_projek'] = 'required';
           $inputan_masuk['f1_nama_plggn'] = 'required';
+          $inputan_masuk['f1_segmen'] = 'required';
           $validasi = $request->all();
           $validator = Validator::make($validasi,$inputan_masuk);
           if($validator->fails()){ return back()->withInput()->withErrors($validator); }
@@ -115,7 +169,9 @@ class InputsController extends Controller
               $filtered = $collection->except([
                   '_token',
                   'p4_attendees',
-                  'global_jenis_spk'
+                  'global_jenis_spk',
+                  'f1_mitra_id',
+                  'f1_nama_mitra_lain'
               ]);
               // dd($filtered);
 
@@ -267,6 +323,7 @@ class InputsController extends Controller
               $filtered->put('is_draf',0);
               $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
               $filtered->put('f1_folder',$nama_folder);
+              $filtered->put('f1_mitra_id',$f1_mitra_id);
               // append tanggal dokumen
               $filtered->put('p2_tgl_p2',$arr_tanggal[0][0]);
               $filtered->put('p3_tgl_p3',$arr_tanggal[1][0]);

@@ -147,25 +147,26 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                  @if($errors->has('f1_nama_mitra'))
-                                                  <select class="outline-input-merah" id="f1_nama_mitra" name="f1_nama_mitra">
+                                                  @if($errors->has('f1_mitra_id'))
+                                                  <select class="outline-input-merah" id="f1_mitra_id" name="f1_mitra_id">
                                                     <option value="" disabled selected>Pilih Vendor</option>
                                                     @if(isset($mitra_vendor))
                                                       @foreach($mitra_vendor as $key => $value)
-                                                        <option value="{{ $value }}" {{ old('f1_nama_mitra') == $value ? ' selected="selected"' : '' }}>{{ $value }}</option>
+                                                        <option value="{{ $value['id'] }}" {{ old('f1_mitra_id') == $value['id'] ? ' selected="selected"' : '' }}>{{ $value['nama_mitra'] }}</option>
                                                       @endforeach
                                                     @endif
                                                   </select>
                                                   @else
-                                                  <select class="" id="f1_nama_mitra" name="f1_nama_mitra" >
+                                                  <select class="" id="f1_mitra_id" name="f1_mitra_id" >
                                                     <option value="" disabled selected>Pilih Vendor</option>
                                                     @if(isset($mitra_vendor))
                                                       @foreach($mitra_vendor as $key => $value)
-                                                        <option value="{{ $value }}" {{ old('f1_nama_mitra') == $value ? ' selected="selected"' : '' }}>{{ $value }}</option>
+                                                        <option value="{{ $value['id'] }}" {{ old('f1_mitra_id') == $value['id'] ? ' selected="selected"' : '' }}>{{ $value['nama_mitra'] }}</option>
                                                       @endforeach
                                                     @endif
                                                   </select>
                                                   @endif
+                                                  <input type="text" name="f1_nama_mitra_lain" id="f1_nama_mitra_lain" value="" style="width:350px;" placeholder="NAMA MITRA BARU">
                                                 </td>
                                             </tr>
                                             <tr >
@@ -316,6 +317,14 @@
 
                 // clear form submit after refresh browser
                 $('#formObl')[0].reset();
+
+
+                $('#f1_mitra_id').change(function() {
+                    if (this.value == 'lainnya') {
+                        $('#f1_nama_mitra_lain').show();
+                    }
+                    else{ $('#f1_nama_mitra_lain').hide(); }
+                });
 
                 // STARTLINE: FORMAT RUPIAH
                 var rupiah = document.getElementById('f1_nilai_kb');

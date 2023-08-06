@@ -332,7 +332,28 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:450px;" type="text" name="f1_nama_mitra" id="f1_nama_mitra" value="{{ old('f1_nama_mitra',$value['f1_nama_mitra']) }}">
+                                                  @if($errors->has('f1_mitra_id'))
+                                                  <select class="outline-input-merah" id="f1_mitra_id" name="f1_mitra_id">
+                                                    <option value="" disabled selected>Pilih Vendor</option>
+                                                    @if(isset($mitra_vendor))
+                                                      @foreach($mitra_vendor as $ind => $label)
+                                                        <option value="{{ $label['id'] }}" {{ old('f1_mitra_id',$value['f1_mitra_id']) == $label['id'] ? ' selected="selected"' : '' }}>{{ $label['nama_mitra'] }}</option>
+                                                      @endforeach
+                                                    @endif
+                                                    <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
+                                                  </select>
+                                                  @else
+                                                  <select class="" id="f1_mitra_id" name="f1_mitra_id" >
+                                                    <option value="" disabled selected>Pilih Vendor</option>
+                                                    @if(isset($mitra_vendor))
+                                                      @foreach($mitra_vendor as $ind => $label)
+                                                        <option value="{{ $label['id'] }}" {{ old('f1_mitra_id',$value['f1_mitra_id']) == $label['id'] ? ' selected="selected"' : '' }}>{{ $label['nama_mitra'] }}</option>
+                                                      @endforeach
+                                                    @endif
+                                                    <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
+                                                  </select>
+                                                  @endif
+                                                  <input type="text" name="f1_nama_mitra_lain" id="f1_nama_mitra_lain" value="" style="width:350px;" placeholder="NAMA MITRA BARU">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -376,7 +397,7 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Tanggal Form P1</h6>
+                                                            <h6 class="mb-0 text-sm">Tanggal Terbit Form P1</h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -967,7 +988,7 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Tanggal FO (P1)</h6>
+                                                            <h6 class="mb-0 text-sm">Tanggal Terbit FO (P1)</h6>
                                                         </div>
                                                     </div>
                                                 </td>

@@ -5,7 +5,7 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Draf;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -29,15 +29,19 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // View::share('count_draf', $count_draf);
-        // view()->composer('*', function($view)
-        // {
-        //     if (Auth::check()) {
-        //         $count_draf = Draf::where('user_id',Auth::user()->id)->where('is_draf',1)->count();
-        //         $view->with('count_draf', $count_draf);
-        //     }else {
-        //         $view->with('count_draf', 0);
-        //     }
-        // });
-        //
+        view()->composer('*', function($view)
+        {
+            if (Auth::check()) {
+                $is_user = User::leftJoin('user_role as ur','ur.user_id','=','users.id')->leftJoin('roles as r','r.id','=','ur.role_id')
+                ->select('users.id','ur.role_id','r.nama_role')
+                ->where('users.id',Auth::user()->id)
+                ->first();
+                $view->with('is_user', $is_user);
+            }else {
+                auth()->logout();
+                return redirect('/sign-in');
+            }
+        });
+
     }
 }
