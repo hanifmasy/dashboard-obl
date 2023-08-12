@@ -2,8 +2,25 @@
         <x-navbars.sidebar activePage="inputs"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="OBL / Input Form"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="TAMBAH DATA"></x-navbars.navs.auth>
             <!-- End Navbar -->
+
+            <style media="screen">
+              table th {
+                /* margin: 1.5em; */
+                /* padding-top: 1.0em; */
+                padding-left: 8.4em;
+                /* padding-right: 2.5em; */
+                padding-bottom: 0.7em;
+              }
+              table td {
+                /* margin: 1.5em; */
+                padding-top: 1.0em;
+                padding-left: 5.5em;
+                /* padding-right: 2.5em; */
+                padding-bottom: 0.7em;
+              }
+            </style>
 
             <!-- modal alerts -->
             <div class="modal fade" id="modal-input-obl" tabindex="-1" aria-labelledby="modal-input-obl" aria-hidden="true">
@@ -30,7 +47,7 @@
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-white text-capitalize ps-3">Input Form OBL</h6>
+                                    <h6 class="text-white text-capitalize ps-3">INPUT FORM OBL</h6>
                                 </div>
                             </div>
 
@@ -53,7 +70,7 @@
                             @csrf
                             <div class="card-body px-0 pb-2">
                                 <div class="table-responsive p-0">
-                                    <table id="table-input-obl" class="table align-items-center mb-0" cellspacing="0" cellpadding="0">
+                                    <table id="table-input-obl" class=" align-items-center mb-0" cellspacing="0" cellpadding="0">
                                         <thead>
                                             <tr class="kepala">
                                                 <th
@@ -61,12 +78,61 @@
                                                     Nama Inputan
                                                 </th>
                                                 <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-7">
                                                     Isian Inputan
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <!-- filter jenis kontrak -->
+                                            <tr class="filter-jenis-kontrak"><td colsapn="2"></td></tr>
+                                            <tr class="filter-jenis-kontrak">
+                                                <td>
+                                                    <div class="">
+                                                        <div class="">
+                                                            <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if($errors->has('f1_jenis_kontrak'))
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" class="f1_jenis_kontrak" value="perpanjangan" {{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}>
+                                                    <label class="outline-input-merah" for="jenis_kontrak"> Amandemen</label><br>
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" class="f1_jenis_kontrak" value="baru" {{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}>
+                                                    <label class="outline-input-merah" for="jenis_kontrak"> Pasang Baru</label><br>
+                                                    @else
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" class="f1_jenis_kontrak" value="perpanjangan" {{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}>
+                                                    <label for="jenis_kontrak"> Amandemen</label><br>
+                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" class="f1_jenis_kontrak" value="baru" {{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}>
+                                                    <label for="jenis_kontrak"> Pasang Baru</label><br>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr class="filter-jenis-kontrak-kb">
+                                                <td>
+                                                    <div class="">
+                                                        <div class="">
+                                                            <h6 class="mb-0 text-sm">Nomor KB</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                  <datalist id="list_nomor_kb">
+                                                   @if(isset($list_nomor_kb))
+                                                    @foreach($list_nomor_kb as $kunci => $nilai)
+                                                      <option value="{{ $nilai['nomor_kb'] }}">{{ $nilai['nomor_kb'] }} &nbsp; | &nbsp; {{ $nilai['f1_jenis_spk'] }} &nbsp; | &nbsp; {{ $nilai['f1_nama_plggn'] }}</option>
+                                                    @endforeach
+                                                   @else
+                                                   <option disabled value="" selected>Tidak Ada Nomor KB</option>
+                                                   @endif
+                                                  </datalist>
+                                                  <input type="text" name="cari_nomor_kb" id="cari_nomor_kb" list="list_nomor_kb" placeholder="INPUT NOMOR KB" style="width:350px;">
+                                                </td>
+                                            </tr>
+                                            <tr class="filter-jenis-kontrak-lanjut"><td colspan="2"><br></td></tr>
+                                            <tr class="filter-jenis-kontrak-lanjut"><td colspan="2">
+                                                <button type="button" id="lanjutFilterKontrak" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut</h6></button>
+                                            </td></tr>
                                             <!-- filter kontrak -->
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak">
@@ -95,15 +161,15 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <select name="f1_witel" id="f1_witel">
-                                                            <option value="" disabled selected>Pilih Witel</option>
-                                                            <option value="BALIKPAPAN" {{ old('f1_witel') == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
-                                                            <option value="KALBAR" {{ old('f1_witel') == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
-                                                            <option value="KALTENG" {{ old('f1_witel') == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
-                                                            <option value="KALSEL" {{ old('f1_witel') == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
-                                                            <option value="KALTARA" {{ old('f1_witel') == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
-                                                            <option value="SAMARINDA" {{ old('f1_witel') == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
-                                                        </select>
+                                                      <select name="f1_witel" id="f1_witel">
+                                                          <option value="" disabled selected>Pilih Witel</option>
+                                                          <option value="BALIKPAPAN" {{ old('f1_witel') == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
+                                                          <option value="KALBAR" {{ old('f1_witel') == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
+                                                          <option value="KALTENG" {{ old('f1_witel') == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
+                                                          <option value="KALSEL" {{ old('f1_witel') == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
+                                                          <option value="KALTARA" {{ old('f1_witel') == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
+                                                          <option value="SAMARINDA" {{ old('f1_witel') == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
+                                                      </select>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -225,40 +291,14 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @if($errors->has('f1_jenis_kontrak'))
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" value="{{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}">
-                                                    <label class="outline-input-merah" for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" value="{{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}">
-                                                    <label class="outline-input-merah" for="jenis_kontrak"> Pasang Baru</label><br>
-                                                    @else
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" value="{{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}">
-                                                    <label for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" value="{{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}">
-                                                    <label for="jenis_kontrak"> Pasang Baru</label><br>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            <tr class="filterKontrak">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Masa Kontrak Layanan</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;" value="{{ old('f1_masa_layanan','') }}">
-                                                    <select name="f1_satuan_masa_layanan" id="f1_satuan_masa_layanan">
-                                                        <option value="" disabled selected>Pilih Satuan</option>
-                                                        <option value="hari" {{ old('f1_satuan_masa_layanan') == 'hari' ? ' selected="selected"' : '' }}>hari</option>
-                                                        <option value="bulan" {{ old('f1_satuan_masa_layanan') == 'bulan' ? ' selected="selected"' : '' }}>bulan</option>
-                                                        <option value="tahun" {{ old('f1_satuan_masa_layanan') == 'tahun' ? ' selected="selected"' : '' }}>tahun</option>
-                                                    </select>
+                                                    <input type="number" name="f1_masa_layanan_tahun" id="f1_masa_layanan_tahun" min="0" style="width:80px;" value="{{ old('f1_masa_layanan_tahun','') }}">Tahun
+                                                    <input type="number" name="f1_masa_layanan_bulan" id="f1_masa_layanan_bulan" min="0" style="width:80px;" value="{{ old('f1_masa_layanan_bulan','') }}">Bulan
+                                                    <input type="number" name="f1_masa_layanan_hari" id="f1_masa_layanan_hari" min="0" style="width:80px;" value="{{ old('f1_masa_layanan_hari','') }}">Hari
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -386,10 +426,11 @@
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
-                                            <tr class="filterKontrak"><td colspan="2"><h6 class="ps-2">SKEMA OBL</h6></td></tr>
+                                            <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak"><td colspan="2">
-                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Work Order ( WO ) </h6></button>
-                                                <button type="button" id="lanjutFilter" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Kontrak Layanan ( KL ) </h6></button>
+                                                <button type="button" id="backFilterKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali </h6></button>
+                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success ms-10"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema WO </h6></button>
+                                                <button type="button" id="lanjutFilter" class="btn bg-gradient-info ms-1"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema KL / SP </h6></button>
                                                 <button type="submit" name="submit" value="draf_filter_kontrak" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <tr class="filterAwal"><td colspan="2"><br></td></tr>
@@ -436,19 +477,6 @@
                                             <!-- P2 -->
                                             <tr class="formP2"><td colspan="2"><br></td></tr>
                                             <tr class="formP2"><td colspan="2"><h6 class="ps-2">FORM P2 – EVALUASI DAN PENETAPAN BAKAL CALON MITRA PELAKSANA </h6></td></tr>
-
-                                            <tr class="formP2">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Lingkup pekerjaan yang membutuhkan Anak Perusahaan/Mitra</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja">{{ old('p2_lingkup_kerja') }}</textarea>
-                                                </td>
-                                            </tr>
                                             <tr class="formP2">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -531,58 +559,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" placeholder="NAMA PEJABAT" value="{{ old('p3_pejabat_mitra_nama') }}"><br>
-                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;" placeholder="ALAMAT">{{ old('p3_pejabat_mitra_alamat') }}</textarea><br>
-                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" placeholder="TELEPON" value="{{ old('p3_pejabat_mitra_telepon') }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP3">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Rapat Penjelasan Pengadaan</h6>
-                                                            <p class="text-xs text-secondary mb-0">
-                                                                Undangan untuk menghadiri rapat dari Telkom ke Mitra</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada" {{ old('p3_status_rapat_pengadaan') == 'ada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Ada</label><br>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada" {{ old('p3_status_rapat_pengadaan') == 'nada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
-                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tgl_rapat_pengadaan') }}"> WIB</div>
-                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" placeholder="TEMPAT RAPAT" value="{{ old('p3_tmpt_rapat_pengadaan') }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP3">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Surat Penawaran Mitra</h6>
-                                                            <p class="text-xs text-secondary mb-0">
-                                                                Tenggat Waktu Surat Penawaran Mitra ke Telkom</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;" value="{{ old('p3_tgl_terima_sp') }}"> WIB<br>
-                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" placeholder="ALAMAT PENYERAHAN DOKUMEN" value="{{ old('p3_alamat_terima_sp') }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP3">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Manager</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <select name="p3_manager_obl" id="p3_manager_obl">
-                                                        <option value="" disabled selected>Pilih manager</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p3_manager_obl') == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p3_manager_obl') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p3_manager_obl') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
-                                                    </select>
+                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;" placeholder="ALAMAT MITRA">{{ old('p3_pejabat_mitra_alamat') }}</textarea><br>
+                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" placeholder="TELEPON MITRA" value="{{ old('p3_pejabat_mitra_telepon') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3"><td colspan="2"><br></td></tr>
@@ -594,20 +572,6 @@
                                             <!-- P4 -->
                                             <tr class="formP4"><td colspan="2"><br></td></tr>
                                             <tr class="formP4"><td colspan="2"><h6 class="ps-2">FORM P4 – BERITA ACARA RAPAT PENJELASAN</h6></td></tr>
-                                            <tr class="formP4">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Tanggal SPH</h6>
-                                                            <!-- <p class="text-xs text-secondary mb-0">
-                                                                Perwakilan yang Hadir Rapat Penjelasan Pengadaan</p> -->
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph" value="{{ old('p4_tgl_sph') }}">
-                                                </td>
-                                            </tr>
                                             <tr class="formP4">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -901,24 +865,18 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">OTC</h6>
+                                                            <h6 class="mb-0 text-sm">Skema Pembayaran</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('p7_otc') }}"><br>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP7">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nominal Rincian Bulanan</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" placeholder="RP xxx.xxx.xxx.-" value="{{ old('p7_rincian_bulanan') }}"><br>
+                                                  <select name="p7_skema_bayar" id="p7_skema_bayar">
+                                                    <option value="" disabled selected>Pilih Skema</option>
+                                                    <option value="otc" {{ old('p7_skema_bayar') == 'otc' ? ' selected="selected"' : '' }}> OTC </option>
+                                                    <option value="recurring" {{ old('p7_skema_bayar') == 'recurring' ? ' selected="selected"' : '' }} > Recurring </option>
+                                                    <option value="termin" {{ old('p7_skema_bayar') == 'termin' ? ' selected="selected"' : '' }} > Termin </option>
+                                                    <option value="campuran" {{ old('p7_skema_bayar') == 'campuran' ? ' selected="selected"' : '' }} > OTC Recurring </option>
+                                                  </select>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -937,18 +895,6 @@
                                                         <option value="Hariyadi_800031" {{ old('p7_pemeriksa') == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
                                                         <option value="Yayan_Nuryana_710516" {{ old('p7_pemeriksa') == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
                                                     </select>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP7">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Tembusan</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" placeholder="Contoh: GM Witel Balikpapan" value="{{ old('p7_tembusan') }}"><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -1494,9 +1440,16 @@
                 <x-footers.auth></x-footers.auth>
             </div>
         </main>
-        <x-plugins></x-plugins>
         @push('js')
         <script>
+            document.getElementById("cari_nomor_kb").onkeydown = function(e) {
+                if ((e.keyCode == 13) && (typeof this.form != "undefined")) {
+                  this.form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                  }, {"once": true});
+                }
+            }
+
             $( document ).ready(function() {
                 var global_jenis_spk = '';
                 var view_diatas_100='';
@@ -1565,6 +1518,22 @@
                     }
                 });
 
+                $('input[type=radio][name=f1_jenis_kontrak]').change(function() {
+                    if (this.value == 'perpanjangan') {
+                        $('.filter-jenis-kontrak-lanjut').show(); $('.filter-jenis-kontrak-kb').show();
+                    }
+                    else if (this.value == 'baru') {
+                        $('#cari_nomor_kb').removeClass('outline-input-merah');
+                        $('.filter-jenis-kontrak-kb').hide(); $('.filter-jenis-kontrak-lanjut').show();
+                    }
+                });
+
+                $('#cari_nomor_kb').change(function() {
+                    if (this.value == '') {
+                        alert('Tidak Boleh Pilihan Kosong');
+                    }
+                    else{ $('.filter-jenis-kontrak-lanjut').show(); }
+                });
 
                 $('input[type=radio][name=f2_nilai_kontrak]').change(function() {
                     if (this.value == 'dibawah_100') {
@@ -1581,6 +1550,33 @@
                     }
                 });
 
+                $('#lanjutFilterKontrak').click(function(){
+                  // $('.filterKontrak').show();
+
+                  let temp_1 = $('input[name="f1_jenis_kontrak"]:checked').val();
+                  let temp_2 = $('#cari_nomor_kb').val();
+                  if( temp_1 == 'perpanjangan' && temp_2 == '' ){
+                    $('#cari_nomor_kb').addClass('outline-input-merah');
+                  }
+                  if( temp_1 == 'perpanjangan' && temp_2 != '' ){
+                    $('.filterKontrak').show();
+                    $('.filter-jenis-kontrak').hide(); $('.filter-jenis-kontrak-kb').hide(); $('.filter-jenis-kontrak-lanjut').hide();
+                    $('#cari_nomor_kb').removeClass('outline-input-merah');
+                  }
+                  if(temp_1 == 'baru' && temp_1 != 'perpanjangan'){
+                    $('.filterKontrak').show();
+                    $('.filter-jenis-kontrak').hide(); $('.filter-jenis-kontrak-kb').hide(); $('.filter-jenis-kontrak-lanjut').hide();
+                    $('#cari_nomor_kb').removeClass('outline-input-merah');
+                  }
+                });
+                $('#backFilterKontrak').click(function(){
+                    let temp_1 = $('input[name="f1_jenis_kontrak"]:checked').val();
+                    $('.filterKontrak').hide();
+                    // $('.f1_jenis_kontrak').prop('checked', false);
+                    if(temp_1 == 'baru'){ $('.filter-jenis-kontrak').show(); $('.filter-jenis-kontrak-kb').hide(); $('.filter-jenis-kontrak-lanjut').show(); }
+                    if(temp_1 == 'perpanjangan'){ $('.filter-jenis-kontrak').show(); $('.filter-jenis-kontrak-kb').show(); $('.filter-jenis-kontrak-lanjut').show(); }
+                });
+
                 // SKEMA OBL : WO
                 $('#lanjutWO2').click(function(){
                   global_jenis_spk = 'WO';
@@ -1595,6 +1591,8 @@
                 });
                 $('#lanjutWO3').click(function(){
                   $('.formP6').hide(); $('.formWO').show();
+                  if( $('input[name="f1_jenis_kontrak"]:checked').val() == 'perpanjangan' ){ $('#wo_nomor_kb').val( $('#cari_nomor_kb').val() ); $('#wo_nomor_kb').attr('disabled',true); $('#wo_nomor_kb').css('border','none'); }
+                  if( $('input[name="f1_jenis_kontrak"]:checked').val() == 'baru' ){ $('#wo_nomor_kb').val(''); $('#wo_nomor_kb').attr('disabled',false); $('#wo_nomor_kb').css('border','1px solid'); }
                 });
                 $('#backP62').click(function(){
                     $('.formWO').hide(); $('.formP6').show();
@@ -1638,6 +1636,7 @@
                 // SKEMA OBL : SP
                 $('#lanjutSP').click(function(){
                     $('.formP7').hide(); $('.formSP').show();
+                    if( $('input[name="f1_jenis_kontrak"]:checked').val() == 'perpanjangan' ){ $('#sp_nomor_kb').val( $('#cari_nomor_kb').val() ); $('#sp_nomor_kb').attr('disabled',true); $('#sp_nomor_kb').css('border','none'); }
                 });
                 $('#backP72').click(function(){
                     $('.formSP').hide(); $('.formP7').show(); $('.diatas-100').hide(); $('.dibawah-100').show();
@@ -1649,10 +1648,8 @@
                     if(
                         $('#p7_lampiran_berkas').val() === '' ||
                         $('#p7_harga_pekerjaan').val() === '' ||
-                        $('#p7_otc').val() === '' ||
-                        $('#p7_rincian_bulanan').val() === '' ||
-                        $('#p7_pemeriksa').val() === '' ||
-                        $('#p7_tembusan').val() === ''
+                        $('#p7_skema_bayar').val() === '' ||
+                        $('#p7_pemeriksa').val() === ''
                     )
                     { $('#lanjutKL').hide(); $('.save-draf').hide(); $('#suksesIsi').hide(); $('#gagalIsi').show(); }
                     else{ $('#gagalIsi').hide(); $('#suksesIsi').show(); $('#lanjutKL').show(); $('.save-draf').show(); }
@@ -1665,19 +1662,27 @@
                     if(
                         $('#p7_lampiran_berkas').val() === '' ||
                         $('#p7_harga_pekerjaan').val() === '' ||
-                        $('#p7_otc').val() === '' ||
-                        $('#p7_rincian_bulanan').val() === '' ||
-                        $('#p7_pemeriksa').val() === '' ||
-                        $('#p7_tembusan').val() === ''
+                        $('#p7_skema_bayar').val() === '' ||
+                        $('#p7_pemeriksa').val() === ''
                     )
                     { $('#lanjutKL').hide(); $('.save-draf').hide(); $('#suksesIsi').hide(); $('#gagalIsi').show(); }
                     else{ $('#gagalIsi').hide(); $('#suksesIsi').show(); $('#lanjutKL').show(); $('.save-draf').show(); }
                 });
                 $('#lanjutKL').click(function(){
                     $('.formP8').hide(); $('.formKL').show();
+                    if( $('input[name="f1_jenis_kontrak"]:checked').val() == 'perpanjangan' ){ $('#kl_nomor_kb').val( $('#cari_nomor_kb').val() ); $('#kl_nomor_kb').attr('disabled',true); $('#kl_nomor_kb').css('border','none');  }
                 });
 
                 // INPUT TEXT : NUMERIC TYPE ONLY
+                $("input[name='f1_masa_layanan_tahun']").on('input', function (e) {
+                    $(this).val($(this).val().replace(/[^0-9]/g, ''));
+                });
+                $("input[name='f1_masa_layanan_bulan']").on('input', function (e) {
+                    $(this).val($(this).val().replace(/[^0-9]/g, ''));
+                });
+                $("input[name='f1_masa_layanan_hari']").on('input', function (e) {
+                    $(this).val($(this).val().replace(/[^0-9]/g, ''));
+                });
                 $("input[name='p7_lampiran_berkas']").on('input', function (e) {
                     $(this).val($(this).val().replace(/[^0-9]/g, ''));
                 });
@@ -1703,16 +1708,6 @@
                 var rupiah4 = document.getElementById('p7_harga_pekerjaan');
                 rupiah4.addEventListener('keyup', function(e){
                     rupiah4.value = formatRupiah(this.value, 'Rp. ');
-                });
-
-                var rupiah5 = document.getElementById('p7_otc');
-                rupiah5.addEventListener('keyup', function(e){
-                    rupiah5.value = formatRupiah(this.value, 'Rp. ');
-                });
-
-                var rupiah6 = document.getElementById('p7_rincian_bulanan');
-                rupiah6.addEventListener('keyup', function(e){
-                    rupiah6.value = formatRupiah(this.value, 'Rp. ');
                 });
 
                 var rupiah7 = document.getElementById('wo_harga_ke_plggn');

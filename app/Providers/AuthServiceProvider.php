@@ -33,7 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         {
             if (Auth::check()) {
                 $is_user = User::leftJoin('user_role as ur','ur.user_id','=','users.id')->leftJoin('roles as r','r.id','=','ur.role_id')
-                ->select('users.id','ur.role_id','r.nama_role')
+                ->select('users.id','users.nama_lengkap','ur.role_id','r.nama_role')
                 ->where('users.id',Auth::user()->id)
                 ->first();
                 $view->with('is_user', $is_user);

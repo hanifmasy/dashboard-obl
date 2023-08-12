@@ -20,11 +20,20 @@ use GuzzleHttp\Exception\ClientException;
 
 class InputsController extends Controller
 {
+
     public function create(Request $request): RedirectResponse
     {
-        // dd($request->all());
+        dd($request->all());
         $created_by = Auth::id();
         $created_at = Carbon::now()->translatedFormat('Y-m-d H:i:s');
+
+        // KONDISI JENIS KONTRAK AMANDEMEN
+        $cari_nomor_kb = '';
+        if($request->cari_nomor_kb){
+          if($request->cari_nomor_kb !== ''){
+              $cari_nomor_kb = $request->cari_nomor_kb;
+          }
+        }
 
         // PENAMAAN FOLDER & SUBFOLDER
         $nama_folder = '';
@@ -76,6 +85,27 @@ class InputsController extends Controller
             }
         }
 
+        // PENAMAAN P7 TEMBUSAN GM WITEL
+        $gm_witel = '';
+        if($request->f1_witel){
+          try{
+            $cek_gm_witel = DB::connection('pgsql')->table('witels')->select('gm_witel')->where('nama_witel',$request->f1_witel)->first();
+            if($cek_gm_witel){ $gm_witel = $cek_gm_witel->gm_witel; }
+            else{ $gm_witel = '[ GM WITEL ]'; }
+          }
+          catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check Witel dan Relasinya.'); }
+        }
+
+        // P6 HARGA NEGO = P7 HARGA PEKERJAAN
+        $p7_harga_pekerjaan = '';
+        if($request->p6_harga_negosiasi){
+          try{
+            if($request->p6_harga_negosiasi !== ''){ $p7_harga_pekerjaan = $request->p6_harga_negosiasi; }
+            else{ $p7_harga_pekerjaan = null; }
+          }
+          catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check P6 HARGA NEGO.'); }
+        }
+
         // PENAMAAN MITRA BARU
         $f1_mitra_id = null;
         if($request->f1_nama_mitra_lain){
@@ -90,6 +120,13 @@ class InputsController extends Controller
               }
             }
             catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check Nama Mitra.'); }
+          }
+        }
+        else{
+          if($request->f1_mitra_id){
+            if($request->f1_mitra_id !== ''){
+              $f1_mitra_id = $request->f1_mitra_id;
+            }
           }
         }
 
@@ -110,15 +147,25 @@ class InputsController extends Controller
                 'p4_attendees',
                 'global_jenis_spk',
                 'f1_mitra_id',
-                'f1_nama_mitra_lain'
+                'f1_nama_mitra_lain',
+                'cari_nomor_kb'
             ]);
             $filtered_draf->put('created_by',$created_by);
             $filtered_draf->put('created_at',$created_at);
-            if($request->keterangan && $request->keterangan !== ''){ $filtered_draf->put('f1_tgl_keterangan',$created_at); }
             $filtered_draf->put('is_draf',1);
             $filtered_draf->put('f1_jenis_spk',$request->global_jenis_spk);
             $filtered_draf->put('f1_folder',$nama_folder);
             $filtered_draf->put('f1_mitra_id',$f1_mitra_id);
+            if($request->f1_witel){ $filtered_draf->put('p7_tembusan',$gm_witel); }
+            if($request->p6_harga_negosiasi){ $filtered_draf->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
+            if($request->f1_keterangan){ $filtered_draf->put('f1_tgl_keterangan',$created_at); }
+            if($request->cari_nomor_kb){
+              if($request->f1_jenis_spk){
+                if($request->f1_jenis_spk === 'SP'){ $filtered_draf->put('sp_nomor_kb',$cari_nomor_kb); }
+                if($request->f1_jenis_spk === 'WO'){ $filtered_draf->put('wo_nomor_kb',$cari_nomor_kb); }
+                if($request->f1_jenis_spk === 'KL'){ $filtered_draf->put('kl_nomor_kb',$cari_nomor_kb); }
+              }
+            }
             $obl_id_draf = DB::connection('pgsql')->table('form_obl')
             ->insertGetId(
                 $filtered_draf->all()
@@ -171,7 +218,8 @@ class InputsController extends Controller
                   'p4_attendees',
                   'global_jenis_spk',
                   'f1_mitra_id',
-                  'f1_nama_mitra_lain'
+                  'f1_nama_mitra_lain',
+                  'cari_nomor_kb'
               ]);
               // dd($filtered);
 
@@ -319,11 +367,20 @@ class InputsController extends Controller
               // append user id
               $filtered->put('created_by',$created_by);
               $filtered->put('created_at',$created_at);
-              $filtered->put('f1_tgl_keterangan',$created_at);
               $filtered->put('is_draf',0);
               $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
               $filtered->put('f1_folder',$nama_folder);
               $filtered->put('f1_mitra_id',$f1_mitra_id);
+              if($request->f1_witel){ $filtered->put('p7_tembusan',$gm_witel); }
+              if($request->p6_harga_negosiasi){ $filtered->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
+              if($request->f1_keterangan){ $filtered->put('f1_tgl_keterangan',$created_at); }
+              if($request->cari_nomor_kb){
+                if($request->f1_jenis_spk){
+                  if($request->f1_jenis_spk === 'SP'){ $filtered->put('sp_nomor_kb',$cari_nomor_kb); }
+                  if($request->f1_jenis_spk === 'WO'){ $filtered->put('wo_nomor_kb',$cari_nomor_kb); }
+                  if($request->f1_jenis_spk === 'KL'){ $filtered->put('kl_nomor_kb',$cari_nomor_kb); }
+                }
+              }
               // append tanggal dokumen
               $filtered->put('p2_tgl_p2',$arr_tanggal[0][0]);
               $filtered->put('p3_tgl_p3',$arr_tanggal[1][0]);
@@ -392,7 +449,7 @@ class InputsController extends Controller
               ->insertGetId(
                   $filtered->all()
               );
-
+              // INSERT TAKAH
               $insert_takah_1 = [];
               foreach($arr_insert_form_takah as $value){
                   array_push($insert_takah_1,
@@ -403,14 +460,12 @@ class InputsController extends Controller
                     ]
                   );
               }
-
               DB::connection('pgsql')->table('form_takah')
               ->insert(
                   $insert_takah_1
               );
 
-
-              // INPUT P4 ATTENDEES
+              // INSERT P4 ATTENDEES
               if($request->p4_attendees){
                   $arr_attendees = [];
                   foreach($request->p4_attendees as $key => $value){

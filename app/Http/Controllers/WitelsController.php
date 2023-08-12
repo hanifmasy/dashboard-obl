@@ -22,7 +22,7 @@ class WitelsController extends Controller
     {
       // dd($request->all());
       $created_by = Auth::id();
-      $created_by_witel = User::leftJoin('witels','witels.id','=','users.witel_id')->select('users.id','users.witel_id','witels.nama_witel')->where('users.id',Auth::id())->first();
+      $created_by_witel = User::leftJoin('witels','witels.id','=','users.witel_id')->select('users.id','users.witel_id','witels.nama_witel','witels.gm_witel')->where('users.id',Auth::id())->first();
       $created_at = Carbon::now()->translatedFormat('Y-m-d H:i:s');
 
       if($request->submit){
@@ -87,6 +87,17 @@ class WitelsController extends Controller
                 }
             }
 
+            // PENAMAAN P7 TEMBUSAN GM WITEL
+            $gm_witel = '';
+            if($created_by_witel->nama_witel){
+              try{
+                $cek_gm_witel = DB::connection('pgsql')->table('witels')->select('gm_witel')->where('nama_witel',$created_by_witel->nama_witel)->first();
+                if($cek_gm_witel){ $gm_witel = $cek_gm_witel->gm_witel; }
+                else{ $gm_witel = '[ GM WITEL ]'; }
+              }
+              catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check Witel dan Relasinya.'); }
+            }
+
             // GET ALL INPUTS
             $collection = collect($request->all());
             $filtered = $collection->except([
@@ -97,6 +108,7 @@ class WitelsController extends Controller
             $filtered->put('f1_proses','witel');
             $filtered->put('f1_witel',$created_by_witel->nama_witel);
             $filtered->put('f1_folder',$nama_folder);
+            if($created_by_witel->nama_witel){ $filtered->put('p7_tembusan',$gm_witel); }
             $obl_id = DB::connection('pgsql')->table('form_obl')
             ->insertGetId(
                 $filtered->all()

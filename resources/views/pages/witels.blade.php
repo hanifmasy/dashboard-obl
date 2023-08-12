@@ -2,7 +2,7 @@
         <x-navbars.sidebar activePage="witels"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="WITEL / Input Form"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="WITEL / TAMBAH DATA"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <!-- modal alerts -->
@@ -274,7 +274,6 @@
                 <x-footers.auth></x-footers.auth>
             </div>
         </main>
-        <x-plugins></x-plugins>
         @push('js')
         <script>
             $( document ).ready(function() {

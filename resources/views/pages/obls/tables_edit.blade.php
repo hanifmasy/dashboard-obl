@@ -2,8 +2,9 @@
         <x-navbars.sidebar activePage="obl-drafs-edit"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="OBL / Tabel Dokumen / Edit"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="OBL / TABEL DOKUMEN / EDIT"></x-navbars.navs.auth>
             <!-- End Navbar -->
+
 
             <!-- modal alerts -->
             <div class="modal fade" id="modal-input-obl" tabindex="-1" aria-labelledby="modal-input-obl" aria-hidden="true">
@@ -29,7 +30,7 @@
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-light shadow-dark border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-capitalize ps-3">Tabel Dokumen: Edit</h6>
+                                    <h6 class="text-capitalize ps-3">TABEL DOKUMEN: EDIT</h6>
                                 </div>
                             </div>
 
@@ -78,7 +79,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn',$value['f1_nama_plggn']) }}" disabled><br><br>
+                                                    <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn',$value['f1_nama_plggn']) }}"><br><br>
                                                     <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN">{{ old('f1_alamat_plggn',$value['f1_alamat_plggn']) }}</textarea>
                                                 </td>
                                             </tr>
@@ -91,15 +92,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <select name="f1_witel" id="f1_witel">
-                                                            <option value="" disabled selected>Pilih Witel</option>
-                                                            <option value="BALIKPAPAN" {{ $value['f1_witel'] == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
-                                                            <option value="KALBAR" {{ $value['f1_witel'] == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
-                                                            <option value="KALTENG" {{ $value['f1_witel'] == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
-                                                            <option value="KALSEL" {{ $value['f1_witel'] == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
-                                                            <option value="KALTARA" {{ $value['f1_witel'] == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
-                                                            <option value="SAMARINDA" {{ $value['f1_witel'] == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
-                                                        </select>
+                                                      <input type="text" value="{{ $value['f1_witel'] }}" disabled style="border:none;font-weight:bolder;">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -111,7 +104,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek" disabled>{{ old('f1_judul_projek',$value['f1_judul_projek']) }}</textarea>
+                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek">{{ old('f1_judul_projek',$value['f1_judul_projek']) }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -156,6 +149,34 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Jenis SPK</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" value="{{ $value['f1_jenis_spk'] }}" disabled style="border:none;">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <select name="f1_jenis_kontrak" id="f1_jenis_kontrak">
+                                                        <option value="" disabled selected>Pilih Jenis</option>
+                                                        <option value="perpanjangan" {{ old('f1_jenis_kontrak',$value['f1_jenis_kontrak']) == 'perpanjangan' ? ' selected="selected"' : '' }}>Amandemen</option>
+                                                        <option value="baru" {{ old('f1_jenis_kontrak',$value['f1_jenis_kontrak']) == 'baru' ? ' selected="selected"' : '' }}>Pasang Baru</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Nilai KB</h6>
                                                         </div>
                                                     </div>
@@ -177,13 +198,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="f1_masa_layanan" id="f1_masa_layanan" min="0" style="width:80px;" value="{{ old('f1_masa_layanan',$value['f1_masa_layanan']) }}">
-                                                    <select name="f1_satuan_masa_layanan" id="f1_satuan_masa_layanan">
-                                                        <option value="" disabled selected>Pilih Satuan</option>
-                                                        <option value="hari" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'hari' ? ' selected="selected"' : '' }}>hari</option>
-                                                        <option value="bulan" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'bulan' ? ' selected="selected"' : '' }}>bulan</option>
-                                                        <option value="tahun" {{ old('f1_satuan_masa_layanan',$value['f1_satuan_masa_layanan']) == 'tahun' ? ' selected="selected"' : '' }}>tahun</option>
-                                                    </select>
+                                                    <input type="number" name="f1_masa_layanan_tahun" id="f1_masa_layanan_tahun" min="0" style="width:80px;" value="{{ old('f1_masa_layanan_tahun',$value['f1_masa_layanan_tahun']) }}">Tahun
+                                                    <input type="number" name="f1_masa_layanan_bulan" id="f1_masa_layanan_bulan" min="0" style="width:80px;" value="{{ old('f1_masa_layanan_bulan',$value['f1_masa_layanan_bulan']) }}">Bulan
+                                                    <input type="number" name="f1_masa_layanan_hari" id="f1_masa_layanan_hari" min="0" style="width:80px;" value="{{ old('f1_masa_layanan_hari',$value['f1_masa_layanan_hari']) }}">Hari
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -220,28 +237,6 @@
                                                 </td>
                                                 <td>
                                                     <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun" value="{{ old('f1_nomor_akun',$value['f1_nomor_akun']) }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="filterKontrak">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @if($errors->has('f1_jenis_kontrak'))
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" {{ old('f1_jenis_kontrak') == 'perpanjangan' ? "checked" : "" }}>
-                                                    <label class="outline-input-merah" for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" {{ old('f1_jenis_kontrak') == 'baru' ? "checked" : "" }}>
-                                                    <label class="outline-input-merah" for="jenis_kontrak"> Pasang Baru</label><br>
-                                                    @else
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="perpanjangan" {{ old('f1_jenis_kontrak',$value['f1_jenis_kontrak']) == 'perpanjangan' ? "checked" : "" }}>
-                                                    <label for="jenis_kontrak"> Amandemen</label><br>
-                                                    <input type="radio" id="f1_jenis_kontrak" name="f1_jenis_kontrak" value="baru" {{ old('f1_jenis_kontrak',$value['f1_jenis_kontrak']) == 'baru' ? "checked" : "" }}>
-                                                    <label for="jenis_kontrak"> Pasang Baru</label><br>
-                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -310,18 +305,6 @@
                                                         </select>
                                                 </td>
                                             </tr>
-                                            <tr class="filterKontrak">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Keterangan</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan">{{ old('f1_keterangan',$value['f1_keterangan']) }}</textarea>
-                                                </td>
-                                            </tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak">
                                                 <td>
@@ -337,7 +320,7 @@
                                                     <option value="" disabled selected>Pilih Vendor</option>
                                                     @if(isset($mitra_vendor))
                                                       @foreach($mitra_vendor as $ind => $label)
-                                                        <option value="{{ $label['id'] }}" {{ old('f1_mitra_id',$value['f1_mitra_id']) == $label['id'] ? ' selected="selected"' : '' }}>{{ $label['nama_mitra'] }}</option>
+                                                        <option value="{{ $label->id }}" {{ old('f1_mitra_id',$value['f1_mitra_id']) == $label->id ? ' selected="selected"' : '' }}>{{ $label->nama_mitra }}</option>
                                                       @endforeach
                                                     @endif
                                                     <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
@@ -347,7 +330,7 @@
                                                     <option value="" disabled selected>Pilih Vendor</option>
                                                     @if(isset($mitra_vendor))
                                                       @foreach($mitra_vendor as $ind => $label)
-                                                        <option value="{{ $label['id'] }}" {{ old('f1_mitra_id',$value['f1_mitra_id']) == $label['id'] ? ' selected="selected"' : '' }}>{{ $label['nama_mitra'] }}</option>
+                                                        <option value="{{ $label->id }}" {{ old('f1_mitra_id',$value['f1_mitra_id']) == $label->id ? ' selected="selected"' : '' }}>{{ $label->nama_mitra }}</option>
                                                       @endforeach
                                                     @endif
                                                     <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
@@ -366,6 +349,42 @@
                                                 </td>
                                                 <td>
                                                     <input style="width:450px;" type="text" name="f1_pic_mitra" id="f1_pic_mitra" value="{{ old('f1_pic_mitra',$value['f1_pic_mitra']) }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak"><td colspan="2"><hr></td></tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Keterangan</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><textarea cols="50" rows="2" name="f1_keterangan" id="f1_keterangan" placeholder="INPUT KETERANGAN TERBARU">{{ old('f1_keterangan') }}</textarea>
+                                                    @if( $value['f1_keterangan'] )
+                                                    <br><table class="align-item-center">
+                                                      <thead>
+                                                        <tr>
+                                                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">TANGGAL</th>
+                                                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-4">KETERANGAN</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          <td class=" justify-content-center"><h6 class="text-sm">▶️ [{{ $value['f1_tgl_keterangan'] }}]</h6></td>
+                                                          <td class="ps-4"><h6 class="text-sm">{{ $value['f1_keterangan'] }}</h6></td>
+                                                        </tr>
+                                                        @if(isset($table_edit_keterangan))
+                                                          @foreach($table_edit_keterangan as $tunjuk => $nilai)
+                                                            <tr>
+                                                              <td class=" justify-content-center">[{{ $nilai['f1_tgl_keterangan'] }}]</td>
+                                                              <td>{{ $nilai['f1_keterangan'] }}</td>
+                                                            </tr>
+                                                          @endforeach
+                                                        @endif
+                                                      </tbody>
+                                                    </table>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
@@ -393,7 +412,7 @@
                                                         <label for="f2_nilai_kontrak"> > 100 Juta</label><br>
                                                 </td>
                                             </tr>
-                                            <tr class="filterAwal hide-filterkl">
+                                            <tr class="filterAwal">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
@@ -412,25 +431,12 @@
                                             <tr class="filterAwal"><td colspan="2"><br></td></tr>
                                             <tr class="filterAwal"><td colspan="2">
                                                 <button type="button" id="backKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
-                                                <button type="button" id="lanjutP2" class="btn bg-gradient-info hide-filterkl"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
-                                                <button type="submit" name="submit" value="draf_filter_kl" id="saveDraf" class="hide-filterkl save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="button" id="lanjutP2" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
+                                                <button type="submit" name="submit" value="draf_filter_kl" id="saveDraf" class=" save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P2 -->
                                             <tr class="formP2"><td colspan="2"><br></td></tr>
                                             <tr class="formP2"><td colspan="2"><h6 class="ps-2">FORM P2 – EVALUASI DAN PENETAPAN BAKAL CALON MITRA PELAKSANA </h6></td></tr>
-
-                                            <tr class="formP2">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Lingkup pekerjaan yang membutuhkan Anak Perusahaan/Mitra</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <textarea type="text" cols="50" rows="2" name="p2_lingkup_kerja" id="p2_lingkup_kerja">{{ old('p2_lingkup_kerja',$value['p2_lingkup_kerja']) }}</textarea>
-                                                </td>
-                                            </tr>
                                             <tr class="formP2">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -513,58 +519,8 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p3_pejabat_mitra_nama" id="p3_pejabat_mitra_nama" style="width:350px;" value="{{ old('p3_pejabat_mitra_nama',$value['p3_pejabat_mitra_nama']) }}"><br>
-                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" style="width:350px;">{{ old('p3_pejabat_mitra_alamat',$value['p3_pejabat_mitra_alamat']) }}</textarea><br>
-                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" style="width:350px;" value="{{ old('p3_pejabat_mitra_telepon',$value['p3_pejabat_mitra_telepon']) }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP3">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Rapat Penjelasan Pengadaan</h6>
-                                                            <p class="text-xs text-secondary mb-0">
-                                                                Undangan untuk menghadiri rapat dari Telkom ke Mitra</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="ada" {{ old('p3_status_rapat_pengadaan',$value['p3_status_rapat_pengadaan']) == 'ada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Ada</label><br>
-                                                    <input type="radio" name="p3_status_rapat_pengadaan" id="p3_status_rapat_pengadaan" value="nada" {{ old('p3_status_rapat_pengadaan',$value['p3_status_rapat_pengadaan']) == 'nada' ? "checked" : "" }}><label for="p3_status_rapat_pengadaan">Tidak Ada</label><br>
-                                                    <div class="status_rapat_pengadaan"><input type="datetime-local" name="p3_tgl_rapat_pengadaan" id="p3_tgl_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tgl_rapat_pengadaan',$value['tgl_rapat_pengadaan']) }}"> WIB</div>
-                                                    <input class="status_rapat_pengadaan" type="text" name="p3_tmpt_rapat_pengadaan" id="p3_tmpt_rapat_pengadaan" style="width:350px;" value="{{ old('p3_tmpt_rapat_pengadaan',$value['p3_tmpt_rapat_pengadaan']) }}" >
-                                                </td>
-                                            </tr>
-                                            <tr class="formP3">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Surat Penawaran Mitra</h6>
-                                                            <p class="text-xs text-secondary mb-0">
-                                                                Tenggat Waktu Surat Penawaran Mitra ke Telkom</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="datetime-local" name="p3_tgl_terima_sp" id="p3_tgl_terima_sp" style="width:350px;" value="{{ old('p3_tgl_terima_sp',$value['tgl_terima_sp']) }}"> WIB<br>
-                                                    <input type="text" name="p3_alamat_terima_sp" id="p3_alamat_terima_sp" style="width:350px;" value="{{ old('p3_alamat_terima_sp',$value['p3_alamat_terima_sp']) }}">
-                                                </td>
-                                            </tr>
-                                            <tr class="formP3">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Manager</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <select name="p3_manager_obl" id="p3_manager_obl">
-                                                        <option value="" disabled selected>Pilih manager</option>
-                                                        <option value="Didik_Kurniawan_Hadi_860113" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Didik_Kurniawan_Hadi_860113' ? ' selected="selected"' : '' }}>Didik Kurniawan Hadi - 860113</option>
-                                                        <option value="Hariyadi_800031" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Hariyadi_800031' ? ' selected="selected"' : '' }}>Hariyadi - 800031</option>
-                                                        <option value="Yayan_Nuryana_710516" {{ old('p3_manager_obl',$value['p3_manager_obl']) == 'Yayan_Nuryana_710516' ? ' selected="selected"' : '' }}>Yayan Nuryana - 710516</option>
-                                                    </select>
+                                                    <textarea cols="50" rows="2" name="p3_pejabat_mitra_alamat" id="p3_pejabat_mitra_alamat" placeholder="ALAMAT MITRA" style="width:350px;">{{ old('p3_pejabat_mitra_alamat',$value['p3_pejabat_mitra_alamat']) }}</textarea><br>
+                                                    <input type="text" name="p3_pejabat_mitra_telepon" id="p3_pejabat_mitra_telepon" placeholder="TELEPON MITRA" style="width:350px;" value="{{ old('p3_pejabat_mitra_telepon',$value['p3_pejabat_mitra_telepon']) }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3"><td colspan="2"><br></td></tr>
@@ -576,20 +532,6 @@
                                             <!-- P4 -->
                                             <tr class="formP4"><td colspan="2"><br></td></tr>
                                             <tr class="formP4"><td colspan="2"><h6 class="ps-2">FORM P4 – BERITA ACARA RAPAT PENJELASAN</h6></td></tr>
-                                            <tr class="formP4">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Tanggal SPH</h6>
-                                                            <!-- <p class="text-xs text-secondary mb-0">
-                                                                Perwakilan yang Hadir Rapat Penjelasan Pengadaan</p> -->
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="date" name="p4_tgl_sph" id="p4_tgl_sph" value="{{ old('p4_tgl_sph',$value['tgl_sph']) }}">
-                                                </td>
-                                            </tr>
                                             <tr class="formP4">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -897,24 +839,18 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">OTC</h6>
+                                                            <h6 class="mb-0 text-sm">Skema Pembayaran</h6>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="p7_otc" id="p7_otc" style="width:350px;" value="{{ old('p7_otc',$value['p7_otc']) }}"><br>
-                                                </td>
-                                            </tr>
-                                            <tr class="formP7">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Nominal Rincian Bulanan</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input class="rupiahs" type="text" name="p7_rincian_bulanan" id="p7_rincian_bulanan" style="width:350px;" value="{{ old('p7_rincian_bulanan',$value['p7_rincian_bulanan']) }}"><br>
+                                                    <select name="p7_skema_bayar" id="p7_skema_bayar">
+                                                      <option value="" disabled>Pilih Skema</option>
+                                                      <option value="otc" {{ old('p7_skema_bayar',$value['p7_skema_bayar']) == 'otc' ? ' selected="selected"' : '' }}> OTC </option>
+                                                      <option value="recurring" {{ old('p7_skema_bayar',$value['p7_skema_bayar']) == 'recurring' ? ' selected="selected"' : '' }} > Recurring </option>
+                                                      <option value="termin" {{ old('p7_skema_bayar',$value['p7_skema_bayar']) == 'termin' ? ' selected="selected"' : '' }} > Termin </option>
+                                                      <option value="campuran" {{ old('p7_skema_bayar',$value['p7_skema_bayar']) == 'campuran' ? ' selected="selected"' : '' }} > OTC Recurring </option>
+                                                    </select>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -944,7 +880,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p7_tembusan" id="p7_tembusan" style="width:350px;" value="{{ old('p7_tembusan',$value['p7_tembusan']) }}"><br>
+                                                    <input type="text" style="width:350px;border:none;font-weight:bolder;" value="{{ $value['p7_tembusan'] }}" disabled><br>
                                                 </td>
                                             </tr>
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -979,7 +915,7 @@
                                             <tr class="formP8"><td colspan="2">
                                                 <button type="button" id="backP7" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
                                                 <button type="button" id="lanjutKL" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form KL</h6></button>
-                                                <button type="submit" name="submit" value="draf_p8" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_p8" id="saveDraf" class="save-draf-p8 btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- WO -->
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -1010,7 +946,24 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb',$value['wo_nomor_kb']) }}">
+                                                  @if(isset($value['f1_jenis_kontrak']))
+                                                    @if( $value['f1_jenis_kontrak'] == 'perpanjangan' )
+                                                      <datalist class="" id="list_nomor_kb">
+                                                        @if(isset($list_nomor_kb))
+                                                          @foreach($list_nomor_kb as $kunci => $nilai)
+                                                            <option value="{{ $nilai['nomor_kb'] }}"  {{ old('wo_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }} &nbsp; | &nbsp; {{ $nilai['f1_jenis_spk'] }} &nbsp; | &nbsp; {{ $nilai['f1_nama_plggn'] }}</option>
+                                                          @endforeach
+                                                        @endif
+                                                      </datalist>
+                                                      <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:300px;" list="list_nomor_kb">
+                                                    @elseif( $value['f1_jenis_kontrak'] == 'baru' )
+                                                      <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb',$value['wo_nomor_kb']) }}">
+                                                    @else
+                                                      <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                                                    @endif
+                                                  @else
+                                                    <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                                                  @endif
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1177,7 +1130,24 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ old('sp_nomor_kb',$value['sp_nomor_kb']) }}">
+                                                    @if(isset($value['f1_jenis_kontrak']))
+                                                      @if( $value['f1_jenis_kontrak'] == 'perpanjangan' )
+                                                        <datalist class="" id="list_nomor_kb">
+                                                          @if(isset($list_nomor_kb))
+                                                            @foreach($list_nomor_kb as $kunci => $nilai)
+                                                              <option value="{{ $nilai['nomor_kb'] }}"  {{ old('sp_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }} &nbsp; | &nbsp; {{ $nilai['f1_jenis_spk'] }} &nbsp; | &nbsp; {{ $nilai['f1_nama_plggn'] }}</option>
+                                                            @endforeach
+                                                          @endif
+                                                        </datalist>
+                                                        <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" list="list_nomor_kb">
+                                                      @elseif( $value['f1_jenis_kontrak'] == 'baru' )
+                                                        <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:350px;" value="{{ old('sp_nomor_kb',$value['sp_nomor_kb']) }}">
+                                                      @else
+                                                        <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                                                      @endif
+                                                    @else
+                                                      <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="formSP"><td colspan="2"><br></td></tr>
@@ -1198,7 +1168,24 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ old('kl_nomor_kb',$value['kl_nomor_kb']) }}">
+                                                  @if(isset($value['f1_jenis_kontrak']))
+                                                    @if( $value['f1_jenis_kontrak'] == 'perpanjangan' )
+                                                      <datalist class="" id="list_nomor_kb">
+                                                        @if(isset($list_nomor_kb))
+                                                          @foreach($list_nomor_kb as $kunci => $nilai)
+                                                            <option value="{{ $nilai['nomor_kb'] }}"  {{ old('kl_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }} &nbsp; | &nbsp; {{ $nilai['f1_jenis_spk'] }} &nbsp; | &nbsp; {{ $nilai['f1_nama_plggn'] }}</option>
+                                                          @endforeach
+                                                        @endif
+                                                      </datalist>
+                                                      <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" list="list_nomor_kb">
+                                                    @elseif( $value['f1_jenis_kontrak'] == 'baru' )
+                                                      <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:350px;" value="{{ old('kl_nomor_kb',$value['kl_nomor_kb']) }}">
+                                                    @else
+                                                      <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                                                    @endif
+                                                  @else
+                                                    <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                                                  @endif
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1490,11 +1477,15 @@
                 <x-footers.auth></x-footers.auth>
             </div>
         </main>
-        <x-plugins></x-plugins>
         @push('js')
         <script>
             $( document ).ready(function() {
+                $(".filterKontrak").show();
+
                 var global_jenis_spk = '';
+                $('#lanjutP2').show();
+                $('.jenis_spk_kl').hide();
+                $('.jenis_spk_sp').hide();
 
                 // clear form submit after refresh browser
                 $('#formObl')[0].reset();
@@ -1509,8 +1500,17 @@
                 var table_edit = @json($table_edit);
 
                 if(table_edit[0]['f1_jenis_spk']==='WO'){ $('.jenis_spk_klsp').hide(); }
-                else if(table_edit[0]['f1_jenis_spk']==='KL'||table_edit[0]['f1_jenis_spk']==='SP'){ $('.jenis_spk_wo').hide(); $('#lanjutP2').show(); }
-                else{ $('.jenis_spk_wo').show(); $('.jenis_spk_klsp').show(); }
+                else if(table_edit[0]['f1_jenis_spk']==='KL'||table_edit[0]['f1_jenis_spk']==='SP'){
+                  $('.jenis_spk_wo').hide();
+                  if(table_edit[0]['f1_jenis_spk']==='KL'){ $('.jenis_spk_kl').show(); }
+                  if(table_edit[0]['f1_jenis_spk']==='SP'){ $('.jenis_spk_sp').show(); }
+                }
+                else{ $('.jenis_spk_klsp').show(); $('.jenis_spk_wo').show(); }
+
+                if(table_edit[0]['f2_nilai_kontrak']==='dibawah_100'){ $('.jenis_spk_sp').show(); }
+                else if(table_edit[0]['f2_nilai_kontrak']==='diatas_100'){ $('.jenis_spk_kl').show(); }
+                else{ $('.jenis_spk_sp').show(); $('.jenis_spk_kl').show(); }
+
 
                 $("#formObl").submit( function(e) {
                    $("<input />").attr("type", "hidden")
@@ -1607,11 +1607,8 @@
                 // END SKEMA OBL : WO
 
                 $('#lanjutFilter').click(function(){ $('.filterKontrak').hide(); $('.filterAwal').show(); });
-                $('#backKontrak').click(function(){ global_jenis_spk = ''; $('.filterAwal').hide(); $('input[type=radio][name=f2_nilai_kontrak]').prop('checked',false); $('#judulFilter').empty(); $('#judulFilter').append(`<h6 class="ps-2">FILTER KL</h6>`); $('.filterKontrak').show(); });
-                $('#lanjutP2').click(function(){
-                  if($('#f2_tgl_p1').val() === ''){ $('#f2_tgl_p1').addClass('outline-input-merah'); }
-                  else{ $('.filterAwal').hide(); $('#f2_tgl_p1').removeClass('outline-input-merah'); $('.formP2').show(); }
-                });
+                $('#backKontrak').click(function(){ global_jenis_spk = ''; $('.filterAwal').hide();  $('.filterKontrak').show(); });
+                $('#lanjutP2').click(function(){ $('.filterAwal').hide(); $('.formP2').show(); });
 
                 $('#backFilter').click(function(){ $('.formP2').hide(); $('.filterAwal').show(); });
                 $('#lanjutP3').click(function(){ $('.formP2').hide(); $('.formP3').show(); });
@@ -1632,8 +1629,9 @@
                 });
                 $('#lanjutP7').click(function(){
                     $('.formP6').hide(); $('.formP7').show();
-                    if(table_edit[0]['f1_jenis_spk']==='KL'){ $('.dibawah-100').hide(); $('.diatas-100').show();  }
-                    else if(table_edit[0]['f1_jenis_spk']==='SP'){ $('.diatas-100').hide(); $('.dibawah-100').show();  }
+                    if(table_edit[0]['f1_jenis_spk']==='KL' || table_edit[0]['f2_nilai_kontrak']==='diatas_100'){ $('.dibawah-100').hide(); $('.diatas-100').show();  }
+                    else if(table_edit[0]['f1_jenis_spk']==='SP' || table_edit[0]['f2_nilai_kontrak']==='dibawah_100'){ $('.diatas-100').hide(); $('.dibawah-100').show();  }
+                    else{ $('.diatas-100').show(); $('.dibawah-100').show(); }
                 });
                 $('#backP6').click(function(){
                     $('.formP7').hide(); $('.formP6').show();
@@ -1652,13 +1650,11 @@
                     if(
                         $('#p7_lampiran_berkas').val() === '' ||
                         $('#p7_harga_pekerjaan').val() === '' ||
-                        $('#p7_otc').val() === '' ||
-                        $('#p7_rincian_bulanan').val() === '' ||
-                        $('#p7_pemeriksa').val() === '' ||
-                        $('#p7_tembusan').val() === ''
+                        $('#p7_skema_bayar').val() === '' ||
+                        $('#p7_pemeriksa').val() === ''
                     )
-                    { $('#lanjutKL').hide(); $('.save-draf').hide(); $('#suksesIsi').hide(); $('#gagalIsi').show(); }
-                    else{ $('#gagalIsi').hide(); $('#suksesIsi').show(); $('#lanjutKL').show(); $('.save-draf').show(); }
+                    { $('#lanjutKL').hide(); $('#suksesIsi').hide(); $('#gagalIsi').show(); $('.save-draf-p8').hide(); }
+                    else{ $('#gagalIsi').hide(); $('#suksesIsi').show(); $('#lanjutKL').show(); $('.save-draf-p8').show(); }
                 });
                 $('#backP7').click(function(){
                     $('.formP8').hide(); $('.formP7').show(); $('.dibawah-100').hide(); $('.diatas-100').show();
@@ -1681,6 +1677,15 @@
                 });
 
                 // INPUT TEXT : NUMERIC TYPE ONLY
+                $("input[name='f1_masa_layanan_tahun']").on('input', function (e) {
+                    $(this).val($(this).val().replace(/[^0-9]/g, ''));
+                });
+                $("input[name='f1_masa_layanan_bulan']").on('input', function (e) {
+                    $(this).val($(this).val().replace(/[^0-9]/g, ''));
+                });
+                $("input[name='f1_masa_layanan_hari']").on('input', function (e) {
+                    $(this).val($(this).val().replace(/[^0-9]/g, ''));
+                });
                 $("input[name='p7_lampiran_berkas']").on('input', function (e) {
                     $(this).val($(this).val().replace(/[^0-9]/g, ''));
                 });
@@ -1706,16 +1711,6 @@
                 var rupiah4 = document.getElementById('p7_harga_pekerjaan');
                 rupiah4.addEventListener('keyup', function(e){
                     rupiah4.value = formatRupiah(this.value, 'Rp. ');
-                });
-
-                var rupiah5 = document.getElementById('p7_otc');
-                rupiah5.addEventListener('keyup', function(e){
-                    rupiah5.value = formatRupiah(this.value, 'Rp. ');
-                });
-
-                var rupiah6 = document.getElementById('p7_rincian_bulanan');
-                rupiah6.addEventListener('keyup', function(e){
-                    rupiah6.value = formatRupiah(this.value, 'Rp. ');
                 });
 
                 var rupiah7 = document.getElementById('wo_harga_ke_plggn');

@@ -588,7 +588,6 @@
 
         </div>
     </main>
-    <x-plugins></x-plugins>
     </div>
     @push('js')
     <script src="{{ asset('assets') }}/js/plugins/chartjs.min.js"></script>

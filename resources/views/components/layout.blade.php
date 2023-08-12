@@ -10,15 +10,14 @@
         Dashboard OBL by SDA
     </title>
     <!--     Fonts and icons     -->
-    <link rel="stylesheet" type="text/css"
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets')}}/css/fonts_googleapis.css" />
     <!-- Nucleo Icons -->
     <link href="{{ asset('assets') }}/css/nucleo-icons.css" rel="stylesheet" />
     <link href="{{ asset('assets') }}/css/nucleo-svg.css" rel="stylesheet" />
     <!-- Font Awesome Icons -->
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets') }}/js/fontawesome.js" crossorigin="anonymous"></script>
     <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="{{ asset('assets') }}/css/materialicons.css" rel="stylesheet">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
     <link href="{{ asset('assets') }}/css/jquery_yajra.min.css" rel="stylesheet" />
@@ -26,8 +25,11 @@
 <body class="{{ $bodyClass }}">
 <style>
         .hidden-leaf,
+        /* .filter-jenis-kontrak, */
+        .filter-jenis-kontrak-kb,
+        .filter-jenis-kontrak-lanjut,
         #f1_nama_mitra_lain,
-        /* .filterKontrak, */
+        .filterKontrak,
         .filterAwal,
         #lanjutP2,
         .formP2,
@@ -49,8 +51,9 @@
         .status_rapat_pengadaan,
         #modal-obl-sukses,
         #modal-obl-gagal,
-        #modal-input-obl {
-            display: none;
+        #modal-input-obl
+         {
+                    display: none;
         }
         .outline-input-merah {
           outline: 6px solid red;
@@ -59,26 +62,38 @@
           border: 0px #ffffff;
         }
 
+        .dataTables_filter {
+           float: left !important;
+        }
 
-        /* modal alerts */
-        .modal {
-          text-align: center;
-        }
-        @media screen and (min-width: 768px) {
-          .modal:before {
-            display: inline-block;
-            vertical-align: middle;
-            content: " ";
-            height: 100%;
-          }
-        }
         .modal-dialog {
-          display: inline-block;
-          text-align: left;
-          vertical-align: middle;
-        }
-        /* end modal alerts */
+            vertical-align: middle;
+            text-align: center;
+          }
 
+        .lampiran-dialog {
+            max-width: 90%;
+            vertical-align: middle;
+            text-align: center;
+            margin-left: 12%;
+            padding-left: 5%;
+          }
+          .lampiran{
+            width: 90%;
+          }
+
+        .footer {
+          /* height:24px; */
+      width: 100%;
+      background-image: none;
+      background-repeat: repeat;
+      background-attachment: scroll;
+      background-position: 0% 0%;
+      position: fixed;
+      bottom: 0pt;
+      z-index: -2;
+      /* left: 0pt; */
+        }
 </style>
 
 {{ $slot }}
@@ -100,9 +115,14 @@
         Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
 
+    $(function () {
+      $('[data-toggle="popover"]').popover();
+
+    })
+
 </script>
 <!-- Github buttons -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script async defer src="{{ asset('assets') }}/js/github_buttons.js"></script>
 <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="{{ asset('assets') }}/js/material-dashboard.min.js?v=3.0.0"></script>
 </body>

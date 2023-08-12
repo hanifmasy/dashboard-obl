@@ -14,40 +14,6 @@
     <hr class="horizontal light mt-0 mb-2">
     <div class="" id="sidenav-collapse-main">
         <ul class="navbar-nav">
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Personal</h6>
-            </li>
-            <li class="nav-item">
-              @if($is_user->role_id == 1 || $is_user->role_id == 2 || $is_user->role_id == 3 || $is_user->role_id == 7 || $is_user->role_id == 8 || $is_user->role_id == 9)
-              <a class="nav-link text-white {{ $activePage == 'user-profile' ? ' active bg-gradient-info' : '' }}  "
-                  href="{{ route('user-profile') }}">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                      <i class="material-icons opacity-10">person</i>
-                  </div>
-                  <span class="nav-link-text ms-1">PROFILE</span>
-              </a>
-              @elseif( $is_user->role_id == 4 || $is_user->role_id == 5  )
-              <a class="nav-link text-white {{ $activePage == 'user-profile' ? ' active bg-gradient-primary' : '' }}  "
-                  href="{{ route('user-profile') }}">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                      <i class="material-icons opacity-10">person</i>
-                  </div>
-                  <span class="nav-link-text ms-1">PROFILE</span>
-              </a>
-              @else
-              <a class="nav-link text-white {{ $activePage == 'user-profile' ? ' active bg-gradient-warning' : '' }}  "
-                  href="{{ route('user-profile') }}">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                      <i class="material-icons opacity-10">person</i>
-                  </div>
-                  <span class="nav-link-text ms-1">PROFILE</span>
-              </a>
-              @endif
-
-            </li>
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Pages</h6>
-            </li>
             <li class="nav-item">
                 @if($is_user->role_id == 1 || $is_user->role_id == 2 || $is_user->role_id == 3 || $is_user->role_id == 7 || $is_user->role_id == 8 || $is_user->role_id == 9)
                 <a class="nav-link text-white {{ $activePage == 'dashboard' ? ' active bg-gradient-info' : '' }} "
@@ -78,60 +44,51 @@
 
             <!-- OBL -->
             @if( $is_user->role_id == 2 || $is_user->role_id == 8 || $is_user->role_id == 9 )
-            <li class="nav-item dropdown align-items-center">
-                <a href="javascript:;" class="nav-link text-white {{ $activePage == 'inputs' || $activePage == 'obl-tables'  || $activePage == 'obl-drafs' || $activePage == 'obl-drafs-edit' ? ' active bg-gradient-info' : '' }}"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">OBL</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'inputs' ? ' active bg-gradient-info' : '' }} "
+                    href="{{ route('inputs') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">article</i>
+                        <i class="material-icons opacity-10">add</i>
                     </div>
-                    <span class="nav-link-text ms-1">OBL</span>
+                    <span class="nav-link-text ms-1">TAMBAH DATA</span>
                 </a>
-                <ul class="dropdown-menu  dropdown-menu-end"
-                    aria-labelledby="dropdownMenuButton">
-                    @if( $is_user->role_id == 2 || $is_user->role_id == 8 || $is_user->role_id == 9 )
-                    <li class="mb-2">
-                        <a class="dropdown-item border-radius-md" href="{{ route('inputs') }}">
-                            <div class="d-flex py-1">
-                                <div class="my-auto">
-                                    <i class="material-icons opacity-10 me-2">note_add</i>
-                                </div>
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="text-sm font-weight-normal mb-1">
-                                        <span class="font-weight-bold">Input Form</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    @endif
-                    <li class="mb-2">
-                        <a class="dropdown-item border-radius-md" href="{{ route('obl.tables') }}">
-                            <div class="d-flex py-1">
-                                <div class="my-auto">
-                                    <i class="material-icons opacity-10 me-2">table_view</i>
-                                </div>
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="text-sm font-weight-normal mb-1">
-                                        <span class="font-weight-bold">Tabel Dokumen</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'obl-tables' || $activePage == 'obl-drafs-edit' ? ' active bg-gradient-info' : '' }} "
+                    href="{{ route('obl.tables') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">table_rows</i>
+                    </div>
+                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'obl-upload' ? ' active bg-gradient-info' : '' }} "
+                    href="{{ route('obl.upload.index') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">publish</i>
+                    </div>
+                    <span class="nav-link-text ms-1">UPLOAD FILE</span>
+                </a>
             </li>
             @endif
             <!-- END OBL -->
 
             <!-- OBL VIEW  -->
             @if( $is_user->role_id == 1 || $is_user->role_id == 3 || $is_user->role_id == 7)
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">OBL</h6>
+            </li>
             <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'obl-tables' ? ' active bg-gradient-info' : '' }} "
                     href="{{ route('obl.tables') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">article</i>
+                        <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1">OBL</span>
+                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
                 </a>
             </li>
             @endif
@@ -139,58 +96,42 @@
 
             <!-- WITEL -->
             @if( $is_user->role_id == 4 || $is_user->role_id == 9 )
-            <li class="nav-item dropdown align-items-center">
-                <a href="javascript:;" class="nav-link text-white {{ $activePage == 'witels' || $activePage == 'obl-tables' ? ' active bg-gradient-primary' : '' }}"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">WITEL</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'witels' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('witels') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">article</i>
+                        <i class="material-icons opacity-10">add</i>
                     </div>
-                    <span class="nav-link-text ms-1">WITEL</span>
+                    <span class="nav-link-text ms-1">TAMBAH DATA</span>
                 </a>
-                <ul class="dropdown-menu  dropdown-menu-end"
-                    aria-labelledby="dropdownMenuButton">
-                    <li class="mb-2">
-                        <a class="dropdown-item border-radius-md" href="{{ route('witels') }}">
-                            <div class="d-flex py-1">
-                                <div class="my-auto">
-                                    <i class="material-icons opacity-10 me-2">note_add</i>
-                                </div>
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="text-sm font-weight-normal mb-1">
-                                        <span class="font-weight-bold">Input Form</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a class="dropdown-item border-radius-md" href="{{ route('obl.tables') }}">
-                            <div class="d-flex py-1">
-                                <div class="my-auto">
-                                    <i class="material-icons opacity-10 me-2">table_view</i>
-                                </div>
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="text-sm font-weight-normal mb-1">
-                                        <span class="font-weight-bold">Tabel Dokumen</span>
-                                    </h6>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'obl-tables' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('obl.tables') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">table_rows</i>
+                    </div>
+                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                </a>
             </li>
             @endif
             <!-- END WITEL -->
 
             <!-- WITEL VIEW  -->
             @if( $is_user->role_id == 5 )
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">WITEL</h6>
+            </li>
             <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'obl-tables' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('obl.tables') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">article</i>
+                        <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1">WITEL</span>
+                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
                 </a>
             </li>
             @endif
@@ -198,13 +139,16 @@
 
             <!-- MITRA -->
             @if( $is_user->role_id == 6 || $is_user->role_id == 9 )
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">MITRA</h6>
+            </li>
             <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'obl-tables' ? ' active bg-gradient-warning' : '' }} "
                     href="{{ route('obl.tables') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">article</i>
+                        <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1">MITRA</span>
+                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
                 </a>
             </li>
             @endif
