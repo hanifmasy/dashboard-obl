@@ -56,8 +56,17 @@
                     <span class="nav-link-text ms-1">TAMBAH DATA</span>
                 </a>
             </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link text-white "
+                    href="#">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">playlist_add</i>
+                    </div>
+                    <span class="nav-link-text ms-1">TAMBAH DATA LAMA</span>
+                </a>
+            </li> -->
             <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'obl-tables' || $activePage == 'obl-drafs-edit' ? ' active bg-gradient-info' : '' }} "
+                <a class="nav-link text-white {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-drafs-edit' ? ' active bg-gradient-info' : '' }} "
                     href="{{ route('obl.tables') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
@@ -69,9 +78,9 @@
                 <a class="nav-link text-white {{ $activePage == 'obl-upload' ? ' active bg-gradient-info' : '' }} "
                     href="{{ route('obl.upload.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">publish</i>
+                        <i class="material-icons opacity-10">cloud_sync</i>
                     </div>
-                    <span class="nav-link-text ms-1">UPLOAD FILE</span>
+                    <span class="nav-link-text ms-1">ARSIP DOKUMEN</span>
                 </a>
             </li>
             @endif

@@ -13,7 +13,7 @@ use App\Http\Controllers\WitelsController;
 use App\Http\Controllers\LampiransController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\UploadController;
-use App\Http\Controllers\TestingController;
+use App\Http\Controllers\FilesController;
 use Illuminate\Support\Facades\DB;
 use App\Models\MitraVendor;
 use App\Models\DocObl;
@@ -89,5 +89,10 @@ Route::post('obl-lampiran/create', [LampiransController::class, 'create'])->midd
 Route::post('obl-print', [PrintController::class, 'index'])->middleware('auth')->name('obl.print.index');
 Route::post('obl-print/create', [PrintController::class, 'create'])->middleware('auth')->name('obl.print.create');
 
-Route::get('obl-upload', [UploadController::class, 'index'])->middleware('auth')->name('obl.upload.index');
-Route::post('obl-tables/upload', [UploadController::class, 'tableUpload'])->middleware('auth')->name('obl.tables.upload');
+Route::get('obl-files', [UploadController::class, 'index'])->middleware('auth')->name('obl.upload.index');
+Route::post('obl-files/cari', [UploadController::class, 'cari'])->middleware('auth')->name('obl.upload.cari');
+Route::post('obl-tables/files', [UploadController::class, 'tableUpload'])->middleware('auth')->name('obl.tables.upload');
+Route::post('obl-files/create', [UploadController::class, 'create'])->middleware('auth')->name('obl.upload.create');
+
+Route::get('obl-files/download', [FilesController::class, 'download'])->middleware('auth')->name('obl.files.download');
+Route::get('obl-files/visibility', [FilesController::class, 'visibility'])->middleware('auth')->name('obl.files.visibility');

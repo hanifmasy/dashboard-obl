@@ -51,12 +51,17 @@
         .status_rapat_pengadaan,
         #modal-obl-sukses,
         #modal-obl-gagal,
-        #modal-input-obl
+        #modal-input-obl,
+        #btn-lanjut,
+        .btn-loading
          {
                     display: none;
         }
         .outline-input-merah {
           outline: 6px solid red;
+        }
+        .outline-input-merah-2 {
+          outline: 2px solid red;
         }
         #table-input-obl {
           border: 0px #ffffff;

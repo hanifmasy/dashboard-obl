@@ -1272,7 +1272,7 @@
                    }
                    if(data.status_id==='1'){
                      let list_print_obl = `<input type="type" name="print_obl_id" value="`+data.print_obl_id+`" hidden>`;
-                     for(let i = 0; i < 8; i++){
+                     for(let i = 0; i < 9; i++){
                        if( data.list_print_obl[0].submit === 'draf_wo' || data.list_print_obl[0].submit === 'submit_wo'){
                          list_print_obl += `
                          <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p6">P6</button><br>`;
@@ -1327,7 +1327,10 @@
 
                      }
 
-                     $('#list-print-obl').append(list_print_obl);
+                     $('#list-print-obl').append(list_print_obl + `
+                      <br>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">TUTUP</button>
+                     `);
                    }
                  }
                });
@@ -1461,7 +1464,7 @@
                   {
                      data:'obl_id',searchable:false,orderable:false,
                      render: function ( data, type, row ) {
-                       if(is_user === '1' || is_user === '3' || is_user === '4' || is_user === '5' ||  is_user === '6' ||  is_user === '7'){ return '<button type="button" class="btn btn-sm btn-secondary" data-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:22px;">quiz</i></button>'; }
+                       if(is_user === '1' || is_user === '3' || is_user === '4' || is_user === '5' ||  is_user === '6' ||  is_user === '7'){ return '<button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:22px;">quiz</i></button>'; }
                        else{ return `
                          <div class="dropdown">
                             <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
@@ -1469,7 +1472,7 @@
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">UPLOAD</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
                             </div>

@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
+        "league/flysystem-sftp-v3": "^3.15",
         "phpoffice/phpword": "^1.1",
         "rap2hpoutre/fast-excel": "^5.2",
         "yajra/laravel-datatables-oracle": "~9.0"
