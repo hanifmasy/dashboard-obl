@@ -23,7 +23,7 @@ class InputsController extends Controller
 
     public function create(Request $request): RedirectResponse
     {
-        dd($request->all());
+        // dd($request->all());
         $created_by = Auth::id();
         $created_at = Carbon::now()->translatedFormat('Y-m-d H:i:s');
 

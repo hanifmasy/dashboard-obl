@@ -20,7 +20,8 @@
     <link href="{{ asset('assets') }}/css/materialicons.css" rel="stylesheet">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
-    <link href="{{ asset('assets') }}/css/jquery_yajra.min.css" rel="stylesheet" />
+    <link href="{{ asset('assets') }}/DataTables/datatables.min.css" rel="stylesheet" />
+    <link href="{{ asset('assets') }}/DataTables/Buttons-2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
 </head>
 <body class="{{ $bodyClass }}">
 <style>
@@ -57,6 +58,15 @@
          {
                     display: none;
         }
+        .text-black{
+          color: #1e2124;
+        }
+        .bg-gradient-mitra{
+          background:#1da2d8;
+        }
+        .bg-gradient-closesm{
+          background: #d9534f;
+        }
         .outline-input-merah {
           outline: 6px solid red;
         }
@@ -69,6 +79,10 @@
 
         .dataTables_filter {
            float: left !important;
+        }
+        div.dataTables_filter input,div.dataTables_filter input:focus {
+          outline: 1px ridge #bbbbbb;
+          border-radius: 0.5em;
         }
 
         .modal-dialog {
@@ -88,26 +102,34 @@
           }
 
         .footer {
-          /* height:24px; */
-      width: 100%;
-      background-image: none;
-      background-repeat: repeat;
-      background-attachment: scroll;
-      background-position: 0% 0%;
-      position: fixed;
-      bottom: 0pt;
-      z-index: -2;
-      /* left: 0pt; */
+          width: 100%;
+          background-image: none;
+          background-repeat: repeat;
+          background-attachment: scroll;
+          background-position: 0% 0%;
+          position: fixed;
+          bottom: 0pt;
+          z-index: -2;
         }
+        /* .navbar-main {
+          display: none;
+          height: 300px;
+          width: 100%;
+          position: fixed;
+          top: 0;
+          z-index: -1;
+        } */
 </style>
 
 {{ $slot }}
-
 <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
 <script src="{{ asset('assets') }}/js/latest_boot.min.js"></script>
-<script src="{{ asset('assets') }}/js/jquery_yajra.min.js"></script>
 <script src="{{ asset('assets') }}/js/alertboot.min.js"></script>
 <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
+<script src="{{ asset('assets') }}/DataTables/datatables.min.js"></script>
+<script src="{{ asset('assets') }}/DataTables/JSZip-3.10.1/jszip.min.js"></script>
+<script src="{{ asset('assets') }}/DataTables/Buttons-2.4.1/js/buttons.dataTables.min.js"></script>
+<script src="{{ asset('assets') }}/DataTables/Buttons-2.4.1/js/buttons.html5.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/perfect-scrollbar.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/smooth-scrollbar.min.js"></script>
 @stack('js')

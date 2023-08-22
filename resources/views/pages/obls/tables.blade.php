@@ -6,11 +6,78 @@
             <!-- End Navbar -->
             <style media="screen">
             .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
-  border-color: #D7B1D7;
-  background-color: #D7B1D7;
+              border-color: #D7B1D7;
+              background-color: #D7B1D7;
+            }
+
+            #table-data-obl .action-kembali-proses-witel.dropdown-item:hover {
+              background-color:  	#E91E63;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
+
+#table-data-obl .action-proses-obl.dropdown-item:hover {
+  background-color:  	#1a73e8;
+  color:  	#ffffff;
+  font-weight: bolder;
+  font-size: 15px;
 }
+
+#table-data-obl .action-proses-legal.dropdown-item:hover {
+  background-color:  	#fb8c00;
+  color:  	#ffffff;
+  font-weight: bolder;
+  font-size: 15px;
+}
+
+#table-data-obl .action-proses-mitra-obl.dropdown-item:hover {
+  background-color:  	#1da2d8;
+  color:  	#ffffff;
+  font-weight: bolder;
+  font-size: 15px;
+}
+
+#table-data-obl .action-proses-closesm.dropdown-item:hover {
+  background-color:  	#d9534f;
+  color:  	#ffffff;
+  font-weight: bolder;
+  font-size: 15px;
+}
+
+#table-data-obl .action-proses-done.dropdown-item:hover {
+  background-color:  	#4CAF50;
+  color:  	#ffffff;
+  font-weight: bolder;
+  font-size: 15px;
+}
+
+#table-data-obl .action-proses-cancel.dropdown-item:hover {
+  background-color:  	#f44335;
+  color:  	#ffffff;
+  font-weight: bolder;
+  font-size: 15px;
+}
+            #table-data-obl .action-kembali-witel.dropdown-item:hover {
+              background-color:  	#E91E63;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
+            #table-data-obl .action-lanjut-obl.dropdown-item:hover {
+              background-color:  	#1a73e8;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
             #table-data-obl .action-edit.dropdown-item:hover {
               background-color:  	#3b5998;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
+            #table-data-obl .action-forms.dropdown-item:hover {
+              background-color:  	#2a623d;
               color:  	#ffffff;
               font-weight: bolder;
               font-size: 15px;
@@ -48,12 +115,12 @@
 
             </style>
             <!-- modal alerts -->
-            @if( $is_user->role_id !== 1 and $is_user->role_id !== 3 and $is_user->role_id !== 4 and $is_user->role_id !== 5 and $is_user->role_id !== 6 and $is_user->role_id !== 7 )
+            @if( $is_user->role_id === 2 or $is_user->role_id === 4 or $is_user->role_id === 8 or $is_user->role_id === 9  )
             <div class="modal fade" id="modal-status-table-obl" tabindex="-1" aria-labelledby="modal-status-table-obl" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Dokumen OBL:</h5>
+                    <h5 class="modal-title">Status Proses Sistem:</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body" id="status-table-obl">
@@ -64,28 +131,13 @@
                 </div>
               </div>
             </div>
-            <div class="modal fade" id="modal-print-obl" tabindex="-1" aria-labelledby="modal-print-obl" aria-hidden="true">
-              <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                  <form action="{{ route('obl.print.create') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                  <div class="modal-header">
-                    <h5 class="modal-title">Print OBL:</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body" id="list-print-obl">
-                  </div>
-                  <div class="modal-footer" id="list-print-obl-options">
-                  </div>
-                </form>
-                </div>
-              </div>
-            </div>
+            @endif
+            @if( $is_user->role_id === 2 or $is_user->role_id === 9 )
             <div class="modal  fade" id="modal-lampiran-table-obl" tabindex="-1" aria-labelledby="modal-lampiran-table-obl" aria-hidden="true">
               <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Lampiran OBL:</h5>
+                    <h5 class="modal-title">Lampiran Dokumen OBL:</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <form id="formLampiran" action="{{ route('obl.lampiran.create') }}" method="POST" enctype="multipart/form-data">
@@ -100,11 +152,26 @@
                 </div>
               </div>
             </div>
+            <div class="modal top fade" id="modal-lampiran-obl" tabindex="-1" aria-hidden="true" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="">Lampiran Dokumen OBL:</h5>
+                      </div>
+                      <div class="modal-body" id="lampiran-obl-body">
+                      </div>
+                      <div class="modal-footer" id="lampiran-obl-footer">
+                      </div>
+                </div>
+              </div>
+            </div>
+            @endif
+            @if( $is_user->role_id === 2 or $is_user->role_id === 8 or $is_user->role_id === 9 )
             <div class="modal fade" id="modal-status-table-obl-delete" tabindex="-1" aria-labelledby="modal-status-table-obl-delete" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Dokumen OBL:</h5>
+                    <h5 class="modal-title">Hapus Dokumen OBL:</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
@@ -126,7 +193,7 @@
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Dokumen OBL:</h5>
+                    <h5 class="modal-title">Hapus Dokumen OBL:</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body" id="multi-obl-hapus-hapus-body">
@@ -136,26 +203,13 @@
                 </div>
               </div>
             </div>
-            <div class="modal top fade" id="modal-lampiran-obl" tabindex="-1" aria-hidden="true" role="dialog">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="">Lampiran OBL:</h5>
-                      </div>
-                      <div class="modal-body" id="lampiran-obl-body">
-                      </div>
-                      <div class="modal-footer" id="lampiran-obl-footer">
-                      </div>
-                </div>
-              </div>
-            </div>
             @endif
             @if( $is_user->role_id )
             <div class="modal fade" id="modal-ketdoc-table-obl" tabindex="-1" aria-labelledby="modal-ketdoc-table-obl" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Dokumen OBL:</h5>
+                    <h5 class="modal-title">Keterangan Dokumen OBL:</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body" id="ketdoc-table-obl">
@@ -163,6 +217,23 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="modal-print-obl" tabindex="-1" aria-labelledby="modal-print-obl" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  <form action="{{ route('obl.print.create') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                  <div class="modal-header">
+                    <h5 class="modal-title">Print Dokumen OBL:</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body" id="list-print-obl">
+                  </div>
+                  <div class="modal-footer" id="list-print-obl-options">
+                  </div>
+                </form>
                 </div>
               </div>
             </div>
@@ -175,17 +246,17 @@
                     <div class="col-12">
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                                @if( $is_user->role_id == 4 or $is_user->role_id == 5 )
-                                <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                                @if( $is_user->role_id == 4 || $is_user->role_id == 5 )
+                                <div class="bg-gradient-primary border-radius-lg pt-4 pb-3">
                                   <h6 class="text-capitalize ps-3 text-white">TABEL DOKUMEN</h6>
                               </div>
                                 @elseif( $is_user->role_id == 6 )
-                                <div class="bg-gradient-warning shadow-warning border-radius-lg pt-4 pb-3">
+                                <div class="bg-gradient-mitra border-radius-lg pt-4 pb-3">
                                   <h6 class="text-capitalize ps-3 text-white">TABEL DOKUMEN</h6>
                               </div>
-                                @else
-                                <div class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3">
-                                  <h6 class="text-capitalize ps-3 text-white">TABEL DOKUMEN</h6>
+                                @elseif( $is_user->role_id !== 4 && $is_user->role_id !== 5 && $is_user->role_id !== 6 )
+                                <div class="bg-gradient-light shadow-primary border-radius-lg pt-4 pb-3">
+                                  <h6 class="text-capitalize ps-3">TABEL DOKUMEN</h6>
                                 </div>
                                 @endif
 
@@ -196,16 +267,12 @@
                                     @csrf
                                     <div class="row">
                                       <div class="col">
-                                        <button type="button" class="btn btn-md bg-gradient-success" id="downloadExcel">EXCEL</button>
-                                        @if( $is_user->role_id !== 1 and $is_user->role_id !== 3 and $is_user->role_id !== 4 and $is_user->role_id !== 5 and $is_user->role_id !== 6 and $is_user->role_id !== 7 )
-                                            <button type="button" class="btn btn-md bg-gradient-danger" id="openMultiDel">HAPUS</button>
-                                        @endif
+
                                       </div>
                                     </div><br>
                                     <table id="table-data-obl" class="table align-items-center justify-content-center mb-0 table-hover">
                                         <thead>
                                             <tr>
-                                                <th></th>
                                                 <th></th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -215,7 +282,7 @@
                                                     Proses</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Status OBL</th>
+                                                    Update Form</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Segmen</th>
@@ -257,9 +324,6 @@
                                                     No. KL / WO / SP</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
-                                                    PIC Mitra</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
                                                     Jenis Kontrak</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
@@ -273,9 +337,6 @@
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
                                                     Status Order</th>
-                                                <th
-                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
-                                                    Alamat Pelanggan</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
                                                     Keterangan Terbaru</th>
@@ -295,6 +356,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <x-footers.auth></x-footers.auth>
             </div>
@@ -315,11 +377,22 @@
             }
 
             function editDoc(edit_obl_id){
+              // console.log(edit_obl_id);
+              $('#formObl').attr('action', "");
               $("<input />").attr("type", "hidden")
                 .attr("name", "edit_obl_id")
                 .attr("value", edit_obl_id)
                 .appendTo("#formObl");
               $('#formObl').attr('action', "{{ route('obl.tables.edit') }}").submit();
+            }
+
+            function formsDoc(forms_obl_id){
+              $('#formObl').attr('action', "");
+              $("<input />").attr("type", "hidden")
+                .attr("name", "forms_obl_id")
+                .attr("value", forms_obl_id)
+                .appendTo("#formObl");
+              $('#formObl').attr('action', "{{ route('witels.forms') }}").submit();
             }
 
 
@@ -1169,7 +1242,7 @@
                       $('#ketdoc-table-obl').append(`
                         <div class="alert alert-warning alert-dismissible">
                             <div class="text-center">
-                                <h5 class="" style="color: #444444 !important;">`+data.status+`</h5>
+                                <h5 class="text-white">`+data.status+`</h5>
                             </div>
                         </div>
                       `);
@@ -1225,13 +1298,7 @@
               $('#modal-ketdoc-table-obl').modal('show');
             }
 
-            function multiDelDoc(){
-              $("<input />").attr("type", "hidden")
-                .attr("name", "status_perintah")
-                .attr("value", "multi_delete_ids")
-                .appendTo("#formObl");
-              $('#formObl').attr('action', "{{ route('obl.tables.multidelete') }}").submit();
-            }
+
 
             function uploadDoc(upload_doc_id){
               $("<input />").attr("type", "hidden")
@@ -1338,6 +1405,79 @@
             }
 
 
+            function kembaliWitel(kw_obl_id){
+              $("<input />").attr("type", "hidden")
+                .attr("name", "kw_obl_id")
+                .attr("value", kw_obl_id)
+                .appendTo("#formObl");
+              $('#formObl').attr('action', "{{ route('obl.tables.kembali_witel') }}").submit();
+            }
+
+            function lanjutObl(lo_obl_id){
+              $("<input />").attr("type", "hidden")
+                .attr("name", "lo_obl_id")
+                .attr("value", lo_obl_id)
+                .appendTo("#formObl");
+              $('#formObl').attr('action', "{{ route('obl.tables.lanjut_obl') }}").submit();
+            }
+
+
+            function kembaliProsesWitel(proses_witel_obl_id){
+              $("<input />").attr("type", "hidden")
+                .attr("name", "proses_witel_obl_id")
+                .attr("value", proses_witel_obl_id)
+                .appendTo("#formObl");
+              $('#formObl').attr('action', "{{ route('obl.tables.proses_witel') }}").submit();
+            }
+
+          function prosesObl(proses_obl_id){
+            $("<input />").attr("type", "hidden")
+              .attr("name", "proses_obl_id")
+              .attr("value", proses_obl_id)
+              .appendTo("#formObl");
+            $('#formObl').attr('action', "{{ route('obl.tables.proses_obl') }}").submit();
+          }
+
+          function prosesLegal(legal_obl_id){
+            $("<input />").attr("type", "hidden")
+              .attr("name", "legal_obl_id")
+              .attr("value", legal_obl_id)
+              .appendTo("#formObl");
+            $('#formObl').attr('action', "{{ route('obl.tables.legal_obl') }}").submit();
+          }
+
+          function prosesMitraObl(mitra_obl_id){
+            $("<input />").attr("type", "hidden")
+              .attr("name", "mitra_obl_id")
+              .attr("value", mitra_obl_id)
+              .appendTo("#formObl");
+            $('#formObl').attr('action', "{{ route('obl.tables.mitra_obl') }}").submit();
+          }
+
+          function prosesCloseSm(closesm_obl_id){
+            $("<input />").attr("type", "hidden")
+              .attr("name", "closesm_obl_id")
+              .attr("value", closesm_obl_id)
+              .appendTo("#formObl");
+            $('#formObl').attr('action', "{{ route('obl.tables.closesm_obl') }}").submit();
+          }
+
+          function prosesDone(done_obl_id){
+            $("<input />").attr("type", "hidden")
+              .attr("name", "done_obl_id")
+              .attr("value", done_obl_id)
+              .appendTo("#formObl");
+            $('#formObl').attr('action', "{{ route('obl.tables.done_obl') }}").submit();
+          }
+
+          function prosesCancel(cancel_obl_id){
+            $("<input />").attr("type", "hidden")
+              .attr("name", "cancel_obl_id")
+              .attr("value", cancel_obl_id)
+              .appendTo("#formObl");
+            $('#formObl').attr('action', "{{ route('obl.tables.cancel_obl') }}").submit();
+          }
+
           $(document).ready(function () {
               $("#modal-status-table-obl").modal({show:false});
               $("#modal-ketdoc-table-obl").modal({show:false});
@@ -1345,8 +1485,18 @@
               $('#modal-multi-obl-hapus').modal({show:false});
 
               var status_table_obl = "{{ session('status') }}";
+              var gdt = @json($gdt);
               if(status_table_obl && typeof status_table_obl !== undefined){
                 $('#status-table-obl').empty();
+                if(status_table_obl.includes('Oops')){
+                  $('#status-table-obl').append(`
+                    <div class="alert alert-danger alert-dismissible">
+                        <div class="text-center">
+                            <h5 class="text-white">`+status_table_obl+`</h5>
+                        </div>
+                    </div>
+                  `);
+                }
                 if(status_table_obl.includes('Sukses')){
                   $('#status-table-obl').append(`
                     <div class="alert alert-success alert-dismissible">
@@ -1355,7 +1505,6 @@
                         </div>
                     </div>
                   `);
-                  $('#modal-status-table-obl').modal('show');
                 }
                 if(status_table_obl.includes('Draf')){
                   $('#status-table-obl').append(`
@@ -1365,7 +1514,6 @@
                         </div>
                     </div>
                   `);
-                  $('#modal-status-table-obl').modal('show');
                 }
                 if(status_table_obl.includes('Tidak')){
                   $('#status-table-obl').append(`
@@ -1375,70 +1523,35 @@
                         </div>
                     </div>
                   `);
-                  $('#modal-status-table-obl').modal('show');
                 }
-                if(status_table_obl.includes('Oops')){
-                  $('#status-table-obl').append(`
-                    <div class="alert alert-danger alert-dismissible">
-                        <div class="text-center">
-                            <h5 class="text-white">`+status_table_obl+`</h5>
-                        </div>
-                    </div>
-                  `);
-                  $('#modal-status-table-obl').modal('show');
-                }
+                $('#modal-status-table-obl').modal('show');
               }
-
-              $("#openMultiDel").on("click", function(){
-                if($('input:checkbox:checked').length > 0){
-                  $('#multi-obl-hapus-hapus-body').empty();
-                  $('#multi-obl-hapus-hapus-body').append(`
-                    <div class="alert alert-dismissible">
-                        <div class="text-center">
-                            <h5 class="">Yakin Hapus `+ $('input:checkbox:checked').length +` Data OBL?</h5>
-                        </div>
-                    </div>
-                    `);
-                  $('#multi-obl-hapus-hapus-footer').empty();
-                  $('#multi-obl-hapus-hapus-footer').append(`
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">TIDAK</button>
-                      <button type="button" class="btn btn-danger" onclick="multiDelDoc()">HAPUS</button>
-                    `);
-                  $('#modal-multi-obl-hapus').modal('show');
-                }
-                else{
-                  $('#multi-obl-hapus-hapus-body').empty();
-                  $('#multi-obl-hapus-hapus-body').append(`
-                    <div class="alert alert-danger alert-dismissible">
-                        <div class="text-center">
-                            <h5 class="text-white">Pilihlah data OBL yang ingin dihapus.</h5>
-                        </div>
-                    </div>
-                    `);
-                  $('#multi-obl-hapus-hapus-footer').empty();
-                  $('#multi-obl-hapus-hapus-footer').append(`
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-                    `);
-                  $('#modal-multi-obl-hapus').modal('show');
-                }
-              });
-
-
-
-              $("#downloadExcel").on("click", function(e){
-                  e.preventDefault();
-                  $("<input />").attr("type", "hidden")
-                    .attr("name", "status_perintah")
-                    .attr("value", "multi_download_ids")
-                    .appendTo("#formObl");
-                  $('#formObl').attr('action', "{{ route('obl.tables.excel') }}").submit();
-              });
-
-
 
 
               var is_user = "{{ $is_user->role_id }}";
               var tableObl = $('#table-data-obl').DataTable({
+                language: {
+                    url: "{{ asset('public/assets') }}/json/yajra_indonesia.json",
+                },
+                dom: 'fBrtip',
+                buttons: [
+                  {
+                      extend: 'excel',
+                      text: 'EXCEL',
+                      className: 'btn btn-sm btn-success',
+                      filename: function(){
+                            var today = new Date();
+                            var dd = String(today.getDate()).padStart(2, '0');
+                            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            var yyyy = today.getFullYear();
+                            today = yyyy + '-' + mm + '-' + dd;
+                            return 'Table_Dokumen_OBL_' + today;
+                        },
+                      exportOptions: {
+                           columns: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+                       }
+                  }
+                ],
                 select: {
                     style: 'multi'
                 },
@@ -1447,27 +1560,92 @@
                 serverSide: true,
                 retrieve: true,
                 aaSorting: [],
-                ajax: "{{ route('obl.tables') }}",
+                ajax: "{{ route('obl.tables') }}?ajx_gdt="+gdt,
                 columns: [
                   {
-                    searchable: false,
-                    orderable:false,
-                    'targets': 0,
-                    'render': function(data, type, row, meta){
-                        data = '<input type="checkbox" name="multi_obl_ids[]" value="'+row.obl_id+'" class="dt-checkboxes">';
-                        return data;
-                    },
-                    'checkboxes': {
-                       'selectRow': false
-                    }
-                 },
-                  {
-                     data:'obl_id',searchable:false,orderable:false,
+                     searchable:false,orderable:false,targets: 0,
                      render: function ( data, type, row ) {
-                       if(is_user === '1' || is_user === '3' || is_user === '4' || is_user === '5' ||  is_user === '6' ||  is_user === '7'){ return '<button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:22px;">quiz</i></button>'; }
-                       else{ return `
+                       if( is_user === '6' ){ return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>'; }
+                       else if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' ){ return `
                          <div class="dropdown">
-                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                            </div>
+                            </div>
+                         `; }
+                       else if( is_user === '4' && row.is_revisi === false ){ return `
+                         <div class="dropdown">
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                            </div>
+                            </div>
+                         `; }
+                       else if( is_user === '4' && row.is_revisi === true ){
+                         return `
+                           <div class="dropdown">
+                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                              <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                              </div>
+                              </div>
+                           `;
+                       }
+                       else if( is_user === '8' && row.proses !== 'witel' ){
+                         return `
+                           <div class="dropdown">
+                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                              <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                              </div>
+                              </div>
+                           `;
+                       }
+                       else if( is_user === '8' && row.proses === 'witel' ){
+                         return `
+                           <div class="btn-group" role="group" aria-label="basic">
+                           <div class="btn-group" role="group">
+                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                              <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
+                              </div>
+                              </div>
+                          <div class="btn-group" role="group">
+                             <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">ACTION <span class="caret"></span></button>
+                             <div class="dropdown-menu">
+                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
+                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lanjut-obl" onclick="lanjutObl(`+row.obl_id+`)">LANJUT OBL</button>
+                             </div>
+                             </div>
+                           </div>
+                           `;
+                       }
+                       else if( is_user === '2' && row.proses === 'witel' ){ return `
+                         <div class="dropdown">
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                            </div>
+                            </div>
+                         `; }
+                       else if( is_user === '2' && row.proses !== 'witel' && row.proses !== 'obl' ){ return `
+                         <div class="btn-group" role="group">
+                         <div class="btn-group" role="group">
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
                             <div class="dropdown-menu">
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
@@ -1477,6 +1655,74 @@
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
                             </div>
                             </div>
+                         <div class="btn-group" role="group">
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">ACTION <span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-obl" onclick="prosesObl(`+row.obl_id+`)">OBL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
+                            </div>
+                            </div>
+                         </div>
+                         `; }
+                       else if( is_user === '2' && row.proses !== 'witel' && row.proses === 'obl' ){ return `
+                         <div class="btn-group" role="group">
+                         <div class="btn-group" role="group">
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
+                            </div>
+                            </div>
+                         <div class="btn-group" role="group">
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">ACTION <span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
+                            </div>
+                            </div>
+                         </div>
+                         `; }
+                       else if( is_user === '9' ){ return `
+                         <div class="btn-group" role="group">
+                         <div class="btn-group" role="group">
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
+                            </div>
+                            </div>
+                         <div class="btn-group" role="group">
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">ACTION <span class="caret"></span></button>
+                            <div class="dropdown-menu">
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lanjut-obl" onclick="lanjutObl(`+row.obl_id+`)">LANJUT OBL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-obl" onclick="prosesObl(`+row.obl_id+`)">OBL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
+                            <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
+                            </div>
+                            </div>
+                         </div>
                          `; }
                      }
                   },
@@ -1504,6 +1750,7 @@
                      "render": function ( data, type, row ) {
                         if(row.filter_submit==='kontrak1'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
                         if(row.filter_submit==='kontrak2'){ return '<span class="badge badge-sm bg-gradient-success">'+data+'</span>'; }
+                        if(row.filter_submit==='kontrak3'){ return '<span class="badge badge-sm bg-gradient-primary">'+data+'</span>'; }
                         if(row.filter_submit==='filter'){ return '<span class="badge badge-sm bg-gradient-danger">'+data+'</span>'; }
                         if(row.filter_submit==='form'){ return '<span class="badge badge-sm bg-gradient-warning">'+data+'</span>'; }
                         if(row.filter_submit===''){ return ''; }
@@ -1569,9 +1816,6 @@
                      data: 'no_kontrak',name: 'no_kontrak',searchable:true,orderable:false
                   },
                   {
-                     data: 'pic_mitra',name: 'pic_mitra',searchable:true,orderable:false
-                  },
-                  {
                      data: 'jenis_kontrak',name: 'jenis_kontrak',searchable:true,orderable:false
                   },
                   {
@@ -1585,9 +1829,6 @@
                   },
                   {
                      data: 'status_order',name: 'status_order',searchable:true,orderable:false
-                  },
-                  {
-                     data: 'alamat_plggn',name: 'alamat_plggn',searchable:true,orderable:false
                   },
                   {
                      data: 'keterangan',name: 'keterangan',searchable:true,orderable:false,
@@ -1604,12 +1845,11 @@
                   }
 
                 ],
-                lengthChange:false,
+                // lengthChange:false,
                 paging:true,
-                orderCellsTop: true,
-                pageLength: 10,
+                // orderCellsTop: true,
+                pageLength: 50,
               });
-
 
           });
           $.extend( $.fn.dataTable.defaults, {

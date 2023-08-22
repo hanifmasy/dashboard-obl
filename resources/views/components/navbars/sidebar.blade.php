@@ -16,12 +16,12 @@
         <ul class="navbar-nav">
             <li class="nav-item">
                 @if($is_user->role_id == 1 || $is_user->role_id == 2 || $is_user->role_id == 3 || $is_user->role_id == 7 || $is_user->role_id == 8 || $is_user->role_id == 9)
-                <a class="nav-link text-white {{ $activePage == 'dashboard' ? ' active bg-gradient-info' : '' }} "
+                <a class="nav-link text-white {{ $activePage == 'dashboard' ? ' active bg-gradient-light' : '' }} "
                     href="{{ route('dashboard') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'dashboard' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">dashboard</i>
                     </div>
-                    <span class="nav-link-text ms-1">DASHBOARD</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'dashboard' ? ' color:#2a2526;' : '' }}">DASHBOARD</span>
                 </a>
                 @elseif( $is_user->role_id == 4 || $is_user->role_id == 5  )
                 <a class="nav-link text-white {{ $activePage == 'dashboard' ? ' active bg-gradient-primary' : '' }} "
@@ -32,7 +32,7 @@
                     <span class="nav-link-text ms-1">DASHBOARD</span>
                 </a>
                 @else
-                <a class="nav-link text-white {{ $activePage == 'dashboard' ? ' active bg-gradient-warning' : '' }} "
+                <a class="nav-link text-white {{ $activePage == 'dashboard' ? ' active bg-gradient-info' : '' }} "
                     href="{{ route('dashboard') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">dashboard</i>
@@ -45,15 +45,21 @@
             <!-- OBL -->
             @if( $is_user->role_id == 2 || $is_user->role_id == 8 || $is_user->role_id == 9 )
             <li class="nav-item mt-3">
+                @if( $is_user->role_id == 2 )
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">OBL</h6>
+                @elseif( $is_user->role_id == 8 )
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">SOLUTION</h6>
+                @elseif( $is_user->role_id == 9 )
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">OBL/SOLUTION</h6>
+                @endif
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'inputs' ? ' active bg-gradient-info' : '' }} "
+                <a class="nav-link {{ $activePage == 'inputs' ? ' active bg-gradient-light ' : '' }} "
                     href="{{ route('inputs') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'inputs' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">add</i>
                     </div>
-                    <span class="nav-link-text ms-1">TAMBAH DATA</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'inputs' ? ' color:#2a2526;' : '' }}">TAMBAH DATA</span>
                 </a>
             </li>
             <!-- <li class="nav-item">
@@ -66,38 +72,46 @@
                 </a>
             </li> -->
             <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-drafs-edit' ? ' active bg-gradient-info' : '' }} "
+                <a class="nav-link {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-drafs-edit' ? ' active bg-gradient-light' : '' }} " style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' ? ' color:#2a2526;' : '' }}"
                     href="{{ route('obl.tables') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' ? ' color:#2a2526;' : '' }}">TABEL DOKUMEN</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'obl-upload' ? ' active bg-gradient-info' : '' }} "
+                <a class="nav-link {{ $activePage == 'obl-upload' ? ' active bg-gradient-light' : '' }} "
                     href="{{ route('obl.upload.index') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'obl-upload' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">cloud_sync</i>
                     </div>
-                    <span class="nav-link-text ms-1">ARSIP DOKUMEN</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-upload' ? ' color:#2a2526;' : '' }}">ARSIP DOKUMEN</span>
                 </a>
             </li>
             @endif
             <!-- END OBL -->
 
             <!-- OBL VIEW  -->
-            @if( $is_user->role_id == 1 || $is_user->role_id == 3 || $is_user->role_id == 7)
+            @if( $is_user->role_id == 1 || $is_user->role_id == 3 || $is_user->role_id == 7 || $is_user->role_id == 9)
             <li class="nav-item mt-3">
+                @if( $is_user->role_id == 1 )
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">OBL</h6>
+                @elseif( $is_user->role_id == 3 )
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">PJM</h6>
+                @elseif( $is_user->role_id == 7 )
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">SOLUTION</h6>
+                @elseif( $is_user->role_id == 9 )
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">PJM</h6>
+                @endif
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'obl-tables' ? ' active bg-gradient-info' : '' }} "
+                <a class="nav-link {{ $activePage == 'obl-tables' ? ' active bg-gradient-light ' : '' }} " style="{{ $activePage == 'obl-tables' ? ' color:#2a2526;' : '' }}"
                     href="{{ route('obl.tables') }}">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'obl-tables' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' ? ' color:#2a2526;' : '' }}">TABEL DOKUMEN</span>
                 </a>
             </li>
             @endif
@@ -118,7 +132,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'obl-tables' ? ' active bg-gradient-primary' : '' }} "
+                <a class="nav-link text-white {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-edit' || $activePage == 'obl-tables-upload'  ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('obl.tables') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
@@ -152,7 +166,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">MITRA</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'obl-tables' ? ' active bg-gradient-warning' : '' }} "
+                <a class="nav-link text-white " style=" {{ $activePage == 'obl-tables' ? ' background: #1da2d8;' : '' }} "
                     href="{{ route('obl.tables') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
@@ -167,12 +181,11 @@
     </div>
     <div class="sidenav-footer position-absolute w-100 bottom-0 ">
         <!-- <div class="mx-3">
-            <a class="btn bg-gradient-primary w-100" href="../../documentation/getting-started/installation.html" target="_blank">View documentation</a>
+            <a class="btn bg-gradient-secondary w-100" href="" ></a>
         </div>
         <div class="mx-3">
-            <a class="btn bg-gradient-primary w-100"
-                href="https://www.creative-tim.com/product/material-dashboard-pro-laravel" target="_blank" type="button">Upgrade
-                to pro</a>
+            <a class="btn bg-gradient-secondary w-100"
+                href="" type="button"></a>
         </div> -->
     </div>
 </aside>

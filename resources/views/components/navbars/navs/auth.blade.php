@@ -13,12 +13,18 @@
                 <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> MITRA: {{ $is_user->nama_lengkap }}</li>
                 @endif
             </ol>
-              @if( $is_user->role_id == 1 || $is_user->role_id == 2 || $is_user->role_id == 3 || $is_user->role_id == 7 || $is_user->role_id == 8 || $is_user->role_id == 9 )
+              @if( $is_user->role_id == 1 || $is_user->role_id == 2 )
               <h6 class="font-weight-bolder mb-0"> OBL / {{ $titlePage }}</h6>
+              @elseif( $is_user->role_id == 7 || $is_user->role_id == 8 )
+              <h6 class="font-weight-bolder mb-0"> SOLUTION / {{ $titlePage }}</h6>
+              @elseif( $is_user->role_id == 3 )
+              <h6 class="font-weight-bolder mb-0"> PJM / {{ $titlePage }}</h6>
               @elseif( $is_user->role_id == 4 || $is_user->role_id == 5 )
               <h6 class="font-weight-bolder mb-0"> WITEL / {{ $titlePage }}</h6>
               @elseif( $is_user->role_id == 6 )
               <h6 class="font-weight-bolder mb-0"> MITRA / {{ $titlePage }}</h6>
+              @elseif( $is_user->role_id == 9 )
+              <h6 class="font-weight-bolder mb-0"> NOUS / {{ $titlePage }}</h6>
               @endif
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">

@@ -24,11 +24,24 @@ class UploadController extends Controller
 {
     public function index(Request $request){
       // dd($request->all());
-      return view('pages.obls.upload');
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+      ->where('users.id',Auth::id())->first();
+      return view('pages.obls.upload',compact('user_in_is'));
     }
 
     public function cari(Request $request){
       // dd($request->all());
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+      ->where('users.id',Auth::id())->first();
+
       $is_segmen_ok = null;
       $is_folder_ok = null;
       $is_tahun_ok = null;
@@ -56,12 +69,17 @@ class UploadController extends Controller
         $upload_doc = DocObl::leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
         ->select(
           'obl.id',
+          'f1_proses',
+          'revisi_witel',
+          'revisi_witel_count',
           'f1_jenis_spk',
           'f1_judul_projek',
           'f1_nama_plggn',
           'mitras.nama_mitra',
         DB::raw("substring(f1_folder, 5, length(f1_folder)-4 ) as folder"),'f1_segmen',
         DB::raw("to_char(created_at,'yyyy') as tahun"),
+        DB::raw("case when file_p0 is null or file_p0 = '' then '' else file_p2 end as nama_p0"),
+        DB::raw("case when file_p1 is null or file_p1 = '' then '' else file_p2 end as nama_p1"),
         DB::raw("case when file_p2 is null or file_p2 = '' then '' else file_p2 end as nama_p2"),
         DB::raw("case when file_p3 is null or file_p3 = '' then '' else file_p3 end as nama_p3"),
         DB::raw("case when file_p4 is null or file_p4 = '' then '' else file_p4 end as nama_p4"),
@@ -75,27 +93,39 @@ class UploadController extends Controller
         )->whereRaw("
         (deleted_at is null and to_char(deleted_at,'yyyy-mm-dd') is null)
         and f1_segmen = '$request->f1_segmen'
-        and substring(f1_folder, 5, length(f1_folder)-4 ) = '$request->folder'
+        and f1_folder = '$request->folder'
         and to_char(created_at,'yyyy') = '$request->tahun'
         ")
         ->get()->toArray();
-        if($upload_doc){ return response()->json(['status_id'=>'1','status'=>' Ditemukan','upload_doc'=>$upload_doc]); }
+        if($upload_doc){ return response()->json(['status_id'=>'1','status'=>' Ditemukan','upload_doc'=>$upload_doc,'user_in_is'=>$user_in_is]); }
         else{ return response()->json(['status_id'=>'2','status'=>' Tidak Ditemukan','upload_doc'=>$upload_doc]); }
       }
       catch(Throwable $e){ return redirect()->route('obl.upload')->with('status', 'Oops! Gagal Ambil Data ID Dokumen OBL'); }
     }
 
     public function tableUpload(Request $request){
+      // dd($request->all());
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+      ->where('users.id',Auth::id())->first();
+
        if($request->upload_doc_id){
          $upload_doc_id = $request->upload_doc_id;
          try{
            $upload_doc = DocObl::select(
              'id',
+             'revisi_witel',
+             'f1_proses',
              'f1_judul_projek',
              'f1_segmen',
              'f1_jenis_spk',
-             DB::raw("substring(f1_folder, 5, length(f1_folder)-4 ) as folder"),
+             DB::raw("case when f1_folder is null or f1_folder = '' then '' else f1_folder end as folder"),
              DB::raw("to_char(created_at,'yyyy') as tahun"),
+             DB::raw("case when file_p0 is null or file_p0 = '' then '' else file_p0 end as nama_p0"),
+             DB::raw("case when file_p1 is null or file_p1 = '' then '' else file_p1 end as nama_p1"),
              DB::raw("case when file_p2 is null or file_p2 = '' then '' else file_p2 end as nama_p2"),
              DB::raw("case when file_p3 is null or file_p3 = '' then '' else file_p3 end as nama_p3"),
              DB::raw("case when file_p4 is null or file_p4 = '' then '' else file_p4 end as nama_p4"),
@@ -107,7 +137,7 @@ class UploadController extends Controller
              DB::raw("case when file_wo is null or file_wo = '' then '' else file_wo end as nama_wo"),
              DB::raw("case when file_kl is null or file_kl = '' then '' else file_kl end as nama_kl")
              )->where('id',$upload_doc_id)->get()->toArray();
-           return view('pages.obls.upload',compact('upload_doc'));
+           return view('pages.obls.upload',compact('upload_doc','user_in_is'));
          }
          catch(Throwable $e){ return redirect()->route('obl.tables')->with('status', 'Oops! Gagal Cek ID Dokumen OBL'); }
        }
@@ -122,6 +152,8 @@ class UploadController extends Controller
           $temp_id = $hasil . '.pdf';
           $cek_uuid_db1 = DocObl::select('id')
           ->whereRaw("
+          file_p0 = '$temp_id' or
+          file_p1 = '$temp_id' or
           file_p2 = '$temp_id' or
           file_p3 = '$temp_id' or
           file_p4 = '$temp_id' or
@@ -137,6 +169,8 @@ class UploadController extends Controller
 
           $cek_uuid_db2 = DocOblHistori::select('id')
           ->whereRaw("
+          file_p0 = '$temp_id' or
+          file_p1 = '$temp_id' or
           file_p2 = '$temp_id' or
           file_p3 = '$temp_id' or
           file_p4 = '$temp_id' or
@@ -156,9 +190,18 @@ class UploadController extends Controller
     }
 
     public function updateNamaFile($var_obl_id,$var_tipe_form,$var_nama_file_baru){
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+      ->where('users.id',Auth::id())->first();
+
       $hasil_update = null;
       $ada_update_obl = null;
       try{
+        if($var_tipe_form==='file_p0'){ $ada_update_obl = 'file_p0'; }
+        if($var_tipe_form==='file_p1'){ $ada_update_obl = 'file_p1'; }
         if($var_tipe_form==='file_p2'){ $ada_update_obl = 'file_p2'; }
         if($var_tipe_form==='file_p3'){ $ada_update_obl = 'file_p3'; }
         if($var_tipe_form==='file_p4'){ $ada_update_obl = 'file_p4'; }
@@ -175,6 +218,8 @@ class UploadController extends Controller
           ->select(
             'id',
             'submit',
+            'revisi_witel',
+            'revisi_witel_count',
             'is_draf',
             'updated_at',
             'updated_by',
@@ -299,7 +344,30 @@ class UploadController extends Controller
             'file_p8',
             'file_sp',
             'file_wo',
-            'file_kl'
+            'file_kl',
+            'p0_nomor_p0',
+            'p0_nik_am',
+            'p0_nik_manager',
+            'p0_tgl_submit',
+            'p0_pemeriksa',
+            'p0_nik_gm',
+            'p1_nomor_p1',
+            'p1_tgl_p1',
+            'p1_pemeriksa',
+            'p1_tgl_delivery',
+            'p1_lokasi_instal',
+            'p1_skema_bisnis',
+            'p1_skema_bayar',
+            'p1_mekanisme_bayar',
+            'p1_tgl_kontrak_mulai',
+            'p1_tgl_kontrak_akhir',
+            'p1_tgl_doc_plggn',
+            'p1_estimasi_harga',
+            'p1_disetujui_gm',
+            'p1_dibuat_am',
+            'p1_diperiksa_manager',
+            'file_p0',
+            'file_p1'
             )
           ->where('id',$var_obl_id)
           ->first();
@@ -307,6 +375,8 @@ class UploadController extends Controller
           DB::connection('pgsql')->table('form_obl_histori')->insert([
             'obl_id' => $doc_to_histori->id,
             'submit' => $doc_to_histori->submit,
+            'revisi_witel' => $doc_to_histori->revisi_witel,
+            'revisi_witel_count' => $doc_to_histori->revisi_witel_count,
             'is_draf' => $doc_to_histori->is_draf,
             'updated_at' => $doc_to_histori->updated_at,
             'updated_by' => $doc_to_histori->updated_by,
@@ -431,10 +501,64 @@ class UploadController extends Controller
             'file_p8' => $doc_to_histori->file_p8,
             'file_sp' => $doc_to_histori->file_sp,
             'file_wo' => $doc_to_histori->file_wo,
-            'file_kl' => $doc_to_histori->file_kl
+            'file_kl' => $doc_to_histori->file_kl,
+            'p0_nomor_p0' => $doc_to_histori->p0_nomor_p0,
+            'p0_nik_am' => $doc_to_histori->p0_nik_am,
+            'p0_nik_manager' => $doc_to_histori->p0_nik_manager,
+            'p0_tgl_submit' => $doc_to_histori->p0_tgl_submit,
+            'p0_pemeriksa' => $doc_to_histori->p0_pemeriksa,
+            'p0_nik_gm' => $doc_to_histori->p0_nik_gm,
+            'p1_nomor_p1' => $doc_to_histori->p1_nomor_p1,
+            'p1_tgl_p1' => $doc_to_histori->p1_tgl_p1,
+            'p1_pemeriksa' => $doc_to_histori->p1_pemeriksa,
+            'p1_tgl_delivery' => $doc_to_histori->p1_tgl_delivery,
+            'p1_lokasi_instal' => $doc_to_histori->p1_lokasi_instal,
+            'p1_skema_bisnis' => $doc_to_histori->p1_skema_bisnis,
+            'p1_skema_bayar' => $doc_to_histori->p1_skema_bayar,
+            'p1_mekanisme_bayar' => $doc_to_histori->p1_mekanisme_bayar,
+            'p1_tgl_kontrak_mulai' => $doc_to_histori->p1_tgl_kontrak_mulai,
+            'p1_tgl_kontrak_akhir' => $doc_to_histori->p1_tgl_kontrak_akhir,
+            'p1_tgl_doc_plggn' => $doc_to_histori->p1_tgl_doc_plggn,
+            'p1_estimasi_harga' => $doc_to_histori->p1_estimasi_harga,
+            'p1_disetujui_gm' => $doc_to_histori->p1_disetujui_gm,
+            'p1_dibuat_am' => $doc_to_histori->p1_dibuat_am,
+            'p1_diperiksa_manager' => $doc_to_histori->p1_diperiksa_manager,
+            'file_p0' => $doc_to_histori->file_p0,
+            'file_p1' => $doc_to_histori->file_p1
           ]);
 
           $doc_to_form_obl = DB::connection('pgsql')->table('form_obl')->where('id',$var_obl_id);
+          if( $ada_update_obl==='file_p0' || $ada_update_obl==='file_p1' ){
+            if( $ada_update_obl==='file_p0' && $user_in_is->role_id === 4 ){ $hasil_update = $doc_to_form_obl->update(['updated_at'=>Carbon::now()->translatedFormat('Y-m-d H:i:s'),'updated_by'=>Auth::id(),'file_p0'=>$var_nama_file_baru,'submit'=>'am_file_p0']); }
+            if( $ada_update_obl==='file_p0' && $user_in_is->role_id === 8 ){ $hasil_update = $doc_to_form_obl->update(['updated_at'=>Carbon::now()->translatedFormat('Y-m-d H:i:s'),'updated_by'=>Auth::id(),'file_p0'=>$var_nama_file_baru,'submit'=>'solution_file_p0']); }
+            if( $ada_update_obl==='file_p1' && $user_in_is->role_id === 4 ){ $hasil_update = $doc_to_form_obl->update(['updated_at'=>Carbon::now()->translatedFormat('Y-m-d H:i:s'),'updated_by'=>Auth::id(),'file_p1'=>$var_nama_file_baru,'submit'=>'am_file_p1']); }
+            if( $ada_update_obl==='file_p1' && $user_in_is->role_id === 8 ){ $hasil_update = $doc_to_form_obl->update(['updated_at'=>Carbon::now()->translatedFormat('Y-m-d H:i:s'),'updated_by'=>Auth::id(),'file_p1'=>$var_nama_file_baru,'submit'=>'solution_file_p1']); }
+
+            $cek_dulu = DB::connection('pgsql')->table('form_obl')
+            ->select('id','p0_tgl_submit','p0_nomor_p0','p1_nomor_p1','p1_tgl_p1','file_p0','file_p1')
+            ->where('id',$var_obl_id)
+            ->first();
+            // revisi_witel is false when DOC & FORMS & FILES exist
+            if(
+              $cek_dulu->id &&
+              $cek_dulu->p0_tgl_submit && $cek_dulu->p0_nomor_p0 &&
+              $cek_dulu->p1_tgl_p1 && $cek_dulu->p1_nomor_p1 &&
+              $cek_dulu->file_p0 && $cek_dulu->file_p1
+            ){
+              if($user_in_is->role_id === 4){
+                DB::connection('pgsql')->table('form_obl')
+                ->where('id',$request->obl_id)
+                ->update( [ 'revisi_witel' => false ] );
+              }
+            }else{
+              if($user_in_is->role_id === 4){
+                DB::connection('pgsql')->table('form_obl')
+                ->where('id',$request->obl_id)
+                ->update( [ 'revisi_witel' => true ] );
+              }
+            }
+
+          }
           if( $ada_update_obl==='file_p2' ){ $hasil_update = $doc_to_form_obl->update(['updated_at'=>Carbon::now()->translatedFormat('Y-m-d H:i:s'),'updated_by'=>Auth::id(),'file_p2'=>$var_nama_file_baru]); }
           if( $ada_update_obl==='file_p3' ){ $hasil_update = $doc_to_form_obl->update(['updated_at'=>Carbon::now()->translatedFormat('Y-m-d H:i:s'),'updated_by'=>Auth::id(),'file_p3'=>$var_nama_file_baru]); }
           if( $ada_update_obl==='file_p4' ){ $hasil_update = $doc_to_form_obl->update(['updated_at'=>Carbon::now()->translatedFormat('Y-m-d H:i:s'),'updated_by'=>Auth::id(),'file_p4'=>$var_nama_file_baru]); }
@@ -462,9 +586,24 @@ class UploadController extends Controller
     public function create(Request $request){
       // DGS-8720-2023
       // dd( $request->all() );
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+      ->where('users.id',Auth::id())->first();
+
+      $tipe_doc_witel1 = 'pdf';
+      $tipe_doc_witel2 = 'docx';
       $tipe_doc_upload = 'pdf';
       $pesan_tipe_doc_upload = '';
       if($request->submit_upload_doc_id){
+              if($request->hasFile('file_p0')){
+                if($request->file('file_p0')->getClientOriginalExtension() !== $tipe_doc_witel1 && $request->file('file_p0')->getClientOriginalExtension() !== $tipe_doc_witel2){ if($pesan_tipe_doc_upload){ $pesan_tipe_doc_upload = $pesan_tipe_doc_upload . '<br> ⊗ File P0 '; }else{ $pesan_tipe_doc_upload = ' ⊗ File P0 '; } }
+              }
+              if($request->hasFile('file_p1')){
+                if($request->file('file_p1')->getClientOriginalExtension() !== $tipe_doc_witel1 && $request->file('file_p1')->getClientOriginalExtension() !== $tipe_doc_witel2){ if($pesan_tipe_doc_upload){ $pesan_tipe_doc_upload = $pesan_tipe_doc_upload . '<br> ⊗ File P1 '; }else{ $pesan_tipe_doc_upload = ' ⊗ File P1 '; } }
+              }
               if($request->hasFile('file_p2')){
                 if($request->file('file_p2')->getClientOriginalExtension() !== $tipe_doc_upload){ if($pesan_tipe_doc_upload){ $pesan_tipe_doc_upload = $pesan_tipe_doc_upload . '<br> ⊗ File P2 '; }else{ $pesan_tipe_doc_upload = ' ⊗ File P2 '; } }
               }
@@ -498,18 +637,41 @@ class UploadController extends Controller
 
 
               if( $pesan_tipe_doc_upload ){
-                return response()->json(['status'=>'Oops!<br>'.$pesan_tipe_doc_upload.' <br> Bukan Format '.strtoupper($tipe_doc_upload).' (.'.$tipe_doc_upload.')']);
+                if( $user_in_is->role_id === 2 || $user_in_is->role_id === 9 ){
+                  return response()->json(['status'=>'Oops!<br>'.$pesan_tipe_doc_upload.' <br> Bukan Format '.strtoupper($tipe_doc_upload).' (.'.$tipe_doc_upload.')']);
+                }
+                if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 ){
+                  return response()->json(['status'=>'Oops!<br>'.$pesan_tipe_doc_upload.' <br> Bukan Format '.strtoupper($tipe_doc_witel1).'/'.strtoupper($tipe_doc_witel2).' (.'.$tipe_doc_witel1.'/'.$tipe_doc_witel2.')']);
+                }
               }
               else{
-                if( !$request->hasFile('file_p2') && !$request->hasFile('file_p3') && !$request->hasFile('file_p4') && !$request->hasFile('file_p5') && !$request->hasFile('file_p6') && !$request->hasFile('file_p7')
-                && !$request->hasFile('file_p8') && !$request->hasFile('file_sp') && !$request->hasFile('file_wo') && !$request->hasFile('file_kl') )
-                {
-                  return response()->json(['status'=>'Tidak Ada File Untuk Proses Upload']);
+                if( $user_in_is->role_id === 2 || $user_in_is->role_id === 9 ){
+                  if( !$request->hasFile('file_p2') && !$request->hasFile('file_p3') && !$request->hasFile('file_p4') && !$request->hasFile('file_p5') && !$request->hasFile('file_p6') && !$request->hasFile('file_p7')
+                  && !$request->hasFile('file_p8') && !$request->hasFile('file_sp') && !$request->hasFile('file_wo') && !$request->hasFile('file_kl') )
+                  {
+                    return response()->json(['status'=>'Tidak Ada File Untuk Proses Upload']);
+                  }
+                }
+                if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 ){
+                  if( !$request->hasFile('file_p0') && !$request->hasFile('file_p1') )
+                  {
+                    return response()->json(['status'=>'Tidak Ada File Untuk Proses Upload']);
+                  }
                 }
               }
 
             try{
               $hasil_proses_upload = null;
+              if($request->hasFile('file_p0')) {
+                  $filenametostore = $this->generateUniqueId() . '.' . $request->file('file_p0')->getClientOriginalExtension();
+                  Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_p0'), 'r+') );
+                  $hasil_proses_upload = $this->updateNamaFile($request->submit_upload_doc_id,'file_p0',$filenametostore);
+              }
+              if($request->hasFile('file_p1')) {
+                  $filenametostore = $this->generateUniqueId() . '.' . $request->file('file_p1')->getClientOriginalExtension();
+                  Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_p1'), 'r+') );
+                  $hasil_proses_upload = $this->updateNamaFile($request->submit_upload_doc_id,'file_p1',$filenametostore);
+              }
               if($request->hasFile('file_p2')) {
                   $filenametostore = $this->generateUniqueId() . '.' . $request->file('file_p2')->getClientOriginalExtension();
                   Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_p2'), 'r+') );

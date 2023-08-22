@@ -32,8 +32,8 @@ class SessionsController extends Controller
 
         session()->regenerate();
 
-        // return redirect('/dashboard');
-        return redirect('inputs');
+        return redirect('/dashboard');
+        // return redirect('inputs');
     }
 
     public function show(){

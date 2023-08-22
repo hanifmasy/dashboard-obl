@@ -2,7 +2,7 @@
         <x-navbars.sidebar activePage="witels"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="WITEL / TAMBAH DATA"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="TAMBAH DATA"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <!-- modal alerts -->
@@ -30,7 +30,7 @@
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-white text-capitalize ps-3">Input Form</h6>
+                                    <h6 class="text-white text-capitalize ps-3">TAMBAH DATA</h6>
                                 </div>
                             </div>
 
@@ -49,7 +49,7 @@
                             </div>
                             @endif
 
-                            <form id="formObl" action="{{ route('witels.create') }}" method="POST" enctype="multipart/form-data">
+                            <form id="formObl"  method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body px-0 pb-2">
                                 <div class="table-responsive p-0">
@@ -78,7 +78,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak','') }}">
+                                                  @if($errors->has('f1_quote_kontrak'))
+                                                  <input style="width:350px;" class="outline-input-merah" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak','') }}" autocomplete="off">
+                                                  @else
+                                                  <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak','') }}" autocomplete="off">
+                                                  @endif
                                                 </td>
                                             </tr>
                                             <tr >
@@ -90,7 +94,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun" value="{{ old('f1_nomor_akun','') }}">
+                                                    <input style="width:350px;" type="text" name="f1_nomor_akun" id="f1_nomor_akun" value="{{ old('f1_nomor_akun','') }}" autocomplete="off">
                                                 </td>
                                             </tr>
                                             <tr >
@@ -102,7 +106,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb','') }}">
+                                                    <input class="rupiahs" type="text" name="f1_nilai_kb" id="f1_nilai_kb" style="width:350px;" placeholder="Rp. xxx.xxx.xxx.-" value="{{ old('f1_nilai_kb','') }}" autocomplete="off">
                                                 </td>
                                             </tr>
                                             <tr >
@@ -115,9 +119,9 @@
                                                 </td>
                                                 <td>
                                                     @if($errors->has('f1_judul_projek'))
-                                                      <textarea type="text" cols="50" rows="2" class="outline-input-merah" name="f1_judul_projek" id="f1_judul_projek">{{ old('f1_judul_projek','') }}</textarea>
+                                                      <textarea type="text" cols="50" rows="2" class="outline-input-merah" name="f1_judul_projek" id="f1_judul_projek" autocomplete="off">{{ old('f1_judul_projek','') }}</textarea>
                                                     @else
-                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek">{{ old('f1_judul_projek','') }}</textarea>
+                                                      <textarea type="text" cols="50" rows="2" name="f1_judul_projek" id="f1_judul_projek" autocomplete="off">{{ old('f1_judul_projek','') }}</textarea>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -131,11 +135,11 @@
                                                 </td>
                                                 <td>
                                                     @if($errors->has('f1_nama_plggn'))
-                                                      <input style="width:450px;" class="outline-input-merah" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn','') }}"><br><br>
+                                                      <input style="width:450px;" class="outline-input-merah" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn','') }}" autocomplete="off"><br><br>
                                                     @else
-                                                      <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn','') }}"><br><br>
+                                                      <input style="width:450px;" type="text" id="f1_nama_plggn" name="f1_nama_plggn" placeholder="NAMA PELANGGAN" value="{{ old('f1_nama_plggn','') }}" autocomplete="off"><br><br>
                                                     @endif
-                                                    <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN">{{ old('f1_alamat_plggn','') }}</textarea>
+                                                    <textarea cols="50" rows="2" id="f1_alamat_plggn" name="f1_alamat_plggn" placeholder="ALAMAT PELANGGAN" autocomplete="off">{{ old('f1_alamat_plggn','') }}</textarea>
                                                 </td>
                                             </tr>
                                             <tr >
@@ -166,7 +170,6 @@
                                                     @endif
                                                   </select>
                                                   @endif
-                                                  <input type="text" name="f1_nama_mitra_lain" id="f1_nama_mitra_lain" value="" style="width:350px;" placeholder="NAMA MITRA BARU">
                                                 </td>
                                             </tr>
                                             <tr >
@@ -222,7 +225,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="f1_pic_plggn" id="f1_pic_plggn" style="width:350px;" value="{{ old('f1_pic_plggn') }}">
+                                                    <input type="text" name="f1_pic_plggn" id="f1_pic_plggn" style="width:350px;" value="{{ old('f1_pic_plggn') }}" autocomplete="off">
                                                 </td>
                                             </tr>
                                             <tr >
@@ -259,7 +262,8 @@
                                             </tr>
                                             <tr ><td colspan="2"><br></td></tr>
                                             <tr ><td colspan="2">
-                                                <button type="submit" name="submit" value="submit_witel" class="btn bg-gradient-primary"><h6 class="mb-0 text-sm" style="color:white;">Submit</h6></button>
+                                                <input type="text" name="submit" value="submit_witel" hidden>
+                                                <button onclick="SubmitWitel()" class="btn bg-gradient-primary"><h6 class="mb-0 text-sm" style="color:white;">Submit</h6></button>
                                             </td></tr>
 
                                         </tbody>
@@ -276,6 +280,10 @@
         </main>
         @push('js')
         <script>
+            function SubmitWitel(){
+              $('#formObl').attr('action', "{{ route('witels.create') }}").submit();
+            }
+
             $( document ).ready(function() {
                 $("#modal-input-obl").modal({show:false});
                 var session_status = "{{ session('status') }}";
@@ -316,14 +324,6 @@
 
                 // clear form submit after refresh browser
                 $('#formObl')[0].reset();
-
-
-                $('#f1_mitra_id').change(function() {
-                    if (this.value == 'lainnya') {
-                        $('#f1_nama_mitra_lain').show();
-                    }
-                    else{ $('#f1_nama_mitra_lain').hide(); }
-                });
 
                 // STARTLINE: FORMAT RUPIAH
                 var rupiah = document.getElementById('f1_nilai_kb');

@@ -2,842 +2,287 @@
     <x-navbars.sidebar activePage='dashboard'></x-navbars.sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <x-navbars.navs.auth titlePage="Dashboard"></x-navbars.navs.auth>
+        <x-navbars.navs.auth titlePage="DASHBOARD"></x-navbars.navs.auth>
         <!-- End Navbar -->
+        <style media="screen">
+        .sz-h4{
+          font-size: 1.8em;
+          font-weight: bolder;
+          color: white;
+        }
+        .sz-h3{
+          font-size: 2em;
+          font-weight: bolder;
+          color: white;
+        }
+        /* .sz-h4:hover{
+          font-size: 1.8em;
+          font-weight: bolder;
+          color: black;
+        } */
+        .anchor-merah:hover{
+          color: black !important;
+        }
 
+        .anchor-tebal1:hover{
+          background: white !important;
+          color: #cc3232 !important;
+        }
+        .anchor-tebal1:hover .anchor-tebal2,
+        .anchor-tebal1:hover .sz-h4{
+          background: white !important;
+          color: #cc3232 !important;
+        }
+
+        .anchor-tebal1s:hover{
+          background: white !important;
+          color: #36802d !important;
+        }
+        .anchor-tebal1s:hover .anchor-tebal2s,
+        .anchor-tebal1s:hover .sz-h4{
+          background: white !important;
+          color: #36802d !important;
+        }
+
+        .anchor-bt-1a:hover{
+          background: #E91E63 !important;
+          color: white !important;
+        }
+        .anchor-bt-1a:hover .anchor-bt-1b,
+        .anchor-bt-1a:hover .sz-h3{
+          background: white !important;
+          color: #E91E63 !important;
+        }
+
+        .anchor-bt-2a:hover{
+          background: #1A73E8 !important;
+          color: white !important;
+        }
+        .anchor-bt-2a:hover .anchor-bt-2b,
+        .anchor-bt-2a:hover .sz-h3{
+          background: white !important;
+          color: #1A73E8 !important;
+        }
+        .anchor-bt-3a:hover{
+          background: #fb8c00 !important;
+          color: white !important;
+        }
+        .anchor-bt-3a:hover .anchor-bt-3b,
+        .anchor-bt-3a:hover .sz-h3{
+          background: white !important;
+          color: #fb8c00 !important;
+        }
+
+        .anchor-bt-4a:hover{
+          background: #1da2d8 !important;
+          color: white !important;
+        }
+        .anchor-bt-4a:hover .anchor-bt-4b,
+        .anchor-bt-4a:hover .sz-h3{
+          background: white !important;
+          color: #1da2d8 !important;
+        }
+
+        .anchor-bt-5a:hover{
+          background: #d9534f !important;
+          color: white !important;
+        }
+        .anchor-bt-5a:hover .anchor-bt-5b,
+        .anchor-bt-5a:hover .sz-h3{
+          background: white !important;
+          color: #d9534f !important;
+        }
+
+        .anchor-bt-6a:hover{
+          background: #4CAF50 !important;
+          color: white !important;
+        }
+        .anchor-bt-6a:hover .anchor-bt-6b,
+        .anchor-bt-6a:hover .sz-h3{
+          background: white !important;
+          color: #4CAF50 !important;
+        }
+        </style>
         <!-- CARDS TOP -->
         <div class="container-fluid py-4">
-            <!-- <div class="row">
+            <div class="row">
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                        <div class="card-header p-3 pt-2">
-                            <div
-                                class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-                                <i class="material-icons opacity-10">weekend</i>
-                            </div>
+                    <a class="" href="{{ route('obl.tables',['gdt'=>Crypt::encrypt('top_1')]) }}" >
+                    <div class="anchor-tebal1 card bg-gradient-danger text-white">
+                        <div class="anchor-tebal2 card-header bg-gradient-danger p-3 pt-2">
                             <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Today's Money</p>
-                                <h4 class="mb-0">$53k</h4>
+                                <p class="text-sm font-weight-bolder mb-0 text-capitalize">CANCEL</p>
+                                <p class=" sz-h4 mb-0">{{ isset($arr_counted_dashboard) && $arr_counted_dashboard['top_1'] ? $arr_counted_dashboard['top_1'] : 0 }}</p>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+55% </span>than
-                                lask week</p>
+                        <div class="p-3">
+                            <p class="mb-0"> TOTAL DATA CANCEL</p>
                         </div>
-                    </div>
+                    </div></a>
                 </div>
+
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                        <div class="card-header p-3 pt-2">
-                            <div
-                                class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
-                                <i class="material-icons opacity-10">person</i>
-                            </div>
+                  <a class="anchor-tebal" href="{{ route('obl.tables',['gdt'=>Crypt::encrypt('top_2')]) }}">
+                    <div class=" anchor-tebal1s card bg-gradient-success text-white ">
+                        <div class=" anchor-tebal2s card-header bg-gradient-success p-3 pt-2">
                             <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Today's Users</p>
-                                <h4 class="mb-0">2,300</h4>
+                                <p class="text-sm mb-0 text-capitalize font-weight-bolder">SEMUA DATA</p>
+                                <p class=" sz-h4 mb-0 ">{{ isset($arr_counted_dashboard) && $arr_counted_dashboard['top_2'] ? $arr_counted_dashboard['top_2'] : 0 }}</p>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
                         <div class="card-footer p-3">
-                            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+3% </span>than
-                                lask month</p>
+                            <p class="mb-0"> TOTAL SEMUA DATA</p>
                         </div>
-                    </div>
+                    </div></a>
                 </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                        <div class="card-header p-3 pt-2">
-                            <div
-                                class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
-                                <i class="material-icons opacity-10">person</i>
-                            </div>
-                            <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">New Clients</p>
-                                <h4 class="mb-0">3,462</h4>
-                            </div>
-                        </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-2%</span> than
-                                yesterday</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6">
-                    <div class="card">
-                        <div class="card-header p-3 pt-2">
-                            <div
-                                class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
-                                <i class="material-icons opacity-10">weekend</i>
-                            </div>
-                            <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Sales</p>
-                                <h4 class="mb-0">$103,430</h4>
-                            </div>
-                        </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+5% </span>than
-                                yesterday</p>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+
+            </div>
             <!-- END CARDS TOP -->
 
             <!-- MAIN MIDDLE CARDS -->
-            <div class="row mt-4 hidden-leaf">
+            <div class="row mt-4 ">
                 <div class="col-lg-4 col-md-6 mt-4 mb-4">
-                    <div class="card z-index-2 ">
+                  <a class="anchor-merah" href="{{ route('obl.tables',['gdt'=>Crypt::encrypt('bottom_1')]) }}">
+                    <div class=" anchor-bt-1a card z-index-2 ">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-                            <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
-                                <div class="chart">
-                                    <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
-                                </div>
-                            </div>
+
+                              <div class=" anchor-bt-1b  bg-gradient-primary  border-radius-lg py-3 pe-1">
+                                  <p class=" sz-h3 text-white text-center font-weight-bolder">
+                                    {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['bottom_1'] ? $arr_counted_dashboard['bottom_1'] : 0 }}
+                                  </p>
+                              </div>
                         </div>
                         <div class="card-body">
-                            <h6 class="mb-0 ">Projects Performance</h6>
-                            <p class="text-sm ">Projek yang Sedang Dikerjakan</p>
+                            <p class="mb-0 font-weight-bolder">WITEL</p>
+                            <p class="text-sm ">TOTAL DATA WITEL</p>
                             <hr class="dark horizontal">
                             <div class="d-flex ">
                                 <i class="material-icons text-sm my-auto me-1">schedule</i>
-                                <p class="mb-0 text-sm"> Updated 1 min ago </p>
+                                <p class="mb-0 text-sm"> {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['timed_bottom_1'] ? "Updated: " . \Carbon\Carbon::createFromTimeStamp(strtotime( $arr_counted_dashboard['timed_bottom_1']->tgl  ))->diffForHumans()  : "Belum Ada Update" }} </p>
                             </div>
                         </div>
-                    </div>
+                    </div></a>
                 </div>
                 <div class="col-lg-4 col-md-6 mt-4 mb-4">
-                    <div class="card z-index-2  ">
+                  <a class="anchor-merah" href="{{ route('obl.tables',['gdt'=>Crypt::encrypt('bottom_2')]) }}">
+                    <div class="anchor-bt-2a card z-index-2 ">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-                            <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
-                                <div class="chart">
-                                    <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
-                                </div>
-                            </div>
+
+                              <div class=" anchor-bt-2b bg-gradient-info border-radius-lg py-3 pe-1">
+                                  <p class=" sz-h3 text-white text-center font-weight-bolder">
+                                    {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['bottom_2'] ? $arr_counted_dashboard['bottom_2'] : 0 }}
+                                  </p>
+                              </div>
                         </div>
                         <div class="card-body">
-                            <h6 class="mb-0 "> Daily Performance </h6>
-                            <p class="text-sm "> (<span class="font-weight-bolder">+0.5%</span>) peningkatan performansi. </p>
+                            <p class="mb-0 font-weight-bolder">OBL</p>
+                            <p class="text-sm ">TOTAL DATA OBL</p>
                             <hr class="dark horizontal">
                             <div class="d-flex ">
                                 <i class="material-icons text-sm my-auto me-1">schedule</i>
-                                <p class="mb-0 text-sm"> Updated 4 min ago </p>
+                                <p class="mb-0 text-sm"> {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['timed_bottom_2'] ? "Updated: " . \Carbon\Carbon::createFromTimeStamp(strtotime( $arr_counted_dashboard['timed_bottom_2']->tgl  ))->diffForHumans()  : "Belum Ada Update" }} </p>
                             </div>
                         </div>
-                    </div>
+                    </div></a>
                 </div>
-                <div class="col-lg-4 mt-4 mb-3">
-                    <div class="card z-index-2 ">
+                <div class="col-lg-4 col-md-6 mt-4 mb-4">
+                  <a class="anchor-merah" href="{{ route('obl.tables',['gdt'=>Crypt::encrypt('bottom_3')]) }}">
+                    <div class="anchor-bt-3a card z-index-2 ">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-                            <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
-                                <div class="chart">
-                                    <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
-                                </div>
-                            </div>
+
+                              <div class=" anchor-bt-3b bg-gradient-warning  border-radius-lg py-3 pe-1">
+                                  <p class=" sz-h3 text-white text-center font-weight-bolder">
+                                    {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['bottom_3'] ? $arr_counted_dashboard['bottom_3'] : 0 }}
+                                  </p>
+                              </div>
                         </div>
                         <div class="card-body">
-                            <h6 class="mb-0 ">Completed Projects</h6>
-                            <p class="text-sm ">Last Campaign Performance</p>
+                            <p class="mb-0 font-weight-bolder">LEGAL</p>
+                            <p class="text-sm ">TOTAL DATA LEGAL</p>
                             <hr class="dark horizontal">
                             <div class="d-flex ">
                                 <i class="material-icons text-sm my-auto me-1">schedule</i>
-                                <p class="mb-0 text-sm">Updated just now</p>
+                                <p class="mb-0 text-sm"> {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['timed_bottom_3'] ? "Updated: " . \Carbon\Carbon::createFromTimeStamp(strtotime( $arr_counted_dashboard['timed_bottom_3']->tgl  ))->diffForHumans()  : "Belum Ada Update" }} </p>
                             </div>
                         </div>
-                    </div>
+                    </div></a>
                 </div>
             </div>
             <!-- END MIDDLE CARDS -->
 
-            <!-- BOTTOM GROUND -->
-            <div class="row mb-4 hidden-leaf">
-                <!-- BOTTOM CARDS - LEFT SIDE - LARGE -->
-                <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
-                    <div class="card">
-                        <div class="card-header pb-0">
-                            <div class="row">
-                                <div class="col-lg-6 col-7">
-                                    <h6>Projects</h6>
-                                    <p class="text-sm mb-0">
-                                        <i class="fa fa-check text-info" aria-hidden="true"></i>
-                                        <span class="font-weight-bold ms-1">1 selesai</span> bulan ini
-                                    </p>
-                                </div>
-                                <div class="col-lg-6 col-5 my-auto text-end">
-                                    <div class="dropdown float-lg-end pe-4">
-                                        <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown"
-                                            aria-expanded="false">
-                                            <i class="fa fa-ellipsis-v text-secondary"></i>
-                                        </a>
-                                        <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5"
-                                            aria-labelledby="dropdownTable">
-                                            <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a>
-                                            </li>
-                                            <li><a class="dropdown-item border-radius-md" href="javascript:;">Another
-                                                    action</a></li>
-                                            <li><a class="dropdown-item border-radius-md" href="javascript:;">Something
-                                                    else here</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body px-0 pb-2">
-                            <div class="table-responsive">
-                                <table class="table align-items-center mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Nama Projek</th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                Nama Pelanggan</th>
-                                            <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Mitra Terkait</th>
-                                            <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Status Projek</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <!-- <img src="{{ asset('assets') }}/img/small-logos/logo-xd.svg"
-                                                            class="avatar avatar-sm me-3" alt="xd"> -->
-                                                            <!-- <h6 class="avatar avatar-sm me-3" alt="xd">1</h6> -->
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-2 text-sm">Projek A</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <!-- <div class="avatar-group mt-2">
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Ryan Tompson">
-                                                        <img src="{{ asset('assets') }}/img/team-1.jpg" alt="team1">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Romina Hadid">
-                                                        <img src="{{ asset('assets') }}/img/team-2.jpg" alt="team2">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Alexander Smith">
-                                                        <img src="{{ asset('assets') }}/img/team-3.jpg" alt="team3">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Jessica Doe">
-                                                        <img src="{{ asset('assets') }}/img/team-4.jpg" alt="team4">
-                                                    </a>
-                                                </div> -->
-                                                <h6>Pelanggan A</h6>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="text-xs font-weight-bold"> 4 </span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="progress-wrapper w-75 mx-auto">
-                                                    <div class="progress-info">
-                                                        <div class="progress-percentage">
-                                                            <span class="text-xs font-weight-bold">60%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-gradient-info w-60"
-                                                            role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <!-- <div>
-                                                        <img src="{{ asset('assets') }}/img/small-logos/logo-atlassian.svg"
-                                                            class="avatar avatar-sm me-3" alt="atlassian">
-                                                    </div> -->
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">Projek B</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <!-- <div class="avatar-group mt-2">
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Romina Hadid">
-                                                        <img src="{{ asset('assets') }}/img/team-2.jpg" alt="team5">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Jessica Doe">
-                                                        <img src="{{ asset('assets') }}/img/team-4.jpg" alt="team6">
-                                                    </a>
-                                                </div> -->
-                                                <h6>Pelanggan B</h6>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="text-xs font-weight-bold"> 3 </span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="progress-wrapper w-75 mx-auto">
-                                                    <div class="progress-info">
-                                                        <div class="progress-percentage">
-                                                            <span class="text-xs font-weight-bold">10%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-gradient-info w-10"
-                                                            role="progressbar" aria-valuenow="10" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <!-- <div>
-                                                        <img src="{{ asset('assets') }}/img/small-logos/logo-slack.svg"
-                                                            class="avatar avatar-sm me-3" alt="team7">
-                                                    </div> -->
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">Projek C</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <!-- <div class="avatar-group mt-2">
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Romina Hadid">
-                                                        <img src="{{ asset('assets') }}/img/team-3.jpg" alt="team8">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Jessica Doe">
-                                                        <img src="{{ asset('assets') }}/img/team-1.jpg" alt="team9">
-                                                    </a>
-                                                </div> -->
-                                                <h6>Pelanggan C</h6>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="text-xs font-weight-bold"> Waiting SKM </span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="progress-wrapper w-75 mx-auto">
-                                                    <div class="progress-info">
-                                                        <div class="progress-percentage">
-                                                            <span class="text-xs font-weight-bold">20%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-gradient-success w-20"
-                                                            role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                                                            aria-valuemax="20"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <!-- <div>
-                                                        <img src="{{ asset('assets') }}/img/small-logos/logo-spotify.svg"
-                                                            class="avatar avatar-sm me-3" alt="spotify">
-                                                    </div> -->
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">Projek D</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <!-- <div class="avatar-group mt-2">
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Ryan Tompson">
-                                                        <img src="{{ asset('assets') }}/img/team-4.jpg" alt="user1">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Romina Hadid">
-                                                        <img src="{{ asset('assets') }}/img/team-3.jpg" alt="user2">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Alexander Smith">
-                                                        <img src="{{ asset('assets') }}/img/team-4.jpg" alt="user3">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Jessica Doe">
-                                                        <img src="{{ asset('assets') }}/img/team-1.jpg" alt="user4">
-                                                    </a>
-                                                </div> -->
-                                                <h6>Pelanggan D</h6>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="text-xs font-weight-bold"> 5 </span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="progress-wrapper w-75 mx-auto">
-                                                    <div class="progress-info">
-                                                        <div class="progress-percentage">
-                                                            <span class="text-xs font-weight-bold">100%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-gradient-success w-100"
-                                                            role="progressbar" aria-valuenow="100" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <!-- <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="{{ asset('assets') }}/img/small-logos/logo-jira.svg"
-                                                            class="avatar avatar-sm me-3" alt="jira">
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">Add the New Pricing Page</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group mt-2">
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Ryan Tompson">
-                                                        <img src="{{ asset('assets') }}/img/team-4.jpg" alt="user5">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="text-xs font-weight-bold"> $500 </span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="progress-wrapper w-75 mx-auto">
-                                                    <div class="progress-info">
-                                                        <div class="progress-percentage">
-                                                            <span class="text-xs font-weight-bold">25%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-gradient-info w-25"
-                                                            role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                                            aria-valuemax="25"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr> -->
-                                        <!-- <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="{{ asset('assets') }}/img/small-logos/logo-invision.svg"
-                                                            class="avatar avatar-sm me-3" alt="invision">
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">Redesign New Online Shop</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group mt-2">
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Ryan Tompson">
-                                                        <img src="{{ asset('assets') }}/img/team-1.jpg" alt="user6">
-                                                    </a>
-                                                    <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="Jessica Doe">
-                                                        <img src="{{ asset('assets') }}/img/team-4.jpg" alt="user7">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="text-xs font-weight-bold"> $2,000 </span>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="progress-wrapper w-75 mx-auto">
-                                                    <div class="progress-info">
-                                                        <div class="progress-percentage">
-                                                            <span class="text-xs font-weight-bold">40%</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-gradient-info w-40"
-                                                            role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                                                            aria-valuemax="40"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr> -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END BOTTOM CARDS - LEFT SIDE - LARGE -->
+            <div class="row mt-4 ">
+              <div class="col-lg-4 col-md-6 mt-4 mb-4">
+                <a class="anchor-merah" href="{{ route('obl.tables',['gdt'=>Crypt::encrypt('bottom_4')]) }}">
+                  <div class=" anchor-bt-4a card z-index-2 ">
+                      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
 
-                <!-- BOTTOM CARDS - RIGHT SIDE - MID SIZE -->
-                <!-- <div class="col-lg-4 col-md-6">
-                    <div class="card h-100">
-                        <div class="card-header pb-0">
-                            <h6>Orders overview</h6>
-                            <p class="text-sm">
-                                <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
-                                <span class="font-weight-bold">24%</span> this month
-                            </p>
-                        </div>
-                        <div class="card-body p-3">
-                            <div class="timeline timeline-one-side">
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-success text-gradient">notifications</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">$2400, Design changes
-                                        </h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">22 DEC 7:20 PM
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-danger text-gradient">code</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">New order #1832412</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">21 DEC 11 PM
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-info text-gradient">shopping_cart</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Server payments for
-                                            April</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">21 DEC 9:34 PM
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-warning text-gradient">credit_card</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">New card added for order
-                                            #4395133</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">20 DEC 2:20 AM
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-primary text-gradient">key</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Unlock packages for
-                                            development</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">18 DEC 4:54 AM
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-dark text-gradient">payments</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">New order #9583120</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">17 DEC</p>
-                                    </div>
-                                </div>
+                            <div class=" anchor-bt-4b bg-gradient-mitra border-radius-lg py-3 pe-1">
+                                <p class=" sz-h3 text-white text-center font-weight-bolder">
+                                  {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['bottom_4'] ? $arr_counted_dashboard['bottom_4'] : 0 }}
+                                </p>
                             </div>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- END BOTTOM CARDS - RIGHT SIDE - MID SIZE -->
+                      </div>
+                      <div class="card-body">
+                          <p class="mb-0 font-weight-bolder">MITRA OBL</p>
+                          <p class="text-sm ">TOTAL DATA MITRA OBL</p>
+                          <hr class="dark horizontal">
+                          <div class="d-flex ">
+                              <i class="material-icons text-sm my-auto me-1">schedule</i>
+                              <p class="mb-0 text-sm"> {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['timed_bottom_4'] ? "Updated: " . \Carbon\Carbon::createFromTimeStamp(strtotime( $arr_counted_dashboard['timed_bottom_4']->tgl  ))->diffForHumans()  : "Belum Ada Update" }} </p>
+                          </div>
+                      </div>
+                  </div></a>
+              </div>
+              <div class="col-lg-4 col-md-6 mt-4 mb-4">
+                <a class="anchor-merah" href="{{ route('obl.tables',['gdt'=>Crypt::encrypt('bottom_5')]) }}">
+                  <div class=" anchor-bt-5a card z-index-2 ">
+                      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+
+                            <div class=" anchor-bt-5b bg-gradient-closesm border-radius-lg py-3 pe-1">
+                                <p class=" sz-h3 text-white text-center font-weight-bolder">
+                                  {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['bottom_5'] ? $arr_counted_dashboard['bottom_5'] : 0 }}
+                                </p>
+                            </div>
+                      </div>
+                      <div class="card-body">
+                        <p class="mb-0 font-weight-bolder">CLOSE SM</p>
+                          <p class="text-sm ">TOTAL DATA CLOSE SM</p>
+                          <hr class="dark horizontal">
+                          <div class="d-flex ">
+                              <i class="material-icons text-sm my-auto me-1">schedule</i>
+                              <p class="mb-0 text-sm"> {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['timed_bottom_5'] ? "Updated: " . \Carbon\Carbon::createFromTimeStamp(strtotime( $arr_counted_dashboard['timed_bottom_5']->tgl  ))->diffForHumans()  : "Belum Ada Update" }} </p>
+                          </div>
+                      </div>
+                  </div></a>
+              </div>
+              <div class="col-lg-4 col-md-6 mt-4 mb-4">
+                <a class="anchor-merah" href="{{ route('obl.tables',['gdt'=>Crypt::encrypt('bottom_6')]) }}">
+                  <div class="anchor-bt-6a card z-index-2 ">
+                      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+
+                            <div class=" anchor-bt-6b bg-gradient-success  border-radius-lg py-3 pe-1">
+                                <p class=" sz-h3 text-white text-center font-weight-bolder">
+                                  {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['bottom_6'] ? $arr_counted_dashboard['bottom_6'] : 0 }}
+                                </p>
+                            </div>
+                      </div>
+                      <div class="card-body">
+                          <p class="mb-0 font-weight-bolder">DONE</p>
+                          <p class="text-sm ">TOTAL DATA DONE</p>
+                          <hr class="dark horizontal">
+                          <div class="d-flex ">
+                              <i class="material-icons text-sm my-auto me-1">schedule</i>
+                              <p class="mb-0 text-sm"> {{ isset($arr_counted_dashboard) && $arr_counted_dashboard['timed_bottom_6'] ? "Updated: " . \Carbon\Carbon::createFromTimeStamp(strtotime( $arr_counted_dashboard['timed_bottom_6']->tgl  ))->diffForHumans()  : "Belum Ada Update" }} </p>
+                          </div>
+                      </div>
+                  </div></a>
+              </div>
+            </div>
 
             </div>
 
-            <div class="row">
-                <div class="col-lg-12 mx-auto">
-                    <img style="max-width:90%;max-height:90%;" src="{{ asset('assets') }}/img/under_develop.png" alt="">
-                </div>
-            </div>
 
         </div>
     </main>
     </div>
-    @push('js')
-    <script src="{{ asset('assets') }}/js/plugins/chartjs.min.js"></script>
-    <script>
-        var ctx = document.getElementById("chart-bars").getContext("2d");
-
-        new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: ["M", "T", "W", "T", "F", "S", "S"],
-                datasets: [{
-                    label: "Sales",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    borderRadius: 4,
-                    borderSkipped: false,
-                    backgroundColor: "rgba(255, 255, 255, .8)",
-                    data: [50, 20, 10, 22, 50, 10, 40],
-                    maxBarThickness: 6
-                }, ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false,
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            drawBorder: false,
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: false,
-                            borderDash: [5, 5],
-                            color: 'rgba(255, 255, 255, .2)'
-                        },
-                        ticks: {
-                            suggestedMin: 0,
-                            suggestedMax: 500,
-                            beginAtZero: true,
-                            padding: 10,
-                            font: {
-                                size: 14,
-                                weight: 300,
-                                family: "Roboto",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                            color: "#fff"
-                        },
-                    },
-                    x: {
-                        grid: {
-                            drawBorder: false,
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: false,
-                            borderDash: [5, 5],
-                            color: 'rgba(255, 255, 255, .2)'
-                        },
-                        ticks: {
-                            display: true,
-                            color: '#f8f9fa',
-                            padding: 10,
-                            font: {
-                                size: 14,
-                                weight: 300,
-                                family: "Roboto",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                },
-            },
-        });
-
-
-        var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-        new Chart(ctx2, {
-            type: "line",
-            data: {
-                labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: "Mobile apps",
-                    tension: 0,
-                    borderWidth: 0,
-                    pointRadius: 5,
-                    pointBackgroundColor: "rgba(255, 255, 255, .8)",
-                    pointBorderColor: "transparent",
-                    borderColor: "rgba(255, 255, 255, .8)",
-                    borderColor: "rgba(255, 255, 255, .8)",
-                    borderWidth: 4,
-                    backgroundColor: "transparent",
-                    fill: true,
-                    data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
-                    maxBarThickness: 6
-
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false,
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            drawBorder: false,
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: false,
-                            borderDash: [5, 5],
-                            color: 'rgba(255, 255, 255, .2)'
-                        },
-                        ticks: {
-                            display: true,
-                            color: '#f8f9fa',
-                            padding: 10,
-                            font: {
-                                size: 14,
-                                weight: 300,
-                                family: "Roboto",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                    x: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            color: '#f8f9fa',
-                            padding: 10,
-                            font: {
-                                size: 14,
-                                weight: 300,
-                                family: "Roboto",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                },
-            },
-        });
-
-        var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
-
-        new Chart(ctx3, {
-            type: "line",
-            data: {
-                labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: "Mobile apps",
-                    tension: 0,
-                    borderWidth: 0,
-                    pointRadius: 5,
-                    pointBackgroundColor: "rgba(255, 255, 255, .8)",
-                    pointBorderColor: "transparent",
-                    borderColor: "rgba(255, 255, 255, .8)",
-                    borderWidth: 4,
-                    backgroundColor: "transparent",
-                    fill: true,
-                    data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-                    maxBarThickness: 6
-
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false,
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            drawBorder: false,
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: false,
-                            borderDash: [5, 5],
-                            color: 'rgba(255, 255, 255, .2)'
-                        },
-                        ticks: {
-                            display: true,
-                            padding: 10,
-                            color: '#f8f9fa',
-                            font: {
-                                size: 14,
-                                weight: 300,
-                                family: "Roboto",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                    x: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            color: '#f8f9fa',
-                            padding: 10,
-                            font: {
-                                size: 14,
-                                weight: 300,
-                                family: "Roboto",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                },
-            },
-        });
-
-    </script>
-    @endpush
 </x-layout>

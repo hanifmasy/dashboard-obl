@@ -63,5 +63,17 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'role_delete_doc' => \App\Http\Middleware\RoleDeleteDoc::class,
+        'role_table_files' => \App\Http\Middleware\RoleTableFiles::class,
+        'role_files' => \App\Http\Middleware\RoleFiles::class,
+        'role_files_upload' => \App\Http\Middleware\RoleFilesUpload::class,
+        'role_super' => \App\Http\Middleware\RoleSuper::class,
+        'role_solution' => \App\Http\Middleware\RoleSolution::class,
+        'role_witel' => \App\Http\Middleware\RoleWitel::class,
+        'role_obl_non_view' => \App\Http\Middleware\RoleOblNonView::class,
+        'role_obl' => \App\Http\Middleware\RoleObl::class,
+        'cbd' => \App\Http\Middleware\CountedDashboard::class,
+        'submit_witel' => \App\Http\Middleware\SubmitWitel::class,
+        'submit_witel_forms' => \App\Http\Middleware\SubmitWitelForms::class,
     ];
 }

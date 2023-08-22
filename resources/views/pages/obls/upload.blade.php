@@ -129,13 +129,33 @@
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                     @if(isset($upload_doc))
-                                    <div class="bg-upload-title border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-white text-capitalize ps-3">ARSIP DOKUMEN: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
-                                    </div>
+                                        @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 5 )
+                                        <div class="bg-gradient-primary border-radius-lg pt-4 pb-3">
+                                        <h6 class="text-white text-capitalize ps-3">ARSIP DOKUMEN: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
+                                        </div>
+                                        @elseif( $user_in_is === 6 )
+                                        <div class=" border-radius-lg pt-4 pb-3" style="background:#1da2d8;">
+                                        <h6 class="text-white text-capitalize ps-3">ARSIP DOKUMEN: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
+                                        </div>
+                                        @else
+                                        <div class="bg-upload-title border-radius-lg pt-4 pb-3">
+                                        <h6 class="text-white text-capitalize ps-3">ARSIP DOKUMEN: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
+                                        </div>
+                                        @endif
                                     @else
-                                    <div class="bg-gradient-info border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-white text-capitalize ps-3">ARSIP DOKUMEN<span id="judul_hasil_cari"></span></h6>
-                                    </div>
+                                        @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 5 )
+                                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                                        <h6 class="text-capitalize ps-3">ARSIP DOKUMEN<span id="judul_hasil_cari"></span></h6>
+                                        </div>
+                                        @elseif( $user_in_is === 6 )
+                                        <div class="shadow-primary border-radius-lg pt-4 pb-3" style="background:#1da2d8;">
+                                        <h6 class="text-capitalize ps-3">ARSIP DOKUMEN<span id="judul_hasil_cari"></span></h6>
+                                        </div>
+                                        @else
+                                        <div class="bg-gradient-light shadow-primary border-radius-lg pt-4 pb-3">
+                                        <h6 class="text-capitalize ps-3">ARSIP DOKUMEN<span id="judul_hasil_cari"></span></h6>
+                                        </div>
+                                        @endif
                                     @endif
                             </div>
 
@@ -202,6 +222,231 @@
                                             <tr class=" lanjut-head ">
                                                 <!-- FILES UPLOAD -->
                                                 <td class="">
+
+                                                  <!-- FILES USER WITEL VIEW -->
+                                                  @if( $user_in_is->role_id === 5 )
+                                                    @if( isset($upload_doc) )
+                                                    @else
+                                                    @endif
+                                                  @endif
+                                                  <!-- END FILES USER WITEL VIEW -->
+
+                                                  <!-- FILES FOR OBL VIEW -->
+                                                  @if( $user_in_is->role_id === 1 || $user_in_is->role_id === 3 || $user_in_is->role_id === 7 )
+                                                    @if( isset($upload_doc) )
+                                                    <div class="row">
+                                                      <div class="col">
+                                                        <div class="row">
+                                                          <div class="col d-flex">
+
+                                                            @if( $upload_doc[0]['nama_p0'] !== '' )
+                                                            <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                            <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                            @else
+                                                            <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                            <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                            @endif
+                                                            <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                                                            <input style="visibility:hidden;" type="file" disabled>
+                                                          </div>
+                                                        </div>
+                                                        <div class="row">
+                                                          <div class="col d-flex">
+
+                                                            @if( $upload_doc[0]['nama_p1'] !== '' )
+                                                            <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                            <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                            @else
+                                                            <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                            <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                            @endif
+                                                            <label class="btn btn-sm bg-gradient-light label_p0">File P1</label>
+                                                            <input style="visibility:hidden;" type="file" disabled>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    @else
+                                                    <div class="row">
+                                                      <div class="col">
+                                                        FILE FOR USER VIEW - ROUTING INDEX
+                                                      </div>
+                                                    </div>
+                                                    @endif
+                                                  @endif
+                                                  <!-- END FILE USER VIEW -->
+
+                                                  <!-- FILES FOR WITEL/SOLUTION -->
+                                                  @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 )
+                                                    @if( isset($upload_doc) )
+                                                      @if( $user_in_is->role_id === 4 && $upload_doc[0]['revisi_witel'] === true )
+                                                      <div class="row">
+                                                        <div class="col">
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                              @if( $upload_doc[0]['nama_p0'] !== '' )
+                                                              <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @else
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @endif
+
+                                                              <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                                                              <label for="file_p0" class="btn btn-sm bg-gradient-light label_p0"><span id="label_file_p0">Pilih File P0</span></label>
+                                                              <input id="file_p0" name="file_p0" style="visibility:hidden;" type="file">
+                                                            </div>
+                                                          </div>
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                                @if( $upload_doc[0]['nama_p1'] !== '' )
+                                                                <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @else
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @endif
+
+                                                              <button type="button" id="btn_clear_p1" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                                                              <label for="file_p1" class="btn btn-sm bg-gradient-light label_p1"><span id="label_file_p1">Pilih File P1</span></label>
+                                                              <input id="file_p1" name="file_p1" style="visibility:hidden;" type="file">
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      @elseif( $user_in_is->role_id === 4 && $upload_doc[0]['revisi_witel'] === false )
+                                                      <div class="row">
+                                                        <div class="col">
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                              @if( $upload_doc[0]['nama_p0'] !== '' )
+                                                              <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @else
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @endif
+                                                              <label  class="btn btn-sm bg-gradient-light label_p1">File P0</label>
+                                                              <input style="visibility:hidden;" type="file" disabled>
+
+                                                            </div>
+                                                          </div>
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                                @if( $upload_doc[0]['nama_p1'] !== '' )
+                                                                <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @else
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @endif
+                                                                <label  class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                                                                <input style="visibility:hidden;" type="file" disabled>
+
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      @elseif( $user_in_is->role_id === 8 && $upload_doc[0]['f1_proses'] === 'witel' )
+                                                      <div class="row">
+                                                        <div class="col">
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                              @if( $upload_doc[0]['nama_p0'] !== '' )
+                                                              <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @else
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @endif
+
+                                                              <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                                                              <label for="file_p0" class="btn btn-sm bg-gradient-light label_p0"><span id="label_file_p0">Pilih File P0</span></label>
+                                                              <input id="file_p0" name="file_p0" style="visibility:hidden;" type="file">
+                                                            </div>
+                                                          </div>
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                                @if( $upload_doc[0]['nama_p1'] !== '' )
+                                                                <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @else
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @endif
+
+                                                              <button type="button" id="btn_clear_p1" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                                                              <label for="file_p1" class="btn btn-sm bg-gradient-light label_p1"><span id="label_file_p1">Pilih File P1</span></label>
+                                                              <input id="file_p1" name="file_p1" style="visibility:hidden;" type="file">
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      @elseif( $user_in_is->role_id === 8 && $upload_doc[0]['f1_proses'] !== 'witel' )
+                                                      <div class="row">
+                                                        <div class="col">
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                              @if( $upload_doc[0]['nama_p0'] !== '' )
+                                                              <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @else
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @endif
+                                                              <label  class="btn btn-sm bg-gradient-light label_p1">File P0</label>
+                                                              <input style="visibility:hidden;" type="file" disabled>
+
+                                                            </div>
+                                                          </div>
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                                @if( $upload_doc[0]['nama_p1'] !== '' )
+                                                                <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @else
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @endif
+                                                                <label  class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                                                                <input style="visibility:hidden;" type="file" disabled>
+
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      @endif
+                                                    @else
+                                                      <div class="row">
+                                                        <div class="col">
+                                                          @if( $user_in_is->role_id === 8 )
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+                                                              <span class="d-flex" id="btns_file_p0"></span>
+                                                            </div>
+                                                          </div>
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+                                                              <span class="d-flex" id="btns_file_p1"></span>
+                                                            </div>
+                                                          </div>
+                                                          @endif
+                                                        </div>
+                                                      </div>
+                                                    @endif
+                                                  @endif
+                                                  <!-- END FILE USER WITEL/SOLUTION -->
+
+                                                  <!-- FILES FOR OBL USER -->
+                                                  @if( $user_in_is->role_id === 2 || $user_in_is->role_id === 8  || $user_in_is->role_id === 9 )
                                                   <div class="row">
                                                     <div class="col">
                                                       <div class=" {{ isset($upload_doc) == false ? ' lanjut-form ' : ''  }} lanjut-form-biasa ">
@@ -402,20 +647,66 @@
                                                       </div>
                                                     </div>
                                                   </div>
+                                                  @endif
+                                                  <!-- END FILE USER OBL -->
+
                                                 </td>
                                             </tr>
                                             <tr><td>
-                                                @if(isset($upload_doc))
-                                                <input type="text" name="submit_upload_doc_id" value="{{ $upload_doc[0]['id'] }}" hidden>
-                                                <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
-                                                <button type="submit" name="submit" id="submit_upload" class="btn btn-lg bg-upload-btn"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
-                                                <button type="button" id="submit_upload_loading" class="btn btn-lg bg-upload-btn btn-submit-loading" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
-                                                @else
-                                                <input type="text" name="submit_upload_doc_id" id="submit_upload_doc_id"  hidden>
-                                                <a href="{{ route('obl.upload.index') }}" role="button" id="btn-kembali-upload" class="mb-8 btn btn-lg btn-kembali-upload bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
-                                                <button type="submit" name="submit" id="submit_upload" class="mt-3 btn btn-lg btn-submit-upload bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
-                                                <button type="button" id="submit_upload_loading" class="mt-3 btn btn-lg btn-submit-loading bg-gradient-info" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
-                                                @endif
+
+                                              @if(isset($upload_doc))
+                                                  @if( $user_in_is->role_id === 5  )
+                                                  <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-light shadow-primary text-sm" aria-pressed="true">KEMBALI</a>
+                                                  @endif
+                                                  @if( $user_in_is->role_id === 1 || $user_in_is->role_id === 3  || $user_in_is->role_id === 7 )
+                                                  <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
+                                                  @endif
+                                                  @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 )
+                                                    @if( $user_in_is->role_id === 4 && $upload_doc[0]['revisi_witel'] === true )
+                                                    <input type="text" name="submit_upload_doc_id" value="{{ $upload_doc[0]['id'] }}" hidden>
+                                                    <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-light shadow-primary text-sm" aria-pressed="true">KEMBALI</a>
+                                                    <button type="submit" name="submit" id="submit_upload" class="btn btn-lg bg-gradient-primary"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
+                                                    <button type="button" id="submit_upload_loading" class="btn btn-lg bg-gradient-primary btn-submit-loading" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
+                                                    @elseif( $user_in_is->role_id === 4 && $upload_doc[0]['revisi_witel'] === false )
+                                                    <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-light shadow-primary text-sm" aria-pressed="true">KEMBALI</a>
+                                                    @elseif( $user_in_is->role_id === 8 && $upload_doc[0]['f1_proses'] !== 'witel' )
+                                                    <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
+                                                    @elseif( $user_in_is->role_id === 8 && $upload_doc[0]['f1_proses'] === 'witel' )
+                                                    <input type="text" name="submit_upload_doc_id" value="{{ $upload_doc[0]['id'] }}" hidden>
+                                                    <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
+                                                    <button type="submit" name="submit" id="submit_upload" class="btn btn-lg bg-upload-btn"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
+                                                    <button type="button" id="submit_upload_loading" class="btn btn-lg bg-upload-btn btn-submit-loading" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
+                                                    @endif
+                                                  @endif
+                                                  @if( $user_in_is->role_id === 2 || $user_in_is->role_id === 9 )
+                                                  <input type="text" name="submit_upload_doc_id" value="{{ $upload_doc[0]['id'] }}" hidden>
+                                                  <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
+                                                  <button type="submit" name="submit" id="submit_upload" class="btn btn-lg bg-upload-btn"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
+                                                  <button type="button" id="submit_upload_loading" class="btn btn-lg bg-upload-btn btn-submit-loading" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
+                                                  @endif
+                                              @else
+                                                  @if( $user_in_is->role_id === 1 || $user_in_is->role_id === 3 || $user_in_is->role_id === 5 || $user_in_is->role_id === 7 )
+                                                  @endif
+                                                  @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 )
+                                                    @if( isset($upload_doc) )
+                                                    @else
+                                                        @if( $user_in_is->role_id === 4 )
+                                                        @elseif( $user_in_is->role_id === 8 )
+                                                            <input type="text" name="submit_upload_doc_id" id="submit_upload_doc_id"  hidden>
+                                                            <a href="{{ route('obl.upload.index') }}" role="button" id="btn-kembali-upload" class="mb-8 btn btn-lg btn-kembali-upload bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
+                                                            <button type="submit" name="submit" id="submit_upload" class="mt-3 btn btn-lg btn-submit-upload bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
+                                                            <button type="button" id="submit_upload_loading" class="mt-3 btn btn-lg btn-submit-loading bg-gradient-info" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
+                                                        @endif
+                                                    @endif
+                                                  @endif
+                                                  @if( $user_in_is->role_id === 2 || $user_in_is->role_id === 9 )
+                                                  <input type="text" name="submit_upload_doc_id" id="submit_upload_doc_id"  hidden>
+                                                  <a href="{{ route('obl.upload.index') }}" role="button" id="btn-kembali-upload" class="mb-8 btn btn-lg btn-kembali-upload bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
+                                                  <button type="submit" name="submit" id="submit_upload" class="mt-3 btn btn-lg btn-submit-upload bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
+                                                  <button type="button" id="submit_upload_loading" class="mt-3 btn btn-lg btn-submit-loading bg-gradient-info" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
+                                                  @endif
+                                              @endif
+
                                             </td></tr>
 
                                         </tbody>
@@ -434,6 +725,10 @@
         <script>
 
         function clearAllFile(){
+          $('#file_p0').val('');
+          $('#label_file_p0').empty(); $('#label_file_p0').append(`Pilih File P0`);
+          $('#file_p1').val('');
+          $('#label_file_p1').empty(); $('#label_file_p1').append(`Pilih File P1`);
           $('#file_p2').val('');
           $('#label_file_p2').empty(); $('#label_file_p2').append(`Pilih File P2`);
           $('.label_p3').removeClass('bg-gradient-secondary'); $('.label_p2').addClass('bg-gradient-light');
@@ -466,6 +761,16 @@
           $('.label_kl').removeClass('bg-gradient-secondary'); $('.label_kl').addClass('bg-gradient-light');
         }
 
+        $('#btn_clear_p0').on('click', function() {
+          $('#file_p0').val('');
+          $('#label_file_p0').empty(); $('#label_file_p0').append(`Pilih File P0`);
+          $('.label_p0').removeClass('bg-gradient-secondary'); $('.label_p0').addClass('bg-gradient-light');
+        });
+        $('#btn_clear_p1').on('click', function() {
+          $('#file_p1').val('');
+          $('#label_file_p1').empty(); $('#label_file_p1').append(`Pilih File P1`);
+          $('.label_p1').removeClass('bg-gradient-secondary'); $('.label_p1').addClass('bg-gradient-light');
+        });
         $('#btn_clear_p2').on('click', function() {
           $('#file_p2').val('');
           $('#label_file_p2').empty(); $('#label_file_p2').append(`Pilih File P2`);
@@ -517,6 +822,22 @@
           $('.label_kl').removeClass('bg-gradient-secondary'); $('.label_kl').addClass('bg-gradient-light');
         });
 
+        $("#file_p0").change(function() {
+          // filename = this.files[0].name;
+          // console.log(filename);
+            $('.label_p0').removeClass('bg-gradient-light');
+            $('#label_file_p0').empty();
+            $('#label_file_p0').append(this.files[0].name);
+            $('.label_p0').addClass('bg-gradient-secondary');
+        });
+        $("#file_p1").change(function() {
+          // filename = this.files[0].name;
+          // console.log(filename);
+            $('.label_p1').removeClass('bg-gradient-light');
+            $('#label_file_p1').empty();
+            $('#label_file_p1').append(this.files[0].name);
+            $('.label_p1').addClass('bg-gradient-secondary');
+        });
         $("#file_p2").change(function() {
           // filename = this.files[0].name;
           // console.log(filename);
@@ -583,6 +904,8 @@
 
         var data_upload_doc = null;
           function cariUploadDoc(){
+            $('#btns_file_p0').empty();
+            $('#btns_file_p1').empty();
             $('#btns_file_p2').empty();
             $('#btns_file_p3').empty();
             $('#btns_file_p4').empty();
@@ -648,7 +971,253 @@
                    $('#submit_upload_doc_id').val(temp_upload_doc_id);
                    $('#judul_hasil_cari').append(`: ` + data.upload_doc[0]['f1_segmen']+' / '+data.upload_doc[0]['folder']+' / '+ data.upload_doc[0]['tahun'] + ' / ' + data.upload_doc[0]['f1_jenis_spk'] + ` / ` + data.upload_doc[0]['f1_judul_projek']);
 
+                   // FILE P0
+                   if( data.upload_doc[0]['nama_p0'] !== '' ){
+                     if( data.user_in_is['role_id'] === 1 || data.user_in_is['role_id'] === 3 || data.user_in_is['role_id'] === 7){
+                       $('#btns_file_p0').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 5 ){
+                       $('#btns_file_p0').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 4 && data.upload_doc[0]['revisi_witel'] === true ){
+                       $('#btns_file_p0').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label for="file_p0" class="btn btn-sm bg-gradient-light label_p0"><span id="label_file_p0">Pilih File P0</span></label>
+                         <input id="file_p0" name="file_p0" style="visibility:hidden;" type="file">
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 4 && data.upload_doc[0]['revisi_witel'] === false ){
+                       $('#btns_file_p0').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 8 && data.upload_doc[0]['f1_proses'] === 'witel' ){
+                       $('#btns_file_p0').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label for="file_p0" class="btn btn-sm bg-gradient-light label_p0"><span id="label_file_p0">Pilih File P0</span></label>
+                         <input id="file_p0" name="file_p0" style="visibility:hidden;" type="file">
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 8 && data.upload_doc[0]['f1_proses'] !== 'witel' ){
+                       $('#btns_file_p0').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 2 || data.user_in_is['role_id'] === 9  ){
+                       $('#btns_file_p0').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p0') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                   }
+                   else{
+                     if( data.user_in_is['role_id'] === 1 || data.user_in_is['role_id'] === 3 || data.user_in_is['role_id'] === 7){
+                       $('#btns_file_p0').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 5 ){
+                       $('#btns_file_p0').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 4 && data.upload_doc[0]['revisi_witel'] === true ){
+                       $('#btns_file_p0').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label for="file_p0" class="btn btn-sm bg-gradient-light label_p0"><span id="label_file_p0">Pilih File P0</span></label>
+                         <input id="file_p0" name="file_p0" style="visibility:hidden;" type="file">
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 4 && data.upload_doc[0]['revisi_witel'] === false ){
+                       $('#btns_file_p0').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 8 && data.upload_doc[0]['f1_proses'] === 'witel' ){
+                       $('#btns_file_p0').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label for="file_p0" class="btn btn-sm bg-gradient-light label_p0"><span id="label_file_p0">Pilih File P0</span></label>
+                         <input id="file_p0" name="file_p0" style="visibility:hidden;" type="file">
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 8 && data.upload_doc[0]['f1_proses'] !== 'witel' ){
+                       $('#btns_file_p0').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 2 || data.user_in_is['role_id'] === 9  ){
+                       $('#btns_file_p0').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                   }
 
+                   // FILE P1
+                   if( data.upload_doc[0]['nama_p1'] !== '' ){
+                     if( data.user_in_is['role_id'] === 1 || data.user_in_is['role_id'] === 3 || data.user_in_is['role_id'] === 7){
+                       $('#btns_file_p1').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 5 ){
+                       $('#btns_file_p1').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 4 && data.upload_doc[0]['revisi_witel'] === true ){
+                       $('#btns_file_p1').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label for="file_p1" class="btn btn-sm bg-gradient-light label_p1"><span id="label_file_p1">Pilih File P1</span></label>
+                         <input id="file_p1" name="file_p1" style="visibility:hidden;" type="file">
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 4 && data.upload_doc[0]['revisi_witel'] === false ){
+                       $('#btns_file_p1').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p1" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 8 && data.upload_doc[0]['f1_proses'] === 'witel' ){
+                       $('#btns_file_p1').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p0" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label for="file_p1" class="btn btn-sm bg-gradient-light label_p1"><span id="label_file_p1">Pilih File P1</span></label>
+                         <input id="file_p1" name="file_p1" style="visibility:hidden;" type="file">
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 8 && data.upload_doc[0]['f1_proses'] !== 'witel' ){
+                       $('#btns_file_p1').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 2 || data.user_in_is['role_id'] === 9  ){
+                       $('#btns_file_p1').append(`
+                         <a target="_blank" href="{{ route('obl.files.visibility' ) }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <a href="{{ route('obl.files.download') }}?st=`+temp_upload_doc_id+`&ft={{ Crypt::encrypt('p1') }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                   }
+                   else{
+                     if( data.user_in_is['role_id'] === 1 || data.user_in_is['role_id'] === 3 || data.user_in_is['role_id'] === 7){
+                       $('#btns_file_p1').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 5 ){
+                       $('#btns_file_p1').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 4 && data.upload_doc[0]['revisi_witel'] === true ){
+                       $('#btns_file_p1').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p1" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label for="file_p1" class="btn btn-sm bg-gradient-light label_p1"><span id="label_file_p1">Pilih File P1</span></label>
+                         <input id="file_p1" name="file_p1" style="visibility:hidden;" type="file">
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 4 && data.upload_doc[0]['revisi_witel'] === false ){
+                       $('#btns_file_p1').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p1" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 8 && data.upload_doc[0]['f1_proses'] === 'witel' ){
+                       $('#btns_file_p1').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" id="btn_clear_p1" class="mb-4 btn btn-link  btn-setting btn-link-clear "><i class="material-icons opacity-7">backspace</i></button>
+                         <label for="file_p1" class="btn btn-sm bg-gradient-light label_p1"><span id="label_file_p1">Pilih File P1</span></label>
+                         <input id="file_p1" name="file_p1" style="visibility:hidden;" type="file">
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 8 && data.upload_doc[0]['f1_proses'] !== 'witel' ){
+                       $('#btns_file_p1').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                     if( data.user_in_is['role_id'] === 2 || data.user_in_is['role_id'] === 9  ){
+                       $('#btns_file_p1').append(`
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                         <label class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                         <input style="visibility:hidden;" type="file" disabled>
+                         `);
+                     }
+                   }
                    // FILE P2
                    if( data.upload_doc[0]['nama_p2'] !== '' ){
                      $('#btns_file_p2').append(`
@@ -779,6 +1348,29 @@
                        <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
                        `);
                    }
+
+                   $('#btn_clear_p0').on('click', function() {
+                     $('#file_p0').val('');
+                     $('#label_file_p0').empty(); $('#label_file_p0').append(`Pilih File P0`);
+                     $('.label_p0').removeClass('bg-gradient-secondary'); $('.label_p0').addClass('bg-gradient-light');
+                   });
+                   $('#btn_clear_p1').on('click', function() {
+                     $('#file_p1').val('');
+                     $('#label_file_p1').empty(); $('#label_file_p1').append(`Pilih File P1`);
+                     $('.label_p1').removeClass('bg-gradient-secondary'); $('.label_p1').addClass('bg-gradient-light');
+                   });
+                   $("#file_p0").change(function() {
+                       $('.label_p0').removeClass('bg-gradient-light');
+                       $('#label_file_p0').empty();
+                       $('#label_file_p0').append(this.files[0].name);
+                       $('.label_p0').addClass('bg-gradient-secondary');
+                   });
+                   $("#file_p1").change(function() {
+                       $('.label_p1').removeClass('bg-gradient-light');
+                       $('#label_file_p1').empty();
+                       $('#label_file_p1').append(this.files[0].name);
+                       $('.label_p1').addClass('bg-gradient-secondary');
+                   });
 
                  }
                },
