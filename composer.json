@@ -6,7 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "afrizalmy/laraindo": "^1.0",
         "guzzlehttp/guzzle": "^7.7",
+        "kwn/number-to-words": "^2.6",
         "laravel-frontend-presets/material-dashboard": "^2.0",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
@@ -15,6 +17,7 @@
         "league/flysystem-sftp-v3": "^3.15",
         "phpoffice/phpword": "^1.1",
         "rap2hpoutre/fast-excel": "^5.2",
+        "sarfraznawaz2005/loading": "^1.4",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {

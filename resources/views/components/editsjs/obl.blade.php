@@ -1,5 +1,5 @@
 @props([
-    'table_edit'
+    'table_edit','table_edit_p4_attendees'
 ])
 
 <script>

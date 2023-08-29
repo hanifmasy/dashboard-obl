@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
-class RoleSolution
+class RoleForms
 {
     /**
      * Handle an incoming request.
@@ -23,7 +23,9 @@ class RoleSolution
           ->select('users.id','users.nama_lengkap','ur.role_id','r.nama_role')
           ->where('users.id',Auth::user()->id)
           ->first();
-          if( $is_user->role_id === 8 || $is_user->role_id === 9 ){ return $next($request); }
+          if( $is_user->role_id === 2 || $is_user->role_id === 4 || $is_user->role_id === 8 || $is_user->role_id === 9 ){
+            return $next($request);
+          }
           else{ return redirect()->route('dashboard'); }
       }
     }

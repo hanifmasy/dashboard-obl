@@ -107,163 +107,7 @@ class WitelsController extends Controller
             if($created_by_witel->nama_witel){ $filtered->put('p7_tembusan',$gm_witel); }
 
             if($temp_folder_old_name && $temp_folder_old_id){
-              $temp_folder_old = DB::connection('pgsql')->table('form_obl')
-              ->select(
-                'id',
-                'submit',
-                'revisi_witel',
-                'revisi_witel_count',
-                'is_draf',
-                'updated_at',
-                'updated_by',
-                'f1_nama_plggn',
-                'f1_alamat_plggn',
-                'f1_witel',
-                'f1_judul_projek',
-                'f1_segmen',
-                'f1_proses',
-                'f1_folder',
-                'f1_nilai_kb',
-                'f1_no_kfs_spk',
-                'f1_quote_kontrak',
-                'f1_nomor_akun',
-                'f1_jenis_kontrak',
-                'f1_skema_bayar',
-                'f1_status_order',
-                'f1_status_sm',
-                'f1_tgl_keterangan',
-                'f1_keterangan',
-                'f1_mitra_id',
-                'f1_pic_mitra',
-                'f1_jenis_spk',
-                'f1_masa_layanan_tahun',
-                'f1_masa_layanan_bulan',
-                'f1_masa_layanan_hari',
-                'f1_pic_plggn',
-                'f2_nilai_kontrak',
-                'f2_tgl_p1',
-                'p2_tgl_p2',
-                'p2_tgl_justifikasi',
-                'p2_dievaluasi_oleh',
-                'p2_disetujui_oleh',
-                'p2_pilihan_catatan',
-                'p2_catatan',
-                'p3_tgl_p3',
-                'p3_takah_p3',
-                'p3_pejabat_mitra_nama',
-                'p3_pejabat_mitra_alamat',
-                'p3_pejabat_mitra_telepon',
-                'p3_status_rapat_pengadaan',
-                'p3_tgl_rapat_pengadaan',
-                'p3_tmpt_rapat_pengadaan',
-                'p3_tgl_terima_sp',
-                'p3_alamat_terima_sp',
-                'p3_manager_obl',
-                'p4_tgl_p4',
-                'p4_waktu_layanan',
-                'p4_skema_bisnis',
-                'p4_mekanisme_pembayaran',
-                'p4_slg',
-                'p4_fasilitator',
-                'p4_pengesahan',
-                'p5_tgl_p5',
-                'p5_harga_penawaran',
-                'p5_ttd_evaluator',
-                'p6_tgl_p6',
-                'p6_ttd_bast_telkom',
-                'p6_ttd_bast_mitra',
-                'p6_harga_negosiasi',
-                'p6_nama_peserta_mitra',
-                'p6_jabatan_peserta_mitra',
-                'p6_peserta_rapat_telkom',
-                'p6_pengesahan',
-                'p7_tgl_p7',
-                'p7_takah_p7',
-                'p7_lampiran_berkas',
-                'p7_harga_pekerjaan',
-                'p7_skema_bayar',
-                'p7_pemeriksa',
-                'p7_tembusan',
-                'sp_tgl_sp',
-                'sp_takah_sp',
-                'sp_nomor_kb',
-                'p8_tgl_p8',
-                'p8_takah_p8',
-                'wo_tgl_wo',
-                'wo_takah_wo',
-                'wo_tgl_fo',
-                'wo_nomor_kb',
-                'wo_jenis_layanan',
-                'wo_jumlah_layanan',
-                'wo_harga_ke_plggn',
-                'wo_onetime_charge_plggn',
-                'wo_monthly_plggn',
-                'wo_onetime_charge_telkom',
-                'wo_persen_telkom',
-                'wo_monthly_telkom',
-                'wo_onetime_charge_mitra',
-                'wo_persen_mitra',
-                'wo_monthly_mitra',
-                'kl_tgl_kl',
-                'kl_takah_kl',
-                'kl_nomor_kb',
-                'kl_no_kl_mitra',
-                'kl_tempat_ttd_kl',
-                'kl_notaris',
-                'kl_akta_notaris',
-                'kl_tgl_akta_notaris',
-                'kl_nama_pejabat_telkom',
-                'kl_jabatan_pejabat_telkom',
-                'kl_npwp_mitra',
-                'kl_no_anggaran_mitra',
-                'kl_tgl_anggaran_mitra',
-                'kl_nama_pejabat_mitra',
-                'kl_jabatan_pejabat_mitra',
-                'kl_no_skm',
-                'kl_tgl_skm',
-                'kl_perihal_skm',
-                'kl_tgl_akhir_kl',
-                'kl_bayar_dp',
-                'kl_nama_bank_mitra',
-                'kl_cabang_bank_mitra',
-                'kl_rek_bank_mitra',
-                'kl_an_bank_mitra',
-                'file_p2',
-                'file_p3',
-                'file_p4',
-                'file_p5',
-                'file_p6',
-                'file_p7',
-                'file_p8',
-                'file_sp',
-                'file_wo',
-                'file_kl',
-                'p0_nomor_p0',
-                'p0_nik_am',
-                'p0_nik_manager',
-                'p0_tgl_submit',
-                'p0_pemeriksa',
-                'p0_nik_gm',
-                'p1_nomor_p1',
-                'p1_tgl_p1',
-                'p1_pemeriksa',
-                'p1_tgl_delivery',
-                'p1_lokasi_instal',
-                'p1_skema_bisnis',
-                'p1_skema_bayar',
-                'p1_mekanisme_bayar',
-                'p1_tgl_kontrak_mulai',
-                'p1_tgl_kontrak_akhir',
-                'p1_tgl_doc_plggn',
-                'p1_estimasi_harga',
-                'p1_disetujui_gm',
-                'p1_dibuat_am',
-                'p1_diperiksa_manager',
-                'file_p0',
-                'file_p1'
-                )
-              ->where('id',$temp_folder_old_id)
-              ->first();
+              $temp_folder_old = DB::connection('pgsql')->table('form_obl')->select('*')->where('id',$temp_folder_old_id)->first();
               DB::connection('pgsql')->table('form_obl_histori')
               ->insert([
                 'obl_id' => $temp_folder_old->id,
@@ -446,6 +290,12 @@ class WitelsController extends Controller
 
     public function forms(Request $request){
       // dd($request->all());
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
+
       $obl_id = '';
       if( $request->forms_obl_id ){ $obl_id = $request->forms_obl_id; }
       $witel_form = DB::connection('pgsql')->table('form_obl')
@@ -469,7 +319,7 @@ class WitelsController extends Controller
       )
       ->where('id',$obl_id)->first();
 
-      return view('pages.witel_forms',compact('obl_id','witel_form'));
+      return view('pages.witel_forms',compact('obl_id','witel_form','user_in_is'));
     }
 
     public function formsCreate(Request $request){
@@ -492,6 +342,9 @@ class WitelsController extends Controller
            $filtered->put('updated_at',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
            $filtered->put('p0_tgl_submit',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
            $filtered->put('p1_tgl_p1',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
+           $filtered->put('f2_tgl_p1',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
+           $filtered->put('wo_tgl_fo',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
+           $filtered->put('f1_nilai_kb', $request->p1_estimasi_harga);
            $filtered->put('p1_pemeriksa', $request->p0_pemeriksa);
            $filtered->put('p1_disetujui_gm', $request->p0_nik_gm);
            $filtered->put('p1_dibuat_am', $request->p0_nik_am);

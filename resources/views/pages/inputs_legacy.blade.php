@@ -1,8 +1,8 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
-        <x-navbars.sidebar activePage="inputs"></x-navbars.sidebar>
+        <x-navbars.sidebar activePage="inputs_legacy"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="TAMBAH DATA"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="TAMBAH DATA LAMA"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <style media="screen">
@@ -47,7 +47,7 @@
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-light shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-capitalize ps-3">TAMBAH DATA</h6>
+                                    <h6 class="text-capitalize ps-3">TAMBAH DATA LAMA</h6>
                                 </div>
                             </div>
 
@@ -66,7 +66,7 @@
                             </div>
                             @endif
 
-                            <form id="formObl" action="{{ route('inputs.create') }}" method="POST" enctype="multipart/form-data">
+                            <form id="formObl" action="{{ route('inputs_legacy.create') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body px-0 pb-2">
                                 <div class="table-responsive p-0">
@@ -85,11 +85,11 @@
                                         </thead>
                                         <tbody>
                                             <!-- filter jenis kontrak -->
-                                            <tr class="filter-jenis-kontrak"><td colsapn="2"></td></tr>
-                                            <tr class="filter-jenis-kontrak">
+                                            <tr class="filterKontrak"><td colsapn="2"></td></tr>
+                                            <tr class="filterKontrak">
                                                 <td>
-                                                    <div class="">
-                                                        <div class="">
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Jenis Kontrak</h6>
                                                         </div>
                                                     </div>
@@ -108,10 +108,10 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                            <tr class="filter-jenis-kontrak-kb">
+                                            <tr class="filterKontrak">
                                                 <td>
-                                                    <div class="">
-                                                        <div class="">
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Nomor KB</h6>
                                                         </div>
                                                     </div>
@@ -129,10 +129,6 @@
                                                   <input type="text" name="cari_nomor_kb" id="cari_nomor_kb" list="list_nomor_kb" placeholder="INPUT NOMOR KB" style="width:350px;">
                                                 </td>
                                             </tr>
-                                            <tr class="filter-jenis-kontrak-lanjut"><td colspan="2"><br></td></tr>
-                                            <tr class="filter-jenis-kontrak-lanjut"><td colspan="2">
-                                                <button type="button" id="lanjutFilterKontrak" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut</h6></button>
-                                            </td></tr>
                                             <!-- filter kontrak -->
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak">
@@ -233,6 +229,18 @@
                                                         <option value="done" {{ old('f1_proses') == 'done' ? ' selected="selected"' : '' }}>DONE</option>
                                                         <option value="cancel" {{ old('f1_proses') == 'cancel' ? ' selected="selected"' : '' }}>CANCEL</option>
                                                     </select>
+                                                </td>
+                                            </tr>
+                                            <tr class="filterKontrak">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nama Folder</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input style="width:350px;" type="text" name="f1_folder" id="f1_folder" value="{{ old('f1_folder','') }}">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -407,10 +415,8 @@
                                                         <option value="{{ $value['id'] }}" {{ old('f1_mitra_id') == $value['id'] ? ' selected="selected"' : '' }}>{{ $value['nama_mitra'] }}</option>
                                                       @endforeach
                                                     @endif
-                                                    <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
                                                   </select>
                                                   @endif
-                                                  <input type="text" name="f1_nama_mitra_lain" id="f1_nama_mitra_lain" value="" style="width:350px;" placeholder="NAMA MITRA BARU">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -431,7 +437,6 @@
                                                 <button type="button" id="backFilterKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali </h6></button>
                                                 <button type="button" id="lanjutWO2" class="btn bg-gradient-success ms-10"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema WO </h6></button>
                                                 <button type="button" id="lanjutFilter" class="btn bg-gradient-info ms-1"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema KL / SP </h6></button>
-                                                <button type="submit" name="submit" value="draf_filter_kontrak" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <tr class="filterAwal"><td colspan="2"><br></td></tr>
                                             <tr class="filterAwal"><td colspan="2" id="judulFilter"><h6 class="ps-2">FILTER KL</h6></td></tr>
@@ -472,11 +477,22 @@
                                             <tr class="filterAwal"><td colspan="2">
                                                 <button type="button" id="backKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
                                                 <button type="button" id="lanjutP2" class="btn bg-gradient-info hide-filterkl"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
-                                                <button type="submit" name="submit" value="draf_filter_kl" id="saveDraf" class="hide-filterkl save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P2 -->
                                             <tr class="formP2"><td colspan="2"><br></td></tr>
                                             <tr class="formP2"><td colspan="2"><h6 class="ps-2">FORM P2 – EVALUASI DAN PENETAPAN BAKAL CALON MITRA PELAKSANA </h6></td></tr>
+                                            <tr class="formP2">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form P2</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="p2_tgl_p2" id="p2_tgl_p2" value="{{ old('p2_tgl_p2') }}">
+                                                </td>
+                                            </tr>
                                             <tr class="formP2">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -545,11 +561,34 @@
                                             <tr class="formP2"><td colspan="2">
                                                 <button type="button" id="backFilter" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter KL</h6></button>
                                                 <button type="button" id="lanjutP3" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P3</h6></button>
-                                                <button type="submit" name="submit" value="draf_p2" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P3 -->
                                             <tr class="formP3"><td colspan="2"><br></td></tr>
                                             <tr class="formP3"><td colspan="2"><h6 class="ps-2">FORM P3 – UNDANGAN PERMINTAAN DAN PENAWARAN HARGA</h6></td></tr>
+                                            <tr class="formP3">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form P3</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="p3_tgl_p3" id="p3_tgl_p3" value="{{ old('p3_tgl_p3') }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP3">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor Form P3</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="p3_takah_p3" id="p3_takah_p3" value="{{ old('p3_takah_p3') }}">
+                                                </td>
+                                            </tr>
                                             <tr class="formP3">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -567,7 +606,6 @@
                                             <tr class="formP3"><td colspan="2">
                                                 <button type="button" id="backP2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P2</h6></button>
                                                 <button type="button" id="lanjutP4" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P4</h6></button>
-                                                <button type="submit" name="submit" value="draf_p3" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P4 -->
                                             <tr class="formP4"><td colspan="2"><br></td></tr>
@@ -700,7 +738,6 @@
                                             <tr class="formP4"><td colspan="2">
                                                 <button type="button" id="backP3" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P3</h6></button>
                                                 <button type="button" id="lanjutP5" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P5</h6></button>
-                                                <button type="submit" name="submit" value="draf_p4" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P5 -->
                                             <tr class="formP5"><td colspan="2"><br></td></tr>
@@ -738,7 +775,6 @@
                                             <tr class="formP5"><td colspan="2">
                                                 <button type="button" id="backP4" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P4</h6></button>
                                                 <button type="button" id="lanjutP6" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P6</h6></button>
-                                                <button type="submit" name="submit" value="draf_p5" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P6 -->
                                             <tr class="formP6"><td colspan="2"><br></td></tr>
@@ -832,7 +868,6 @@
                                                 <button type="button" id="backP5" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P5</h6></button>
                                                 <button type="button" id="lanjutP7" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P7</h6></button>
                                                 <button type="button" id="lanjutWO3" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form WO</h6></button>
-                                                <button type="submit" name="submit" value="draf_p6" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P7 -->
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -902,7 +937,6 @@
                                                 <button type="button" id="backP6" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
                                                 <button type="button" id="lanjutP8" class="diatas-100 btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P8</h6></button>
                                                 <button type="button" id="lanjutSP" class="dibawah-100 btn bg-gradient-info" ><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form SP</h6></button>
-                                                <button type="submit" name="submit" value="draf_p7" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P8 -->
                                             <tr class="formP8"><td colspan="2"><br></td></tr>
@@ -929,7 +963,6 @@
                                             <tr class="formP8"><td colspan="2">
                                                 <button type="button" id="backP7" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
                                                 <button type="button" id="lanjutKL" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form KL</h6></button>
-                                                <button type="submit" name="submit" value="draf_p8" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- WO -->
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -1113,7 +1146,6 @@
                                             <tr class="formWO"><td colspan="2">
                                                 <button type="button" id="backP62" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
                                                 <button type="submit" name="submit" value="submit_wo" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema WO</h6></button>
-                                                <button type="submit" name="submit" value="draf_wo" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- SP -->
                                             <tr class="formSP"><td colspan="2"><br></td></tr>
@@ -1134,7 +1166,6 @@
                                             <tr class="formSP"><td colspan="2">
                                                 <button type="button" id="backP72" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
                                                 <button type="submit" name="submit" value="submit_sp" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema SP</h6></button>
-                                                <button type="submit" name="submit" value="draf_sp" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- KL -->
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1410,23 +1441,7 @@
                                             <tr class="formKL"><td colspan="2">
                                                 <button type="button" id="backP8" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P8</h6></button>
                                                 <button type="submit" name="submit" value="submit_kl" class="btn bg-gradient-info" ><h6 class="mb-0 text-sm" style="color:white;">Submit Skema KL</h6></button>
-                                                <button type="submit" name="submit" value="draf_kl" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
-
-                                            <!-- <tr class="diatas-100">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Laurent Perrier</h6>
-                                                            <p class="text-xs text-secondary mb-0">
-                                                                laurent@creative-tim.com</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text">
-                                                </td>
-                                            </tr> -->
 
                                         </tbody>
                                     </table>
@@ -1451,6 +1466,7 @@
             }
 
             $( document ).ready(function() {
+                $('.filterKontrak').show();
                 var global_jenis_spk = '';
                 var view_diatas_100='';
 

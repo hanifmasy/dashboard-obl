@@ -50,6 +50,7 @@ class TableOblController extends Controller
                       'am_submit','am_edit','am_form_p0-p1','am_file_p0','am_file_p1','am_revisi',
                       'solution_submit','solution_edit','solution_form_p0-p1','solution_file_p0','solution_file_p1'
                     ) then 'kontrak3'
+                    when submit in ('obl_submit','obl_lampiran','obl_edit') then 'kontrak4'
                     else ''
                     end as filter_submit"),
                     DB::raw("replace(submit,'_',' ') as string_submit"),
@@ -87,6 +88,7 @@ class TableOblController extends Controller
                     DB::raw("case when f1_status_order is null or f1_status_order = '' then '' else f1_status_order end as status_order"),
                     DB::raw("case when f1_tgl_keterangan is null then null else to_char(f1_tgl_keterangan,'YYYY-MM-DD HH24:MI') end as tgl_keterangan"),
                     DB::raw("case when f1_keterangan is null or f1_keterangan = '' then '' else f1_keterangan end as keterangan"),
+                    DB::raw("case when obl.revisi_witel_count is null then 0 else obl.revisi_witel_count end as revisi_count"),
                     DB::raw("u.nama_lengkap as user_create"),
                     DB::raw("uu.nama_lengkap as user_update")
                   );
@@ -111,7 +113,11 @@ class TableOblController extends Controller
                     when submit like 'draf_p%' then 'form'
                     when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
                     when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
-                    when submit in ('am_submit','form_p0-p1','revisi_witel','solution_') then 'kontrak3'
+                    when submit in (
+                      'am_submit','am_edit','am_form_p0-p1','am_file_p0','am_file_p1','am_revisi',
+                      'solution_submit','solution_edit','solution_form_p0-p1','solution_file_p0','solution_file_p1'
+                    ) then 'kontrak3'
+                    when submit in ('obl_submit','obl_lampiran','obl_edit') then 'kontrak4'
                     else ''
                     end as filter_submit"),
                     DB::raw("replace(submit,'_',' ') as string_submit"),
@@ -149,6 +155,7 @@ class TableOblController extends Controller
                     DB::raw("case when f1_status_order is null or f1_status_order = '' then '' else f1_status_order end as status_order"),
                     DB::raw("case when f1_tgl_keterangan is null then null else to_char(f1_tgl_keterangan,'YYYY-MM-DD HH24:MI') end as tgl_keterangan"),
                     DB::raw("case when f1_keterangan is null or f1_keterangan = '' then '' else f1_keterangan end as keterangan"),
+                    DB::raw("case when obl.revisi_witel_count is null then 0 else obl.revisi_witel_count end as revisi_count"),
                     DB::raw("u.nama_lengkap as user_create"),
                     DB::raw("uu.nama_lengkap as user_update")
                   )->where('obl.f1_witel',$user_in_is->nama_witel);
@@ -172,7 +179,11 @@ class TableOblController extends Controller
                     when submit like 'draf_p%' then 'form'
                     when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
                     when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
-                    when submit in ('am_submit','form_p0-p1','revisi_witel','solution_') then 'kontrak3'
+                    when submit in (
+                      'am_submit','am_edit','am_form_p0-p1','am_file_p0','am_file_p1','am_revisi',
+                      'solution_submit','solution_edit','solution_form_p0-p1','solution_file_p0','solution_file_p1'
+                    ) then 'kontrak3'
+                    when submit in ('obl_submit','obl_lampiran','obl_edit') then 'kontrak4'
                     else ''
                     end as filter_submit"),
                     DB::raw("replace(submit,'_',' ') as string_submit"),
@@ -210,6 +221,7 @@ class TableOblController extends Controller
                     DB::raw("case when f1_status_order is null or f1_status_order = '' then '' else f1_status_order end as status_order"),
                     DB::raw("case when f1_tgl_keterangan is null then null else to_char(f1_tgl_keterangan,'YYYY-MM-DD HH24:MI') end as tgl_keterangan"),
                     DB::raw("case when f1_keterangan is null or f1_keterangan = '' then '' else f1_keterangan end as keterangan"),
+                    DB::raw("case when obl.revisi_witel_count is null then 0 else obl.revisi_witel_count end as revisi_count"),
                     DB::raw("u.nama_lengkap as user_create"),
                     DB::raw("uu.nama_lengkap as user_update")
                   )->where('obl.f1_mitra_id',$user_in_is->mitra_id);
@@ -226,6 +238,32 @@ class TableOblController extends Controller
           if($ajx_gdt==='bottom_5'){ $query->whereRaw(" obl.f1_proses = 'close_sm' "); }
           if($ajx_gdt==='bottom_6'){ $query->whereRaw(" obl.f1_proses = 'done' "); }
         }
+        $cl = null;
+        if($request->ajx_cl){ $cl = $request->ajx_cl; }
+        if($cl){
+          if($cl==='b'){ $query->whereRaw(" obl.f1_proses = 'cancel' "); }
+          if($cl==='c'){ $query->whereRaw(" obl.f1_proses = 'done' "); }
+          if($cl==='d'){ $query->whereRaw(" obl.f1_proses = 'obl' "); }
+          if($cl==='e'){ $query->whereRaw(" obl.f1_proses = 'witel' "); }
+          if($cl==='f'){ $query->whereRaw(" obl.revisi_witel = true "); }
+          if($cl==='g'){ $query->whereRaw(" obl.revisi_witel_count > 0 "); }
+          if($cl==='h'){ $query->whereRaw(" obl.revisi_witel_count > 0 "); }
+        }
+        $wl = null;
+        if($request->ajx_wl){ $wl = $request->ajx_wl; }
+        if($wl){
+          if( ($user_in_is->role_id == 4 || $user_in_is->role_id == 5) && $user_in_is->nama_witel === $wl){
+            $query->whereRaw(" obl.f1_witel = '$wl' ");
+          }
+          else if( !$user_in_is->nama_witel && $user_in_is->role_id !== 6 && $user_in_is->role_id !== 4 && $user_in_is->role_id !== 5 ){
+            if($wl==='BALIKPAPAN'){ $query->whereRaw(" obl.f1_witel = 'BALIKPAPAN' "); }
+            if($wl==='SAMARINDA'){ $query->whereRaw(" obl.f1_witel = 'SAMARINDA' "); }
+            if($wl==='KALBAR'){ $query->whereRaw(" obl.f1_witel = 'KALBAR' "); }
+            if($wl==='KALSEL'){ $query->whereRaw(" obl.f1_witel = 'KALSEL' "); }
+            if($wl==='KALTENG'){ $query->whereRaw(" obl.f1_witel = KALTENG "); }
+            if($wl==='KALTARA'){ $query->whereRaw(" obl.f1_witel = KALTARA "); }
+          }
+        }
 
         $data = $query->whereRaw(" obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '' ")
           ->orderBy('obl.created_at','DESC')
@@ -235,7 +273,11 @@ class TableOblController extends Controller
       }
       $gdt = null;
       if($request->gdt){ $gdt = Crypt::decrypt($request->gdt); }
-      return view('pages.obls.tables',compact('gdt'));
+      $cl = null;
+      if($request->cl){ $cl = Crypt::decryptString($request->cl); }
+      $wl = null;
+      if($request->wl){ $wl = $request->wl; }
+      return view('pages.obls.tables',compact('gdt','cl','wl'));
     }
 
     public function delete(Request $request)
@@ -618,7 +660,7 @@ class TableOblController extends Controller
           $table_edit_keterangan = null;
           $list_nomor_kb = null;
           // user witel & solution
-          if( $user_edit->role_id === 4 || $user_edit->role_id === 8 ){
+          if( $user_edit->role_id === 4 ){
             $table_edit = DocObl::select(
               'id',
               'f1_quote_kontrak',
@@ -658,10 +700,10 @@ class TableOblController extends Controller
               $mitra_vendor = DB::connection('pgsql')->table('mitras')->select('*')->get()->toArray();
           }
           // user obl
-          if( $user_edit->role_id === 2 || $user_edit === 9 ){
-            try{
+          if( $user_edit->role_id === 2 || $user_edit->role_id === 8  || $user_edit->role_id === 9 ){
               $table_edit = DocObl::select(
                 '*',
+                DB::raw("TO_CHAR(p1_tgl_p1,'yyyy-mm-dd') AS tgl_p1_all "),
                 DB::raw("TO_CHAR(f2_tgl_p1,'yyyy-mm-dd') AS tgl_p1 "),
                 DB::raw("TO_CHAR(p2_tgl_justifikasi,'yyyy-mm-dd') AS tgl_justifikasi "),
                 DB::raw("TO_CHAR(p3_tgl_rapat_pengadaan,'yyyy-mm-dd hh24:mi:ss') AS tgl_rapat_pengadaan "),
@@ -691,10 +733,6 @@ class TableOblController extends Controller
                 ),
                 'f1_jenis_spk','f1_nama_plggn')
               ->orderBy('created_at','DESC')->get()->toArray();
-            }
-            catch(Throwable $e){
-              return back()->with('status','Oops! Gagal Mengambil Data Tabel Dokumen.');
-            }
           }
 
           return view('pages.obls.tables_edit',compact('user_edit','table_edit','table_edit_p4_attendees','mitra_vendor','table_edit_keterangan','list_nomor_kb'));
@@ -740,7 +778,7 @@ class TableOblController extends Controller
       ->first();
 
       // user witel & solution
-      if( $user_update->role_id === 4 || $user_update->role_id === 8 ){
+      if( $user_update->role_id === 4 ){
         $collection = collect($request->all());
         $filtered = $collection->except([
             '_token',
@@ -954,7 +992,7 @@ class TableOblController extends Controller
       // end user witel & solution
 
       // user obl
-      else if( $user_update->role_id === 2 || $user_update->role_id === 9 ){
+      else if( $user_update->role_id === 2 || $user_update->role_id === 8  || $user_update->role_id === 9 ){
         // P6 HARGA NEGO = P7 HARGA PEKERJAAN
         $p7_harga_pekerjaan = '';
         if($request->p6_harga_negosiasi){
@@ -984,21 +1022,175 @@ class TableOblController extends Controller
                 'f1_nama_mitra_lain'
             ]);
             $filtered_draf->put('updated_at',$submit_sekarang);
-            $filtered_draf->put('updated_by',$user_id);
+            $filtered_draf->put('updated_by',$user_update->id);
+            // if($user_update->role_id===8){$filtered_draf->put('submit','solution_edit');}
+            // if($user_update->role_id===2 || $user_update->role_id===9){$filtered_draf->put('submit','obl_edit');}
             if($request->p6_harga_negosiasi){ $filtered_draf->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
             if($request->f1_keterangan){ $filtered_draf->put('f1_tgl_keterangan',$submit_sekarang); }
             $filtered_draf->put('is_draf',1);
             $filtered_draf->put('f1_mitra_id',$f1_mitra_id);
 
-            Draf::where('id',$edit_draf_id)
+            DB::connection('pgsql')->table('form_obl_histori')
+            ->insert([
+              'obl_id' => $cek_doc_obl_update->id,
+              'submit' => $cek_doc_obl_update->submit,
+              'revisi_witel' => $cek_doc_obl_update->revisi_witel,
+              'revisi_witel_count' => $cek_doc_obl_update->revisi_witel_count,
+              'is_draf' => $cek_doc_obl_update->is_draf,
+              'updated_at' => $cek_doc_obl_update->updated_at,
+              'updated_by' => $cek_doc_obl_update->updated_by,
+              'p0_nomor_p0' => $cek_doc_obl_update->p0_nomor_p0,
+              'p0_nik_am' => $cek_doc_obl_update->p0_nik_am,
+              'p0_nik_manager' => $cek_doc_obl_update->p0_nik_manager,
+              'p0_tgl_submit' => $cek_doc_obl_update->p0_tgl_submit,
+              'p0_pemeriksa' => $cek_doc_obl_update->p0_pemeriksa,
+              'p0_nik_gm' => $cek_doc_obl_update->p0_nik_gm,
+              'p1_nomor_p1' => $cek_doc_obl_update->p1_nomor_p1,
+              'p1_tgl_p1' => $cek_doc_obl_update->p1_tgl_p1,
+              'p1_pemeriksa' => $cek_doc_obl_update->p1_pemeriksa,
+              'p1_tgl_delivery' => $cek_doc_obl_update->p1_tgl_delivery,
+              'p1_lokasi_instal' => $cek_doc_obl_update->p1_lokasi_instal,
+              'p1_skema_bisnis' => $cek_doc_obl_update->p1_skema_bisnis,
+              'p1_skema_bayar' => $cek_doc_obl_update->p1_skema_bayar,
+              'p1_mekanisme_bayar' => $cek_doc_obl_update->p1_mekanisme_bayar,
+              'p1_tgl_kontrak_mulai' => $cek_doc_obl_update->p1_tgl_kontrak_mulai,
+              'p1_tgl_kontrak_akhir' => $cek_doc_obl_update->p1_tgl_kontrak_akhir,
+              'p1_tgl_doc_plggn' => $cek_doc_obl_update->p1_tgl_doc_plggn,
+              'p1_estimasi_harga' => $cek_doc_obl_update->p1_estimasi_harga,
+              'p1_disetujui_gm' => $cek_doc_obl_update->p1_disetujui_gm,
+              'p1_dibuat_am' => $cek_doc_obl_update->p1_dibuat_am,
+              'p1_diperiksa_manager' => $cek_doc_obl_update->p1_diperiksa_manager,
+              'f1_nama_plggn' => $cek_doc_obl_update->f1_nama_plggn,
+              'f1_alamat_plggn' => $cek_doc_obl_update->f1_alamat_plggn,
+              'f1_witel' => $cek_doc_obl_update->f1_witel,
+              'f1_judul_projek' => $cek_doc_obl_update->f1_judul_projek,
+              'f1_segmen' => $cek_doc_obl_update->f1_segmen,
+              'f1_proses' => $cek_doc_obl_update->f1_proses,
+              'f1_folder' => $cek_doc_obl_update->f1_folder,
+              'f1_nilai_kb' => $cek_doc_obl_update->f1_nilai_kb,
+              'f1_no_kfs_spk' => $cek_doc_obl_update->f1_no_kfs_spk,
+              'f1_quote_kontrak' => $cek_doc_obl_update->f1_quote_kontrak,
+              'f1_nomor_akun' => $cek_doc_obl_update->f1_nomor_akun,
+              'f1_jenis_kontrak' => $cek_doc_obl_update->f1_jenis_kontrak,
+              'f1_skema_bayar' => $cek_doc_obl_update->f1_skema_bayar,
+              'f1_status_order' => $cek_doc_obl_update->f1_status_order,
+              'f1_status_sm' => $cek_doc_obl_update->f1_status_sm,
+              'f1_tgl_keterangan' => $cek_doc_obl_update->f1_tgl_keterangan,
+              'f1_keterangan' => $cek_doc_obl_update->f1_keterangan,
+              'f1_mitra_id' => $cek_doc_obl_update->f1_mitra_id,
+              'f1_pic_mitra' => $cek_doc_obl_update->f1_pic_mitra,
+              'f1_jenis_spk' => $cek_doc_obl_update->f1_jenis_spk,
+              'f1_masa_layanan_tahun' => $cek_doc_obl_update->f1_masa_layanan_tahun,
+              'f1_masa_layanan_bulan' => $cek_doc_obl_update->f1_masa_layanan_bulan,
+              'f1_masa_layanan_hari' => $cek_doc_obl_update->f1_masa_layanan_hari,
+              'f1_pic_plggn' => $cek_doc_obl_update->f1_pic_plggn,
+              'f2_nilai_kontrak' => $cek_doc_obl_update->f2_nilai_kontrak,
+              'f2_tgl_p1' => $cek_doc_obl_update->f2_tgl_p1,
+              'p2_tgl_p2' => $cek_doc_obl_update->p2_tgl_p2,
+              'p2_tgl_justifikasi' => $cek_doc_obl_update->p2_tgl_justifikasi,
+              'p2_dievaluasi_oleh' => $cek_doc_obl_update->p2_dievaluasi_oleh,
+              'p2_disetujui_oleh' => $cek_doc_obl_update->p2_disetujui_oleh,
+              'p2_pilihan_catatan' => $cek_doc_obl_update->p2_pilihan_catatan,
+              'p2_catatan' => $cek_doc_obl_update->p2_catatan,
+              'p3_tgl_p3' => $cek_doc_obl_update->p3_tgl_p3,
+              'p3_takah_p3' => $cek_doc_obl_update->p3_takah_p3,
+              'p3_pejabat_mitra_nama' => $cek_doc_obl_update->p3_pejabat_mitra_nama,
+              'p3_pejabat_mitra_alamat' => $cek_doc_obl_update->p3_pejabat_mitra_alamat,
+              'p3_pejabat_mitra_telepon' => $cek_doc_obl_update->p3_pejabat_mitra_telepon,
+              'p3_status_rapat_pengadaan' => $cek_doc_obl_update->p3_status_rapat_pengadaan,
+              'p3_tgl_rapat_pengadaan' => $cek_doc_obl_update->p3_tgl_rapat_pengadaan,
+              'p3_tmpt_rapat_pengadaan' => $cek_doc_obl_update->p3_tmpt_rapat_pengadaan,
+              'p3_tgl_terima_sp' => $cek_doc_obl_update->p3_tgl_terima_sp,
+              'p3_alamat_terima_sp' => $cek_doc_obl_update->p3_alamat_terima_sp,
+              'p3_manager_obl' => $cek_doc_obl_update->p3_manager_obl,
+              'p4_tgl_p4' => $cek_doc_obl_update->p4_tgl_p4,
+              'p4_waktu_layanan' => $cek_doc_obl_update->p4_waktu_layanan,
+              'p4_skema_bisnis' => $cek_doc_obl_update->p4_skema_bisnis,
+              'p4_mekanisme_pembayaran' => $cek_doc_obl_update->p4_mekanisme_pembayaran,
+              'p4_slg' => $cek_doc_obl_update->p4_slg,
+              'p4_fasilitator' => $cek_doc_obl_update->p4_fasilitator,
+              'p4_pengesahan' => $cek_doc_obl_update->p4_pengesahan,
+              'p5_tgl_p5' => $cek_doc_obl_update->p5_tgl_p5,
+              'p5_harga_penawaran' => $cek_doc_obl_update->p5_harga_penawaran,
+              'p5_ttd_evaluator' => $cek_doc_obl_update->p5_ttd_evaluator,
+              'p6_tgl_p6' => $cek_doc_obl_update->p6_tgl_p6,
+              'p6_ttd_bast_telkom' => $cek_doc_obl_update->p6_ttd_bast_telkom,
+              'p6_ttd_bast_mitra' => $cek_doc_obl_update->p6_ttd_bast_mitra,
+              'p6_harga_negosiasi' => $cek_doc_obl_update->p6_harga_negosiasi,
+              'p6_nama_peserta_mitra' => $cek_doc_obl_update->p6_nama_peserta_mitra,
+              'p6_jabatan_peserta_mitra' => $cek_doc_obl_update->p6_jabatan_peserta_mitra,
+              'p6_peserta_rapat_telkom' => $cek_doc_obl_update->p6_peserta_rapat_telkom,
+              'p6_pengesahan' => $cek_doc_obl_update->p6_pengesahan,
+              'p7_tgl_p7' => $cek_doc_obl_update->p7_tgl_p7,
+              'p7_takah_p7' => $cek_doc_obl_update->p7_takah_p7,
+              'p7_lampiran_berkas' => $cek_doc_obl_update->p7_lampiran_berkas,
+              'p7_harga_pekerjaan' => $cek_doc_obl_update->p7_harga_pekerjaan,
+              'p7_skema_bayar' => $cek_doc_obl_update->p7_skema_bayar,
+              'p7_pemeriksa' => $cek_doc_obl_update->p7_pemeriksa,
+              'p7_tembusan' => $cek_doc_obl_update->p7_tembusan,
+              'sp_tgl_sp' => $cek_doc_obl_update->sp_tgl_sp,
+              'sp_takah_sp' => $cek_doc_obl_update->sp_takah_sp,
+              'sp_nomor_kb' => $cek_doc_obl_update->sp_nomor_kb,
+              'p8_tgl_p8' => $cek_doc_obl_update->p8_tgl_p8,
+              'p8_takah_p8' => $cek_doc_obl_update->p8_takah_p8,
+              'wo_tgl_wo' => $cek_doc_obl_update->wo_tgl_wo,
+              'wo_takah_wo' => $cek_doc_obl_update->wo_takah_wo,
+              'wo_tgl_fo' => $cek_doc_obl_update->wo_tgl_fo,
+              'wo_nomor_kb' => $cek_doc_obl_update->wo_nomor_kb,
+              'wo_jenis_layanan' => $cek_doc_obl_update->wo_jenis_layanan,
+              'wo_jumlah_layanan' => $cek_doc_obl_update->wo_jumlah_layanan,
+              'wo_harga_ke_plggn' => $cek_doc_obl_update->wo_harga_ke_plggn,
+              'wo_onetime_charge_plggn' => $cek_doc_obl_update->wo_onetime_charge_plggn,
+              'wo_monthly_plggn' => $cek_doc_obl_update->wo_monthly_plggn,
+              'wo_onetime_charge_telkom' => $cek_doc_obl_update->wo_onetime_charge_telkom,
+              'wo_persen_telkom' => $cek_doc_obl_update->wo_persen_telkom,
+              'wo_monthly_telkom' => $cek_doc_obl_update->wo_monthly_telkom,
+              'wo_onetime_charge_mitra' => $cek_doc_obl_update->wo_onetime_charge_mitra,
+              'wo_persen_mitra' => $cek_doc_obl_update->wo_persen_mitra,
+              'wo_monthly_mitra' => $cek_doc_obl_update->wo_monthly_mitra,
+              'kl_tgl_kl' => $cek_doc_obl_update->kl_tgl_kl,
+              'kl_takah_kl' => $cek_doc_obl_update->kl_takah_kl,
+              'kl_nomor_kb' => $cek_doc_obl_update->kl_nomor_kb,
+              'kl_no_kl_mitra' => $cek_doc_obl_update->kl_no_kl_mitra,
+              'kl_tempat_ttd_kl' => $cek_doc_obl_update->kl_tempat_ttd_kl,
+              'kl_notaris' => $cek_doc_obl_update->kl_notaris,
+              'kl_akta_notaris' => $cek_doc_obl_update->kl_akta_notaris,
+              'kl_tgl_akta_notaris' => $cek_doc_obl_update->kl_tgl_akta_notaris,
+              'kl_nama_pejabat_telkom' => $cek_doc_obl_update->kl_nama_pejabat_telkom,
+              'kl_jabatan_pejabat_telkom' => $cek_doc_obl_update->kl_jabatan_pejabat_telkom,
+              'kl_npwp_mitra' => $cek_doc_obl_update->kl_npwp_mitra,
+              'kl_no_anggaran_mitra' => $cek_doc_obl_update->kl_no_anggaran_mitra,
+              'kl_tgl_anggaran_mitra' => $cek_doc_obl_update->kl_tgl_anggaran_mitra,
+              'kl_nama_pejabat_mitra' => $cek_doc_obl_update->kl_nama_pejabat_mitra,
+              'kl_jabatan_pejabat_mitra' => $cek_doc_obl_update->kl_jabatan_pejabat_mitra,
+              'kl_no_skm' => $cek_doc_obl_update->kl_no_skm,
+              'kl_tgl_skm' => $cek_doc_obl_update->kl_tgl_skm,
+              'kl_perihal_skm' => $cek_doc_obl_update->kl_perihal_skm,
+              'kl_tgl_akhir_kl' => $cek_doc_obl_update->kl_tgl_akhir_kl,
+              'kl_bayar_dp' => $cek_doc_obl_update->kl_bayar_dp,
+              'kl_nama_bank_mitra' => $cek_doc_obl_update->kl_nama_bank_mitra,
+              'kl_cabang_bank_mitra' => $cek_doc_obl_update->kl_cabang_bank_mitra,
+              'kl_rek_bank_mitra' => $cek_doc_obl_update->kl_rek_bank_mitra,
+              'kl_an_bank_mitra' => $cek_doc_obl_update->kl_an_bank_mitra,
+              'file_p0' => $cek_doc_obl_update->file_p0,
+              'file_p1' => $cek_doc_obl_update->file_p1,
+              'file_p2' => $cek_doc_obl_update->file_p2,
+              'file_p3' => $cek_doc_obl_update->file_p3,
+              'file_p4' => $cek_doc_obl_update->file_p4,
+              'file_p5' => $cek_doc_obl_update->file_p5,
+              'file_p6' => $cek_doc_obl_update->file_p6,
+              'file_p7' => $cek_doc_obl_update->file_p7,
+              'file_p8' => $cek_doc_obl_update->file_p8,
+              'file_sp' => $cek_doc_obl_update->file_sp,
+              'file_wo' => $cek_doc_obl_update->file_wo,
+              'file_kl' => $cek_doc_obl_update->file_kl
+            ]);
+
+            DocObl::where('id',$edit_draf_id)
             ->update(
                 $filtered_draf->all()
             );
-            $filtered->put('obl_id',$edit_draf_id);
-            DB::connection('pgsql')->table('form_obl_histori')
-            ->insert(
-                $filtered_draf->all()
-            );
+
 
             if($request->p4_attendees){
                 $arr_attendees_draf = [];
@@ -1270,129 +1462,162 @@ class TableOblController extends Controller
 
 
               // INSERT DATA TO OBL DATABASE
-              $form_obl_histori = DB::connection('pgsql')->table('form_obl')->select(
-                DB::raw("id as obl_id"),
-                'submit',
-                'is_draf',
-                'updated_at',
-                'updated_by',
-                'f1_nama_plggn',
-                'f1_alamat_plggn',
-                'f1_witel',
-                'f1_judul_projek',
-                'f1_segmen',
-                'f1_nilai_kb',
-                'f1_no_kfs_spk',
-                'f1_quote_kontrak',
-                'f1_nomor_akun',
-                'f1_jenis_kontrak',
-                'f1_skema_bayar',
-                'f1_status_order',
-                'f1_tgl_keterangan',
-                'f1_keterangan',
-                'f1_mitra_id',
-                'f1_pic_mitra',
-                'f1_jenis_spk',
-                'f1_masa_layanan_tahun',
-                'f1_masa_layanan_bulan',
-                'f1_masa_layanan_hari',
-                'f2_nilai_kontrak',
-                'f2_tgl_p1',
-                'p2_tgl_p2',
-                'p2_tgl_justifikasi',
-                'p2_dievaluasi_oleh',
-                'p2_disetujui_oleh',
-                'p2_pilihan_catatan',
-                'p2_catatan',
-                'p3_tgl_p3',
-                'p3_takah_p3',
-                'p3_pejabat_mitra_nama',
-                'p3_pejabat_mitra_alamat',
-                'p3_pejabat_mitra_telepon',
-                'p3_status_rapat_pengadaan',
-                'p3_tgl_rapat_pengadaan',
-                'p3_tmpt_rapat_pengadaan',
-                'p3_tgl_terima_sp',
-                'p3_alamat_terima_sp',
-                'p3_manager_obl',
-                'p4_tgl_p4',
-                'p4_tgl_sph',
-                'p4_waktu_layanan',
-                'p4_skema_bisnis',
-                'p4_mekanisme_pembayaran',
-                'p4_slg',
-                'p4_fasilitator',
-                'p4_pengesahan',
-                'p5_tgl_p5',
-                'p5_harga_penawaran',
-                'p5_ttd_evaluator',
-                'p6_tgl_p6',
-                'p6_ttd_bast_telkom',
-                'p6_ttd_bast_mitra',
-                'p6_harga_negosiasi',
-                'p6_nama_peserta_mitra',
-                'p6_jabatan_peserta_mitra',
-                'p6_peserta_rapat_telkom',
-                'p6_pengesahan',
-                'p7_tgl_p7',
-                'p7_takah_p7',
-                'p7_lampiran_berkas',
-                'p7_harga_pekerjaan',
-                'p7_otc',
-                'p7_rincian_bulanan',
-                'p7_pemeriksa',
-                'p7_tembusan',
-                'sp_tgl_sp',
-                'sp_takah_sp',
-                'sp_nomor_kb',
-                'p8_tgl_p8',
-                'p8_takah_p8',
-                'wo_tgl_wo',
-                'wo_takah_wo',
-                'wo_tgl_fo',
-                'wo_nomor_kb',
-                'wo_jenis_layanan',
-                'wo_jumlah_layanan',
-                'wo_harga_ke_plggn',
-                'wo_onetime_charge_plggn',
-                'wo_monthly_plggn',
-                'wo_onetime_charge_telkom',
-                'wo_persen_telkom',
-                'wo_monthly_telkom',
-                'wo_onetime_charge_mitra',
-                'wo_persen_mitra',
-                'wo_monthly_mitra',
-                'kl_tgl_kl',
-                'kl_takah_kl',
-                'kl_nomor_kb',
-                'kl_no_kl_mitra',
-                'kl_tempat_ttd_kl',
-                'kl_notaris',
-                'kl_akta_notaris',
-                'kl_tgl_akta_notaris',
-                'kl_nama_pejabat_telkom',
-                'kl_jabatan_pejabat_telkom',
-                'kl_npwp_mitra',
-                'kl_no_anggaran_mitra',
-                'kl_tgl_anggaran_mitra',
-                'kl_nama_pejabat_mitra',
-                'kl_jabatan_pejabat_mitra',
-                'kl_no_skm',
-                'kl_tgl_skm',
-                'kl_perihal_skm',
-                'kl_tgl_akhir_kl',
-                'kl_bayar_dp',
-                'kl_nama_bank_mitra',
-                'kl_cabang_bank_mitra',
-                'kl_rek_bank_mitra',
-                'kl_an_bank_mitra'
-                )
-              ->where('id',$edit_draf_id)
-              ->get();
               DB::connection('pgsql')->table('form_obl_histori')
-              ->insert(
-                  $form_obl_histori->all()
-              );
+              ->insert([
+                'obl_id' => $cek_doc_obl_update->id,
+                'submit' => $cek_doc_obl_update->submit,
+                'revisi_witel' => $cek_doc_obl_update->revisi_witel,
+                'revisi_witel_count' => $cek_doc_obl_update->revisi_witel_count,
+                'is_draf' => $cek_doc_obl_update->is_draf,
+                'updated_at' => $cek_doc_obl_update->updated_at,
+                'updated_by' => $cek_doc_obl_update->updated_by,
+                'p0_nomor_p0' => $cek_doc_obl_update->p0_nomor_p0,
+                'p0_nik_am' => $cek_doc_obl_update->p0_nik_am,
+                'p0_nik_manager' => $cek_doc_obl_update->p0_nik_manager,
+                'p0_tgl_submit' => $cek_doc_obl_update->p0_tgl_submit,
+                'p0_pemeriksa' => $cek_doc_obl_update->p0_pemeriksa,
+                'p0_nik_gm' => $cek_doc_obl_update->p0_nik_gm,
+                'p1_nomor_p1' => $cek_doc_obl_update->p1_nomor_p1,
+                'p1_tgl_p1' => $cek_doc_obl_update->p1_tgl_p1,
+                'p1_pemeriksa' => $cek_doc_obl_update->p1_pemeriksa,
+                'p1_tgl_delivery' => $cek_doc_obl_update->p1_tgl_delivery,
+                'p1_lokasi_instal' => $cek_doc_obl_update->p1_lokasi_instal,
+                'p1_skema_bisnis' => $cek_doc_obl_update->p1_skema_bisnis,
+                'p1_skema_bayar' => $cek_doc_obl_update->p1_skema_bayar,
+                'p1_mekanisme_bayar' => $cek_doc_obl_update->p1_mekanisme_bayar,
+                'p1_tgl_kontrak_mulai' => $cek_doc_obl_update->p1_tgl_kontrak_mulai,
+                'p1_tgl_kontrak_akhir' => $cek_doc_obl_update->p1_tgl_kontrak_akhir,
+                'p1_tgl_doc_plggn' => $cek_doc_obl_update->p1_tgl_doc_plggn,
+                'p1_estimasi_harga' => $cek_doc_obl_update->p1_estimasi_harga,
+                'p1_disetujui_gm' => $cek_doc_obl_update->p1_disetujui_gm,
+                'p1_dibuat_am' => $cek_doc_obl_update->p1_dibuat_am,
+                'p1_diperiksa_manager' => $cek_doc_obl_update->p1_diperiksa_manager,
+                'f1_nama_plggn' => $cek_doc_obl_update->f1_nama_plggn,
+                'f1_alamat_plggn' => $cek_doc_obl_update->f1_alamat_plggn,
+                'f1_witel' => $cek_doc_obl_update->f1_witel,
+                'f1_judul_projek' => $cek_doc_obl_update->f1_judul_projek,
+                'f1_segmen' => $cek_doc_obl_update->f1_segmen,
+                'f1_proses' => $cek_doc_obl_update->f1_proses,
+                'f1_folder' => $cek_doc_obl_update->f1_folder,
+                'f1_nilai_kb' => $cek_doc_obl_update->f1_nilai_kb,
+                'f1_no_kfs_spk' => $cek_doc_obl_update->f1_no_kfs_spk,
+                'f1_quote_kontrak' => $cek_doc_obl_update->f1_quote_kontrak,
+                'f1_nomor_akun' => $cek_doc_obl_update->f1_nomor_akun,
+                'f1_jenis_kontrak' => $cek_doc_obl_update->f1_jenis_kontrak,
+                'f1_skema_bayar' => $cek_doc_obl_update->f1_skema_bayar,
+                'f1_status_order' => $cek_doc_obl_update->f1_status_order,
+                'f1_status_sm' => $cek_doc_obl_update->f1_status_sm,
+                'f1_tgl_keterangan' => $cek_doc_obl_update->f1_tgl_keterangan,
+                'f1_keterangan' => $cek_doc_obl_update->f1_keterangan,
+                'f1_mitra_id' => $cek_doc_obl_update->f1_mitra_id,
+                'f1_pic_mitra' => $cek_doc_obl_update->f1_pic_mitra,
+                'f1_jenis_spk' => $cek_doc_obl_update->f1_jenis_spk,
+                'f1_masa_layanan_tahun' => $cek_doc_obl_update->f1_masa_layanan_tahun,
+                'f1_masa_layanan_bulan' => $cek_doc_obl_update->f1_masa_layanan_bulan,
+                'f1_masa_layanan_hari' => $cek_doc_obl_update->f1_masa_layanan_hari,
+                'f1_pic_plggn' => $cek_doc_obl_update->f1_pic_plggn,
+                'f2_nilai_kontrak' => $cek_doc_obl_update->f2_nilai_kontrak,
+                'f2_tgl_p1' => $cek_doc_obl_update->f2_tgl_p1,
+                'p2_tgl_p2' => $cek_doc_obl_update->p2_tgl_p2,
+                'p2_tgl_justifikasi' => $cek_doc_obl_update->p2_tgl_justifikasi,
+                'p2_dievaluasi_oleh' => $cek_doc_obl_update->p2_dievaluasi_oleh,
+                'p2_disetujui_oleh' => $cek_doc_obl_update->p2_disetujui_oleh,
+                'p2_pilihan_catatan' => $cek_doc_obl_update->p2_pilihan_catatan,
+                'p2_catatan' => $cek_doc_obl_update->p2_catatan,
+                'p3_tgl_p3' => $cek_doc_obl_update->p3_tgl_p3,
+                'p3_takah_p3' => $cek_doc_obl_update->p3_takah_p3,
+                'p3_pejabat_mitra_nama' => $cek_doc_obl_update->p3_pejabat_mitra_nama,
+                'p3_pejabat_mitra_alamat' => $cek_doc_obl_update->p3_pejabat_mitra_alamat,
+                'p3_pejabat_mitra_telepon' => $cek_doc_obl_update->p3_pejabat_mitra_telepon,
+                'p3_status_rapat_pengadaan' => $cek_doc_obl_update->p3_status_rapat_pengadaan,
+                'p3_tgl_rapat_pengadaan' => $cek_doc_obl_update->p3_tgl_rapat_pengadaan,
+                'p3_tmpt_rapat_pengadaan' => $cek_doc_obl_update->p3_tmpt_rapat_pengadaan,
+                'p3_tgl_terima_sp' => $cek_doc_obl_update->p3_tgl_terima_sp,
+                'p3_alamat_terima_sp' => $cek_doc_obl_update->p3_alamat_terima_sp,
+                'p3_manager_obl' => $cek_doc_obl_update->p3_manager_obl,
+                'p4_tgl_p4' => $cek_doc_obl_update->p4_tgl_p4,
+                'p4_waktu_layanan' => $cek_doc_obl_update->p4_waktu_layanan,
+                'p4_skema_bisnis' => $cek_doc_obl_update->p4_skema_bisnis,
+                'p4_mekanisme_pembayaran' => $cek_doc_obl_update->p4_mekanisme_pembayaran,
+                'p4_slg' => $cek_doc_obl_update->p4_slg,
+                'p4_fasilitator' => $cek_doc_obl_update->p4_fasilitator,
+                'p4_pengesahan' => $cek_doc_obl_update->p4_pengesahan,
+                'p5_tgl_p5' => $cek_doc_obl_update->p5_tgl_p5,
+                'p5_harga_penawaran' => $cek_doc_obl_update->p5_harga_penawaran,
+                'p5_ttd_evaluator' => $cek_doc_obl_update->p5_ttd_evaluator,
+                'p6_tgl_p6' => $cek_doc_obl_update->p6_tgl_p6,
+                'p6_ttd_bast_telkom' => $cek_doc_obl_update->p6_ttd_bast_telkom,
+                'p6_ttd_bast_mitra' => $cek_doc_obl_update->p6_ttd_bast_mitra,
+                'p6_harga_negosiasi' => $cek_doc_obl_update->p6_harga_negosiasi,
+                'p6_nama_peserta_mitra' => $cek_doc_obl_update->p6_nama_peserta_mitra,
+                'p6_jabatan_peserta_mitra' => $cek_doc_obl_update->p6_jabatan_peserta_mitra,
+                'p6_peserta_rapat_telkom' => $cek_doc_obl_update->p6_peserta_rapat_telkom,
+                'p6_pengesahan' => $cek_doc_obl_update->p6_pengesahan,
+                'p7_tgl_p7' => $cek_doc_obl_update->p7_tgl_p7,
+                'p7_takah_p7' => $cek_doc_obl_update->p7_takah_p7,
+                'p7_lampiran_berkas' => $cek_doc_obl_update->p7_lampiran_berkas,
+                'p7_harga_pekerjaan' => $cek_doc_obl_update->p7_harga_pekerjaan,
+                'p7_skema_bayar' => $cek_doc_obl_update->p7_skema_bayar,
+                'p7_pemeriksa' => $cek_doc_obl_update->p7_pemeriksa,
+                'p7_tembusan' => $cek_doc_obl_update->p7_tembusan,
+                'sp_tgl_sp' => $cek_doc_obl_update->sp_tgl_sp,
+                'sp_takah_sp' => $cek_doc_obl_update->sp_takah_sp,
+                'sp_nomor_kb' => $cek_doc_obl_update->sp_nomor_kb,
+                'p8_tgl_p8' => $cek_doc_obl_update->p8_tgl_p8,
+                'p8_takah_p8' => $cek_doc_obl_update->p8_takah_p8,
+                'wo_tgl_wo' => $cek_doc_obl_update->wo_tgl_wo,
+                'wo_takah_wo' => $cek_doc_obl_update->wo_takah_wo,
+                'wo_tgl_fo' => $cek_doc_obl_update->wo_tgl_fo,
+                'wo_nomor_kb' => $cek_doc_obl_update->wo_nomor_kb,
+                'wo_jenis_layanan' => $cek_doc_obl_update->wo_jenis_layanan,
+                'wo_jumlah_layanan' => $cek_doc_obl_update->wo_jumlah_layanan,
+                'wo_harga_ke_plggn' => $cek_doc_obl_update->wo_harga_ke_plggn,
+                'wo_onetime_charge_plggn' => $cek_doc_obl_update->wo_onetime_charge_plggn,
+                'wo_monthly_plggn' => $cek_doc_obl_update->wo_monthly_plggn,
+                'wo_onetime_charge_telkom' => $cek_doc_obl_update->wo_onetime_charge_telkom,
+                'wo_persen_telkom' => $cek_doc_obl_update->wo_persen_telkom,
+                'wo_monthly_telkom' => $cek_doc_obl_update->wo_monthly_telkom,
+                'wo_onetime_charge_mitra' => $cek_doc_obl_update->wo_onetime_charge_mitra,
+                'wo_persen_mitra' => $cek_doc_obl_update->wo_persen_mitra,
+                'wo_monthly_mitra' => $cek_doc_obl_update->wo_monthly_mitra,
+                'kl_tgl_kl' => $cek_doc_obl_update->kl_tgl_kl,
+                'kl_takah_kl' => $cek_doc_obl_update->kl_takah_kl,
+                'kl_nomor_kb' => $cek_doc_obl_update->kl_nomor_kb,
+                'kl_no_kl_mitra' => $cek_doc_obl_update->kl_no_kl_mitra,
+                'kl_tempat_ttd_kl' => $cek_doc_obl_update->kl_tempat_ttd_kl,
+                'kl_notaris' => $cek_doc_obl_update->kl_notaris,
+                'kl_akta_notaris' => $cek_doc_obl_update->kl_akta_notaris,
+                'kl_tgl_akta_notaris' => $cek_doc_obl_update->kl_tgl_akta_notaris,
+                'kl_nama_pejabat_telkom' => $cek_doc_obl_update->kl_nama_pejabat_telkom,
+                'kl_jabatan_pejabat_telkom' => $cek_doc_obl_update->kl_jabatan_pejabat_telkom,
+                'kl_npwp_mitra' => $cek_doc_obl_update->kl_npwp_mitra,
+                'kl_no_anggaran_mitra' => $cek_doc_obl_update->kl_no_anggaran_mitra,
+                'kl_tgl_anggaran_mitra' => $cek_doc_obl_update->kl_tgl_anggaran_mitra,
+                'kl_nama_pejabat_mitra' => $cek_doc_obl_update->kl_nama_pejabat_mitra,
+                'kl_jabatan_pejabat_mitra' => $cek_doc_obl_update->kl_jabatan_pejabat_mitra,
+                'kl_no_skm' => $cek_doc_obl_update->kl_no_skm,
+                'kl_tgl_skm' => $cek_doc_obl_update->kl_tgl_skm,
+                'kl_perihal_skm' => $cek_doc_obl_update->kl_perihal_skm,
+                'kl_tgl_akhir_kl' => $cek_doc_obl_update->kl_tgl_akhir_kl,
+                'kl_bayar_dp' => $cek_doc_obl_update->kl_bayar_dp,
+                'kl_nama_bank_mitra' => $cek_doc_obl_update->kl_nama_bank_mitra,
+                'kl_cabang_bank_mitra' => $cek_doc_obl_update->kl_cabang_bank_mitra,
+                'kl_rek_bank_mitra' => $cek_doc_obl_update->kl_rek_bank_mitra,
+                'kl_an_bank_mitra' => $cek_doc_obl_update->kl_an_bank_mitra,
+                'file_p0' => $cek_doc_obl_update->file_p0,
+                'file_p1' => $cek_doc_obl_update->file_p1,
+                'file_p2' => $cek_doc_obl_update->file_p2,
+                'file_p3' => $cek_doc_obl_update->file_p3,
+                'file_p4' => $cek_doc_obl_update->file_p4,
+                'file_p5' => $cek_doc_obl_update->file_p5,
+                'file_p6' => $cek_doc_obl_update->file_p6,
+                'file_p7' => $cek_doc_obl_update->file_p7,
+                'file_p8' => $cek_doc_obl_update->file_p8,
+                'file_sp' => $cek_doc_obl_update->file_sp,
+                'file_wo' => $cek_doc_obl_update->file_wo,
+                'file_kl' => $cek_doc_obl_update->file_kl
+              ]);
+
               DB::connection('pgsql')->table('form_obl')
               ->where('id',$edit_draf_id)
               ->update(

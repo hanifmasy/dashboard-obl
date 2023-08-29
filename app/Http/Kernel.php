@@ -70,6 +70,8 @@ class Kernel extends HttpKernel
         'role_super' => \App\Http\Middleware\RoleSuper::class,
         'role_solution' => \App\Http\Middleware\RoleSolution::class,
         'role_witel' => \App\Http\Middleware\RoleWitel::class,
+        'role_forms' => \App\Http\Middleware\RoleForms::class,
+        'role_forms_create' => \App\Http\Middleware\RoleFormsCreate::class,
         'role_obl_non_view' => \App\Http\Middleware\RoleOblNonView::class,
         'role_obl' => \App\Http\Middleware\RoleObl::class,
         'cbd' => \App\Http\Middleware\CountedDashboard::class,

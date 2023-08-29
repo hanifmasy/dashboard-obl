@@ -43,7 +43,7 @@
                         </div>
                     </td>
                     <td>
-                          <input type="text" value="{{ $value['f1_witel'] }}" disabled style="border:none;font-weight:bolder;">
+                          <input type="text" value="{{ old('f1_witel',$value['f1_witel']) }}" disabled style="border:none;font-weight:bolder;">
                     </td>
                 </tr>
                 <tr class="filterKontrak">
@@ -84,7 +84,7 @@
                         </div>
                     </td>
                     <td>
-                        <select name="f1_proses" id="f1_proses">
+                        <select name="f1_proses" id="f1_proses" disabled>
                             <option value="" disabled selected>Pilih Proses</option>
                             <option value="witel" {{ old('f1_proses',$value['f1_proses']) == 'witel' ? ' selected="selected"' : '' }}>WITEL</option>
                             <option value="obl" {{ old('f1_proses',$value['f1_proses']) == 'obl' ? ' selected="selected"' : '' }}>OBL</option>
@@ -105,7 +105,7 @@
                         </div>
                     </td>
                     <td>
-                        <input type="text" value="{{ $value['f1_jenis_spk'] }}" disabled style="border:none;">
+                        <input type="text" value="{{ $value['f1_jenis_spk'] }}" disabled style="font-weight: bolder;border:none;">
                     </td>
                 </tr>
                 <tr class="filterKontrak">
@@ -340,6 +340,7 @@
                 </tr>
                 <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                 <tr class="filterKontrak"><td colspan="2">
+                    <a href="{{ route('obl.tables') }}" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">KEMBALI</h6></a>
                     <button type="button" id="lanjutWO2" class="btn bg-gradient-success jenis_spk_wo"><h6 class="mb-0 text-sm" style="color:white;">Lanjutkan WO </h6></button>
                     <button type="button" id="lanjutFilter" class="btn bg-gradient-info jenis_spk_klsp"><h6 class="mb-0 text-sm" style="color:white;">Lanjutkan KL / SP</h6></button>
                     <button type="submit" name="submit" value="draf_filter_kontrak" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
@@ -373,9 +374,9 @@
                     </td>
                     <td>
                       @if($errors->has('f2_tgl_p1'))
-                        <input class="outline-input-merah" type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1') }}">
+                        <input class="outline-input-merah" type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1',$value['tgl_p1_all']) }}">
                       @else
-                        <input type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1',$value['tgl_p1']) }}">
+                        <input type="date" name="f2_tgl_p1" id="f2_tgl_p1" value="{{ old('f2_tgl_p1',$value['tgl_p1_all']) }}">
                       @endif
                     </td>
                 </tr>
@@ -883,7 +884,7 @@
                       @if($errors->has('wo_tgl_fo'))
                         <input class="outline-input-merah" type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo') }}">
                       @else
-                        <input type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo',$value['tgl_fo']) }}">
+                        <input type="date" name="wo_tgl_fo" id="wo_tgl_fo" value="{{ old('wo_tgl_fo',$value['tgl_p1_all']) }}">
                       @endif
 
                     </td>

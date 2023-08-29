@@ -182,7 +182,9 @@ class SolutionController extends Controller
             'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
             'updated_by' => Auth::id(),
             'revisi_witel' => true,
-            'revisi_witel_count' => ($doc_to_histori->revisi_witel_count + 1)
+            'revisi_witel_count' => ($doc_to_histori->revisi_witel_count + 1),
+            'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+            'f1_keterangan' => 'KEMBALI: WITEL REVISI'
           ]);
 
           return redirect()->route('obl.tables')->with('status', 'Sukses Memproses Action Kembali Witel.');
@@ -357,7 +359,10 @@ class SolutionController extends Controller
           DB::connection('pgsql')->table('form_obl')->where('id',$request->lo_obl_id)->update([
             'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
             'updated_by' => Auth::id(),
-            'f1_proses' => 'obl'
+            'f1_proses' => 'obl',
+            'revisi_witel' => false,
+            'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+            'f1_keterangan' => 'LANJUT OBL'
           ]);
 
           return redirect()->route('obl.tables')->with('status', 'Sukses Memproses Action Lanjut OBL.');

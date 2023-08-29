@@ -214,6 +214,7 @@
                 <tr ><td colspan="2"><br></td></tr>
                 <tr ><td colspan="2">
                     <input type="text" name="edit_obl_id" value="{{ $table_edit[0]['id'] ? $table_edit[0]['id'] : '' }}" hidden>
+                    <a href="{{ route('obl.tables') }}" class="btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm">KEMBALI</h6></a>
                     <button type="submit" name="submit" value="submit_witel"  class="btn bg-gradient-primary"><h6 class="mb-0 text-sm" style="color:white;">SIMPAN EDIT</h6></button>
                 </td></tr>
 

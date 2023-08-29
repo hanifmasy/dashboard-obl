@@ -62,22 +62,24 @@
                     <span class="nav-link-text ms-1" style="{{ $activePage == 'inputs' ? ' color:#2a2526;' : '' }}">TAMBAH DATA</span>
                 </a>
             </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link text-white "
-                    href="#">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            @if( $is_user->role_id == 2 || $is_user->role_id == 9 )
+            <li class="nav-item">
+                <a class="nav-link {{ $activePage == 'inputs_legacy' ? ' active bg-gradient-light ' : '' }} "
+                    href="{{ route('inputs_legacy') }}">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'inputs_legacy' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">playlist_add</i>
                     </div>
-                    <span class="nav-link-text ms-1">TAMBAH DATA LAMA</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'inputs_legacy' ? ' color:#2a2526;' : '' }}">TAMBAH DATA LAMA</span>
                 </a>
-            </li> -->
+            </li>
+            @endif
             <li class="nav-item">
-                <a class="nav-link {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-drafs-edit' ? ' active bg-gradient-light' : '' }} " style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' ? ' color:#2a2526;' : '' }}"
+                <a class="nav-link {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-drafs-edit' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' active bg-gradient-light' : '' }} " style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' color:#2a2526;' : '' }}"
                     href="{{ route('obl.tables') }}">
-                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' ? ' color:#2a2526;' : '' }}">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' ? ' color:#2a2526;' : '' }}">TABEL DOKUMEN</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' color:#2a2526;' : '' }}">TABEL DOKUMEN</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -87,6 +89,18 @@
                         <i class="material-icons opacity-10">cloud_sync</i>
                     </div>
                     <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-upload' ? ' color:#2a2526;' : '' }}">ARSIP DOKUMEN</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">REWARD</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $activePage == 'reward-witel-obl' ? ' active bg-gradient-light' : '' }} "
+                    href="{{ route('reward.witel_obl') }}">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">
+                        <i class="material-icons opacity-10">add_task</i>
+                    </div>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">WITEL OBL</span>
                 </a>
             </li>
             @endif
@@ -114,6 +128,18 @@
                     <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' ? ' color:#2a2526;' : '' }}">TABEL DOKUMEN</span>
                 </a>
             </li>
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">REWARD</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $activePage == 'reward-witel-obl' ? ' active bg-gradient-light ' : '' }} " style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}"
+                    href="{{ route('reward.witel_obl') }}">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">
+                        <i class="material-icons opacity-10">add_task</i>
+                    </div>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">WITEL OBL</span>
+                </a>
+            </li>
             @endif
             <!-- END OBL VIEW -->
 
@@ -132,12 +158,24 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-edit' || $activePage == 'obl-tables-upload'  ? ' active bg-gradient-primary' : '' }} "
+                <a class="nav-link text-white {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-edit' || $activePage == 'obl-tables-upload' || $activePage == 'witels-forms'  ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('obl.tables') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
                     <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">REWARD</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'reward-witel-obl' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('reward.witel_obl') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">add_task</i>
+                    </div>
+                    <span class="nav-link-text ms-1">WITEL OBL</span>
                 </a>
             </li>
             @endif
@@ -155,6 +193,18 @@
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
                     <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">REWARD</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'reward-witel-obl' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('reward.witel_obl') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">add_task</i>
+                    </div>
+                    <span class="nav-link-text ms-1">WITEL OBL</span>
                 </a>
             </li>
             @endif

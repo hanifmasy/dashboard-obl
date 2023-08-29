@@ -17,47 +17,47 @@
               font-size: 15px;
             }
 
-#table-data-obl .action-proses-obl.dropdown-item:hover {
-  background-color:  	#1a73e8;
-  color:  	#ffffff;
-  font-weight: bolder;
-  font-size: 15px;
-}
+            #table-data-obl .action-proses-obl.dropdown-item:hover {
+              background-color:  	#1a73e8;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
 
-#table-data-obl .action-proses-legal.dropdown-item:hover {
-  background-color:  	#fb8c00;
-  color:  	#ffffff;
-  font-weight: bolder;
-  font-size: 15px;
-}
+            #table-data-obl .action-proses-legal.dropdown-item:hover {
+              background-color:  	#fb8c00;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
 
-#table-data-obl .action-proses-mitra-obl.dropdown-item:hover {
-  background-color:  	#1da2d8;
-  color:  	#ffffff;
-  font-weight: bolder;
-  font-size: 15px;
-}
+            #table-data-obl .action-proses-mitra-obl.dropdown-item:hover {
+              background-color:  	#1da2d8;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
 
-#table-data-obl .action-proses-closesm.dropdown-item:hover {
-  background-color:  	#d9534f;
-  color:  	#ffffff;
-  font-weight: bolder;
-  font-size: 15px;
-}
+            #table-data-obl .action-proses-closesm.dropdown-item:hover {
+              background-color:  	#d9534f;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
 
-#table-data-obl .action-proses-done.dropdown-item:hover {
-  background-color:  	#4CAF50;
-  color:  	#ffffff;
-  font-weight: bolder;
-  font-size: 15px;
-}
+            #table-data-obl .action-proses-done.dropdown-item:hover {
+              background-color:  	#4CAF50;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
 
-#table-data-obl .action-proses-cancel.dropdown-item:hover {
-  background-color:  	#f44335;
-  color:  	#ffffff;
-  font-weight: bolder;
-  font-size: 15px;
-}
+            #table-data-obl .action-proses-cancel.dropdown-item:hover {
+              background-color:  	#f44335;
+              color:  	#ffffff;
+              font-weight: bolder;
+              font-size: 15px;
+            }
             #table-data-obl .action-kembali-witel.dropdown-item:hover {
               background-color:  	#E91E63;
               color:  	#ffffff;
@@ -146,7 +146,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">TUTUP</button>
-                    <button type="submit" name="submit" value="submit_lampiran" class="btn btn-success text-white">SIMPAN</button>
+                    <button type="submit" name="submit" value="submit_lampiran" class="btn text-white" style="background:#008080;">SIMPAN</button>
                   </div>
                 </form>
                 </div>
@@ -270,7 +270,7 @@
 
                                       </div>
                                     </div><br>
-                                    <table id="table-data-obl" class="table align-items-center justify-content-center mb-0 table-hover">
+                                    <table id="table-data-obl" class="table align-items-center justify-content-center mb-0 table-hover text-center">
                                         <thead>
                                             <tr>
                                                 <th></th>
@@ -340,6 +340,9 @@
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
                                                     Keterangan Terbaru</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                                                    Jumlah Witel Revisi</th>
                                                 <th
                                                     class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
                                                     Created By</th>
@@ -635,7 +638,7 @@
                      });
 
                      let append_total = `
-                     <div class="alert alert-success alert-dismissible">
+                     <div class="alert alert-dismissible" style="background:#008080;">
                          <div class="text-center">
                          <h6 class="text-white">
                           Layanan: `+data.perihal[0].f1_judul_projek+` &nbsp;|&nbsp;
@@ -1309,99 +1312,197 @@
             }
 
             function printDoc(print_obl_id){
-              $('#list-print-obl').empty();
-              $('#list-print-obl-options').empty();
-              // JQUERY AJAX POST
-              $.ajax({
-                 type:'POST',
-                 url:"{{ route('obl.print.index') }}",
-                 data:{
-                   _token: "{{ csrf_token() }}",
-                   print_obl_id:print_obl_id
-                 },
-                 success:function(data){
-                   // console.log(data);
-                   if(data.status_id==='4' || data.status_id==='3'){
-                     $('#list-print-obl').append(`<div class="alert alert-danger alert-dismissible">
-                         <div class="text-center">
-                             <h5 class="text-white">`+data.status+`</h5>
-                         </div>
-                     </div>`);
-                     $('#list-print-obl-options').append(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>`);
-                   }
-                   if(data.status_id==='2'){
-                     $('#list-print-obl').append(`<div class="alert alert-warning alert-dismissible">
-                         <div class="text-center">
-                             <h5 class="text-white">`+data.status+`</h5>
-                         </div>
-                     </div>`);
-                     $('#list-print-obl-options').append(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>`);
-                   }
-                   if(data.status_id==='1'){
-                     let list_print_obl = `<input type="type" name="print_obl_id" value="`+data.print_obl_id+`" hidden>`;
-                     for(let i = 0; i < 9; i++){
-                       if( data.list_print_obl[0].submit === 'draf_wo' || data.list_print_obl[0].submit === 'submit_wo'){
-                         list_print_obl += `
-                         <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p6">P6</button><br>`;
-                         list_print_obl += `
-                         <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_wo">WO</button><br>`;
-                         break;}
-                   else{
-                     if(i===0){
-                        list_print_obl += `
-                        <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p2">P2</button><br>`;
-                        if( data.list_print_obl[0].submit === 'draf_p2' ){ break; }
-                     }
-                     if(i===1){
-                       list_print_obl += `
-                       <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p3">P3</button><br>`;
-                       if( data.list_print_obl[0].submit === 'draf_p3' ){ break; }
-                     }
-                     if(i===2){
-                        list_print_obl += `
-                        <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p4">P4</button><br>`;
-                        if( data.list_print_obl[0].submit === 'draf_p4' ){ break; }
-                     }
-                     if(i===3){
-                        list_print_obl += `
-                        <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p5">P5</button><br>`;
-                        if( data.list_print_obl[0].submit === 'draf_p5' ){ break; }
-                     }
-                     if(i===4){
-                        list_print_obl += `
-                        <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p6">P6</button><br>`;
-                        if( data.list_print_obl[0].submit === 'draf_p6' ){ break; }
-                     }
-                     if(i===5){
-                        list_print_obl += `
-                        <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p7">P7</button><br>`;
-                        if( data.list_print_obl[0].submit === 'draf_p7' ){ break; }
-                     }
-                     if(i===6){
-                       if( data.list_print_obl[0].submit === 'draf_sp' || data.list_print_obl[0].submit === 'submit_sp' ){
-                         list_print_obl += `
-                         <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_sp">SP</button>`; }
-                     }
-                     if(i===7){
-                       if( data.list_print_obl[0].submit === 'draf_kl' || data.list_print_obl[0].submit === 'submit_kl'){
-                         list_print_obl += `
-                         <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_p8">P8</button><br>`;
-                         list_print_obl += `
-                         <button type="submit" class="btn btn-lg btn-warning" name="submit" value="submit_print_kl">KL</button>`; }
-                     }
-                   }
+            $('#list-print-obl').empty();
+            $('#list-print-obl-options').empty();
+            // JQUERY AJAX POST
+            $.ajax({
+               type:'POST',
+               url:"{{ route('obl.print.index') }}",
+               data:{
+                 _token: "{{ csrf_token() }}",
+                 print_obl_id:print_obl_id
+               },
+               success:function(data){
+                 // console.log(data);
+                 if(data.status_id==='4' || data.status_id==='3'){
+                   $('#list-print-obl').append(`<div class="alert alert-danger alert-dismissible">
+                       <div class="text-center">
+                           <h5 class="text-white">`+data.status+`</h5>
+                       </div>
+                   </div>`);
+                   $('#list-print-obl-options').append(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>`);
+                 }
+                 if(data.status_id==='2'){
+                   $('#list-print-obl').append(`<div class="alert alert-warning alert-dismissible">
+                       <div class="text-center">
+                           <h5 class="text-white">`+data.status+`</h5>
+                       </div>
+                   </div>`);
+                   $('#list-print-obl-options').append(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>`);
+                 }
+                 if(data.status_id==='1'){
+                   let list_print_obl = `<input type="type" name="print_obl_id" value="`+data.print_obl_id+`" hidden>`;
+                      if( data.user_in_is.role_id === 8 || data.user_in_is.role_id === 9 ){
+                        for(let i = 0; i < 7; i++){
+                          if( data.list_print_obl.f1_jenis_spk === 'WO' || data.list_print_obl.submit === 'draf_wo' || data.list_print_obl.submit === 'submit_wo'){
+                            list_print_obl += `
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p0">P0</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p1">P1</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p6">P6</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_wo">WO</button><br>`;
+                            break;
+                          }
+                          else if( data.list_print_obl.f1_jenis_spk === 'SP' || data.list_print_obl.submit === 'draf_sp' || data.list_print_obl.submit === 'submit_sp'){
+                            list_print_obl += `
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p0">P0</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p1">P1</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p2">P2</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p3">P3</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p4">P4</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p5">P5</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p6">P6</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p7">P7</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_sp">SP</button>`;
+                            break;
+                          }
+                          else if( data.list_print_obl.f1_jenis_spk === 'KL' || data.list_print_obl.submit === 'draf_kl' || data.list_print_obl.submit === 'submit_kl'){
+                            list_print_obl += `
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p0">P0</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p1">P1</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p2">P2</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p3">P3</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p4">P4</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p5">P5</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p6">P6</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p7">P7</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p8">P8</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_kl">KL</button>`;
+                            break;
+                          }
+                          else{
+                              if(i===0){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p0">P0</button><br>
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p1">P1</button><br>`;
+                                 if( data.list_print_obl.submit === 'am_form_p0-p1' || data.list_print_obl.submit === 'solution_form_p0-p1' ){ break; }
+                              }
+                              if(i===1){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p2">P2</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p2' ){ break; }
+                              }
+                              if(i===2){
+                                list_print_obl += `
+                                <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p3">P3</button><br>`;
+                                if( data.list_print_obl.submit === 'draf_p3' ){ break; }
+                              }
+                              if(i===3){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p4">P4</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p4' ){ break; }
+                              }
+                              if(i===4){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p5">P5</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p5' ){ break; }
+                              }
+                              if(i===5){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p6">P6</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p6' ){ break; }
+                              }
+                              if(i===6){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p7">P7</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p7' ){ break; }
+                              }
+                         }
+                       }
+                      }
+                      if( data.user_in_is.role_id === 2 ){
+                        for(let i = 0; i < 6; i++){
+                          if( data.list_print_obl.f1_jenis_spk === 'WO' || data.list_print_obl.submit === 'draf_wo' || data.list_print_obl.submit === 'submit_wo'){
+                            list_print_obl += `
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p6">P6</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_wo">WO</button><br>`;
+                            break;
+                          }
+                          else if( data.list_print_obl.f1_jenis_spk === 'SP' || data.list_print_obl.submit === 'draf_sp' || data.list_print_obl.submit === 'submit_sp'){
+                            list_print_obl += `
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p2">P2</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p3">P3</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p4">P4</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p5">P5</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p6">P6</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p7">P7</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_sp">SP</button>`;
+                            break;
+                          }
+                          else if( data.list_print_obl.f1_jenis_spk === 'KL' || data.list_print_obl.submit === 'draf_kl' || data.list_print_obl.submit === 'submit_kl'){
+                            list_print_obl += `
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p2">P2</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p3">P3</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p4">P4</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p5">P5</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p6">P6</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p7">P7</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p8">P8</button><br>
+                             <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_kl">KL</button>`;
+                            break;
+                          }
+                          else{
+                              if(i===0){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p2">P2</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p2' ){ break; }
+                              }
+                              if(i===1){
+                                list_print_obl += `
+                                <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p3">P3</button><br>`;
+                                if( data.list_print_obl.submit === 'draf_p3' ){ break; }
+                              }
+                              if(i===2){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p4">P4</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p4' ){ break; }
+                              }
+                              if(i===3){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p5">P5</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p5' ){ break; }
+                              }
+                              if(i===4){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p6">P6</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p6' ){ break; }
+                              }
+                              if(i===5){
+                                 list_print_obl += `
+                                 <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p7">P7</button><br>`;
+                                 if( data.list_print_obl.submit === 'draf_p7' ){ break; }
+                              }
+                         }
+                      }
+                    }
+                      if( data.user_in_is.role_id === 4 ){
+                        for(let i = 0; i < 1; i++){
+                          if( data.list_print_obl.submit === 'am_form_p0-p1' || data.list_print_obl.submit === 'solution_form_p0-p1' ){
+                            list_print_obl += `
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p0">P0</button><br>
+                            <button type="submit" class="btn btn-lg btn-warning" name="submit" value="print_p1">P1</button><br>`;
+                            break;
+                          }
+                        }
+                      }
 
-
-                     }
-
-                     $('#list-print-obl').append(list_print_obl + `
-                      <br>
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">TUTUP</button>
-                     `);
+                      $('#list-print-obl').append(list_print_obl + `
+                       <br>
+                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">TUTUP</button>
+                      `);
                    }
                  }
-               });
-               $('#modal-print-obl').modal('show');
+             });
+             $('#modal-print-obl').modal('show');
             }
 
 
@@ -1486,6 +1587,8 @@
 
               var status_table_obl = "{{ session('status') }}";
               var gdt = @json($gdt);
+              var cl = @json($cl);
+              var wl = @json($wl);
               if(status_table_obl && typeof status_table_obl !== undefined){
                 $('#status-table-obl').empty();
                 if(status_table_obl.includes('Oops')){
@@ -1548,7 +1651,7 @@
                             return 'Table_Dokumen_OBL_' + today;
                         },
                       exportOptions: {
-                           columns: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+                           columns: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
                        }
                   }
                 ],
@@ -1560,7 +1663,7 @@
                 serverSide: true,
                 retrieve: true,
                 aaSorting: [],
-                ajax: "{{ route('obl.tables') }}?ajx_gdt="+gdt,
+                ajax: "{{ route('obl.tables') }}?ajx_gdt="+gdt+"&ajx_cl="+cl+"&ajx_wl="+wl,
                 columns: [
                   {
                      searchable:false,orderable:false,targets: 0,
@@ -1624,7 +1727,7 @@
                               </div>
                               </div>
                           <div class="btn-group" role="group">
-                             <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">ACTION <span class="caret"></span></button>
+                             <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
                              <div class="dropdown-menu">
                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lanjut-obl" onclick="lanjutObl(`+row.obl_id+`)">LANJUT OBL</button>
@@ -1649,6 +1752,7 @@
                             <div class="dropdown-menu">
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
@@ -1656,7 +1760,7 @@
                             </div>
                             </div>
                          <div class="btn-group" role="group">
-                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">ACTION <span class="caret"></span></button>
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
                             <div class="dropdown-menu">
                             <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-obl" onclick="prosesObl(`+row.obl_id+`)">OBL</button>
                             <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
@@ -1675,6 +1779,7 @@
                             <div class="dropdown-menu">
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
+                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
                               <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
@@ -1682,7 +1787,7 @@
                             </div>
                             </div>
                          <div class="btn-group" role="group">
-                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">ACTION <span class="caret"></span></button>
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
                             <div class="dropdown-menu">
                             <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
                             <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
@@ -1709,7 +1814,7 @@
                             </div>
                             </div>
                          <div class="btn-group" role="group">
-                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">ACTION <span class="caret"></span></button>
+                            <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
                             <div class="dropdown-menu">
                             <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
                             <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
@@ -1737,9 +1842,9 @@
                      "render": function ( data, type, row ) {
                        if(data==='witel'){ return '<span class="badge badge-sm bg-gradient-primary">WITEL</span>'; }
                        else if(data==='obl'){ return '<span class="badge badge-sm bg-gradient-info">OBL</span>'; }
-                       else if(data==='legal'){ return '<span class="badge badge-sm bg-gradient-secondary">LEGAL</span>'; }
-                       else if(data==='mitra_obl'){ return '<span class="badge badge-sm bg-gradient-warning">MITRA OBL</span>'; }
-                       else if(data==='close_sm'){ return '<span class="badge badge-sm bg-gradient-light" style="color: #444444 !important;">CLOSE SM</span>'; }
+                       else if(data==='legal'){ return '<span class="badge badge-sm bg-gradient-warning">LEGAL</span>'; }
+                       else if(data==='mitra_obl'||data==='mitra_pjm'){ return '<span class="badge badge-sm bg-gradient-info">MITRA OBL</span>'; }
+                       else if(data==='close_sm'){ return '<span class="badge badge-sm bg-gradient-danger">CLOSE SM</span>'; }
                        else if(data==='done'){ return '<span class="badge badge-sm bg-gradient-success">DONE</span>'; }
                        else if(data==='cancel'){ return '<span class="badge badge-sm bg-gradient-danger">CANCEL</span>'; }
                        else{ return '<span class="badge badge-sm bg-gradient-dark">'+data+'</span>'; }
@@ -1751,6 +1856,7 @@
                         if(row.filter_submit==='kontrak1'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
                         if(row.filter_submit==='kontrak2'){ return '<span class="badge badge-sm bg-gradient-success">'+data+'</span>'; }
                         if(row.filter_submit==='kontrak3'){ return '<span class="badge badge-sm bg-gradient-primary">'+data+'</span>'; }
+                        if(row.filter_submit==='kontrak4'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
                         if(row.filter_submit==='filter'){ return '<span class="badge badge-sm bg-gradient-danger">'+data+'</span>'; }
                         if(row.filter_submit==='form'){ return '<span class="badge badge-sm bg-gradient-warning">'+data+'</span>'; }
                         if(row.filter_submit===''){ return ''; }
@@ -1836,6 +1942,9 @@
                        if(row.tgl_keterangan){ return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>'; }
                        else{ return '<span style="white-space:normal"></span>'; }
                      }
+                  },
+                  {
+                     data: 'revisi_count',name: 'revisi_count',searchable:false,orderable:false
                   },
                   {
                      data: 'user_create',name: 'user_create',searchable:true,orderable:false

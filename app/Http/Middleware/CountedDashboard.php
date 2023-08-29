@@ -24,25 +24,27 @@ class CountedDashboard
           // GET & COUNT DATA FOR DASHBOARD
           $counted_dashboard_top_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'cancel' ");
           $counted_dashboard_top_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null ");
+
           $counted_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'witel' ");
-          $timed_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'cancel' ");
+          $timed_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'witel' ");
           $counted_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'obl' ");
           $timed_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'obl' ");
           $counted_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'legal' ");
           $timed_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'legal' ");
           $counted_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'mitra_obl' ");
-          $timed_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'mitra_obl' ");
+          $timed_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses in ('mitra_obl','mitra_pjm') ");
           $counted_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'close_sm' ");
           $timed_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'close_sm' ");
           $counted_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'done' ");
           $timed_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'done' ");
 
           if(Auth::check()){
-            $is_user = User::leftJoin('user_role as ur','ur.user_id','=','users.id')->leftJoin('roles as r','r.id','=','ur.role_id')
+            $is_user = User::leftJoin('user_role as ur','ur.user_id','=','users.id')
+            ->leftJoin('roles as r','r.id','=','ur.role_id')
             ->leftJoin('witels','witels.id','=','users.witel_id')
             ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
             ->select('users.id','users.nama_lengkap','ur.role_id','r.nama_role','witels.nama_witel','user_mitra.mitra_id')
-            ->where('users.id',Auth::user()->id)
+            ->where('users.id',Auth::id())
             ->first();
             // USER WITEL
             if($is_user->role_id===4 || $is_user->role_id===5){

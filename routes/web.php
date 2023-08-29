@@ -15,6 +15,7 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\FilesController;
 use App\Http\Controllers\SolutionController;
 use App\Http\Controllers\ProsesOblController;
+use App\Http\Controllers\RewardsController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\DB;
 use App\Models\MitraVendor;
@@ -49,6 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 // GET VIEW WITH METHODS
+Route::get('reward-witel-obl', [RewardsController::class, 'witelObl'])->middleware(['auth','role_table_files'])->name('reward.witel_obl');
 Route::get('obl-tables', [TableOblController::class, 'tables'])->middleware('auth')->name('obl.tables');
 Route::get('obl-files', [UploadController::class, 'index'])->middleware(['auth','role_files'])->name('obl.upload.index');
 Route::get('inputs', function () {
@@ -66,17 +68,33 @@ Route::get('inputs', function () {
 		)->get()->toArray();
 	$mitra_vendor = MitraVendor::get()->toArray();
 	return view('pages.inputs',compact('mitra_vendor','list_nomor_kb')); })->middleware(['auth','role_obl'])->name('inputs');
+Route::get('inputs-legacy', function () {
+	$list_nomor_kb = DocObl::select(
+			DB::raw("
+			case
+				when (kl_nomor_kb is not null and kl_nomor_kb <> '') and f1_jenis_spk = 'KL' then kl_nomor_kb
+				when (sp_nomor_kb is not null and sp_nomor_kb <> '') and f1_jenis_spk = 'SP' then sp_nomor_kb
+				when (wo_nomor_kb is not null and wo_nomor_kb <> '') and f1_jenis_spk = 'WO' then wo_nomor_kb
+				else ''
+			end as nomor_kb
+			"),
+			'f1_jenis_spk',
+			'f1_nama_plggn'
+		)->get()->toArray();
+	$mitra_vendor = MitraVendor::get()->toArray();
+	return view('pages.inputs_legacy',compact('mitra_vendor','list_nomor_kb')); })->middleware(['auth','role_obl_non_view'])->name('inputs_legacy');
 Route::get('witels', function () { $mitra_vendor = MitraVendor::get()->toArray(); return view('pages.witels',compact('mitra_vendor')); })->middleware(['auth','role_witel'])->name('witels');
 Route::get('testing', [TestingController::class, 'index'])->middleware(['auth','role_super'])->name('testing.index');
 
 
 // POST METHOD ( PAGES )
-Route::post('inputs/create', [InputsController::class, 'create'])->middleware(['auth','role_obl_non_view'])->name('inputs.create');
+Route::post('inputs/create', [InputsController::class, 'create'])->middleware(['auth','role_obl'])->name('inputs.create');
+Route::post('inputs-legacy/create', [InputsController::class, 'createLegacy'])->middleware(['auth','role_obl_non_view'])->name('inputs_legacy.create');
 
 Route::post('witels/create', [WitelsController::class, 'create'])->middleware(['auth','role_witel'])->name('witels.create');
 Route::post('witels/edit', [WitelsController::class, 'edit'])->middleware(['auth','role_witel'])->name('witels.edit');
-Route::post('witels/forms', [WitelsController::class, 'forms'])->middleware(['auth','role_witel'])->name('witels.forms');
-Route::post('witels/forms/create', [WitelsController::class, 'formsCreate'])->middleware(['auth','role_witel'])->name('witels.forms.create');
+Route::post('witels/forms', [WitelsController::class, 'forms'])->middleware(['auth','role_forms'])->name('witels.forms');
+Route::post('witels/forms/create', [WitelsController::class, 'formsCreate'])->middleware(['auth','role_forms_create'])->name('witels.forms.create');
 Route::post('witels/files', [WitelsController::class, 'files'])->middleware(['auth','role_witel'])->name('witels.files');
 Route::post('witels/files/upload', [WitelsController::class, 'upload'])->middleware(['auth','role_witel'])->name('witels.files.upload');
 

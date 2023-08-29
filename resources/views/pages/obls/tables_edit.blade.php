@@ -41,7 +41,7 @@
                                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                                     <h6 class="text-capitalize text-white ps-3">TABEL DOKUMEN: EDIT</h6>
                                 </div>
-                                @elseif( $user_edit->role_id === 2 || $user_edit->role_id === 8 || $user_id->role_id === 9 )
+                                @elseif( $user_edit->role_id === 2 || $user_edit->role_id === 8 || $user_edit->role_id === 9 )
                                 <div class="bg-gradient-edit border-radius-lg pt-4 pb-3">
                                     <h6 class="text-capitalize text-white ps-3">TABEL DOKUMEN: EDIT</h6>
                                 </div>
@@ -68,9 +68,9 @@
                             <form id="formObl" action="{{ route('obl.tables.edit.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @if( isset($user_edit) )
-                              @if( $user_edit->role_id === 4 || $user_edit->role_id === 8 )
+                              @if( $user_edit->role_id === 4 )
                               <x-edits.witel :table_edit="$table_edit" :mitra_vendor="$mitra_vendor"></x-edits.witel>
-                              @elseif( $user_edit->role_id === 2 || $user_id->role_id === 9 )
+                              @elseif( $user_edit->role_id === 2 || $user_edit->role_id === 8  || $user_edit->role_id === 9 )
                               <x-edits.obl :table_edit="$table_edit" :mitra_vendor="$mitra_vendor"></x-edits.obl>
                               @endif
                             @else
@@ -87,10 +87,10 @@
         @push('js')
 
         @if( isset($user_edit) )
-          @if( $user_edit->role_id === 4 || $user_edit->role_id === 8 )
+          @if( $user_edit->role_id === 4 )
           <x-editsjs.witel :table_edit="$table_edit"></x-editsjs.witel>
-          @elseif( $user_edit->role_id === 2 || $user_id->role_id === 9 )
-          <x-editsjs.obl :table_edit="$table_edit"></x-editsjs.obl>
+          @elseif( $user_edit->role_id === 2 || $user_edit->role_id === 8 || $user_edit->role_id === 9 )
+          <x-editsjs.obl :table_edit="$table_edit" :table_edit_p4_attendees="$table_edit_p4_attendees"></x-editsjs.obl>
           @endif
         @else
         DATA PARSING KOSONG!
