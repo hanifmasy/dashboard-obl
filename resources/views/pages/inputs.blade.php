@@ -407,10 +407,8 @@
                                                         <option value="{{ $value['id'] }}" {{ old('f1_mitra_id') == $value['id'] ? ' selected="selected"' : '' }}>{{ $value['nama_mitra'] }}</option>
                                                       @endforeach
                                                     @endif
-                                                    <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
                                                   </select>
                                                   @endif
-                                                  <input type="text" name="f1_nama_mitra_lain" id="f1_nama_mitra_lain" value="" style="width:350px;" placeholder="NAMA MITRA BARU">
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -912,12 +910,10 @@
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
                                                             <div id="suksesIsi" class="alert alert-success opacity-7" role="alert">
-                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P8 SUDAH TERISI ✅</h5>
-                                                                <p class="text-xs text-secondary mb-0 text-white">
-                                                                SILAHKAN LANJUT KE FORM WO</p>
+                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P7 & P8 SUDAH TERISI ✅</h5>
                                                             </div>
                                                             <div id="gagalIsi" class="alert alert-danger opacity-7" role="alert">
-                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P8 BELUM TERISI ❌</h5>
+                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P7 BELUM TERISI ❌</h5>
                                                                 <p class="text-xs text-secondary mb-0 text-white">
                                                                 SILAHKAN KEMBALI KE FORM P7</p>
                                                             </div>

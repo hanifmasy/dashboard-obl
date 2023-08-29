@@ -2,7 +2,7 @@
         <x-navbars.sidebar activePage="inputs_legacy"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="TAMBAH DATA LAMA"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="REKAP DATA LAMA"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <style media="screen">
@@ -47,7 +47,7 @@
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-light shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-capitalize ps-3">TAMBAH DATA LAMA</h6>
+                                    <h6 class="text-capitalize ps-3">REKAP DATA LAMA</h6>
                                 </div>
                             </div>
 
@@ -219,14 +219,14 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <select name="f1_proses" id="f1_proses">
-                                                        <option value="" disabled selected>Pilih Proses</option>
+                                                    <select name="f1_proses" id="f1_proses" disabled>
+                                                        <option value="" >Pilih Proses</option>
                                                         <option value="witel" {{ old('f1_proses') == 'witel' ? ' selected="selected"' : '' }}>WITEL</option>
                                                         <option value="obl" {{ old('f1_proses') == 'obl' ? ' selected="selected"' : '' }}>OBL</option>
                                                         <option value="legal" {{ old('f1_proses') == 'legal' ? ' selected="selected"' : '' }}>LEGAL</option>
                                                         <option value="mitra_obl" {{ old('f1_proses') == 'mitra_obl' ? ' selected="selected"' : '' }}>MITRA OBL</option>
                                                         <option value="close_sm" {{ old('f1_proses') == 'close_sm' ? ' selected="selected"' : '' }}>CLOSE SM</option>
-                                                        <option value="done" {{ old('f1_proses') == 'done' ? ' selected="selected"' : '' }}>DONE</option>
+                                                        <option value="done" selected {{ old('f1_proses') == 'done' ? ' selected="selected"' : '' }}>DONE</option>
                                                         <option value="cancel" {{ old('f1_proses') == 'cancel' ? ' selected="selected"' : '' }}>CANCEL</option>
                                                     </select>
                                                 </td>
@@ -240,7 +240,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
+                                                    @if($errors->has('f1_folder'))
+                                                    <input class="rupiahs outline-input-merah" style="width:350px;" type="text" name="f1_folder" id="f1_folder" value="{{ old('f1_folder','') }}">
+                                                    @else
                                                     <input style="width:350px;" type="text" name="f1_folder" id="f1_folder" value="{{ old('f1_folder','') }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -434,8 +438,7 @@
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak"><td colspan="2">
-                                                <button type="button" id="backFilterKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali </h6></button>
-                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success ms-10"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema WO </h6></button>
+                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success ms-0"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema WO </h6></button>
                                                 <button type="button" id="lanjutFilter" class="btn bg-gradient-info ms-1"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema KL / SP </h6></button>
                                             </td></tr>
                                             <tr class="filterAwal"><td colspan="2"><br></td></tr>
@@ -586,7 +589,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p3_takah_p3" id="p3_takah_p3" value="{{ old('p3_takah_p3') }}">
+                                                    <input type="text" name="p3_takah_p3" id="p3_takah_p3" value="{{ old('p3_takah_p3') }}">
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -610,6 +613,18 @@
                                             <!-- P4 -->
                                             <tr class="formP4"><td colspan="2"><br></td></tr>
                                             <tr class="formP4"><td colspan="2"><h6 class="ps-2">FORM P4 – BERITA ACARA RAPAT PENJELASAN</h6></td></tr>
+                                            <tr class="formP4">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form P4</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="p4_tgl_p4" id="p4_tgl_p4" value="{{ old('p4_tgl_p4') }}">
+                                                </td>
+                                            </tr>
                                             <tr class="formP4">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -746,6 +761,18 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form P5</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="p5_tgl_p5" id="p5_tgl_p5" value="{{ old('p5_tgl_p5') }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP5">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Harga Penawaran Total (Sebelum PPN)</h6>
                                                         </div>
                                                     </div>
@@ -779,6 +806,18 @@
                                             <!-- P6 -->
                                             <tr class="formP6"><td colspan="2"><br></td></tr>
                                             <tr class="formP6"><td colspan="2"><h6 class="ps-2">FORM P6 – BERITA ACARA KLARIFIKASI DAN NEGOSIASI</h6></td></tr>
+                                            <tr class="formP6">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form P6</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="p6_tgl_p6" id="p6_tgl_p6" value="{{ old('p6_tgl_p6') }}">
+                                                </td>
+                                            </tr>
                                             <tr class="formP6">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -876,6 +915,30 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form P7</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="p7_tgl_p7" id="p7_tgl_p7" value="{{ old('p7_tgl_p7') }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP7">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor Form P7</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="p7_takah_p7" id="p7_takah_p7" value="{{ old('p7_takah_p7') }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="formP7">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Lampiran Berkas</h6>
                                                         </div>
                                                     </div>
@@ -945,13 +1008,13 @@
                                                 <td colspan="2">
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <div id="suksesIsi" class="alert alert-success opacity-7" role="alert">
-                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P8 SUDAH TERISI ✅</h5>
-                                                                <p class="text-xs text-secondary mb-0 text-white">
-                                                                SILAHKAN LANJUT KE FORM WO</p>
+                                                            <div id="suksesIsi" class="alert alert-success opacity-7 text-white" role="alert">
+                                                                <h5 class="text-white mb-0 text-lg">LANJUT ISI FORM P8</h5><br><hr>
+                                                                TANGGAL FORM P8: <br><input type="date" name="p8_tgl_p8" id="p8_tgl_p8" value="{{ old('p8_tgl_p8') }}"><br><br>
+                                                                NOMOR FORM P8: <br><input type="text" name="p8_takah_p8" id="p8_takah_p8" value="{{ old('p8_takah_p8') }}">
                                                             </div>
                                                             <div id="gagalIsi" class="alert alert-danger opacity-7" role="alert">
-                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P8 BELUM TERISI ❌</h5>
+                                                                <h5 class="text-white mb-0 text-lg">INPUTAN FORM P7 BELUM TERISI ❌</h5>
                                                                 <p class="text-xs text-secondary mb-0 text-white">
                                                                 SILAHKAN KEMBALI KE FORM P7</p>
                                                             </div>
@@ -967,6 +1030,30 @@
                                             <!-- WO -->
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
                                             <tr class="formWO"><td colspan="2"><h6 class="ps-2">WORK ORDER ( WO )</h6></td></tr>
+                                            <tr class="formWO">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form WO</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="wo_tgl_wo" id="wo_tgl_wo" value="{{ old('wo_tgl_wo') }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="formWO">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor Form WO</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="wo_takah_wo" id="wo_takah_wo" value="{{ old('wo_takah_wo') }}">
+                                                </td>
+                                            </tr>
                                             <tr class="formWO">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
@@ -1154,6 +1241,30 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form SP</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="sp_tgl_sp" id="sp_tgl_sp" value="{{ old('sp_tgl_sp') }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="formSP">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor Form SP</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="sp_takah_sp" id="sp_takah_sp" value="{{ old('sp_takah_sp') }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="formSP">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Nomor Kontrak Berlangganan (KB) </h6>
                                                         </div>
                                                     </div>
@@ -1170,6 +1281,30 @@
                                             <!-- KL -->
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
                                             <tr class="formKL"><td colspan="2"><h6 class="ps-2">KONTRAK LAYANAN ( KL )</h6></td></tr>
+                                            <tr class="formKL">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Tanggal Form KL</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="date" name="kl_tgl_kl" id="kl_tgl_kl" value="{{ old('kl_tgl_kl') }}">
+                                                </td>
+                                            </tr>
+                                            <tr class="formKL">
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Nomor Form KL</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="kl_takah_kl" id="kl_takah_kl" value="{{ old('kl_takah_kl') }}">
+                                                </td>
+                                            </tr>
                                             <tr class="formKL">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">

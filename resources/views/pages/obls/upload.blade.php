@@ -7,7 +7,7 @@
 
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="ARSIP DOKUMEN"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="ARSIP FILE"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <style media="screen">
@@ -131,29 +131,29 @@
                                     @if(isset($upload_doc))
                                         @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 5 )
                                         <div class="bg-gradient-primary border-radius-lg pt-4 pb-3">
-                                        <h6 class="text-white text-capitalize ps-3">ARSIP DOKUMEN: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
+                                        <h6 class="text-white text-capitalize ps-3">ARSIP FILE: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
                                         </div>
                                         @elseif( $user_in_is === 6 )
                                         <div class=" border-radius-lg pt-4 pb-3" style="background:#1da2d8;">
-                                        <h6 class="text-white text-capitalize ps-3">ARSIP DOKUMEN: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
+                                        <h6 class="text-white text-capitalize ps-3">ARSIP FILE: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
                                         </div>
                                         @else
                                         <div class="bg-upload-title border-radius-lg pt-4 pb-3">
-                                        <h6 class="text-white text-capitalize ps-3">ARSIP DOKUMEN: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
+                                        <h6 class="text-white text-capitalize ps-3">ARSIP FILE: <div style="font-size: 24px;">{{ $upload_doc[0]['f1_segmen'] }} / {{ $upload_doc[0]['folder'] }} / {{ $upload_doc[0]['tahun'] }}  / {{ $upload_doc[0]['f1_judul_projek'] }} </div></h6>
                                         </div>
                                         @endif
                                     @else
                                         @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 5 )
                                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 class="text-capitalize ps-3">ARSIP DOKUMEN<span id="judul_hasil_cari"></span></h6>
+                                        <h6 class="text-capitalize ps-3">ARSIP FILE<span id="judul_hasil_cari"></span></h6>
                                         </div>
                                         @elseif( $user_in_is === 6 )
                                         <div class="shadow-primary border-radius-lg pt-4 pb-3" style="background:#1da2d8;">
-                                        <h6 class="text-capitalize ps-3">ARSIP DOKUMEN<span id="judul_hasil_cari"></span></h6>
+                                        <h6 class="text-capitalize ps-3">ARSIP FILE<span id="judul_hasil_cari"></span></h6>
                                         </div>
                                         @else
                                         <div class="bg-gradient-light shadow-primary border-radius-lg pt-4 pb-3">
-                                        <h6 class="text-capitalize ps-3">ARSIP DOKUMEN<span id="judul_hasil_cari"></span></h6>
+                                        <h6 class="text-capitalize ps-3">ARSIP FILE<span id="judul_hasil_cari"></span></h6>
                                         </div>
                                         @endif
                                     @endif

@@ -69,7 +69,7 @@
                     <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'inputs_legacy' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">playlist_add</i>
                     </div>
-                    <span class="nav-link-text ms-1" style="{{ $activePage == 'inputs_legacy' ? ' color:#2a2526;' : '' }}">TAMBAH DATA LAMA</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'inputs_legacy' ? ' color:#2a2526;' : '' }}">REKAP DATA LAMA</span>
                 </a>
             </li>
             @endif
@@ -88,7 +88,7 @@
                     <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'obl-upload' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">cloud_sync</i>
                     </div>
-                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-upload' ? ' color:#2a2526;' : '' }}">ARSIP DOKUMEN</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-upload' ? ' color:#2a2526;' : '' }}">ARSIP FILE</span>
                 </a>
             </li>
             <li class="nav-item mt-3">

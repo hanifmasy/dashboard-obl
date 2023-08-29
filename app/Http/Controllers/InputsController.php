@@ -264,30 +264,6 @@ class InputsController extends Controller
           catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check P6 HARGA NEGO.'); }
         }
 
-        // PENAMAAN MITRA BARU
-        $f1_mitra_id = null;
-        if($request->f1_nama_mitra_lain){
-          if($request->f1_nama_mitra_lain !== ''){
-            try{
-              $cek_nama_mitra = DB::connection('pgsql')->table('mitras')->select('*')->where('nama_mitra',$request->f1_nama_mitra_lain)->get()->toArray();
-              if( count($cek_nama_mitra) > 0 ){ return back()->withInput()->with('status','Oops! Nama Mitra Sudah Digunakan.'); }
-              else{
-                $f1_mitra_id = DB::connection('pgsql')->table('mitras')->insertGetId([
-                  'nama_mitra' => $request->f1_nama_mitra_lain
-                ]);
-              }
-            }
-            catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check Nama Mitra.'); }
-          }
-        }
-        else{
-          if($request->f1_mitra_id){
-            if($request->f1_mitra_id !== ''){
-              $f1_mitra_id = $request->f1_mitra_id;
-            }
-          }
-        }
-
         if($request->submit && str_contains($request->submit,'draf')){
           try{
             // SUBMIT DRAF (VALIDASI: JUDUL PROJEK)
@@ -304,8 +280,6 @@ class InputsController extends Controller
                 '_token',
                 'p4_attendees',
                 'global_jenis_spk',
-                'f1_mitra_id',
-                'f1_nama_mitra_lain',
                 'cari_nomor_kb'
             ]);
             $filtered_draf->put('created_by',$created_by);
@@ -319,7 +293,6 @@ class InputsController extends Controller
             $filtered_draf->put('revisi_witel_count',0);
             $filtered_draf->put('f1_jenis_spk',$request->global_jenis_spk);
             $filtered_draf->put('f1_folder',$nama_folder);
-            $filtered_draf->put('f1_mitra_id',$f1_mitra_id);
             if($request->f1_witel){ $filtered_draf->put('p7_tembusan',$gm_witel); }
             if($request->p6_harga_negosiasi){ $filtered_draf->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
             if($request->f1_keterangan){ $filtered_draf->put('f1_tgl_keterangan',$created_at); }
@@ -381,8 +354,6 @@ class InputsController extends Controller
                   '_token',
                   'p4_attendees',
                   'global_jenis_spk',
-                  'f1_mitra_id',
-                  'f1_nama_mitra_lain',
                   'cari_nomor_kb'
               ]);
               // dd($filtered);
@@ -540,7 +511,6 @@ class InputsController extends Controller
               $filtered->put('revisi_witel_count',0);
               $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
               $filtered->put('f1_folder',$nama_folder);
-              $filtered->put('f1_mitra_id',$f1_mitra_id);
               if($request->f1_witel){ $filtered->put('p7_tembusan',$gm_witel); }
               if($request->p6_harga_negosiasi){ $filtered->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
               if($request->f1_keterangan){ $filtered->put('f1_tgl_keterangan',$created_at); }
@@ -678,6 +648,83 @@ class InputsController extends Controller
     }
 
     public function createLegacy(Request $request){
-      dd($request->all());
+      // dd($request->all());
+
+      try{
+        $inputan_masuk = [];
+        if($request->submit){
+          if($request->submit=='submit_wo'){
+            $inputan_masuk['p6_tgl_p6'] = 'required';
+            $inputan_masuk['wo_tgl_fo'] = 'required';
+            $inputan_masuk['wo_tgl_wo'] = 'required';
+            $inputan_masuk['wo_nomor_kb'] = 'required';
+          }
+          if($request->submit=='submit_sp' ){
+            $inputan_masuk['f2_tgl_p1'] = 'required';
+            $inputan_masuk['p2_tgl_p2'] = 'required';
+            $inputan_masuk['p3_tgl_p3'] = 'required';
+            $inputan_masuk['p3_takah_p3'] = 'required';
+            $inputan_masuk['p4_tgl_p4'] = 'required';
+            $inputan_masuk['p5_tgl_p5'] = 'required';
+            $inputan_masuk['p6_tgl_p6'] = 'required';
+            $inputan_masuk['p7_tgl_p7'] = 'required';
+            $inputan_masuk['p7_takah_p7'] = 'required';
+            $inputan_masuk['sp_tgl_sp'] = 'required';
+            $inputan_masuk['sp_takah_sp'] = 'required';
+            $inputan_masuk['sp_nomor_kb'] = 'required';
+          }
+          if($request->submit=='submit_sp' ){
+            $inputan_masuk['f2_tgl_p1'] = 'required';
+            $inputan_masuk['p2_tgl_p2'] = 'required';
+            $inputan_masuk['p3_tgl_p3'] = 'required';
+            $inputan_masuk['p3_takah_p3'] = 'required';
+            $inputan_masuk['p4_tgl_p4'] = 'required';
+            $inputan_masuk['p5_tgl_p5'] = 'required';
+            $inputan_masuk['p6_tgl_p6'] = 'required';
+            $inputan_masuk['p7_tgl_p7'] = 'required';
+            $inputan_masuk['p7_takah_p7'] = 'required';
+            $inputan_masuk['p8_tgl_p8'] = 'required';
+            $inputan_masuk['p8_takah_p8'] = 'required';
+            $inputan_masuk['kl_tgl_kl'] = 'required';
+            $inputan_masuk['kl_takah_kl'] = 'required';
+            $inputan_masuk['kl_nomor_kb'] = 'required';
+          }
+        }
+        $inputan_masuk['f1_nilai_kb'] = 'required';
+        $inputan_masuk['f1_jenis_kontrak'] = 'required';
+        $inputan_masuk['f1_judul_projek'] = 'required';
+        $inputan_masuk['f1_nama_plggn'] = 'required';
+        $inputan_masuk['f1_segmen'] = 'required';
+        $inputan_masuk['f1_folder'] = 'required';
+        $inputan_masuk['f1_witel'] = 'required';
+        $validasi = $request->all();
+        $validator = Validator::make($validasi,$inputan_masuk);
+        if($validator->fails()){ return back()->withInput()->withErrors($validator); }
+        // $validated = $validator->validated();
+        // dd($validated);
+
+        $collection = collect($request->all());
+        $filtered = $collection->except([
+            '_token',
+            'p4_attendees',
+            'global_jenis_spk',
+            'cari_nomor_kb'
+        ]);
+        // dd($filtered);
+        $filtered->put('is_draf',9);
+        $filtered->put('revisi_witel',false);
+        $filtered->put('revisi_witel_count',0);
+        $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
+        if($request->f1_keterangan){ $filtered->put('f1_tgl_keterangan',$created_at); }
+        $obl_id = DB::connection('pgsql')->table('form_obl')
+        ->insertGetId(
+            $filtered->all()
+        );
+        return redirect()->route('inputs_legacy')->with('status', 'Sukses Simpan Rekap Data Lama.');
+      }
+      catch(Throwable $e){
+          return back()->with('status','Gagal Simpan Rekap Data Lama.');
+      }
+
     }
 }

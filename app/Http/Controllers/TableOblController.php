@@ -34,6 +34,7 @@ class TableOblController extends Controller
           ->leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
           ->select(
                     'obl.id as obl_id',
+                    'obl.is_draf',
                     'obl.revisi_witel as is_revisi',
                     DB::raw("
                     case
@@ -101,6 +102,7 @@ class TableOblController extends Controller
           ->leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
           ->select(
                     'obl.id as obl_id',
+                    'obl.is_draf',
                     'obl.revisi_witel as is_revisi',
                     DB::raw("
                     case
@@ -167,6 +169,7 @@ class TableOblController extends Controller
           ->leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
           ->select(
                     'obl.id as obl_id',
+                    'obl.is_draf',
                     'obl.revisi_witel as is_revisi',
                     DB::raw("
                     case
@@ -265,8 +268,8 @@ class TableOblController extends Controller
           }
         }
 
-        $data = $query->whereRaw(" obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '' ")
-          ->orderBy('obl.created_at','DESC')
+        $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') ")
+          // ->orderBy('obl.created_at','DESC')
           ->orderBy('obl.updated_at','DESC')
           ->get();
         return DataTables::of($data)->addIndexColumn()->make(true);
