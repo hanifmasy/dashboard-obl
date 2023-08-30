@@ -269,7 +269,6 @@ class TableOblController extends Controller
         }
 
         $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') ")
-          // ->orderBy('obl.created_at','DESC')
           ->orderBy('obl.updated_at','DESC')
           ->get();
         return DataTables::of($data)->addIndexColumn()->make(true);
@@ -309,6 +308,8 @@ class TableOblController extends Controller
     public function multidelete(Request $request)
     {
       // dd($request->all());
+      return redirect()->route('obl.tables')->with('status', 'Oops! Fitur Multidelete Ditutup Oleh Admin.');
+
       if($request->multi_obl_ids && $request->status_perintah){
         if($request->status_perintah == 'multi_delete_ids'){
           $multi_delete_ids = $request->multi_obl_ids;
@@ -337,7 +338,8 @@ class TableOblController extends Controller
     public function excel(Request $request)
     {
       // dd($request->all());
-      // return redirect('obl-tables')->with('status', 'Oops! Fitur Excel Sedang Dikembangkan.');
+      return redirect()->route('obl.tables')->with('status', 'Oops! Fitur Excel-Non-Yajra Ditutup Oleh Admin.');
+
       $user_enter = 'OBL';
       $tgl_download = Carbon::now()->translatedFormat('Y-m-d');
       $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
@@ -662,7 +664,7 @@ class TableOblController extends Controller
           $mitra_vendor = null;
           $table_edit_keterangan = null;
           $list_nomor_kb = null;
-          // user witel & solution
+          // user witel
           if( $user_edit->role_id === 4 ){
             $table_edit = DocObl::select(
               'id',
@@ -702,7 +704,7 @@ class TableOblController extends Controller
               ->get()->toArray();
               $mitra_vendor = DB::connection('pgsql')->table('mitras')->select('*')->get()->toArray();
           }
-          // user obl
+          // user obl & solution
           if( $user_edit->role_id === 2 || $user_edit->role_id === 8  || $user_edit->role_id === 9 ){
               $table_edit = DocObl::select(
                 '*',
@@ -992,9 +994,9 @@ class TableOblController extends Controller
         return redirect()->route('obl.tables')->with('status', 'Sukses Simpan Edit Dokumen OBL.');
 
       }
-      // end user witel & solution
+      // end user witel
 
-      // user obl
+      // user obl  & solution
       else if( $user_update->role_id === 2 || $user_update->role_id === 8  || $user_update->role_id === 9 ){
         // P6 HARGA NEGO = P7 HARGA PEKERJAAN
         $p7_harga_pekerjaan = '';
@@ -1021,17 +1023,16 @@ class TableOblController extends Controller
                 '_token',
                 'p4_attendees',
                 'edit_draf_id',
-                'f1_mitra_id',
-                'f1_nama_mitra_lain'
+                'global_jenis_spk'
             ]);
             $filtered_draf->put('updated_at',$submit_sekarang);
             $filtered_draf->put('updated_by',$user_update->id);
-            // if($user_update->role_id===8){$filtered_draf->put('submit','solution_edit');}
-            // if($user_update->role_id===2 || $user_update->role_id===9){$filtered_draf->put('submit','obl_edit');}
+            if($user_update->role_id===8){$filtered_draf->put('submit','solution_edit');}
+            if($user_update->role_id===2 || $user_update->role_id===9){$filtered_draf->put('submit','obl_edit');}
             if($request->p6_harga_negosiasi){ $filtered_draf->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
             if($request->f1_keterangan){ $filtered_draf->put('f1_tgl_keterangan',$submit_sekarang); }
             $filtered_draf->put('is_draf',1);
-            $filtered_draf->put('f1_mitra_id',$f1_mitra_id);
+            $filtered_draf->put('f1_jenis_spk',$request->global_jenis_spk);
 
             DB::connection('pgsql')->table('form_obl_histori')
             ->insert([
@@ -1247,8 +1248,7 @@ class TableOblController extends Controller
                   '_token',
                   'p4_attendees',
                   'edit_draf_id',
-                  'f1_mitra_id',
-                  'f1_nama_mitra_lain'
+                  'global_jenis_spk'
               ]);
               // dd($filtered);
 
@@ -1396,11 +1396,12 @@ class TableOblController extends Controller
               // append user id
               $filtered->put('updated_by',$user_id);
               $filtered->put('updated_at',$submit_sekarang);
+              if($user_update->role_id===8){$filtered->put('submit','solution_edit');}
+              if($user_update->role_id===2 || $user_update->role_id===9){$filtered->put('submit','obl_edit');}
               if($request->p6_harga_negosiasi){ $filtered->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
               if($request->f1_keterangan){ $filtered->put('f1_tgl_keterangan',$submit_sekarang); }
               $filtered->put('is_draf',0);
               $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
-              $filtered->put('f1_mitra_id',$f1_mitra_id);
               // append tanggal dokumen
               $filtered->put('p2_tgl_p2',$arr_tanggal[0][0]);
               $filtered->put('p3_tgl_p3',$arr_tanggal[1][0]);
@@ -1674,15 +1675,11 @@ class TableOblController extends Controller
               return redirect()->route('obl.tables')->with('status', 'Sukses Simpan Edit OBL : ' . $dok_obl);
           }
           catch(Throwable $e){
-              // report($e);
-              // return false;
-              // return redirect()->back()->with('status',$e);
-              // return redirect()->back()->with('status','Gagal Simpan OBL!');
               return back()->with('status','Oops! Gagal Simpan Edit OBL!');
           }
         }
       }
-      // end user obl
+      // end user obl  & solution
 
       else{ redirect()->route('obl.tables')->with('status', 'Oops! Gagal Cek ID User.'); }
 

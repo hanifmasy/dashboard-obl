@@ -711,6 +711,11 @@ class InputsController extends Controller
             'cari_nomor_kb'
         ]);
         // dd($filtered);
+        $created_by = Auth::id();
+        $created_at = Carbon::now()->translatedFormat('Y-m-d H:i:s');
+
+        $filtered->put('created_by',$created_by);
+        $filtered->put('created_at',$created_at);
         $filtered->put('is_draf',9);
         $filtered->put('revisi_witel',false);
         $filtered->put('revisi_witel_count',0);
@@ -720,6 +725,25 @@ class InputsController extends Controller
         ->insertGetId(
             $filtered->all()
         );
+        // INSERT P4 ATTENDEES
+        if($request->p4_attendees){
+            $arr_attendees = [];
+            foreach($request->p4_attendees as $key => $value){
+                array_push(
+                    $arr_attendees,
+                    [
+                        'obl_id' => $obl_id,
+                        'p4_attendees' => $value
+                    ]
+                );
+            }
+
+            DB::connection('pgsql')->table('form_p4_attendees')
+            ->insert(
+                $arr_attendees
+            );
+        }
+
         return redirect()->route('inputs_legacy')->with('status', 'Sukses Simpan Rekap Data Lama.');
       }
       catch(Throwable $e){

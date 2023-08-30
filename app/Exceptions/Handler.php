@@ -60,9 +60,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        // if(!$this->isHttpException($e)){
-        //   return redirect()->route('page_500');
-        // }
+        if(!$this->isHttpException($e)){
+          return redirect()->route('page_500');
+        }
         if ($e instanceof TokenMismatchException) {
           auth()->logout();
           return redirect('/sign-in');

@@ -157,15 +157,28 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                      <select name="f1_witel" id="f1_witel">
-                                                          <option value="" disabled selected>Pilih Witel</option>
-                                                          <option value="BALIKPAPAN" {{ old('f1_witel') == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
-                                                          <option value="KALBAR" {{ old('f1_witel') == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
-                                                          <option value="KALTENG" {{ old('f1_witel') == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
-                                                          <option value="KALSEL" {{ old('f1_witel') == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
-                                                          <option value="KALTARA" {{ old('f1_witel') == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
-                                                          <option value="SAMARINDA" {{ old('f1_witel') == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
-                                                      </select>
+                                                  @if($errors->has('f1_witel'))
+                                                  <select name="f1_witel" id="f1_witel" class="outline-input-merah">
+                                                      <option value="" disabled selected>Pilih Witel</option>
+                                                      <option value="BALIKPAPAN" {{ old('f1_witel') == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
+                                                      <option value="KALBAR" {{ old('f1_witel') == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
+                                                      <option value="KALTENG" {{ old('f1_witel') == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
+                                                      <option value="KALSEL" {{ old('f1_witel') == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
+                                                      <option value="KALTARA" {{ old('f1_witel') == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
+                                                      <option value="SAMARINDA" {{ old('f1_witel') == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
+                                                  </select>
+                                                  @else
+                                                  <select name="f1_witel" id="f1_witel">
+                                                      <option value="" disabled selected>Pilih Witel</option>
+                                                      <option value="BALIKPAPAN" {{ old('f1_witel') == 'BALIKPAPAN' ? ' selected="selected"' : '' }}>BALIKPAPAN</option>
+                                                      <option value="KALBAR" {{ old('f1_witel') == 'KALBAR' ? ' selected="selected"' : '' }}>KALBAR</option>
+                                                      <option value="KALTENG" {{ old('f1_witel') == 'KALTENG' ? ' selected="selected"' : '' }}>KALTENG</option>
+                                                      <option value="KALSEL" {{ old('f1_witel') == 'KALSEL' ? ' selected="selected"' : '' }}>KALSEL</option>
+                                                      <option value="KALTARA" {{ old('f1_witel') == 'KALTARA' ? ' selected="selected"' : '' }}>KALTARA</option>
+                                                      <option value="SAMARINDA" {{ old('f1_witel') == 'SAMARINDA' ? ' selected="selected"' : '' }}>SAMARINDA</option>
+                                                  </select>
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="filterKontrak">
@@ -493,7 +506,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p2_tgl_p2" id="p2_tgl_p2" value="{{ old('p2_tgl_p2') }}">
+                                                  @if($errors->has('p2_tgl_p2'))
+                                                  <input class="outline-input-merah" type="date" name="p2_tgl_p2" id="p2_tgl_p2" value="{{ old('p2_tgl_p2') }}">
+                                                  @else
+                                                  <input type="date" name="p2_tgl_p2" id="p2_tgl_p2" value="{{ old('p2_tgl_p2') }}">
+                                                  @endif
                                                 </td>
                                             </tr>
                                             <tr class="formP2">
@@ -577,7 +594,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
+                                                    @if($errors->has('p3_tgl_p3'))
+                                                    <input class="outline-input-merah" type="date" name="p3_tgl_p3" id="p3_tgl_p3" value="{{ old('p3_tgl_p3') }}">
+                                                    @else
                                                     <input type="date" name="p3_tgl_p3" id="p3_tgl_p3" value="{{ old('p3_tgl_p3') }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -589,7 +610,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p3_takah_p3" id="p3_takah_p3" value="{{ old('p3_takah_p3') }}">
+                                                  @if($errors->has('p3_takah_p3'))
+                                                  <input class="outline-input-merah" type="text" name="p3_takah_p3" id="p3_takah_p3" value="{{ old('p3_takah_p3') }}">
+                                                  @else
+                                                  <input type="text" name="p3_takah_p3" id="p3_takah_p3" value="{{ old('p3_takah_p3') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formP3">
@@ -622,7 +648,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p4_tgl_p4" id="p4_tgl_p4" value="{{ old('p4_tgl_p4') }}">
+                                                  @if($errors->has('p4_tgl_p4'))
+                                                  <input class="outline-input-merah" type="date" name="p4_tgl_p4" id="p4_tgl_p4" value="{{ old('p4_tgl_p4') }}">
+                                                  @else
+                                                  <input type="date" name="p4_tgl_p4" id="p4_tgl_p4" value="{{ old('p4_tgl_p4') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formP4">
@@ -766,7 +797,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p5_tgl_p5" id="p5_tgl_p5" value="{{ old('p5_tgl_p5') }}">
+                                                  @if($errors->has('p5_tgl_p5'))
+                                                  <input class="outline-input-merah" type="date" name="p5_tgl_p5" id="p5_tgl_p5" value="{{ old('p5_tgl_p5') }}">
+                                                  @else
+                                                  <input type="date" name="p5_tgl_p5" id="p5_tgl_p5" value="{{ old('p5_tgl_p5') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formP5">
@@ -815,7 +851,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
+                                                    @if($errors->has('p6_tgl_p6'))
+                                                    <input class="outline-input-merah" type="date" name="p6_tgl_p6" id="p6_tgl_p6" value="{{ old('p6_tgl_p6') }}">
+                                                    @else
                                                     <input type="date" name="p6_tgl_p6" id="p6_tgl_p6" value="{{ old('p6_tgl_p6') }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="formP6">
@@ -920,7 +960,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="p7_tgl_p7" id="p7_tgl_p7" value="{{ old('p7_tgl_p7') }}">
+                                                  @if($errors->has('p7_tgl_p7'))
+                                                  <input class="outline-input-merah" type="date" name="p7_tgl_p7" id="p7_tgl_p7" value="{{ old('p7_tgl_p7') }}">
+                                                  @else
+                                                  <input type="date" name="p7_tgl_p7" id="p7_tgl_p7" value="{{ old('p7_tgl_p7') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -932,7 +977,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="p7_takah_p7" id="p7_takah_p7" value="{{ old('p7_takah_p7') }}">
+                                                  @if($errors->has('p3_tgl_p3'))
+                                                  <input class="outline-input-merah" type="text" name="p7_takah_p7" id="p7_takah_p7" value="{{ old('p7_takah_p7') }}">
+                                                  @else
+                                                  <input type="text" name="p7_takah_p7" id="p7_takah_p7" value="{{ old('p7_takah_p7') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formP7">
@@ -1039,7 +1089,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
+                                                    @if($errors->has('wo_tgl_wo'))
+                                                    <input class="outline-input-merah" type="date" name="wo_tgl_wo" id="wo_tgl_wo" value="{{ old('wo_tgl_wo') }}">
+                                                    @else
                                                     <input type="date" name="wo_tgl_wo" id="wo_tgl_wo" value="{{ old('wo_tgl_wo') }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1080,7 +1134,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb') }}">
+                                                  @if($errors->has('wo_nomor_kb'))
+                                                  <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb') }}">
+                                                  @else
+                                                  <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formWO">
@@ -1246,7 +1305,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="sp_tgl_sp" id="sp_tgl_sp" value="{{ old('sp_tgl_sp') }}">
+                                                  @if($errors->has('sp_tgl_sp'))
+                                                  <input class="outline-input-merah" type="date" name="sp_tgl_sp" id="sp_tgl_sp" value="{{ old('sp_tgl_sp') }}">
+                                                  @else
+                                                  <input type="date" name="sp_tgl_sp" id="sp_tgl_sp" value="{{ old('sp_tgl_sp') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formSP">
@@ -1258,7 +1322,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="sp_takah_sp" id="sp_takah_sp" value="{{ old('sp_takah_sp') }}">
+                                                  @if($errors->has('sp_takah_sp'))
+                                                  <input class="outline-input-merah" type="text" name="sp_takah_sp" id="sp_takah_sp" value="{{ old('sp_takah_sp') }}">
+                                                  @else
+                                                  <input type="text" name="sp_takah_sp" id="sp_takah_sp" value="{{ old('sp_takah_sp') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formSP">
@@ -1270,7 +1339,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ old('sp_nomor_kb') }}">
+                                                  @if($errors->has('sp_nomor_kb'))
+                                                  <input class="outline-input-merah" type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ old('sp_nomor_kb') }}">
+                                                  @else
+                                                  <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" value="{{ old('sp_nomor_kb') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formSP"><td colspan="2"><br></td></tr>
@@ -1290,7 +1364,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="date" name="kl_tgl_kl" id="kl_tgl_kl" value="{{ old('kl_tgl_kl') }}">
+                                                  @if($errors->has('kl_tgl_kl'))
+                                                  <input class="outline-input-merah" type="date" name="kl_tgl_kl" id="kl_tgl_kl" value="{{ old('kl_tgl_kl') }}">
+                                                  @else
+                                                  <input type="date" name="kl_tgl_kl" id="kl_tgl_kl" value="{{ old('kl_tgl_kl') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1302,7 +1381,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_takah_kl" id="kl_takah_kl" value="{{ old('kl_takah_kl') }}">
+                                                  @if($errors->has('kl_takah_kl'))
+                                                  <input class="outline-input-merah" type="text" name="kl_takah_kl" id="kl_takah_kl" value="{{ old('kl_takah_kl') }}">
+                                                  @else
+                                                  <input type="text" name="kl_takah_kl" id="kl_takah_kl" value="{{ old('kl_takah_kl') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
@@ -1314,7 +1398,12 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ old('kl_nomor_kb') }}">
+                                                  @if($errors->has('kl_nomor_kb'))
+                                                  <input class="outline-input-merah" type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ old('kl_nomor_kb') }}">
+                                                  @else
+                                                  <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" value="{{ old('kl_nomor_kb') }}">
+                                                  @endif
+
                                                 </td>
                                             </tr>
                                             <tr class="formKL">
