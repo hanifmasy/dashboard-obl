@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -64,7 +65,7 @@ class Handler extends ExceptionHandler
           return redirect()->route('page_500');
         }
         if ($e instanceof TokenMismatchException) {
-          auth()->logout();
+          Auth::logout();
           return redirect('/sign-in');
         }
         if ($e instanceof MethodNotAllowedHttpException) {

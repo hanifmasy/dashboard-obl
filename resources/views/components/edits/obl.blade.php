@@ -903,18 +903,18 @@
                           <datalist class="" id="list_nomor_kb">
                             @if(isset($list_nomor_kb))
                               @foreach($list_nomor_kb as $kunci => $nilai)
-                                <option value="{{ $nilai['nomor_kb'] }}"  {{ old('wo_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }} &nbsp; | &nbsp; {{ $nilai['f1_jenis_spk'] }} &nbsp; | &nbsp; {{ $nilai['f1_nama_plggn'] }}</option>
+                                <option value="{{ $nilai['nomor_kb'] }}"  {{ old('wo_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }}</option>
                               @endforeach
                             @endif
                           </datalist>
-                          <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:300px;" list="list_nomor_kb">
+                          <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:400px;" list="list_nomor_kb">
                         @elseif( $value['f1_jenis_kontrak'] == 'baru' )
-                          <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;" value="{{ old('wo_nomor_kb',$value['wo_nomor_kb']) }}">
+                          <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:400px;" value="{{ old('wo_nomor_kb',$value['wo_nomor_kb']) }}">
                         @else
-                          <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                          <input type="text" value="-" style="border:none;" disabled>
                         @endif
                       @else
-                        <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                        <input type="text" value="-" style="border:none;" disabled>
                       @endif
                     </td>
                 </tr>
@@ -1087,18 +1087,18 @@
                             <datalist class="" id="list_nomor_kb">
                               @if(isset($list_nomor_kb))
                                 @foreach($list_nomor_kb as $kunci => $nilai)
-                                  <option value="{{ $nilai['nomor_kb'] }}"  {{ old('sp_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }} &nbsp; | &nbsp; {{ $nilai['f1_jenis_spk'] }} &nbsp; | &nbsp; {{ $nilai['f1_nama_plggn'] }}</option>
+                                  <option value="{{ $nilai['nomor_kb'] }}"  {{ old('sp_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }}</option>
                                 @endforeach
                               @endif
                             </datalist>
-                            <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:300px;" list="list_nomor_kb">
+                            <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:400px;" list="list_nomor_kb">
                           @elseif( $value['f1_jenis_kontrak'] == 'baru' )
-                            <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:350px;" value="{{ old('sp_nomor_kb',$value['sp_nomor_kb']) }}">
+                            <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:400px;" value="{{ old('sp_nomor_kb',$value['sp_nomor_kb']) }}">
                           @else
-                            <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                            <input type="text" value="-" style="border:none;" disabled>
                           @endif
                         @else
-                          <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                          <input type="text" value="-" style="border:none;" disabled>
                         @endif
                     </td>
                 </tr>
@@ -1125,18 +1125,18 @@
                           <datalist class="" id="list_nomor_kb">
                             @if(isset($list_nomor_kb))
                               @foreach($list_nomor_kb as $kunci => $nilai)
-                                <option value="{{ $nilai['nomor_kb'] }}"  {{ old('kl_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }} &nbsp; | &nbsp; {{ $nilai['f1_jenis_spk'] }} &nbsp; | &nbsp; {{ $nilai['f1_nama_plggn'] }}</option>
+                                <option value="{{ $nilai['nomor_kb'] }}"  {{ old('kl_nomor_kb',$nilai['nomor_kb']) == $nilai['nomor_kb'] ? ' selected="selected"' : '' }}>{{ $nilai['nomor_kb'] }}</option>
                               @endforeach
                             @endif
                           </datalist>
-                          <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:300px;" list="list_nomor_kb">
+                          <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:400px;" list="list_nomor_kb">
                         @elseif( $value['f1_jenis_kontrak'] == 'baru' )
-                          <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:350px;" value="{{ old('kl_nomor_kb',$value['kl_nomor_kb']) }}">
+                          <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:400px;" value="{{ old('kl_nomor_kb',$value['kl_nomor_kb']) }}">
                         @else
-                          <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                          <input type="text" value="-" style="border:none;" disabled>
                         @endif
                       @else
-                        <input type="text" value="HISTORI JENIS KONTRAK KOSONG" style="border:none;" disabled>
+                        <input type="text" value="-" style="border:none;" disabled>
                       @endif
                     </td>
                 </tr>
@@ -1380,7 +1380,7 @@
                         </div>
                     </td>
                     <td>
-                        <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;" value="{{ old('kl_rek_bank_mitra',$value['kl_rek_bank_mitra']) }}">
+                        <input type="text" name="kl_rek_bank_mitra" id="kl_rek_bank_mitra" style="width:300px;" value="{{ old('kl_rek_bank_mitra', $value['kl_rek_bank_mitra'] ) }}">
                     </td>
                 </tr>
                 <tr class="formKL">

@@ -39,6 +39,11 @@ class InputsController extends Controller
               $cari_nomor_kb = $request->cari_nomor_kb;
           }
         }
+        // ENKRIPSI KL_REK_BANK_MITRA
+        // $kl_rek_bank_mitra = '';
+        // if($request->kl_rek_bank_mitra){
+        //   $kl_rek_bank_mitra = Crypt::encrypt($request->kl_rek_bank_mitra);
+        // }
 
         // PENAMAAN FOLDER & SUBFOLDER
         $nama_folder = '';
@@ -288,6 +293,7 @@ class InputsController extends Controller
             $filtered_draf->put('updated_at',$created_at);
             if($user_in_is->role_id===2 || $user_in_is->role_id===9){ $filtered_draf->put('submit','obl_submit'); }
             if($user_in_is->role_id===8){ $filtered_draf->put('submit','solution_submit'); }
+            // if($kl_rek_bank_mitra){ $filtered_draf->put('kl_rek_bank_mitra',$kl_rek_bank_mitra); }
             $filtered_draf->put('is_draf',1);
             $filtered_draf->put('revisi_witel',false);
             $filtered_draf->put('revisi_witel_count',0);
@@ -506,6 +512,7 @@ class InputsController extends Controller
               $filtered->put('updated_at',$created_at);
               if($user_in_is->role_id===2 || $user_in_is->role_id===9){ $filtered->put('submit','obl_submit'); }
               if($user_in_is->role_id===8){ $filtered->put('submit','solution_submit'); }
+              // if($kl_rek_bank_mitra){ $filtered->put('kl_rek_bank_mitra',$kl_rek_bank_mitra); }
               $filtered->put('is_draf',0);
               $filtered->put('revisi_witel',false);
               $filtered->put('revisi_witel_count',0);
@@ -650,6 +657,12 @@ class InputsController extends Controller
     public function createLegacy(Request $request){
       // dd($request->all());
 
+      // ENKRIPSI KL_REK_BANK_MITRA
+      // $kl_rek_bank_mitra = '';
+      // if($request->kl_rek_bank_mitra){
+      //   $kl_rek_bank_mitra = Crypt::encrypt($request->kl_rek_bank_mitra);
+      // }
+
       try{
         $inputan_masuk = [];
         if($request->submit){
@@ -708,7 +721,8 @@ class InputsController extends Controller
             '_token',
             'p4_attendees',
             'global_jenis_spk',
-            'cari_nomor_kb'
+            'cari_nomor_kb',
+            'kl_rek_bank_mitra'
         ]);
         // dd($filtered);
         $created_by = Auth::id();
@@ -721,6 +735,7 @@ class InputsController extends Controller
         $filtered->put('revisi_witel_count',0);
         $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
         if($request->f1_keterangan){ $filtered->put('f1_tgl_keterangan',$created_at); }
+        // if($kl_rek_bank_mitra){ $filtered->put('kl_rek_bank_mitra',$kl_rek_bank_mitra); }
         $obl_id = DB::connection('pgsql')->table('form_obl')
         ->insertGetId(
             $filtered->all()

@@ -1007,6 +1007,11 @@ class TableOblController extends Controller
           }
           catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check P6 HARGA NEGO.'); }
         }
+        // ENKRIPSI KL_REK_BANK_MITRA
+        // $kl_rek_bank_mitra = '';
+        // if($request->kl_rek_bank_mitra){
+        //   $kl_rek_bank_mitra = Crypt::encrypt($request->kl_rek_bank_mitra);
+        // }
 
         if($request->submit && str_contains($request->submit,'draf')){
           try{
@@ -1031,6 +1036,7 @@ class TableOblController extends Controller
             if($user_update->role_id===2 || $user_update->role_id===9){$filtered_draf->put('submit','obl_edit');}
             if($request->p6_harga_negosiasi){ $filtered_draf->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
             if($request->f1_keterangan){ $filtered_draf->put('f1_tgl_keterangan',$submit_sekarang); }
+            // if($kl_rek_bank_mitra){ $filtered_draf->put('kl_rek_bank_mitra',$kl_rek_bank_mitra); }
             $filtered_draf->put('is_draf',1);
             $filtered_draf->put('f1_jenis_spk',$request->global_jenis_spk);
 
@@ -1400,6 +1406,7 @@ class TableOblController extends Controller
               if($user_update->role_id===2 || $user_update->role_id===9){$filtered->put('submit','obl_edit');}
               if($request->p6_harga_negosiasi){ $filtered->put('p7_harga_pekerjaan',$p7_harga_pekerjaan); }
               if($request->f1_keterangan){ $filtered->put('f1_tgl_keterangan',$submit_sekarang); }
+              // if($kl_rek_bank_mitra){ $filtered->put('kl_rek_bank_mitra',$kl_rek_bank_mitra); }
               $filtered->put('is_draf',0);
               $filtered->put('f1_jenis_spk',$request->global_jenis_spk);
               // append tanggal dokumen
