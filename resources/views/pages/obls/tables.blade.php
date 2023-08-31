@@ -1634,7 +1634,7 @@
               var is_user = "{{ $is_user->role_id }}";
               var tableObl = $('#table-data-obl').DataTable({
                 language: {
-                    url: "{{ asset('public/assets') }}/json/yajra_indonesia.json",
+                    url: "{{ asset('assets') }}/json/yajra_indonesia.json",
                 },
                 dom: 'fBrtip',
                 buttons: [
