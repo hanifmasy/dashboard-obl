@@ -85,17 +85,17 @@ class CountedDashboard
           $top_1 = $counted_dashboard_top_1->count();
           $top_2 = $counted_dashboard_top_2->count();
           $bottom_1 = $counted_dashboard_bottom_1->count();
-          $timed_bottom_1 = $timed_dashboard_bottom_1->orderBy('updated_at','desc')->first();
+          $timed_bottom_1 = $timed_dashboard_bottom_1->orderByRaw("CASE WHEN updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('updated_at','DESC')->first();
           $bottom_2 = $counted_dashboard_bottom_2->count();
-          $timed_bottom_2 = $timed_dashboard_bottom_2->orderBy('updated_at','desc')->first();
+          $timed_bottom_2 = $timed_dashboard_bottom_2->orderByRaw("CASE WHEN updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('updated_at','DESC')->first();
           $bottom_3 = $counted_dashboard_bottom_3->count();
-          $timed_bottom_3 = $timed_dashboard_bottom_3->orderBy('updated_at','desc')->first();
+          $timed_bottom_3 = $timed_dashboard_bottom_3->orderByRaw("CASE WHEN updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('updated_at','DESC')->first();
           $bottom_4 = $counted_dashboard_bottom_4->count();
-          $timed_bottom_4 = $timed_dashboard_bottom_4->orderBy('updated_at','desc')->first();
+          $timed_bottom_4 = $timed_dashboard_bottom_4->orderByRaw("CASE WHEN updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('updated_at','DESC')->first();
           $bottom_5 = $counted_dashboard_bottom_5->count();
-          $timed_bottom_5 = $timed_dashboard_bottom_5->orderBy('updated_at','desc')->first();
+          $timed_bottom_5 = $timed_dashboard_bottom_5->orderByRaw("CASE WHEN updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('updated_at','DESC')->first();
           $bottom_6 = $counted_dashboard_bottom_6->count();
-          $timed_bottom_6 = $timed_dashboard_bottom_6->orderBy('updated_at','desc')->first();
+          $timed_bottom_6 = $timed_dashboard_bottom_6->orderByRaw("CASE WHEN updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('updated_at','DESC')->first();
 
           // STORE IN GLOBAL SESSIONS HELPER
           $arr_counted_dashboard = [
