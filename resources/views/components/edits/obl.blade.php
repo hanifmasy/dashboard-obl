@@ -601,7 +601,7 @@
                                       <tr>
                                         <th scrope="row">{{ ($i + 1) }}</th>
                                         <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" value="{{ old('p4_attendees.'.$i) }}"></td>
-                                        <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
+                                        <td><button style="float:left;margin-left:-20%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
                                       </tr>
                                     @endfor
                                   @endif
@@ -911,10 +911,10 @@
                         @elseif( $value['f1_jenis_kontrak'] == 'baru' )
                           <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:400px;" value="{{ old('wo_nomor_kb',$value['wo_nomor_kb']) }}">
                         @else
-                          <input type="text" value="-" style="border:none;" disabled>
+                          <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;">
                         @endif
                       @else
-                        <input type="text" value="-" style="border:none;" disabled>
+                        <input type="text" name="wo_nomor_kb" id="wo_nomor_kb" style="width:350px;">
                       @endif
                     </td>
                 </tr>
@@ -1095,10 +1095,10 @@
                           @elseif( $value['f1_jenis_kontrak'] == 'baru' )
                             <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:400px;" value="{{ old('sp_nomor_kb',$value['sp_nomor_kb']) }}">
                           @else
-                            <input type="text" value="-" style="border:none;" disabled>
+                            <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:400px;">
                           @endif
                         @else
-                          <input type="text" value="-" style="border:none;" disabled>
+                          <input type="text" name="sp_nomor_kb" id="sp_nomor_kb" style="width:400px;">
                         @endif
                     </td>
                 </tr>
@@ -1133,10 +1133,10 @@
                         @elseif( $value['f1_jenis_kontrak'] == 'baru' )
                           <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:400px;" value="{{ old('kl_nomor_kb',$value['kl_nomor_kb']) }}">
                         @else
-                          <input type="text" value="-" style="border:none;" disabled>
+                          <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:350px;">
                         @endif
                       @else
-                        <input type="text" value="-" style="border:none;" disabled>
+                        <input type="text" name="kl_nomor_kb" id="kl_nomor_kb" style="width:350px;">
                       @endif
                     </td>
                 </tr>

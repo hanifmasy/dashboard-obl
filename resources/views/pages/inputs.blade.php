@@ -120,7 +120,7 @@
                                                   <datalist id="list_nomor_kb">
                                                    @if(isset($list_nomor_kb))
                                                     @foreach($list_nomor_kb as $kunci => $nilai)
-                                                      <option value="{{ $nilai['nomor_kb'] }}">{{ $nilai['nomor_kb'] }} &nbsp; | &nbsp; {{ $nilai['f1_jenis_spk'] }} &nbsp; | &nbsp; {{ $nilai['f1_nama_plggn'] }}</option>
+                                                      <option value="{{ $nilai['nomor_kb'] }}">{{ $nilai['f1_jenis_spk'] }}&nbsp;|&nbsp;{{ $nilai['nomor_kb'] }}&nbsp;|&nbsp;{{ $nilai['f1_nama_plggn'] }}</option>
                                                     @endforeach
                                                    @else
                                                    <option disabled value="" selected>Tidak Ada Nomor KB</option>
@@ -685,7 +685,7 @@
                                                             @for( $i = 0; $i < count(old('p4_attendees')); $i++ )
                                                               <th scrope="row"> {{ ($i+1) }} </th>
                                                               <td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" placeholder="Masukkan Attendees" value="{{ old('p4_attendees.'.$i) }}"></td>
-                                                              <td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
+                                                              <td><button style="float:left;margin-left:-20%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>
                                                             @endfor
                                                           @endif
                                                         </tbody>
@@ -1770,7 +1770,7 @@
                     var cols = '';
                     cols += '<th scrope="row">' + counter + '</th>';
                     cols += '<td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" placeholder="Masukkan Attendees"></td>';
-                    cols += '<td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>';
+                    cols += '<td><button style="float:left;margin-left:-20%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>';
                     newRow.append(cols);
                     $("#p4_attendees").append(newRow);
                     counter++;

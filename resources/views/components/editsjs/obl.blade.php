@@ -153,9 +153,9 @@
         });
         $('#lanjutP7').click(function(){
             $('.formP6').hide(); $('.formP7').show();
-            if(table_edit[0]['f1_jenis_spk']==='KL' || table_edit[0]['f2_nilai_kontrak']==='diatas_100'){ $('.dibawah-100').hide(); $('.diatas-100').show();  }
-            else if(table_edit[0]['f1_jenis_spk']==='SP' || table_edit[0]['f2_nilai_kontrak']==='dibawah_100'){ $('.diatas-100').hide(); $('.dibawah-100').show();  }
-            else{ $('.diatas-100').show(); $('.dibawah-100').show(); }
+            if(table_edit[0]['f1_jenis_spk']==='KL' || table_edit[0]['f2_nilai_kontrak']==='diatas_100' || view_diatas_100 === '1' || global_jenis_spk === 'KL'){ $('.dibawah-100').hide(); $('.diatas-100').show();  }
+            else if(table_edit[0]['f1_jenis_spk']==='SP' || table_edit[0]['f2_nilai_kontrak']==='dibawah_100' || view_diatas_100 === '0' || global_jenis_spk === 'SP' ){ $('.diatas-100').hide(); $('.dibawah-100').show();  }
+            // else{ $('.diatas-100').show(); $('.dibawah-100').show(); }
         });
         $('#backP6').click(function(){
             $('.formP7').hide(); $('.formP6').show();
@@ -304,7 +304,7 @@
             var cols = '';
             cols += '<th scrope="row">' + counter + '</th>';
             cols += '<td><input style="width:500px;" type="text" name="p4_attendees[]" id="p4_attendees" placeholder="Masukkan Attendees"></td>';
-            cols += '<td><button style="float:left;margin-left:-250%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>';
+            cols += '<td><button style="float:left;margin-left:-20%;" type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>';
             newRow.append(cols);
             $("#p4_attendees").append(newRow);
             counter++;

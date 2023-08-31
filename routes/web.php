@@ -57,10 +57,9 @@ Route::get('inputs', function () {
 	$list_nomor_kb = DocObl::select(
 			DB::raw("
 			case
-				when (kl_nomor_kb is not null and kl_nomor_kb <> '') and f1_jenis_spk = 'KL' then kl_nomor_kb
-				when (sp_nomor_kb is not null and sp_nomor_kb <> '') and f1_jenis_spk = 'SP' then sp_nomor_kb
-				when (wo_nomor_kb is not null and wo_nomor_kb <> '') and f1_jenis_spk = 'WO' then wo_nomor_kb
-				else ''
+				when kl_nomor_kb is not null and kl_nomor_kb <> '' then kl_nomor_kb
+				when sp_nomor_kb is not null and sp_nomor_kb <> '' then sp_nomor_kb
+				when wo_nomor_kb is not null and wo_nomor_kb <> '' then wo_nomor_kb
 			end as nomor_kb
 			"),
 			'f1_jenis_spk',

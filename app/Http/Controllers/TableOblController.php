@@ -269,7 +269,7 @@ class TableOblController extends Controller
         }
 
         $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') ")
-          ->orderByRaw("CASE WHEN obl.created_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.created_at','DESC')
+          // ->orderByRaw("CASE WHEN obl.created_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.created_at','DESC')
           ->orderByRaw("CASE WHEN obl.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.updated_at','DESC')
           ->get();
         return DataTables::of($data)->addIndexColumn()->make(true);

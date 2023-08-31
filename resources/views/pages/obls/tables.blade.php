@@ -1910,7 +1910,10 @@
                      }
                   },
                   {
-                     data: 'layanan',name: 'layanan',searchable:true,orderable:true
+                     data: 'layanan',name: 'layanan',searchable:true,orderable:true,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
                      data: 'nama_vendor',name: 'nama_vendor',searchable:true,orderable:false,
@@ -1930,28 +1933,52 @@
                      }
                   },
                   {
-                     data: 'nilai_kb',name: 'nilai_kb',searchable:true,orderable:false
+                     data: 'nilai_kb',name: 'nilai_kb',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'no_kfs_spk',name: 'no_kfs_spk',searchable:true,orderable:false
+                     data: 'no_kfs_spk',name: 'no_kfs_spk',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'no_kontrak',name: 'no_kontrak',searchable:true,orderable:false
+                     data: 'no_kontrak',name: 'no_kontrak',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'jenis_kontrak',name: 'jenis_kontrak',searchable:true,orderable:false
+                     data: 'jenis_kontrak',name: 'jenis_kontrak',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'quote_kontrak',name: 'quote_kontrak',searchable:true,orderable:false
+                     data: 'quote_kontrak',name: 'quote_kontrak',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'nomor_akun',name: 'nomor_akun',searchable:true,orderable:false
+                     data: 'nomor_akun',name: 'nomor_akun',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'skema_bayar',name: 'skema_bayar',searchable:true,orderable:false
+                     data: 'skema_bayar',name: 'skema_bayar',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'status_order',name: 'status_order',searchable:true,orderable:false
+                     data: 'status_order',name: 'status_order',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
                      data: 'keterangan',name: 'keterangan',searchable:true,orderable:false,
@@ -1961,13 +1988,22 @@
                      }
                   },
                   {
-                     data: 'revisi_count',name: 'revisi_count',searchable:false,orderable:false
+                     data: 'revisi_count',name: 'revisi_count',searchable:false,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'user_create',name: 'user_create',searchable:true,orderable:false
+                     data: 'user_create',name: 'user_create',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   },
                   {
-                     data: 'user_update',name: 'user_update',searchable:true,orderable:false
+                     data: 'user_update',name: 'user_update',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
+                     }
                   }
 
                 ],
