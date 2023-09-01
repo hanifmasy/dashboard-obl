@@ -9,6 +9,25 @@
                 </div>
             </div>
         </div>
+
+        @if( session('status') )
+        <div class="modal fade" id="modal-status-table-obl" tabindex="-1" aria-labelledby="modal-status-table-obl" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Status Proses Sistem:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="status-table-obl">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        @endif
+
         <main class="main-content  mt-0">
             <div class="page-header align-items-start min-vh-100"
                 <span class="mask bg-gradient-dark opacity-6"></span>
@@ -57,6 +76,11 @@
                                             <button type="submit" class="btn bg-gradient-light shadow-danger w-100 my-4 mb-2">Sign
                                                 in</button>
                                         </div>
+                                        <p class="mt-4 text-sm text-center">
+                                            Belum memiliki akun?
+                                            <a href="{{ route('register') }}"
+                                                class="text-primary text-gradient font-weight-bold">Klik di sini.</a>
+                                        </p>
                                     </form>
                                 </div>
                             </div>

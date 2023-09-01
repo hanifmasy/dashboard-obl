@@ -103,6 +103,12 @@
           color: #4CAF50 !important;
         }
         </style>
+        @if( !$user_masuk->role_id )
+
+        <div class="alert alert-danger alert-dismissible text-white" role="alert">
+            <span class="text-md">HUBUNGI ADMIN UNTUK ROLE USER ANDA.</span>
+        </div>
+        @else
         <!-- CARDS TOP -->
         <div class="container-fluid py-4">
             <div class="row">
@@ -280,6 +286,7 @@
             </div>
 
             </div>
+        @endif
 
 
         </div>

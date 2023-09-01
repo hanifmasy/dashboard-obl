@@ -16,13 +16,13 @@ class RegisterController extends Controller
 
         $attributes = request()->validate([
             'nama_lengkap' => 'required|max:255',
+            'username' => 'required|max:255|unique:users,username',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|min:5|max:255',
         ]);
 
         $user = User::create($attributes);
-        auth()->login($user);
-
-        return redirect('/dashboard');
+        // auth()->login($user);
+        return redirect('/sign-in')->with('status','Silahkan Hubungi Admin Untuk Memilih Role Akses Anda.');
     }
 }

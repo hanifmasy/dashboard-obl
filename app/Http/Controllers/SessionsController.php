@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 Use Str;
 Use Hash;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -29,9 +30,17 @@ class SessionsController extends Controller
                 'username' => 'NO USER EXISTS.'
             ]);
         }
+        $is_user = User::leftJoin('user_role as ur','ur.user_id','=','users.id')->leftJoin('roles as r','r.id','=','ur.role_id')
+        ->select('users.id','users.nama_lengkap','ur.role_id','r.nama_role')
+        ->where('users.id',Auth::user()->id)
+        ->first();
+        if( !$is_user->role_id ){
+          throw ValidationException::withMessages([
+              'user_role' => 'Akun Anda Belum Memiliki Akses Role.'
+          ]);
+        }
 
         session()->regenerate();
-
         return redirect('/dashboard');
         // return redirect('inputs');
     }
