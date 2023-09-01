@@ -1983,8 +1983,9 @@
                   {
                      data: 'keterangan',name: 'keterangan',searchable:true,orderable:false,
                      "render": function ( data, type, row ) {
-                       if(row.tgl_keterangan){ return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>'; }
-                       else{ return '<span style="white-space:normal"></span>'; }
+                       // if(row.tgl_keterangan){ return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>'; }
+                       // else{ return '<span style="white-space:normal"></span>'; }
+                       return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>';
                      }
                   },
                   {
