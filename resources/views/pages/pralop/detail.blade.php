@@ -241,9 +241,9 @@
                                                       @endif
                                                   @else
                                                       @if( $value->file_p1 )
-                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
+                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Download P1</button><br>
                                                       @else
-                                                      <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
+                                                      <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Download P1</button><br>
                                                       @endif
                                                   @endif
                                                   @if( $value->p0_nomor_p0 )
@@ -261,9 +261,9 @@
                                                         @endif
                                                     @else
                                                         @if( $value->file_p0 )
-                                                        <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
+                                                        <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Download P0</button><br>
                                                         @else
-                                                        <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
+                                                        <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Download P0</button><br>
                                                         @endif
                                                     @endif
                                                   @endif
