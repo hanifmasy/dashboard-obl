@@ -492,7 +492,7 @@
                          else if( is_user === '13' && row.on_handling !== 'legal' ){
                            return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
                          }
-                         else if( is_user === '8' && row.on_handling === 'solution' ){
+                         else if( is_user === '8' && (row.on_handling === 'solution' || row.on_handling === 'final_pralop') ){
                            return `
                                <div class="btn-group" role="group">
                                  <div class="btn-group" role="group">
@@ -504,8 +504,8 @@
                                </div>
                                `;
                          }
-                         else if( is_user === '8' && row.on_handling !== 'solution' ){
-                           return `<button type="button" class="btn btn-sm btn-secondary mt-3">VIEWER</button>`;
+                         else if( is_user === '8' && (row.on_handling !== 'solution' && row.on_handling !== 'final_pralop') ){
+                           return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
                          }
                          else if( is_user === '9' ){
                            return `

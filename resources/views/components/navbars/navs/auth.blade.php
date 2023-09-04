@@ -11,6 +11,8 @@
                 <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> WITEL {{ $is_user->nama_lengkap }}</li>
                 @elseif( $is_user->role_id == 6 )
                 <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> MITRA: {{ $is_user->nama_lengkap }}</li>
+                @elseif( $is_user->role_id == 13 )
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> LEGAL: {{ $is_user->nama_lengkap }}</li>
                 @endif
             </ol>
               @if( $is_user->role_id == 1 || $is_user->role_id == 2 )
@@ -23,6 +25,8 @@
               <h6 class="font-weight-bolder mb-0"> WITEL / {{ $titlePage }}</h6>
               @elseif( $is_user->role_id == 6 )
               <h6 class="font-weight-bolder mb-0"> MITRA / {{ $titlePage }}</h6>
+              @elseif( $is_user->role_id == 13 )
+              <h6 class="font-weight-bolder mb-0"> LEGAL / {{ $titlePage }}</h6>
               @elseif( $is_user->role_id == 9 )
               <h6 class="font-weight-bolder mb-0"> NOUS / {{ $titlePage }}</h6>
               @endif

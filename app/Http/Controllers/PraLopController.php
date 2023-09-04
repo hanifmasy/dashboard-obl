@@ -91,15 +91,32 @@ class PraLopController extends Controller
   }
 
   public function detail(Request $request){
-    // dd(
-    //   $request->all(),
-    //   str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->edit_pralop_id)))
-    // );
     $edit_pralop_id = str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->edit_pralop_id)));
+    $user_pralop = User::leftJoin('user_role','user_role.user_id','=','users.id')
+    ->leftJoin('witels','witels.id','=','users.witel_id')
+    ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+    ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+    ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
     $pralop = DB::connection('pgsql')->table('form_pralop as fp')
     ->leftJoin('users as u','u.id','=','fp.updated_by')
     ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
     ->where('fp.id',$edit_pralop_id)->first();
+
+    if( ($user_pralop->role_id === 4 || $user_pralop->role_id === 5) && $pralop->on_handling !== 'witel' ){
+      return redirect()->route('witels.pralop');
+    }
+    else if( $user_pralop->role_id === 8 && ($pralop->on_handling !== 'solution' && $pralop->on_handling !== 'final_pralop') ){
+      return redirect()->route('witels.pralop');
+    }
+    else if( $user_pralop->role_id === 13 && $pralop->on_handling !== 'legal' ){
+      return redirect()->route('witels.pralop');
+    }
+    else if($user_pralop->role_id !== 9 && $user_pralop->role_id !== 4 && $user_pralop->role_id !== 5 && $user_pralop->role_id !== 8 && $user_pralop->role_id !== 13){
+      return redirect()->route('witels.pralop');
+    }
+
+
+
     $pralop_histori = DB::connection('pgsql')->table('form_pralop_histori as fp')
     ->leftJoin('users as u','u.id','=','fp.updated_by')
     ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
@@ -125,7 +142,6 @@ class PraLopController extends Controller
     foreach($obl as $key => $value){ array_push($arr_log_histori,json_decode(json_encode($value), true)); }
     foreach($obl_histori as $key => $value){ array_push($arr_log_histori,json_decode(json_encode($value), true)); }
     usort($arr_log_histori, function ($a, $b) {return $a['sort_tgl'] < $b['sort_tgl'];});
-    // dd($arr_log_histori);
 
     $layanan = DB::connection('pgsql')->table('form_obl as fo')
     ->leftJoin('mitras as m','m.id','=','fo.f1_mitra_id')
@@ -133,11 +149,7 @@ class PraLopController extends Controller
     ->where('fo.f1_id_form_pralop',$edit_pralop_id)
     ->get()->toArray();
     $encrypted = $request->edit_pralop_id;
-    $user_pralop = User::leftJoin('user_role','user_role.user_id','=','users.id')
-    ->leftJoin('witels','witels.id','=','users.witel_id')
-    ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
-    ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
-    ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
+
     return view('pages.pralop.detail',compact('pralop','pralop_histori','layanan','encrypted','user_pralop','arr_log_histori'));
   }
 
@@ -398,7 +410,6 @@ class PraLopController extends Controller
 
 
   public function langkah(Request $request){
-    // dd($request->all());
     $proses = '';
     $on_handling = '';
     $pralop_id = '';
@@ -429,7 +440,7 @@ class PraLopController extends Controller
       $on_handling = 'final_pralop';
       $pralop_id = str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->submit_final)));
     }
-    // dd($request->all(),$pralop_id);
+
     $data_lama = $this->updatePraLopHistori($pralop_id);
     DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
       'on_handling' => $on_handling,
@@ -439,6 +450,17 @@ class PraLopController extends Controller
       'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
       'updated_by' => Auth::id()
     ]);
+
+    if($request->submit_final){
+      $data_lama_obl = $this->updatePraLopToObl($pralop_id);
+      DB::connection('pgsql')->table('form_obl')->where('f1_id_form_pralop',$pralop_id)->update([
+        'is_draf' => 7,
+        'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'f1_keterangan' => 'FINAL PRA LOP: ' . $data_lama->lop_judul_projek,
+        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'updated_by' => Auth::id()
+      ]);
+    }
 
     return $this->index($request);
   }
@@ -655,6 +677,175 @@ class PraLopController extends Controller
     return $hasil;
   }
 
+
+  public function updatePraLopToObl($var_pralop_id){
+    $data_lama = DB::connection('pgsql')->table('form_obl')
+    ->where('f1_id_form_pralop',$var_pralop_id)
+    ->get()->toArray();
+    $arr_ids = [];
+    foreach( $data_lama as $key => $value ){
+      array_push($arr,$value->id);
+      DB::connection('pgsql')->table('form_obl_histori')
+      ->insert([
+        'obl_id' => $value->id,
+        'submit' => $value->submit,
+        'revisi_witel' => $value->revisi_witel,
+        'revisi_witel_count' => $value->revisi_witel_count,
+        'is_draf' => $value->is_draf,
+        'updated_at' => $value->updated_at,
+        'updated_by' => $value->updated_by,
+        'p0_nomor_p0' => $value->p0_nomor_p0,
+        'p0_nik_am' => $value->p0_nik_am,
+        'p0_nik_manager' => $value->p0_nik_manager,
+        'p0_tgl_submit' => $value->p0_tgl_submit,
+        'p0_pemeriksa' => $value->p0_pemeriksa,
+        'p0_nik_gm' => $value->p0_nik_gm,
+        'p1_nomor_p1' => $value->p1_nomor_p1,
+        'p1_tgl_p1' => $value->p1_tgl_p1,
+        'p1_pemeriksa' => $value->p1_pemeriksa,
+        'p1_tgl_delivery' => $value->p1_tgl_delivery,
+        'p1_lokasi_instal' => $value->p1_lokasi_instal,
+        'p1_skema_bisnis' => $value->p1_skema_bisnis,
+        'p1_skema_bayar' => $value->p1_skema_bayar,
+        'p1_mekanisme_bayar' => $value->p1_mekanisme_bayar,
+        'p1_tgl_kontrak_mulai' => $value->p1_tgl_kontrak_mulai,
+        'p1_tgl_kontrak_akhir' => $value->p1_tgl_kontrak_akhir,
+        'p1_tgl_doc_plggn' => $value->p1_tgl_doc_plggn,
+        'p1_estimasi_harga' => $value->p1_estimasi_harga,
+        'p1_disetujui_gm' => $value->p1_disetujui_gm,
+        'p1_dibuat_am' => $value->p1_dibuat_am,
+        'p1_diperiksa_manager' => $value->p1_diperiksa_manager,
+        'f1_nama_plggn' => $value->f1_nama_plggn,
+        'f1_alamat_plggn' => $value->f1_alamat_plggn,
+        'f1_witel' => $value->f1_witel,
+        'f1_judul_projek' => $value->f1_judul_projek,
+        'f1_segmen' => $value->f1_segmen,
+        'f1_proses' => $value->f1_proses,
+        'f1_folder' => $value->f1_folder,
+        'f1_nilai_kb' => $value->f1_nilai_kb,
+        'f1_no_kfs_spk' => $value->f1_no_kfs_spk,
+        'f1_quote_kontrak' => $value->f1_quote_kontrak,
+        'f1_nomor_akun' => $value->f1_nomor_akun,
+        'f1_jenis_kontrak' => $value->f1_jenis_kontrak,
+        'f1_skema_bayar' => $value->f1_skema_bayar,
+        'f1_status_order' => $value->f1_status_order,
+        'f1_status_sm' => $value->f1_status_sm,
+        'f1_tgl_keterangan' => $value->f1_tgl_keterangan,
+        'f1_keterangan' => $value->f1_keterangan,
+        'f1_mitra_id' => $value->f1_mitra_id,
+        'f1_pic_mitra' => $value->f1_pic_mitra,
+        'f1_jenis_spk' => $value->f1_jenis_spk,
+        'f1_masa_layanan_tahun' => $value->f1_masa_layanan_tahun,
+        'f1_masa_layanan_bulan' => $value->f1_masa_layanan_bulan,
+        'f1_masa_layanan_hari' => $value->f1_masa_layanan_hari,
+        'f1_pic_plggn' => $value->f1_pic_plggn,
+        'f2_nilai_kontrak' => $value->f2_nilai_kontrak,
+        'f2_tgl_p1' => $value->f2_tgl_p1,
+        'p2_tgl_p2' => $value->p2_tgl_p2,
+        'p2_tgl_justifikasi' => $value->p2_tgl_justifikasi,
+        'p2_dievaluasi_oleh' => $value->p2_dievaluasi_oleh,
+        'p2_disetujui_oleh' => $value->p2_disetujui_oleh,
+        'p2_pilihan_catatan' => $value->p2_pilihan_catatan,
+        'p2_catatan' => $value->p2_catatan,
+        'p3_tgl_p3' => $value->p3_tgl_p3,
+        'p3_takah_p3' => $value->p3_takah_p3,
+        'p3_pejabat_mitra_nama' => $value->p3_pejabat_mitra_nama,
+        'p3_pejabat_mitra_alamat' => $value->p3_pejabat_mitra_alamat,
+        'p3_pejabat_mitra_telepon' => $value->p3_pejabat_mitra_telepon,
+        'p3_status_rapat_pengadaan' => $value->p3_status_rapat_pengadaan,
+        'p3_tgl_rapat_pengadaan' => $value->p3_tgl_rapat_pengadaan,
+        'p3_tmpt_rapat_pengadaan' => $value->p3_tmpt_rapat_pengadaan,
+        'p3_tgl_terima_sp' => $value->p3_tgl_terima_sp,
+        'p3_alamat_terima_sp' => $value->p3_alamat_terima_sp,
+        'p3_manager_obl' => $value->p3_manager_obl,
+        'p4_tgl_p4' => $value->p4_tgl_p4,
+        'p4_waktu_layanan' => $value->p4_waktu_layanan,
+        'p4_skema_bisnis' => $value->p4_skema_bisnis,
+        'p4_mekanisme_pembayaran' => $value->p4_mekanisme_pembayaran,
+        'p4_slg' => $value->p4_slg,
+        'p4_fasilitator' => $value->p4_fasilitator,
+        'p4_pengesahan' => $value->p4_pengesahan,
+        'p5_tgl_p5' => $value->p5_tgl_p5,
+        'p5_harga_penawaran' => $value->p5_harga_penawaran,
+        'p5_ttd_evaluator' => $value->p5_ttd_evaluator,
+        'p6_tgl_p6' => $value->p6_tgl_p6,
+        'p6_ttd_bast_telkom' => $value->p6_ttd_bast_telkom,
+        'p6_ttd_bast_mitra' => $value->p6_ttd_bast_mitra,
+        'p6_harga_negosiasi' => $value->p6_harga_negosiasi,
+        'p6_nama_peserta_mitra' => $value->p6_nama_peserta_mitra,
+        'p6_jabatan_peserta_mitra' => $value->p6_jabatan_peserta_mitra,
+        'p6_peserta_rapat_telkom' => $value->p6_peserta_rapat_telkom,
+        'p6_pengesahan' => $value->p6_pengesahan,
+        'p7_tgl_p7' => $value->p7_tgl_p7,
+        'p7_takah_p7' => $value->p7_takah_p7,
+        'p7_lampiran_berkas' => $value->p7_lampiran_berkas,
+        'p7_harga_pekerjaan' => $value->p7_harga_pekerjaan,
+        'p7_skema_bayar' => $value->p7_skema_bayar,
+        'p7_pemeriksa' => $value->p7_pemeriksa,
+        'p7_tembusan' => $value->p7_tembusan,
+        'sp_tgl_sp' => $value->sp_tgl_sp,
+        'sp_takah_sp' => $value->sp_takah_sp,
+        'sp_nomor_kb' => $value->sp_nomor_kb,
+        'p8_tgl_p8' => $value->p8_tgl_p8,
+        'p8_takah_p8' => $value->p8_takah_p8,
+        'wo_tgl_wo' => $value->wo_tgl_wo,
+        'wo_takah_wo' => $value->wo_takah_wo,
+        'wo_tgl_fo' => $value->wo_tgl_fo,
+        'wo_nomor_kb' => $value->wo_nomor_kb,
+        'wo_jenis_layanan' => $value->wo_jenis_layanan,
+        'wo_jumlah_layanan' => $value->wo_jumlah_layanan,
+        'wo_harga_ke_plggn' => $value->wo_harga_ke_plggn,
+        'wo_onetime_charge_plggn' => $value->wo_onetime_charge_plggn,
+        'wo_monthly_plggn' => $value->wo_monthly_plggn,
+        'wo_onetime_charge_telkom' => $value->wo_onetime_charge_telkom,
+        'wo_persen_telkom' => $value->wo_persen_telkom,
+        'wo_monthly_telkom' => $value->wo_monthly_telkom,
+        'wo_onetime_charge_mitra' => $value->wo_onetime_charge_mitra,
+        'wo_persen_mitra' => $value->wo_persen_mitra,
+        'wo_monthly_mitra' => $value->wo_monthly_mitra,
+        'kl_tgl_kl' => $value->kl_tgl_kl,
+        'kl_takah_kl' => $value->kl_takah_kl,
+        'kl_nomor_kb' => $value->kl_nomor_kb,
+        'kl_no_kl_mitra' => $value->kl_no_kl_mitra,
+        'kl_tempat_ttd_kl' => $value->kl_tempat_ttd_kl,
+        'kl_notaris' => $value->kl_notaris,
+        'kl_akta_notaris' => $value->kl_akta_notaris,
+        'kl_tgl_akta_notaris' => $value->kl_tgl_akta_notaris,
+        'kl_nama_pejabat_telkom' => $value->kl_nama_pejabat_telkom,
+        'kl_jabatan_pejabat_telkom' => $value->kl_jabatan_pejabat_telkom,
+        'kl_npwp_mitra' => $value->kl_npwp_mitra,
+        'kl_no_anggaran_mitra' => $value->kl_no_anggaran_mitra,
+        'kl_tgl_anggaran_mitra' => $value->kl_tgl_anggaran_mitra,
+        'kl_nama_pejabat_mitra' => $value->kl_nama_pejabat_mitra,
+        'kl_jabatan_pejabat_mitra' => $value->kl_jabatan_pejabat_mitra,
+        'kl_no_skm' => $value->kl_no_skm,
+        'kl_tgl_skm' => $value->kl_tgl_skm,
+        'kl_perihal_skm' => $value->kl_perihal_skm,
+        'kl_tgl_akhir_kl' => $value->kl_tgl_akhir_kl,
+        'kl_bayar_dp' => $value->kl_bayar_dp,
+        'kl_nama_bank_mitra' => $value->kl_nama_bank_mitra,
+        'kl_cabang_bank_mitra' => $value->kl_cabang_bank_mitra,
+        'kl_rek_bank_mitra' => $value->kl_rek_bank_mitra,
+        'kl_an_bank_mitra' => $value->kl_an_bank_mitra,
+        'file_p0' => $value->file_p0,
+        'file_p1' => $value->file_p1,
+        'file_p2' => $value->file_p2,
+        'file_p3' => $value->file_p3,
+        'file_p4' => $value->file_p4,
+        'file_p5' => $value->file_p5,
+        'file_p6' => $value->file_p6,
+        'file_p7' => $value->file_p7,
+        'file_p8' => $value->file_p8,
+        'file_sp' => $value->file_sp,
+        'file_wo' => $value->file_wo,
+        'file_kl' => $value->file_kl,
+        'p1_paragraf' => $value->p1_paragraf,
+        'p0_paragraf' => $value->p0_paragraf
+      ]);
+    }
+
+    return $arr_ids;
+  }
 
   public function updateOblHistori($var_obl_id){
     $data_lama = DB::connection('pgsql')->table('form_obl')
