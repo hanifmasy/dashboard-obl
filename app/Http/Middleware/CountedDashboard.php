@@ -8,6 +8,7 @@ use App\Exceptions\Handler;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Role;
 
 class CountedDashboard
 {
@@ -20,23 +21,33 @@ class CountedDashboard
      */
     public function handle(Request $request, Closure $next)
     {
+        $user_role = Role::where('user_id',Auth::id())->first();
+        // dd( $user_role );
+        if( !$user_role ){
+          auth()->logout();
+          return redirect('/sign-in')->with('status','Oops! Akun Anda Tidak Memiliki Akses Role. Hubungi Admin.');
+        }
+        else{
+          if( !$user_role->role_id ){ auth()->logout(); return redirect('/sign-in')->with('status','Oops! Akun Anda Tidak Memiliki Akses Role. Hubungi Admin.'); }
+        }
+
         try{
           // GET & COUNT DATA FOR DASHBOARD
-          $counted_dashboard_top_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'cancel' ");
-          $counted_dashboard_top_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null ");
+          $counted_dashboard_top_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'cancel' ");
+          $counted_dashboard_top_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null ");
 
-          $counted_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'witel' ");
-          $timed_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'witel' ");
-          $counted_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'obl' ");
-          $timed_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'obl' ");
-          $counted_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'legal' ");
-          $timed_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'legal' ");
-          $counted_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'mitra_obl' ");
-          $timed_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses in ('mitra_obl','mitra_pjm') ");
-          $counted_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'close_sm' ");
-          $timed_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'close_sm' ");
-          $counted_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->whereRaw(" deleted_at is null and f1_proses = 'done' ");
-          $timed_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" deleted_at is null and f1_proses = 'done' ");
+          $counted_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'witel' ");
+          $timed_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'witel' ");
+          $counted_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses in ('obl','pjm') ");
+          $timed_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses in ('obl','pjm') ");
+          $counted_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'legal' ");
+          $timed_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'legal' ");
+          $counted_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses in ('mitra_obl','mitra_pjm') ");
+          $timed_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses in ('mitra_obl','mitra_pjm') ");
+          $counted_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'close_sm' ");
+          $timed_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'close_sm' ");
+          $counted_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'done' ");
+          $timed_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'done' ");
 
           if(Auth::check()){
             $is_user = User::leftJoin('user_role as ur','ur.user_id','=','users.id')

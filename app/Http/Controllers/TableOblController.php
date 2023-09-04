@@ -48,8 +48,8 @@ class TableOblController extends Controller
                     when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
                     when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
                     when submit in (
-                      'am_submit','am_edit','am_form_p0-p1','am_file_p0','am_file_p1','am_revisi',
-                      'solution_submit','solution_edit','solution_form_p0-p1','solution_file_p0','solution_file_p1'
+                      'witel_submit','witel_edit','witel_form_p1','witel_file_p0','witel_file_p1','witel_revisi',
+                      'solution_submit','solution_edit','solution_form_p1','solution_file_p0','solution_file_p1'
                     ) then 'kontrak3'
                     when submit in ('obl_submit','obl_lampiran','obl_edit') then 'kontrak4'
                     else ''
@@ -116,8 +116,8 @@ class TableOblController extends Controller
                     when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
                     when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
                     when submit in (
-                      'am_submit','am_edit','am_form_p0-p1','am_file_p0','am_file_p1','am_revisi',
-                      'solution_submit','solution_edit','solution_form_p0-p1','solution_file_p0','solution_file_p1'
+                      'witel_submit','witel_edit','witel_form_p1','witel_file_p0','witel_file_p1','witel_revisi',
+                      'solution_submit','solution_edit','solution_form_p1','solution_file_p0','solution_file_p1'
                     ) then 'kontrak3'
                     when submit in ('obl_submit','obl_lampiran','obl_edit') then 'kontrak4'
                     else ''
@@ -183,8 +183,8 @@ class TableOblController extends Controller
                     when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
                     when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
                     when submit in (
-                      'am_submit','am_edit','am_form_p0-p1','am_file_p0','am_file_p1','am_revisi',
-                      'solution_submit','solution_edit','solution_form_p0-p1','solution_file_p0','solution_file_p1'
+                      'witel_submit','witel_edit','witel_form_p1','witel_file_p0','witel_file_p1','witel_revisi',
+                      'solution_submit','solution_edit','solution_form_p1','solution_file_p0','solution_file_p1'
                     ) then 'kontrak3'
                     when submit in ('obl_submit','obl_lampiran','obl_edit') then 'kontrak4'
                     else ''
@@ -235,9 +235,9 @@ class TableOblController extends Controller
         if($ajx_gdt){
           if($ajx_gdt==='top_1'){ $query->whereRaw(" obl.f1_proses = 'cancel' "); }
           if($ajx_gdt==='bottom_1'){ $query->whereRaw(" obl.f1_proses = 'witel' "); }
-          if($ajx_gdt==='bottom_2'){ $query->whereRaw(" obl.f1_proses = 'obl' "); }
+          if($ajx_gdt==='bottom_2'){ $query->whereRaw(" obl.f1_proses in ('obl','pjm') "); }
           if($ajx_gdt==='bottom_3'){ $query->whereRaw(" obl.f1_proses = 'legal' "); }
-          if($ajx_gdt==='bottom_4'){ $query->whereRaw(" obl.f1_proses = 'mitra_obl' "); }
+          if($ajx_gdt==='bottom_4'){ $query->whereRaw(" obl.f1_proses in ('mitra_obl','mitra_pjm') "); }
           if($ajx_gdt==='bottom_5'){ $query->whereRaw(" obl.f1_proses = 'close_sm' "); }
           if($ajx_gdt==='bottom_6'){ $query->whereRaw(" obl.f1_proses = 'done' "); }
         }
@@ -246,7 +246,7 @@ class TableOblController extends Controller
         if($cl){
           if($cl==='b'){ $query->whereRaw(" obl.f1_proses = 'cancel' "); }
           if($cl==='c'){ $query->whereRaw(" obl.f1_proses = 'done' "); }
-          if($cl==='d'){ $query->whereRaw(" obl.f1_proses = 'obl' "); }
+          if($cl==='d'){ $query->whereRaw(" obl.f1_proses in ('obl','pjm') "); }
           if($cl==='e'){ $query->whereRaw(" obl.f1_proses = 'witel' "); }
           if($cl==='f'){ $query->whereRaw(" obl.revisi_witel = true "); }
           if($cl==='g'){ $query->whereRaw(" obl.revisi_witel_count > 0 "); }
@@ -268,7 +268,7 @@ class TableOblController extends Controller
           }
         }
 
-        $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') ")
+        $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') and is_draf <> 8 ")
           // ->orderByRaw("CASE WHEN obl.created_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.created_at','DESC')
           ->orderByRaw("CASE WHEN obl.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.updated_at','DESC')
           ->get();
@@ -946,7 +946,9 @@ class TableOblController extends Controller
             'file_p8' => $cek_doc_obl_update->file_p8,
             'file_sp' => $cek_doc_obl_update->file_sp,
             'file_wo' => $cek_doc_obl_update->file_wo,
-            'file_kl' => $cek_doc_obl_update->file_kl
+            'file_kl' => $cek_doc_obl_update->file_kl,
+            'p1_paragraf' => $cek_doc_obl_update->p1_paragraf,
+            'p0_paragraf' => $cek_doc_obl_update->p0_paragraf
           ]);
           DB::connection('pgsql')->table('form_obl')
           ->where('id',$edit_obl_id)

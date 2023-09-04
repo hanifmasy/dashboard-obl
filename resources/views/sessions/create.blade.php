@@ -10,24 +10,6 @@
             </div>
         </div>
 
-        @if( session('status') )
-        <div class="modal fade" id="modal-status-table-obl" tabindex="-1" aria-labelledby="modal-status-table-obl" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Status Proses Sistem:</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body" id="status-table-obl">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        @endif
-
         <main class="main-content  mt-0">
             <div class="page-header align-items-start min-vh-100"
                 <span class="mask bg-gradient-dark opacity-6"></span>
@@ -49,37 +31,50 @@
                                 <div class="card-body">
                                     <form role="form" method="POST" action="{{ route('login') }}" class="text-start">
                                         @csrf
-                                        @if (Session::has('status'))
-                                        <div class="alert alert-success alert-dismissible text-white" role="alert">
-                                            <span class="text-sm">{{ Session::get('status') }}</span>
+                                        @if ( Session::has('status') )
+                                            @if( str_contains(Session::get('status'),'Oops') )
+                                            <div class="alert alert-danger alert-dismissible text-white" role="alert">
+                                                <span class="text-sm">{{ Session::get('status') }}</span>
+                                                <button type="button" class="btn-close text-lg py-3 opacity-10"
+                                                    data-bs-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            @else
+                                            <div class="alert alert-success alert-dismissible text-white" role="alert">
+                                                <span class="text-sm">{{ Session::get('status') }}</span>
+                                                <button type="button" class="btn-close text-lg py-3 opacity-10"
+                                                    data-bs-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            @endif
+                                        @endif
+                                        @error('username')
+                                        <div class="alert alert-danger alert-dismissible text-white" role="alert">
+                                            <span class="text-sm">{{ $message }}</span>
                                             <button type="button" class="btn-close text-lg py-3 opacity-10"
                                                 data-bs-dismiss="alert" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        @endif
+                                        @enderror
                                         <div class="input-group input-group-outline mt-3">
                                             <label class="form-label">Username</label>
-                                            <input type="text" class="form-control" name="username">
+                                            <input type="text" class="form-control" name="username" autocomplete="off">
                                         </div>
-                                        @error('username')
-                                        <p class='text-danger inputerror'>{{ $message }} </p>
-                                        @enderror
                                         <div class="input-group input-group-outline mt-3">
                                             <label class="form-label">Password</label>
-                                            <input type="password" class="form-control" name="password">
+                                            <input type="password" class="form-control" name="password" autocomplete="off">
                                         </div>
-                                        @error('password')
-                                        <p class='text-danger inputerror'>{{ $message }} </p>
-                                        @enderror
                                         <div class="text-center">
                                             <button type="submit" class="btn bg-gradient-light shadow-danger w-100 my-4 mb-2">Sign
                                                 in</button>
                                         </div>
                                         <p class="mt-4 text-sm text-center">
-                                            Belum memiliki akun?
+                                            Belum Memiliki Akun?
                                             <a href="{{ route('register') }}"
-                                                class="text-primary text-gradient font-weight-bold">Klik di sini.</a>
+                                                class="text-primary text-gradient font-weight-bold">Klik di sini</a>
                                         </p>
                                     </form>
                                 </div>

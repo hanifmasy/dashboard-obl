@@ -16,6 +16,7 @@ use App\Http\Controllers\FilesController;
 use App\Http\Controllers\SolutionController;
 use App\Http\Controllers\ProsesOblController;
 use App\Http\Controllers\RewardsController;
+use App\Http\Controllers\PraLopController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\DB;
 use App\Models\MitraVendor;
@@ -50,7 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 // GET VIEW WITH METHODS
-Route::get('reward-witel-obl', [RewardsController::class, 'witelObl'])->middleware(['auth','role_table_files'])->name('reward.witel_obl');
+Route::get('reward-witel', [RewardsController::class, 'witelObl'])->middleware(['auth','role_table_files'])->name('reward.witel_obl');
 Route::get('obl-tables', [TableOblController::class, 'tables'])->middleware('auth')->name('obl.tables');
 Route::get('obl-files', [UploadController::class, 'index'])->middleware(['auth','role_files'])->name('obl.upload.index');
 Route::get('inputs', function () {
@@ -83,6 +84,9 @@ Route::get('inputs-legacy', function () {
 	$mitra_vendor = MitraVendor::get()->toArray();
 	return view('pages.inputs_legacy',compact('mitra_vendor','list_nomor_kb')); })->middleware(['auth','role_obl_non_view'])->name('inputs_legacy');
 Route::get('witels', function () { $mitra_vendor = MitraVendor::get()->toArray(); return view('pages.witels',compact('mitra_vendor')); })->middleware(['auth','role_witel'])->name('witels');
+Route::get('witels-pralop', [PraLopController::class, 'index'])->middleware(['auth','role_pralop'])->name('witels.pralop');
+Route::get('witels-pralop/detail', [PraLopController::class, 'detail'])->middleware(['auth','role_pralop'])->name('witels.pralop.detail');
+Route::get('witels-pralop/detail/layanan', [PraLopController::class, 'layanan'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan');
 Route::get('testing', [TestingController::class, 'index'])->middleware(['auth','role_super'])->name('testing.index');
 
 
@@ -90,9 +94,19 @@ Route::get('testing', [TestingController::class, 'index'])->middleware(['auth','
 Route::post('inputs/create', [InputsController::class, 'create'])->middleware(['auth','role_obl'])->name('inputs.create');
 Route::post('inputs-legacy/create', [InputsController::class, 'createLegacy'])->middleware(['auth','role_obl_non_view'])->name('inputs_legacy.create');
 
+Route::post('witels-pralop/ketdoc', [PraLopController::class, 'ketdoc'])->middleware(['auth','role_pralop'])->name('witels.pralop.ketdoc');
+Route::post('witels-pralop/langkah', [PraLopController::class, 'langkah'])->middleware(['auth','role_pralop'])->name('witels.pralop.langkah');
+Route::post('witels-pralop/detail/update', [PraLopController::class, 'update'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.update');
+Route::post('witels-pralop/detail/layanan/update', [PraLopController::class, 'layananUpdate'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.update');
+Route::post('witels-pralop/detail/layanan/print', [PraLopController::class, 'layananPrint'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.print');
+Route::post('witels-pralop/detail/layanan/upload', [PraLopController::class, 'layananUpload'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.upload');
+Route::post('witels-pralop/detail/layanan/download', [PraLopController::class, 'layananDownload'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.download');
+Route::post('witels-pralop/detail/layanan/edit', [PraLopController::class, 'layananEdit'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.edit');
+Route::post('witels-pralop/detail/layanan/edit/update', [PraLopController::class, 'layananEditUpdate'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.edit.update');
+
 Route::post('witels/create', [WitelsController::class, 'create'])->middleware(['auth','role_witel'])->name('witels.create');
 Route::post('witels/edit', [WitelsController::class, 'edit'])->middleware(['auth','role_witel'])->name('witels.edit');
-Route::post('witels/forms', [WitelsController::class, 'forms'])->middleware(['auth','role_forms'])->name('witels.forms');
+Route::post('witels/forms', [WitelsController::class, 'forms'])->middleware(['auth','role_pralop'])->name('witels.forms');
 Route::post('witels/forms/create', [WitelsController::class, 'formsCreate'])->middleware(['auth','role_forms_create'])->name('witels.forms.create');
 Route::post('witels/files', [WitelsController::class, 'files'])->middleware(['auth','role_witel'])->name('witels.files');
 Route::post('witels/files/upload', [WitelsController::class, 'upload'])->middleware(['auth','role_witel'])->name('witels.files.upload');

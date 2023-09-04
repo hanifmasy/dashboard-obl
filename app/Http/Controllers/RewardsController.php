@@ -39,11 +39,29 @@ class RewardsController extends Controller
           DB::raw("sum(revisi_witel_count) as total_prs_rev") // total proses revisi
           )
         ->whereRaw("
-        (deleted_at is null or to_char(deleted_at,'yyyy-mm-dd') = '') and
-        deleted_by is null
+        f1_witel is not null and
+        (deleted_at is null or to_char(deleted_at,'yyyy-mm-dd') = '') and deleted_by is null
+        and is_draf <> 8
         ");
 
-        $data = $query->groupBy('f1_witel')->orderBy('f1_witel','asc')->get()->toArray();
+        $query2 = DB::connection('pgsql')->table('form_pralop')
+        ->select(
+          'lop_witel',
+          DB::raw("sum(1) as total"),
+          DB::raw("sum(case when on_handling = 'witel' then 1 else 0 end) as total_witel"),
+          DB::raw("sum(case when on_handling = 'solution' then 1 else 0 end) as total_solution"),
+          DB::raw("sum(case when on_handling = 'legal' then 1 else 0 end) as total_legal"),
+          DB::raw("sum(case when on_handling = 'final_pralop' then 1 else 0 end) as total_final_pralop"),
+          DB::raw("sum(case when lop_count_revisi > 0 then 1 else 0 end) as total_doc_rev"),
+          DB::raw("sum(lop_count_revisi) as total_prs_rev")
+        );
+
+        $obl = $query->groupBy('f1_witel')->orderBy('f1_witel','asc')->get()->toArray();
+        $pralop = $query2->groupBy('lop_witel')->orderBy('lop_witel','asc')->get()->toArray();
+        $data = [
+          'obl' => $obl,
+          'pralop' => $pralop
+        ];
 
         return response()->json($data);
       }

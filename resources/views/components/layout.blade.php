@@ -130,6 +130,7 @@
 <script src="{{ asset('assets') }}/DataTables/JSZip-3.10.1/jszip.min.js"></script>
 <script src="{{ asset('assets') }}/DataTables/Buttons-2.4.1/js/buttons.dataTables.min.js"></script>
 <script src="{{ asset('assets') }}/DataTables/Buttons-2.4.1/js/buttons.html5.min.js"></script>
+<script src="{{ asset('assets') }}/js/crypto-js.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/perfect-scrollbar.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/smooth-scrollbar.min.js"></script>
 @stack('js')

@@ -28,30 +28,30 @@
                                             <div class="input-group input-group-outline mt-3">
                                                 <label class="form-label">Nama Lengkap</label>
                                                 <input type="text" class="form-control" name="nama_lengkap"
-                                                    value="{{ old('nama_lengkap') }}">
+                                                    value="{{ old('nama_lengkap') }}" autocomplete="off">
                                             </div>
-                                            @error('name')
+                                            @error('nama_lengkap')
                                             <p class='text-danger inputerror'>{{ $message }} </p>
                                             @enderror
                                             <div class="input-group input-group-outline mt-3">
                                                 <label class="form-label">Username</label>
                                                 <input type="text" class="form-control" name="username"
-                                                    value="{{ old('username') }}">
+                                                    value="{{ old('username') }}" autocomplete="off">
                                             </div>
-                                            @error('name')
+                                            @error('username')
                                             <p class='text-danger inputerror'>{{ $message }} </p>
                                             @enderror
                                             <div class="input-group input-group-outline mt-3">
                                                 <label class="form-label">Email</label>
                                                 <input type="email" class="form-control" name="email"
-                                                    value="{{ old('email') }}">
+                                                    value="{{ old('email') }}" autocomplete="off">
                                             </div>
                                             @error('email')
                                             <p class='text-danger inputerror'>{{ $message }} </p>
                                             @enderror
                                             <div class="input-group input-group-outline mt-3">
                                                 <label class="form-label">Password</label>
-                                                <input type="password" class="form-control" name="password">
+                                                <input type="password" class="form-control" name="password" autocomplete="off">
                                             </div>
                                             @error('password')
                                             <p class='text-danger inputerror'>{{ $message }} </p>

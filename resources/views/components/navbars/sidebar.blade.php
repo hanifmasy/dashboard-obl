@@ -73,13 +73,24 @@
                 </a>
             </li>
             @endif
+            @if( $is_user->role_id == 8 || $is_user->role_id == 9 )
+            <li class="nav-item">
+                <a class="nav-link {{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' active bg-gradient-light' : '' }} " style="{{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail'  ? ' color:#2a2526;' : '' }}"
+                    href="{{ route('witels.pralop') }}">
+                    <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' color:#2a2526;' : '' }}">
+                        <i class="material-icons opacity-10">app_registration</i>
+                    </div>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' color:#2a2526;' : '' }}">REPORT PRA LOP</span>
+                </a>
+            </li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link {{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-drafs-edit' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' active bg-gradient-light' : '' }} " style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' color:#2a2526;' : '' }}"
                     href="{{ route('obl.tables') }}">
                     <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' color:#2a2526;' : '' }}">TABEL DOKUMEN</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' || $activePage == 'obl-tables-upload' || $activePage == 'obl-tables-edit' || $activePage == 'witels-forms' ? ' color:#2a2526;' : '' }}">DOKUMEN OBL</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -100,7 +111,7 @@
                     <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">add_task</i>
                     </div>
-                    <span class="nav-link-text ms-1" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">WITEL OBL</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">WITEL</span>
                 </a>
             </li>
             @endif
@@ -125,7 +136,7 @@
                     <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'obl-tables' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' ? ' color:#2a2526;' : '' }}">TABEL DOKUMEN</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'obl-tables' ? ' color:#2a2526;' : '' }}">DOKUMEN OBL</span>
                 </a>
             </li>
             <li class="nav-item mt-3">
@@ -137,7 +148,7 @@
                     <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">
                         <i class="material-icons opacity-10">add_task</i>
                     </div>
-                    <span class="nav-link-text ms-1" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">WITEL OBL</span>
+                    <span class="nav-link-text ms-1" style="{{ $activePage == 'reward-witel-obl' ? ' color:#2a2526;' : '' }}">WITEL</span>
                 </a>
             </li>
             @endif
@@ -154,7 +165,16 @@
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">add</i>
                     </div>
-                    <span class="nav-link-text ms-1">TAMBAH DATA</span>
+                    <span class="nav-link-text ms-1">CREATE PRA LOP</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('witels.pralop') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">app_registration</i>
+                    </div>
+                    <span class="nav-link-text ms-1">REPORT PRA LOP</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -163,7 +183,7 @@
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                    <span class="nav-link-text ms-1">DOKUMEN OBL</span>
                 </a>
             </li>
             <li class="nav-item mt-3">
@@ -175,7 +195,7 @@
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">add_task</i>
                     </div>
-                    <span class="nav-link-text ms-1">WITEL OBL</span>
+                    <span class="nav-link-text ms-1">WITEL</span>
                 </a>
             </li>
             @endif
@@ -192,7 +212,7 @@
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                    <span class="nav-link-text ms-1">DOKUMEN OBL</span>
                 </a>
             </li>
             <li class="nav-item mt-3">
@@ -204,7 +224,7 @@
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">add_task</i>
                     </div>
-                    <span class="nav-link-text ms-1">WITEL OBL</span>
+                    <span class="nav-link-text ms-1">WITEL</span>
                 </a>
             </li>
             @endif
@@ -221,7 +241,7 @@
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
-                    <span class="nav-link-text ms-1">TABEL DOKUMEN</span>
+                    <span class="nav-link-text ms-1">DOKUMEN OBL</span>
                 </a>
             </li>
             @endif

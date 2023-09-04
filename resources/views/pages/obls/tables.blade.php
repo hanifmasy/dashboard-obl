@@ -206,7 +206,7 @@
             @endif
             @if( $is_user->role_id )
             <div class="modal fade" id="modal-ketdoc-table-obl" tabindex="-1" aria-labelledby="modal-ketdoc-table-obl" aria-hidden="true">
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title">Keterangan Dokumen OBL:</h5>
@@ -1257,7 +1257,7 @@
                           status_ket_obl+=`
                           <tr>
                             <td class="d-flex flex-column"><h6 class="text-sm justify-content-center">▶️ [`+value.f1_tgl_keterangan+`]</h6></td>
-                            <td><h6 class="text-sm">`+value.f1_keterangan+`</h6></td>
+                            <td><h6 style="white-space:normal;" class="text-sm">`+value.f1_keterangan+`</h6></td>
                           </tr>
                           `;
                         });
@@ -1267,7 +1267,7 @@
                           status_ket_obl+=`
                           <tr>
                             <td class="d-flex flex-column justify-content-center">[`+value.f1_tgl_keterangan+`]</td>
-                            <td>`+value.f1_keterangan+`</td>
+                            <td style="white-space:normal;">`+value.f1_keterangan+`</td>
                           </tr>
                           `;
                         });
@@ -1276,11 +1276,11 @@
                       $('#ketdoc-table-obl').append(`
                         <div class="alert alert-secondary alert-dismissible">
                             <div class="text-center">
-                                <h5 class="text-white">Keterangan OBL</h5>
+                                <h5 class="text-white">List Keterangan</h5>
                             </div>
                         </div>
                         <div class="row">
-                          <div class="col-lg-12">
+                          <div class="col-lg-12 table-responsive">
                             <table class="table align-items-center mb-0" cellspacing="0" cellpadding="0">
                               <thead>
                                 <tr>
@@ -1678,6 +1678,7 @@
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
                                 <div class="dropdown-menu">
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
                                 </div>
                                 </div>
                              `;
@@ -1985,7 +1986,7 @@
                      "render": function ( data, type, row ) {
                        // if(row.tgl_keterangan){ return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>'; }
                        // else{ return '<span style="white-space:normal"></span>'; }
-                       return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>';
+                       return '<span white-space:normal><b>'+row.tgl_keterangan+'</b> '+data.substr(0,20)+'</span>';
                      }
                   },
                   {
