@@ -455,6 +455,10 @@ class PraLopController extends Controller
       $data_lama_obl = $this->updatePraLopToObl($pralop_id);
       DB::connection('pgsql')->table('form_obl')->where('f1_id_form_pralop',$pralop_id)->update([
         'is_draf' => 7,
+        'revisi_witel' => false,
+        'revisi_witel_count' => 0,
+        'submit' => 'solution_edit',
+        'f1_proses' => 'witel',
         'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
         'f1_keterangan' => 'FINAL PRA LOP: ' . $data_lama->lop_judul_projek,
         'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
