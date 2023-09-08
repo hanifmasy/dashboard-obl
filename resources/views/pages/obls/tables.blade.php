@@ -1670,9 +1670,9 @@
                      render: function ( data, type, row ) {
                        if( row.is_draf === 9 ){
                          if( is_user !== '9' && is_user !== '2' ){
-                           return ``;
+                           return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>';
                          }
-                         else{
+                         else if ( is_user === '2' ){
                            return `
                              <div class="dropdown">
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
@@ -1681,6 +1681,38 @@
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
                                 </div>
                                 </div>
+                             `;
+                         }
+                         else if ( is_user === '9' ){
+                           return `
+                             <div class="btn-group" role="group">
+                             <div class="btn-group" role="group">
+                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
+                                </div>
+                                </div>
+                             <div class="btn-group" role="group">
+                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lanjut-obl" onclick="lanjutObl(`+row.obl_id+`)">LANJUT OBL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-obl" onclick="prosesObl(`+row.obl_id+`)">OBL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
+                                </div>
+                                </div>
+                             </div>
                              `;
                          }
                        }

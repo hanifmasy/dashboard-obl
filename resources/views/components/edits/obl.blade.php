@@ -267,7 +267,7 @@
                     </td>
                     <td>
                       @if($errors->has('f1_mitra_id'))
-                      <select class="outline-input-merah" id="f1_mitra_id" name="f1_mitra_id">
+                      <select class="outline-input-merah" id="f1_mitra_id" name="f1_mitra_id" disabled>
                         <option value="" disabled selected>Pilih Vendor</option>
                         @if(isset($mitra_vendor))
                           @foreach($mitra_vendor as $ind => $label)
@@ -277,17 +277,15 @@
                         <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
                       </select>
                       @else
-                      <select class="" id="f1_mitra_id" name="f1_mitra_id" >
+                      <select class="" id="f1_mitra_id" name="f1_mitra_id"  disabled>
                         <option value="" disabled selected>Pilih Vendor</option>
                         @if(isset($mitra_vendor))
                           @foreach($mitra_vendor as $ind => $label)
                             <option value="{{ $label->id }}" {{ old('f1_mitra_id',$value['f1_mitra_id']) == $label->id ? ' selected="selected"' : '' }}>{{ $label->nama_mitra }}</option>
                           @endforeach
                         @endif
-                        <option class="f1-nama-mitra-lain" value="lainnya">Lainnya</option>
                       </select>
                       @endif
-                      <input type="text" name="f1_nama_mitra_lain" id="f1_nama_mitra_lain" value="" style="width:350px;" placeholder="NAMA MITRA BARU">
                     </td>
                 </tr>
                 <tr class="filterKontrak">

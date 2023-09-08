@@ -91,6 +91,8 @@ Route::get('testing', [TestingController::class, 'index'])->middleware(['auth','
 
 
 // POST METHOD ( PAGES )
+Route::post('/dashboard/excel', [DashboardController::class, 'excel'])->middleware(['auth','cbd'])->name('dashboard.excel');
+
 Route::post('inputs/create', [InputsController::class, 'create'])->middleware(['auth','role_obl'])->name('inputs.create');
 Route::post('inputs-legacy/create', [InputsController::class, 'createLegacy'])->middleware(['auth','role_obl_non_view'])->name('inputs_legacy.create');
 
