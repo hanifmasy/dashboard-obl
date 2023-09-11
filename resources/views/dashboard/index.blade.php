@@ -122,7 +122,7 @@
         @else
         <div class="container-fluid py-4">
           <!-- FILTER -->
-          <form action="{{ route('dashboard.excel') }}" method="POST" enctype="multipart/form-data">
+          <form action="{{ route('obl.tables.excel') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-sm-6">

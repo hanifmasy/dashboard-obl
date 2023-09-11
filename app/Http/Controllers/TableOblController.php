@@ -21,6 +21,7 @@ class TableOblController extends Controller
 {
     public function tables(Request $request){
       if($request->ajax()){
+        // dd($request->all());
         $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
         ->leftJoin('witels','witels.id','=','users.witel_id')
         ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
@@ -231,7 +232,7 @@ class TableOblController extends Controller
         }
 
         $ajx_gdt = null;
-        if($request->ajx_gdt){ $ajx_gdt = $request->ajx_gdt; }
+        if($request->ajx_gdt && $request->ajx_gdt !== 'null'){ $ajx_gdt = $request->ajx_gdt; }
         if($ajx_gdt){
           if($ajx_gdt==='top_1'){ $query->whereRaw(" obl.f1_proses = 'cancel' "); }
           if($ajx_gdt==='bottom_1'){ $query->whereRaw(" obl.f1_proses = 'witel' "); }
@@ -242,7 +243,7 @@ class TableOblController extends Controller
           if($ajx_gdt==='bottom_6'){ $query->whereRaw(" obl.f1_proses = 'done' "); }
         }
         $cl = null;
-        if($request->ajx_cl){ $cl = $request->ajx_cl; }
+        if($request->ajx_cl && $request->ajx_cl !== 'null'){ $cl = $request->ajx_cl; }
         if($cl){
           if($cl==='b'){ $query->whereRaw(" obl.f1_proses = 'cancel' "); }
           if($cl==='c'){ $query->whereRaw(" obl.f1_proses = 'done' "); }
@@ -253,7 +254,7 @@ class TableOblController extends Controller
           if($cl==='h'){ $query->whereRaw(" obl.revisi_witel_count > 0 "); }
         }
         $wl = null;
-        if($request->ajx_wl){ $wl = $request->ajx_wl; }
+        if($request->ajx_wl && $request->ajx_wl !== 'null'){ $wl = $request->ajx_wl; }
         if($wl){
           if( ($user_in_is->role_id == 4 || $user_in_is->role_id == 5) && $user_in_is->nama_witel === $wl){
             $query->whereRaw(" obl.f1_witel = '$wl' ");
@@ -268,19 +269,39 @@ class TableOblController extends Controller
           }
         }
 
+        if( $user_in_is->role_id !== 4 && $user_in_is->role_id !== 5 ){
+          if($request->fl_witel){ $query->where('f1_witel',$request->fl_witel); }
+        }
+        if($request->fl_tahun){ $query->where(DB::raw("to_char(obl.created_at,'yyyy')"),'=',$request->fl_tahun); }
+        if( $user_in_is->role_id !== 6 ){
+          if($request->fl_mitra){ $query->where('f1_pic_mitra',$request->fl_mitra); }
+        }
+        if($request->fl_plggn){ $query->where('f1_nama_plggn',$request->fl_plggn); }
+        if($request->fl_segmen){ $query->where('f1_segmen',$request->fl_segmen); }
+        if($request->fl_status){ $query->where('f1_jenis_kontrak',$request->fl_status); }
+
         $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') and is_draf <> 8 ")
-          // ->orderByRaw("CASE WHEN obl.created_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.created_at','DESC')
           ->orderByRaw("CASE WHEN obl.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.updated_at','DESC')
+          ->orderByRaw("CASE WHEN obl.created_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.created_at','DESC')
           ->get();
         return DataTables::of($data)->addIndexColumn()->make(true);
       }
+
       $gdt = null;
       if($request->gdt){ $gdt = Crypt::decrypt($request->gdt); }
       $cl = null;
       if($request->cl){ $cl = Crypt::decryptString($request->cl); }
       $wl = null;
       if($request->wl){ $wl = $request->wl; }
-      return view('pages.obls.tables',compact('gdt','cl','wl'));
+
+      $witels = DB::connection('pgsql')->table('witels')->select('nama_witel')->get()->toArray();
+      $tahuns = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(created_at,'yyyy') as tahun"))->groupBy('tahun')->orderByRaw("CASE WHEN to_char(created_at,'yyyy') IS NULL THEN 0 ELSE 1 END DESC")->orderBy('tahun','DESC')->get()->toArray();
+      $mitras = DB::connection('pgsql')->table('mitras')->select('id','nama_mitra')->get()->toArray();
+      $plggns = DB::connection('pgsql')->table('form_obl')->select('f1_nama_plggn')->groupBy('f1_nama_plggn')->orderByRaw("CASE WHEN f1_nama_plggn IS NULL THEN 0 ELSE 1 END DESC")->orderBy('f1_nama_plggn','DESC')->get()->toArray();
+      $segmens = DB::connection('pgsql')->table('form_obl')->select('f1_segmen')->groupBy('f1_segmen')->orderByRaw("CASE WHEN f1_segmen IS NULL THEN 0 ELSE 1 END DESC")->orderBy('f1_segmen','DESC')->get()->toArray();
+      $statuses = DB::connection('pgsql')->table('form_obl')->select('f1_jenis_kontrak',DB::raw("case when f1_jenis_kontrak = 'perpanjangan' then 'Amandemen' when f1_jenis_kontrak = 'baru' then 'Baru' end as jenis_kontrak"))->whereRaw(" f1_jenis_kontrak in ('perpanjangan','baru') ")->groupBy('f1_jenis_kontrak','jenis_kontrak')->orderByRaw("CASE WHEN f1_jenis_kontrak IS NULL THEN 0 ELSE 1 END DESC")->orderBy('f1_jenis_kontrak','DESC')->get()->toArray();
+
+      return view('pages.obls.tables',compact('gdt','cl','wl','witels','tahuns','mitras','plggns','segmens','statuses'));
     }
 
     public function delete(Request $request)
@@ -339,9 +360,9 @@ class TableOblController extends Controller
     public function excel(Request $request)
     {
       // dd($request->all());
-      return redirect()->route('obl.tables')->with('status', 'Oops! Fitur Excel-Non-Yajra Ditutup Oleh Admin.');
+      // return redirect()->route('obl.tables')->with('status', 'Oops! Fitur Excel-Non-Yajra Ditutup Oleh Admin.');
 
-      $user_enter = 'OBL';
+      $user_enter = '';
       $tgl_download = Carbon::now()->translatedFormat('Y-m-d');
       $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
       ->leftJoin('witels','witels.id','=','users.witel_id')
@@ -349,246 +370,122 @@ class TableOblController extends Controller
       ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
       ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
 
-      $query=null;
-      if($user_in_is->role_id !== 4 && $user_in_is->role_id !== 5 && $user_in_is->role_id !== 6){
-        $query = DocObl::leftJoin('users as u','u.id','=','obl.created_by')
-        ->leftJoin('users as uu','uu.id','=','obl.updated_by')
-        ->leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
-        ->select(
-                  'obl.id as obl_id',
-                  DB::raw("
-                  case
-                  when f1_proses is null or f1_proses = '' then ''
-                  else f1_proses
-                  end as proses"),
-                  DB::raw("
-                  case
-                  when submit like 'draf_filter_%' then 'filter'
-                  when submit like 'draf_p%' then 'form'
-                  when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
-                  when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
-                  else ''
-                  end as filter_submit"),
-                  DB::raw("replace(submit,'_',' ') as string_submit"),
-                  DB::raw("case when f1_segmen is null or f1_segmen = '' then '' else f1_segmen end as segmen"),
-                  DB::raw("case when f1_folder is null or f1_folder = '' then '' else f1_folder end as folder"),
-                  DB::raw("to_char(obl.created_at,'YYYY-MM-DD HH24:MI') as string_tgl_submit"),
-                  DB::raw("to_char(obl.updated_at,'YYYY-MM-DD HH24:MI') as string_tgl_update"),
-                  DB::raw("case when f1_jenis_spk is null or f1_jenis_spk = '' then '' else f1_jenis_spk end as jenis_spk"),
-                  DB::raw("case when f1_witel is null or f1_witel = '' then '' else f1_witel end as witel"),
-                  DB::raw("case when f1_nama_plggn is null or f1_nama_plggn = '' then '' else f1_nama_plggn end as nama_plggn"),
-                  DB::raw("
-                  case
-                  when f1_judul_projek is null or f1_judul_projek = '' then ''
-                  else f1_judul_projek
-                  end as layanan
-                  "),
-                  DB::raw("case when mitras.nama_mitra is null or mitras.nama_mitra = '' then '' else mitras.nama_mitra end as nama_vendor"),
-                  'f1_masa_layanan_tahun as masa_layanan_tahun',
-                  'f1_masa_layanan_bulan as masa_layanan_bulan',
-                  'f1_masa_layanan_hari as masa_layanan_hari',
-                  DB::raw("case when f1_nilai_kb is null or f1_nilai_kb = '' then '' else f1_nilai_kb end as nilai_kb"),
-                  DB::raw("case when f1_no_kfs_spk is null or f1_no_kfs_spk = '' then '' else f1_no_kfs_spk end as no_kfs_spk"),
-                  DB::raw("
-                  case
-                  when (wo_takah_wo is null or wo_takah_wo = '') and (sp_takah_sp is null or sp_takah_sp = '') then kl_takah_kl
-                  when (wo_takah_wo is null or wo_takah_wo = '') and (kl_takah_kl is null or kl_takah_kl = '') then sp_takah_sp
-                  when (kl_takah_kl is null or kl_takah_kl = '') and (sp_takah_sp is null or sp_takah_sp = '') then wo_takah_wo
-                  else '-'
-                  end as no_kontrak
-                  "),
-                  DB::raw("case when f1_pic_mitra is null or f1_pic_mitra = '' then '' else f1_pic_mitra end as pic_mitra"),
-                  DB::raw("case when f1_jenis_kontrak is null or f1_jenis_kontrak = '' then '' else f1_jenis_kontrak end as jenis_kontrak"),
-                  DB::raw("case when f1_quote_kontrak is null or f1_quote_kontrak = '' then '' else f1_quote_kontrak end as quote_kontrak"),
-                  DB::raw("case when f1_nomor_akun is null or f1_nomor_akun = '' then '' else f1_nomor_akun end as nomor_akun"),
-                  DB::raw("case when f1_skema_bayar is null or f1_skema_bayar = '' then '' else f1_skema_bayar end as skema_bayar"),
-                  DB::raw("case when f1_status_order is null or f1_status_order = '' then '' else f1_status_order end as status_order"),
-                  DB::raw("case when f1_alamat_plggn is null or f1_alamat_plggn = '' then '' else f1_alamat_plggn end as alamat_plggn"),
-                  DB::raw("case when f1_tgl_keterangan is null then null else to_char(f1_tgl_keterangan,'YYYY-MM-DD HH24:MI') end as tgl_keterangan"),
-                  DB::raw("case when f1_keterangan is null or f1_keterangan = '' then '' else f1_keterangan end as keterangan"),
-                  DB::raw("u.nama_lengkap as user_create"),
-                  DB::raw("uu.nama_lengkap as user_update")
-                );
+      $query = DocObl::leftJoin('users as u','u.id','=','obl.created_by')
+      ->leftJoin('users as uu','uu.id','=','obl.updated_by')
+      ->leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
+      ->select(
+                'obl.id as obl_id',
+                DB::raw("
+                case
+                when f1_proses is null or f1_proses = '' then ''
+                else f1_proses
+                end as proses"),
+                DB::raw("
+                case
+                when submit like 'draf_filter_%' then 'filter'
+                when submit like 'draf_p%' then 'form'
+                when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
+                when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
+                when submit in (
+                  'witel_submit','witel_edit','witel_form_p1','witel_file_p0','witel_file_p1','witel_revisi',
+                  'solution_submit','solution_edit','solution_form_p1','solution_file_p0','solution_file_p1'
+                ) then 'kontrak3'
+                when submit in ('obl_submit','obl_lampiran','obl_edit') then 'kontrak4'
+                else ''
+                end as filter_submit"),
+                DB::raw("replace(submit,'_',' ') as string_submit"),
+                DB::raw("case when f1_segmen is null or f1_segmen = '' then '' else f1_segmen end as segmen"),
+                DB::raw("case when f1_folder is null or f1_folder = '' then '' else f1_folder end as folder"),
+                DB::raw("to_char(obl.created_at,'YYYY-MM-DD HH24:MI') as string_tgl_submit"),
+                DB::raw("to_char(obl.updated_at,'YYYY-MM-DD HH24:MI') as string_tgl_update"),
+                DB::raw("case when f1_jenis_spk is null or f1_jenis_spk = '' then '' else f1_jenis_spk end as jenis_spk"),
+                DB::raw("case when f1_witel is null or f1_witel = '' then '' else f1_witel end as witel"),
+                DB::raw("case when f1_nama_plggn is null or f1_nama_plggn = '' then '' else f1_nama_plggn end as nama_plggn"),
+                DB::raw("
+                case
+                when f1_judul_projek is null or f1_judul_projek = '' then ''
+                else f1_judul_projek
+                end as layanan
+                "),
+                DB::raw("case when mitras.nama_mitra is null or mitras.nama_mitra = '' then '' else mitras.nama_mitra end as nama_vendor"),
+                'f1_masa_layanan_tahun as masa_layanan_tahun',
+                'f1_masa_layanan_bulan as masa_layanan_bulan',
+                'f1_masa_layanan_hari as masa_layanan_hari',
+                DB::raw("case when f1_nilai_kb is null or f1_nilai_kb = '' then '' else f1_nilai_kb end as nilai_kb"),
+                DB::raw("case when f1_no_kfs_spk is null or f1_no_kfs_spk = '' then '' else f1_no_kfs_spk end as no_kfs_spk"),
+                DB::raw("
+                case
+                when (wo_takah_wo is null or wo_takah_wo = '') and (sp_takah_sp is null or sp_takah_sp = '') then kl_takah_kl
+                when (wo_takah_wo is null or wo_takah_wo = '') and (kl_takah_kl is null or kl_takah_kl = '') then sp_takah_sp
+                when (kl_takah_kl is null or kl_takah_kl = '') and (sp_takah_sp is null or sp_takah_sp = '') then wo_takah_wo
+                else '-'
+                end as no_kontrak
+                "),
+                DB::raw("case when f1_pic_mitra is null or f1_pic_mitra = '' then '' else f1_pic_mitra end as pic_mitra"),
+                DB::raw("case when f1_jenis_kontrak is null or f1_jenis_kontrak = '' then '' else f1_jenis_kontrak end as jenis_kontrak"),
+                DB::raw("case when f1_quote_kontrak is null or f1_quote_kontrak = '' then '' else f1_quote_kontrak end as quote_kontrak"),
+                DB::raw("case when f1_nomor_akun is null or f1_nomor_akun = '' then '' else f1_nomor_akun end as nomor_akun"),
+                DB::raw("case when f1_skema_bayar is null or f1_skema_bayar = '' then '' else f1_skema_bayar end as skema_bayar"),
+                DB::raw("case when f1_status_order is null or f1_status_order = '' then '' else f1_status_order end as status_order"),
+                DB::raw("case when f1_alamat_plggn is null or f1_alamat_plggn = '' then '' else f1_alamat_plggn end as alamat_plggn"),
+                DB::raw("case when f1_tgl_keterangan is null then null else to_char(f1_tgl_keterangan,'YYYY-MM-DD HH24:MI') end as tgl_keterangan"),
+                DB::raw("case when f1_keterangan is null or f1_keterangan = '' then '' else f1_keterangan end as keterangan"),
+                DB::raw("u.nama_lengkap as user_create"),
+                DB::raw("uu.nama_lengkap as user_update")
+              );
+
+      if($user_in_is->role_id === 1 || $user_in_is->role_id === 2 || $user_in_is->role_id === 7 || $user_in_is->role_id === 9){
+        $user_enter = 'OBL';
+      }
+      if($user_in_is->role_id === 3){
+        $user_enter = 'PJM';
+      }
+      if($user_in_is->role_id === 8 ){
+        $user_enter = 'Solution';
       }
 
       // WITEL
-      if($user_in_is->role_id == 4 || $user_in_is->role_id == 5 ){
-        $query = DocObl::leftJoin('users as u','u.id','=','obl.created_by')
-        ->leftJoin('users as uu','uu.id','=','obl.updated_by')
-        ->leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
-        ->select(
-                  'obl.id as obl_id',
-                  DB::raw("
-                  case
-                  when f1_proses is null or f1_proses = '' then ''
-                  else f1_proses
-                  end as proses"),
-                  DB::raw("
-                  case
-                  when submit like 'draf_filter_%' then 'filter'
-                  when submit like 'draf_p%' then 'form'
-                  when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
-                  when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
-                  else ''
-                  end as filter_submit"),
-                  DB::raw("replace(submit,'_',' ') as string_submit"),
-                  DB::raw("case when f1_segmen is null or f1_segmen = '' then '' else f1_segmen end as segmen"),
-                  DB::raw("case when f1_folder is null or f1_folder = '' then '' else f1_folder end as folder"),
-                  DB::raw("to_char(obl.created_at,'YYYY-MM-DD HH24:MI') as string_tgl_submit"),
-                  DB::raw("to_char(obl.updated_at,'YYYY-MM-DD HH24:MI') as string_tgl_update"),
-                  DB::raw("case when f1_jenis_spk is null or f1_jenis_spk = '' then '' else f1_jenis_spk end as jenis_spk"),
-                  DB::raw("case when f1_witel is null or f1_witel = '' then '' else f1_witel end as witel"),
-                  DB::raw("case when f1_nama_plggn is null or f1_nama_plggn = '' then '' else f1_nama_plggn end as nama_plggn"),
-                  DB::raw("
-                  case
-                  when f1_judul_projek is null or f1_judul_projek = '' then ''
-                  else f1_judul_projek
-                  end as layanan
-                  "),
-                  DB::raw("case when mitras.nama_mitra is null or mitras.nama_mitra = '' then '' else mitras.nama_mitra end as nama_vendor"),
-                  'f1_masa_layanan_tahun as masa_layanan_tahun',
-                  'f1_masa_layanan_bulan as masa_layanan_bulan',
-                  'f1_masa_layanan_hari as masa_layanan_hari',
-                  DB::raw("case when f1_nilai_kb is null or f1_nilai_kb = '' then '' else f1_nilai_kb end as nilai_kb"),
-                  DB::raw("case when f1_no_kfs_spk is null or f1_no_kfs_spk = '' then '' else f1_no_kfs_spk end as no_kfs_spk"),
-                  DB::raw("
-                  case
-                  when (wo_takah_wo is null or wo_takah_wo = '') and (sp_takah_sp is null or sp_takah_sp = '') then kl_takah_kl
-                  when (wo_takah_wo is null or wo_takah_wo = '') and (kl_takah_kl is null or kl_takah_kl = '') then sp_takah_sp
-                  when (kl_takah_kl is null or kl_takah_kl = '') and (sp_takah_sp is null or sp_takah_sp = '') then wo_takah_wo
-                  else '-'
-                  end as no_kontrak
-                  "),
-                  DB::raw("case when f1_pic_mitra is null or f1_pic_mitra = '' then '' else f1_pic_mitra end as pic_mitra"),
-                  DB::raw("case when f1_jenis_kontrak is null or f1_jenis_kontrak = '' then '' else f1_jenis_kontrak end as jenis_kontrak"),
-                  DB::raw("case when f1_quote_kontrak is null or f1_quote_kontrak = '' then '' else f1_quote_kontrak end as quote_kontrak"),
-                  DB::raw("case when f1_nomor_akun is null or f1_nomor_akun = '' then '' else f1_nomor_akun end as nomor_akun"),
-                  DB::raw("case when f1_skema_bayar is null or f1_skema_bayar = '' then '' else f1_skema_bayar end as skema_bayar"),
-                  DB::raw("case when f1_status_order is null or f1_status_order = '' then '' else f1_status_order end as status_order"),
-                  DB::raw("case when f1_alamat_plggn is null or f1_alamat_plggn = '' then '' else f1_alamat_plggn end as alamat_plggn"),
-                  DB::raw("case when f1_tgl_keterangan is null then null else to_char(f1_tgl_keterangan,'YYYY-MM-DD HH24:MI') end as tgl_keterangan"),
-                  DB::raw("case when f1_keterangan is null or f1_keterangan = '' then '' else f1_keterangan end as keterangan"),
-                  DB::raw("u.nama_lengkap as user_create"),
-                  DB::raw("uu.nama_lengkap as user_update")
-                )->where('obl.f1_witel',$user_in_is->nama_witel);
-                $user_enter = 'WITEL_' . $user_in_is->nama_witel;
+      if($user_in_is->role_id === 4 || $user_in_is->role_id === 5 ){
+        $query->where('obl.f1_witel',$user_in_is->nama_witel);
+        $user_enter = 'WITEL_' . $user_in_is->nama_witel;
       }
       // MITRA
-      if($user_in_is->role_id == 6){
-        $query = DocObl::leftJoin('users as u','u.id','=','obl.created_by')
-        ->leftJoin('users as uu','uu.id','=','obl.updated_by')
-        ->leftJoin('mitras','mitras.id','=','obl.f1_mitra_id')
-        ->select(
-                  'obl.id as obl_id',
-                  DB::raw("
-                  case
-                  when f1_proses is null or f1_proses = '' then ''
-                  else f1_proses
-                  end as proses"),
-                  DB::raw("
-                  case
-                  when submit like 'draf_filter_%' then 'filter'
-                  when submit like 'draf_p%' then 'form'
-                  when submit in ('draf_wo','draf_sp','draf_kl') then 'kontrak1'
-                  when submit in ('submit_wo','submit_sp','submit_kl') then 'kontrak2'
-                  else ''
-                  end as filter_submit"),
-                  DB::raw("replace(submit,'_',' ') as string_submit"),
-                  DB::raw("case when f1_segmen is null or f1_segmen = '' then '' else f1_segmen end as segmen"),
-                  DB::raw("case when f1_folder is null or f1_folder = '' then '' else f1_folder end as folder"),
-                  DB::raw("to_char(obl.created_at,'YYYY-MM-DD HH24:MI') as string_tgl_submit"),
-                  DB::raw("to_char(obl.updated_at,'YYYY-MM-DD HH24:MI') as string_tgl_update"),
-                  DB::raw("case when f1_jenis_spk is null or f1_jenis_spk = '' then '' else f1_jenis_spk end as jenis_spk"),
-                  DB::raw("case when f1_witel is null or f1_witel = '' then '' else f1_witel end as witel"),
-                  DB::raw("case when f1_nama_plggn is null or f1_nama_plggn = '' then '' else f1_nama_plggn end as nama_plggn"),
-                  DB::raw("
-                  case
-                  when f1_judul_projek is null or f1_judul_projek = '' then ''
-                  else f1_judul_projek
-                  end as layanan
-                  "),
-                  DB::raw("case when mitras.nama_mitra is null or mitras.nama_mitra = '' then '' else mitras.nama_mitra end as nama_vendor"),
-                  'f1_masa_layanan_tahun as masa_layanan_tahun',
-                  'f1_masa_layanan_bulan as masa_layanan_bulan',
-                  'f1_masa_layanan_hari as masa_layanan_hari',
-                  DB::raw("case when f1_nilai_kb is null or f1_nilai_kb = '' then '' else f1_nilai_kb end as nilai_kb"),
-                  DB::raw("case when f1_no_kfs_spk is null or f1_no_kfs_spk = '' then '' else f1_no_kfs_spk end as no_kfs_spk"),
-                  DB::raw("
-                  case
-                  when (wo_takah_wo is null or wo_takah_wo = '') and (sp_takah_sp is null or sp_takah_sp = '') then kl_takah_kl
-                  when (wo_takah_wo is null or wo_takah_wo = '') and (kl_takah_kl is null or kl_takah_kl = '') then sp_takah_sp
-                  when (kl_takah_kl is null or kl_takah_kl = '') and (sp_takah_sp is null or sp_takah_sp = '') then wo_takah_wo
-                  else '-'
-                  end as no_kontrak
-                  "),
-                  DB::raw("case when f1_pic_mitra is null or f1_pic_mitra = '' then '' else f1_pic_mitra end as pic_mitra"),
-                  DB::raw("case when f1_jenis_kontrak is null or f1_jenis_kontrak = '' then '' else f1_jenis_kontrak end as jenis_kontrak"),
-                  DB::raw("case when f1_quote_kontrak is null or f1_quote_kontrak = '' then '' else f1_quote_kontrak end as quote_kontrak"),
-                  DB::raw("case when f1_nomor_akun is null or f1_nomor_akun = '' then '' else f1_nomor_akun end as nomor_akun"),
-                  DB::raw("case when f1_skema_bayar is null or f1_skema_bayar = '' then '' else f1_skema_bayar end as skema_bayar"),
-                  DB::raw("case when f1_status_order is null or f1_status_order = '' then '' else f1_status_order end as status_order"),
-                  DB::raw("case when f1_alamat_plggn is null or f1_alamat_plggn = '' then '' else f1_alamat_plggn end as alamat_plggn"),
-                  DB::raw("case when f1_tgl_keterangan is null then null else to_char(f1_tgl_keterangan,'YYYY-MM-DD HH24:MI') end as tgl_keterangan"),
-                  DB::raw("case when f1_keterangan is null or f1_keterangan = '' then '' else f1_keterangan end as keterangan"),
-                  DB::raw("u.nama_lengkap as user_create"),
-                  DB::raw("uu.nama_lengkap as user_update")
-                )->where('obl.f1_mitra_id',$user_in_is->mitra_id);
-                $user_enter = 'MITRA_' . $user_in_is->nama_mitra;
+      if($user_in_is->role_id === 6){
+        $query->where('obl.f1_mitra_id',$user_in_is->mitra_id);
+        $user_enter = 'MITRA_' . $user_in_is->nama_mitra;
       }
 
-      if( $request->multi_obl_ids && count($request->multi_obl_ids) > 0 ){
-          $query->whereIn('obl.id',$request->multi_obl_ids);
+      if( $user_in_is->role_id !== 4 && $user_in_is->role_id !== 5 ){
+        if($request->fl_witel){ $query->where('f1_witel',$request->fl_witel); }
       }
+      if($request->fl_tahun){ $query->where(DB::raw("to_char(obl.created_at,'yyyy')"),'=',$request->fl_tahun); }
+      if( $user_in_is->role_id !== 6 ){
+        if($request->fl_mitra){ $query->where('f1_pic_mitra',$request->fl_mitra); }
+      }
+      if($request->fl_plggn){ $query->where('f1_nama_plggn',$request->fl_plggn); }
+      if($request->fl_segmen){ $query->where('f1_segmen',$request->fl_segmen); }
+      if($request->fl_status){ $query->where('f1_jenis_kontrak',$request->fl_status); }
 
-      $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') ")
-        ->orderBy('obl.created_at','DESC')
-        ->orderBy('obl.updated_at','DESC')
+      // if( $request->multi_obl_ids && count($request->multi_obl_ids) > 0 ){
+      //     $query->whereIn('obl.id',$request->multi_obl_ids);
+      // }
+
+      $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') and is_draf <> 8")
+        // ->orderBy('obl.created_at','DESC')
+        // ->orderBy('obl.updated_at','DESC')
+        // ->orderByRaw("CASE WHEN to_char(obl.created_at,'yyyy') IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.created_at','DESC')
+        ->orderByRaw("CASE WHEN to_char(obl.updated_at,'yyyy') IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.updated_at','DESC')
         ->get();
 
       if( $data && count($data) === 0 ){ return redirect('obl-tables')->with('status','Oops Data Download Excel Kosong'); }
 
-      if($user_in_is->role_id !== 4 && $user_in_is->role_id !== 5 && $user_in_is->role_id !== 6){
-        return (new FastExcel($data))->download('Dokumen_'.$user_enter.'_'.$tgl_download.'.xlsx',function($row){
-           return [
-                     'PROSES' => $row->proses,
-                     'STATUS_OBL' => $row->status_obl,
-                     'SEGMEN' => $row->segmen,
-                     'FOLDER' => $row->folder,
-                     'TGL_SUBMIT' => $row->tgl_submit,
-                     'TGL_UPDATE' => $row->tgl_update,
-                     'JENIS_SPK' => $row->jenis_spk,
-                     'WITEL' => $row->witel,
-                     'NAMA_PELANGGAN' => $row->nama_pelanggan,
-                     'LAYANAN' => $row->layanan,
-                     'NAMA_VENDOR' => $row->nama_vendor,
-                     'MASA_LAYANAN_TAHUN' => $row->masa_layanan_tahun,
-                     'MASA_LAYANAN_BULAN' => $row->masa_layanan_bulan,
-                     'MASA_LAYANAN_HARI' => $row->masa_layanan_hari,
-                     'NILAI_KB' => $row->nilai_kb,
-                     'NO_KFS_SPK' => $row->no_kfs_spk,
-                     'NOMOR_KONTRAK' => $row->nomor_kontrak,
-                     'PIC_MITRA' => $row->pic_mitra,
-                     'JENIS_KONTRAK' => $row->jenis_kontrak,
-                     'QUOTE_KONTRAK' => $row->quote_kontrak,
-                     'NOMOR_AKUN' => $row->nomor_akun,
-                     'SKEMA_BAYAR' => $row->skema_bayar,
-                     'STATUS_ORDER' => $row->status_order,
-                     'ALAMAT_PELANGGAN' => $row->alamat_pelanggan,
-                     'TGL_KETERANGAN' => $row->tgl_keterangan,
-                     'KETERANGAN' => $row->keterangan,
-                     'DIBUAT_OLEH' => $row->dibuat_oleh,
-                     'DIUPDATE_OLEH' => $row->diupdate_oleh,
-                  ];
-        });
-      }
-      if($user_in_is->role_id == 4 || $user_in_is->role_id == 5){
-        return (new FastExcel($data))->download('Dokumen_'.$user_enter.'_'.$tgl_download.'.xlsx',function($row){
-           return [
+      return (new FastExcel($data))->download('Dokumen_'.$user_enter.'_'.$tgl_download.'.xlsx',function($row){
+         return [
                    'PROSES' => $row->proses,
-                   'STATUS_OBL' => $row->status_obl,
                    'SEGMEN' => $row->segmen,
-                   'TGL_SUBMIT' => $row->tgl_submit,
-                   'TGL_UPDATE' => $row->tgl_update,
+                   'FOLDER' => $row->folder,
+                   'TGL_SUBMIT' => $row->string_tgl_submit,
+                   'TGL_UPDATE' => $row->string_tgl_update,
                    'JENIS_SPK' => $row->jenis_spk,
                    'WITEL' => $row->witel,
                    'NAMA_PELANGGAN' => $row->nama_pelanggan,
@@ -609,44 +506,10 @@ class TableOblController extends Controller
                    'ALAMAT_PELANGGAN' => $row->alamat_pelanggan,
                    'TGL_KETERANGAN' => $row->tgl_keterangan,
                    'KETERANGAN' => $row->keterangan,
-                   'DIBUAT_OLEH' => $row->dibuat_oleh,
-                   'DIUPDATE_OLEH' => $row->diupdate_oleh,
-                  ];
-        });
-      }
-      if($user_in_is->role_id == 6){
-        return (new FastExcel($data))->download('Dokumen_'.$user_enter.'_'.$tgl_download.'.xlsx',function($row){
-           return [
-                      'PROSES' => $row->proses,
-                      'STATUS_OBL' => $row->status_obl,
-                      'SEGMEN' => $row->segmen,
-                      'TGL_SUBMIT' => $row->tgl_submit,
-                      'TGL_UPDATE' => $row->tgl_update,
-                      'JENIS_SPK' => $row->jenis_spk,
-                      'WITEL' => $row->witel,
-                      'NAMA_PELANGGAN' => $row->nama_pelanggan,
-                      'LAYANAN' => $row->layanan,
-                      'NAMA_VENDOR' => $row->nama_vendor,
-                      'MASA_LAYANAN_TAHUN' => $row->masa_layanan_tahun,
-                      'MASA_LAYANAN_BULAN' => $row->masa_layanan_bulan,
-                      'MASA_LAYANAN_HARI' => $row->masa_layanan_hari,
-                      'NILAI_KB' => $row->nilai_kb,
-                      'NO_KFS_SPK' => $row->no_kfs_spk,
-                      'NOMOR_KONTRAK' => $row->nomor_kontrak,
-                      'PIC_MITRA' => $row->pic_mitra,
-                      'JENIS_KONTRAK' => $row->jenis_kontrak,
-                      'QUOTE_KONTRAK' => $row->quote_kontrak,
-                      'NOMOR_AKUN' => $row->nomor_akun,
-                      'SKEMA_BAYAR' => $row->skema_bayar,
-                      'STATUS_ORDER' => $row->status_order,
-                      'ALAMAT_PELANGGAN' => $row->alamat_pelanggan,
-                      'TGL_KETERANGAN' => $row->tgl_keterangan,
-                      'KETERANGAN' => $row->keterangan,
-                      'DIBUAT_OLEH' => $row->dibuat_oleh,
-                      'DIUPDATE_OLEH' => $row->diupdate_oleh,
-                  ];
-        });
-      }
+                   'DIBUAT_OLEH' => $row->user_create,
+                   'DIUPDATE_OLEH' => $row->user_update
+                ];
+      });
     }
 
     public function edit(Request $request)

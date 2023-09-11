@@ -454,7 +454,7 @@ class PraLopController extends Controller
     if($request->submit_final){
       $data_lama_obl = $this->updatePraLopToObl($pralop_id);
       DB::connection('pgsql')->table('form_obl')->where('f1_id_form_pralop',$pralop_id)->update([
-        'is_draf' => 7,
+        'is_draf' => 8,
         'revisi_witel' => false,
         'revisi_witel_count' => 0,
         'submit' => 'solution_edit',

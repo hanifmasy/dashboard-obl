@@ -262,6 +262,92 @@
 
                             </div>
                             <div class="card-body px-0 pb-2">
+
+                              <div class="row ps-4">
+                                  <div class="col-sm-6">
+                                    <div class=" card z-index-2 ">
+
+                                      <div class="input-group p-1">
+
+                                        @if( $is_user->role_id === 4 || $is_user->role_id === 5 )
+                                        <select class="border-0 form-select form-select-lg" aria-label="Default select example" id="fl_witel" name="fl_witel" disabled>
+                                          <option value="" selected>Pilih Witel</option>
+                                        </select>
+                                        @else
+                                        <select class="border-0 form-select form-select-lg" aria-label="Default select example" id="fl_witel" name="fl_witel">
+                                          <option value="" selected>Pilih Witel</option>
+                                          @if( $witels )
+                                            @foreach( $witels as $key => $value )
+                                              <option value="{{ $value->nama_witel }}">{{ $value->nama_witel }}</option>
+                                            @endforeach
+                                          @endif
+                                        </select>
+                                        @endif
+
+                                        <select class="border-0 form-select form-select-lg" aria-label="Default select example" id="fl_tahun" name="fl_tahun">
+                                          <option value="" selected>Pilih Tahun</option>
+                                          @if( $tahuns )
+                                            @foreach( $tahuns as $key => $value )
+                                              <option value="{{ $value->tahun }}">{{ $value->tahun }}</option>
+                                            @endforeach
+                                          @endif
+                                        </select>
+
+                                        @if( $is_user->role_id === 6 )
+                                        <select class="border-0 form-select form-select-lg" aria-label="Default select example" id="fl_mitra" name="fl_mitra" disabled>
+                                          <option value="" selected>Pilih Mitra</option>
+                                        </select>
+                                        @else
+                                        <select class="border-0 form-select form-select-lg" aria-label="Default select example" id="fl_mitra" name="fl_mitra">
+                                          <option value="" selected>Pilih Mitra</option>
+                                          @if( $mitras )
+                                            @foreach( $mitras as $key => $value )
+                                              <option value="{{ $value->id }}">{{ $value->nama_mitra }}</option>
+                                            @endforeach
+                                          @endif
+                                        </select>
+                                        @endif
+
+                                      </div>
+                                      <div class="input-group p-1">
+                                        <select class="border-0 form-select form-select-lg" aria-label="Default select example" id="fl_plggn" name="fl_plggn">
+                                          <option value="" selected>Pilih Pelanggan</option>
+                                          @if( $plggns )
+                                            @foreach( $plggns as $key => $value )
+                                              <option value="{{ $value->f1_nama_plggn }}">{{ $value->f1_nama_plggn }}</option>
+                                            @endforeach
+                                          @endif
+                                        </select>
+                                        <select class="border-0 form-select form-select-lg" aria-label="Default select example" id="fl_segmen" name="fl_segmen">
+                                          <option value="" selected>Pilih Segmen</option>
+                                          @if( $segmens )
+                                            @foreach( $segmens as $key => $value )
+                                              <option value="{{ $value->f1_segmen }}">{{ $value->f1_segmen }}</option>
+                                            @endforeach
+                                          @endif
+                                        </select>
+                                        <select class="border-0 form-select form-select-lg" aria-label="Default select example" id="fl_status" name="fl_status">
+                                          <option value="" selected>Pilih Status</option>
+                                          @if( $statuses )
+                                            @foreach( $statuses as $key => $value )
+                                              <option value="{{ $value->f1_jenis_kontrak }}">{{ $value->jenis_kontrak }}</option>
+                                            @endforeach
+                                          @endif
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                              </div>
+                              <div class="row pt-2 ps-4">
+                                <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
+                                  <div class="btn-group" role="group">
+                                    <button class="btn btn-md bg-gradient-info" type="button" name="button" id="cari">CARI</button>
+                                    <!-- <button class="btn btn-md bg-gradient-danger" type="button" name="button" id="reset">RESET</button> -->
+                                  </div>
+                                </div>
+                              </div>
+
                                 <div class="table-responsive p-3">
                                   <form id="formObl" method="POST" enctype="multipart/form-data">
                                     @csrf
@@ -1586,9 +1672,6 @@
               $('#modal-multi-obl-hapus').modal({show:false});
 
               var status_table_obl = "{{ session('status') }}";
-              var gdt = @json($gdt);
-              var cl = @json($cl);
-              var wl = @json($wl);
               if(status_table_obl && typeof status_table_obl !== undefined){
                 $('#status-table-obl').empty();
                 if(status_table_obl.includes('Oops')){
@@ -1632,48 +1715,153 @@
 
 
               var is_user = "{{ $is_user->role_id }}";
-              var tableObl = $('#table-data-obl').DataTable({
-                language: {
-                    url: "{{ asset('assets') }}/json/yajra_indonesia.json",
-                },
-                dom: 'fBrtip',
-                buttons: [
-                  {
-                      extend: 'excel',
-                      text: 'EXCEL',
-                      className: 'btn btn-sm btn-success',
-                      filename: function(){
-                            var today = new Date();
-                            var dd = String(today.getDate()).padStart(2, '0');
-                            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                            var yyyy = today.getFullYear();
-                            today = yyyy + '-' + mm + '-' + dd;
-                            return 'Table_Dokumen_OBL_' + today;
-                        },
-                      exportOptions: {
-                           columns: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
-                       }
-                  }
-                ],
-                select: {
-                    style: 'multi'
-                },
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                retrieve: true,
-                aaSorting: [],
-                ajax: "{{ route('obl.tables') }}?ajx_gdt="+gdt+"&ajx_cl="+cl+"&ajx_wl="+wl,
-                columns: [
-                  {
-                     searchable:false,orderable:false,targets: 0,
-                     render: function ( data, type, row ) {
-                       if( row.is_draf === 9 ){
-                         if( is_user !== '9' && is_user !== '2' ){
-                           return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>';
+              var gdt = @json($gdt);
+              var cl = @json($cl);
+              var wl = @json($wl);
+
+              var fl_witel = $('#fl_witel').val();
+              var fl_tahun = $('#fl_tahun').val();
+              var fl_mitra = $('#fl_mitra').val();
+              var fl_plggn = $('#fl_plggn').val();
+              var fl_segmen = $('#fl_segmen').val();
+              var fl_status = $('#fl_status').val();
+
+              yajra(is_user,gdt,cl,wl,fl_witel,fl_tahun,fl_mitra,fl_plggn,fl_segmen,fl_status);
+
+              $("#reset").click(function(){
+                is_user = "{{ $is_user->role_id }}";
+                gdt = @json($gdt);
+                cl = @json($cl);
+                wl = @json($wl);
+
+                fl_witel = $('#fl_witel').val('');
+                fl_tahun = $('#fl_tahun').val('');
+                fl_mitra = $('#fl_mitra').val('');
+                fl_plggn = $('#fl_plggn').val('');
+                fl_segmen = $('#fl_segmen').val('');
+                fl_status = $('#fl_status').val('');
+
+                // console.log(is_user,gdt,cl,wl,fl_witel,fl_tahun,fl_mitra,fl_plggn,fl_segmen,fl_status);
+                yajra(is_user,gdt,cl,wl,fl_witel,fl_tahun,fl_mitra,fl_plggn,fl_segmen,fl_status);
+              });
+
+              $("#cari").click(function(){
+                is_user = "{{ $is_user->role_id }}";
+                gdt = @json($gdt);
+                cl = @json($cl);
+                wl = @json($wl);
+
+                fl_witel = $('#fl_witel').val();
+                fl_tahun = $('#fl_tahun').val();
+                fl_mitra = $('#fl_mitra').val();
+                fl_plggn = $('#fl_plggn').val();
+                fl_segmen = $('#fl_segmen').val();
+                fl_status = $('#fl_status').val();
+
+                // console.log(is_user,gdt,cl,wl,fl_witel,fl_tahun,fl_mitra,fl_plggn,fl_segmen,fl_status);
+                yajra(is_user,gdt,cl,wl,fl_witel,fl_tahun,fl_mitra,fl_plggn,fl_segmen,fl_status);
+              });
+
+              var tableObl;
+              function yajra(is_user,gdt,cl,wl,fl_witel,fl_tahun,fl_mitra,fl_plggn,fl_segmen,fl_status){
+                if( is_user === undefined ){ is_user = '1'; }
+                if( gdt === undefined ){ gdt = ''; }
+                if( cl === undefined ){ cl = ''; }
+                if( wl === undefined ){ wl = ''; }
+                if( fl_witel === undefined ){ fl_witel = ''; }
+                if( fl_tahun === undefined ){ fl_tahun = ''; }
+                if( fl_mitra === undefined ){ fl_mitra = ''; }
+                if( fl_plggn === undefined ){ fl_plggn = ''; }
+                if( fl_segmen === undefined ){ fl_segmen = ''; }
+                if( fl_status === undefined ){ fl_status = ''; }
+
+                tableObl = $('#table-data-obl').DataTable({
+                  language: {
+                      url: "{{ asset('assets') }}/json/yajra_indonesia.json",
+                  },
+                  dom: 'fBrtip',
+                  buttons: [
+                    {
+                        extend: 'excel',
+                        text: 'EXCEL',
+                        className: 'btn btn-sm btn-success',
+                        filename: function(){
+                              var today = new Date();
+                              var dd = String(today.getDate()).padStart(2, '0');
+                              var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                              var yyyy = today.getFullYear();
+                              today = yyyy + '-' + mm + '-' + dd;
+                              return 'Table_Dokumen_OBL_' + today;
+                          },
+                        exportOptions: {
+                             columns: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
                          }
-                         else if ( is_user === '2' ){
-                           return `
+                    }
+                  ],
+                  select: {
+                      style: 'multi'
+                  },
+                  destroy: true,
+                  processing: true,
+                  serverSide: true,
+                  retrieve: true,
+                  aaSorting: [],
+                  ajax: "{{ route('obl.tables') }}?ajx_gdt="+gdt+"&ajx_cl="+cl+"&ajx_wl="+wl+"&fl_witel="+fl_witel+"&fl_tahun="+fl_tahun+"&fl_mitra="+fl_mitra+"&fl_plggn="+fl_plggn+"&fl_segmen="+fl_segmen+"&fl_status="+fl_status,
+                  columns: [
+                    {
+                       searchable:false,orderable:false,targets: 0,
+                       render: function ( data, type, row ) {
+                         if( row.is_draf === 9 ){
+                           if( is_user !== '9' && is_user !== '2' ){
+                             return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>';
+                           }
+                           else if ( is_user === '2' ){
+                             return `
+                               <div class="dropdown">
+                                  <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                  <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                  </div>
+                                  </div>
+                               `;
+                           }
+                           else if ( is_user === '9' ){
+                             return `
+                               <div class="btn-group" role="group">
+                               <div class="btn-group" role="group">
+                                  <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                  <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
+                                  </div>
+                                  </div>
+                               <div class="btn-group" role="group">
+                                  <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
+                                  <div class="dropdown-menu">
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lanjut-obl" onclick="lanjutObl(`+row.obl_id+`)">LANJUT OBL</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-obl" onclick="prosesObl(`+row.obl_id+`)">OBL</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
+                                  </div>
+                                  </div>
+                               </div>
+                               `;
+                           }
+                         }
+                         else{
+                           if( is_user === '6' ){ return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>'; }
+                           else if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' ){ return `
                              <div class="dropdown">
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
                                 <div class="dropdown-menu">
@@ -1681,10 +1869,129 @@
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
                                 </div>
                                 </div>
-                             `;
-                         }
-                         else if ( is_user === '9' ){
-                           return `
+                             `; }
+                           else if( is_user === '4' && row.is_revisi === false ){ return `
+                             <div class="dropdown">
+                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                </div>
+                                </div>
+                             `; }
+                           else if( is_user === '4' && row.is_revisi === true ){
+                             return `
+                               <div class="dropdown">
+                                  <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                  <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                  </div>
+                                  </div>
+                               `;
+                           }
+                           else if( is_user === '8' && row.proses !== 'witel' ){
+                             return `
+                               <div class="dropdown">
+                                  <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                  <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                  </div>
+                                  </div>
+                               `;
+                           }
+                           else if( is_user === '8' && row.proses === 'witel' ){
+                             return `
+                               <div class="btn-group" role="group" aria-label="basic">
+                               <div class="btn-group" role="group">
+                                  <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                  <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
+                                  </div>
+                                  </div>
+                              <div class="btn-group" role="group">
+                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
+                                 <div class="dropdown-menu">
+                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
+                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lanjut-obl" onclick="lanjutObl(`+row.obl_id+`)">LANJUT OBL</button>
+                                 </div>
+                                 </div>
+                               </div>
+                               `;
+                           }
+                           else if( is_user === '2' && row.proses === 'witel' ){ return `
+                             <div class="dropdown">
+                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                </div>
+                                </div>
+                             `; }
+                           else if( is_user === '2' && row.proses !== 'witel' && row.proses !== 'obl' ){ return `
+                             <div class="btn-group" role="group">
+                             <div class="btn-group" role="group">
+                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
+                                </div>
+                                </div>
+                             <div class="btn-group" role="group">
+                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-obl" onclick="prosesObl(`+row.obl_id+`)">OBL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
+                                </div>
+                                </div>
+                             </div>
+                             `; }
+                           else if( is_user === '2' && row.proses !== 'witel' && row.proses === 'obl' ){ return `
+                             <div class="btn-group" role="group">
+                             <div class="btn-group" role="group">
+                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
+                                </div>
+                                </div>
+                             <div class="btn-group" role="group">
+                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
+                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
+                                </div>
+                                </div>
+                             </div>
+                             `; }
+                           else if( is_user === '9' ){ return `
                              <div class="btn-group" role="group">
                              <div class="btn-group" role="group">
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
@@ -1713,339 +2020,178 @@
                                 </div>
                                 </div>
                              </div>
-                             `;
+                             `; }
                          }
                        }
-                       else{
-                         if( is_user === '6' ){ return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>'; }
-                         else if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' ){ return `
-                           <div class="dropdown">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                              </div>
-                              </div>
-                           `; }
-                         else if( is_user === '4' && row.is_revisi === false ){ return `
-                           <div class="dropdown">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                              </div>
-                              </div>
-                           `; }
-                         else if( is_user === '4' && row.is_revisi === true ){
-                           return `
-                             <div class="dropdown">
-                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                                <div class="dropdown-menu">
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                                </div>
-                                </div>
-                             `;
-                         }
-                         else if( is_user === '8' && row.proses !== 'witel' ){
-                           return `
-                             <div class="dropdown">
-                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                                <div class="dropdown-menu">
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                                </div>
-                                </div>
-                             `;
-                         }
-                         else if( is_user === '8' && row.proses === 'witel' ){
-                           return `
-                             <div class="btn-group" role="group" aria-label="basic">
-                             <div class="btn-group" role="group">
-                                <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                                <div class="dropdown-menu">
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
-                                </div>
-                                </div>
-                            <div class="btn-group" role="group">
-                               <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
-                               <div class="dropdown-menu">
-                                 <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
-                                 <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lanjut-obl" onclick="lanjutObl(`+row.obl_id+`)">LANJUT OBL</button>
-                               </div>
-                               </div>
-                             </div>
-                             `;
-                         }
-                         else if( is_user === '2' && row.proses === 'witel' ){ return `
-                           <div class="dropdown">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                              </div>
-                              </div>
-                           `; }
-                         else if( is_user === '2' && row.proses !== 'witel' && row.proses !== 'obl' ){ return `
-                           <div class="btn-group" role="group">
-                           <div class="btn-group" role="group">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
-                              </div>
-                              </div>
-                           <div class="btn-group" role="group">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-obl" onclick="prosesObl(`+row.obl_id+`)">OBL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
-                              </div>
-                              </div>
-                           </div>
-                           `; }
-                         else if( is_user === '2' && row.proses !== 'witel' && row.proses === 'obl' ){ return `
-                           <div class="btn-group" role="group">
-                           <div class="btn-group" role="group">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
-                              </div>
-                              </div>
-                           <div class="btn-group" role="group">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
-                              </div>
-                              </div>
-                           </div>
-                           `; }
-                         else if( is_user === '9' ){ return `
-                           <div class="btn-group" role="group">
-                           <div class="btn-group" role="group">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
-                                <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-delete" onclick="deleteDoc(`+row.obl_id+`)">HAPUS</button>
-                              </div>
-                              </div>
-                           <div class="btn-group" role="group">
-                              <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">PROSES <span class="caret"></span></button>
-                              <div class="dropdown-menu">
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-witel" onclick="kembaliWitel(`+row.obl_id+`)" >KEMBALI WITEL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-kembali-proses-witel" onclick="kembaliProsesWitel(`+row.obl_id+`)" >KEMBALI PROSES WITEL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lanjut-obl" onclick="lanjutObl(`+row.obl_id+`)">LANJUT OBL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-obl" onclick="prosesObl(`+row.obl_id+`)">OBL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-legal" onclick="prosesLegal(`+row.obl_id+`)">LEGAL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-mitra-obl" onclick="prosesMitraObl(`+row.obl_id+`)">MITRA OBL</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-closesm" onclick="prosesCloseSm(`+row.obl_id+`)">CLOSE SM</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-done" onclick="prosesDone(`+row.obl_id+`)">DONE</button>
-                              <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-proses-cancel" onclick="prosesCancel(`+row.obl_id+`)">CANCEL</button>
-                              </div>
-                              </div>
-                           </div>
-                           `; }
+                    },
+                    {
+                       data: 'DT_RowIndex',searchable:false,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<b>'+data+'</b>';
                        }
-                     }
-                  },
-                  {
-                     data: 'DT_RowIndex',searchable:false,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<b>'+data+'</b>';
-                     }
-                  },
-                  {
-                     data: 'proses',name: 'proses',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       if(data==='witel'){ return '<span class="badge badge-sm bg-gradient-primary">WITEL</span>'; }
-                       else if(data==='obl'){ return '<span class="badge badge-sm bg-gradient-info">OBL</span>'; }
-                       else if(data==='legal'){ return '<span class="badge badge-sm bg-gradient-warning">LEGAL</span>'; }
-                       else if(data==='mitra_obl'||data==='mitra_pjm'){ return '<span class="badge badge-sm bg-gradient-info">MITRA OBL</span>'; }
-                       else if(data==='close_sm'){ return '<span class="badge badge-sm bg-gradient-danger">CLOSE SM</span>'; }
-                       else if(data==='done'){ return '<span class="badge badge-sm bg-gradient-success">DONE</span>'; }
-                       else if(data==='cancel'){ return '<span class="badge badge-sm bg-gradient-danger">CANCEL</span>'; }
-                       else{ return '<span class="badge badge-sm bg-gradient-dark">'+data+'</span>'; }
-                     }
-                  },
-                  {
-                     data: 'string_submit',name: 'string_submit',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                        if(row.filter_submit==='kontrak1'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
-                        if(row.filter_submit==='kontrak2'){ return '<span class="badge badge-sm bg-gradient-success">'+data+'</span>'; }
-                        if(row.filter_submit==='kontrak3'){ return '<span class="badge badge-sm bg-gradient-primary">'+data+'</span>'; }
-                        if(row.filter_submit==='kontrak4'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
-                        if(row.filter_submit==='filter'){ return '<span class="badge badge-sm bg-gradient-danger">'+data+'</span>'; }
-                        if(row.filter_submit==='form'){ return '<span class="badge badge-sm bg-gradient-warning">'+data+'</span>'; }
-                        if(row.filter_submit===''){ return ''; }
-                     }
-                  },
-                  {
-                     data: 'segmen',name: 'segmen',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'folder',name: 'folder',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'string_tgl_submit',name: 'string_tgl_submit',searchable:true,orderable:true
-                  },
-                  {
-                     data: 'string_tgl_update',name: 'string_tgl_update',searchable:true,orderable:true
-                  },
-                  {
-                     data: 'jenis_spk',name: 'jenis_spk',searchable:true,orderable:true
-                  },
-                  {
-                     data: 'witel',name: 'witel',searchable:true,orderable:true
-                  },
-                  {
-                     data: 'nama_plggn',name: 'nama_plggn',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'layanan',name: 'layanan',searchable:true,orderable:true,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'nama_vendor',name: 'nama_vendor',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'masa_layanan_tahun',name: 'masa_layanan_tahun',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       let string_masa_layanan = `<span style="white-space:normal">`;
-                       if( /\d/.test(data) ){ string_masa_layanan+= ` ` + data +` tahun`; }
-                       if( /\d/.test(row.masa_layanan_bulan) ){ string_masa_layanan+=` `+row.masa_layanan_bulan+` bulan`; }
-                       if( /\d/.test(row.masa_layanan_hari) ){ string_masa_layanan+=` `+row.masa_layanan_hari+` hari`; }
-                       string_masa_layanan += `</span>`;
-                       return string_masa_layanan;
-                     }
-                  },
-                  {
-                     data: 'nilai_kb',name: 'nilai_kb',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'no_kfs_spk',name: 'no_kfs_spk',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'no_kontrak',name: 'no_kontrak',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'jenis_kontrak',name: 'jenis_kontrak',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'quote_kontrak',name: 'quote_kontrak',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'nomor_akun',name: 'nomor_akun',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'skema_bayar',name: 'skema_bayar',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'status_order',name: 'status_order',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'keterangan',name: 'keterangan',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       // if(row.tgl_keterangan){ return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>'; }
-                       // else{ return '<span style="white-space:normal"></span>'; }
-                       return '<span white-space:normal><b>'+row.tgl_keterangan+'</b> '+data.substr(0,20)+'</span>';
-                     }
-                  },
-                  {
-                     data: 'revisi_count',name: 'revisi_count',searchable:false,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'user_create',name: 'user_create',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
-                  {
-                     data: 'user_update',name: 'user_update',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  }
+                    },
+                    {
+                       data: 'proses',name: 'proses',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         if(data==='witel'){ return '<span class="badge badge-sm bg-gradient-primary">WITEL</span>'; }
+                         else if(data==='obl'){ return '<span class="badge badge-sm bg-gradient-info">OBL</span>'; }
+                         else if(data==='legal'){ return '<span class="badge badge-sm bg-gradient-warning">LEGAL</span>'; }
+                         else if(data==='mitra_obl'||data==='mitra_pjm'){ return '<span class="badge badge-sm bg-gradient-info">MITRA OBL</span>'; }
+                         else if(data==='close_sm'){ return '<span class="badge badge-sm bg-gradient-danger">CLOSE SM</span>'; }
+                         else if(data==='done'){ return '<span class="badge badge-sm bg-gradient-success">DONE</span>'; }
+                         else if(data==='cancel'){ return '<span class="badge badge-sm bg-gradient-danger">CANCEL</span>'; }
+                         else{ return '<span class="badge badge-sm bg-gradient-dark">'+data+'</span>'; }
+                       }
+                    },
+                    {
+                       data: 'string_submit',name: 'string_submit',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                          if(row.filter_submit==='kontrak1'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
+                          if(row.filter_submit==='kontrak2'){ return '<span class="badge badge-sm bg-gradient-success">'+data+'</span>'; }
+                          if(row.filter_submit==='kontrak3'){ return '<span class="badge badge-sm bg-gradient-primary">'+data+'</span>'; }
+                          if(row.filter_submit==='kontrak4'){ return '<span class="badge badge-sm bg-gradient-info">'+data+'</span>'; }
+                          if(row.filter_submit==='filter'){ return '<span class="badge badge-sm bg-gradient-danger">'+data+'</span>'; }
+                          if(row.filter_submit==='form'){ return '<span class="badge badge-sm bg-gradient-warning">'+data+'</span>'; }
+                          if(row.filter_submit===''){ return ''; }
+                       }
+                    },
+                    {
+                       data: 'segmen',name: 'segmen',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'folder',name: 'folder',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'string_tgl_submit',name: 'string_tgl_submit',searchable:true,orderable:true
+                    },
+                    {
+                       data: 'string_tgl_update',name: 'string_tgl_update',searchable:true,orderable:true
+                    },
+                    {
+                       data: 'jenis_spk',name: 'jenis_spk',searchable:true,orderable:true
+                    },
+                    {
+                       data: 'witel',name: 'witel',searchable:true,orderable:true
+                    },
+                    {
+                       data: 'nama_plggn',name: 'nama_plggn',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'layanan',name: 'layanan',searchable:true,orderable:true,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'nama_vendor',name: 'nama_vendor',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'masa_layanan_tahun',name: 'masa_layanan_tahun',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         let string_masa_layanan = `<span style="white-space:normal">`;
+                         if( /\d/.test(data) ){ string_masa_layanan+= ` ` + data +` tahun`; }
+                         if( /\d/.test(row.masa_layanan_bulan) ){ string_masa_layanan+=` `+row.masa_layanan_bulan+` bulan`; }
+                         if( /\d/.test(row.masa_layanan_hari) ){ string_masa_layanan+=` `+row.masa_layanan_hari+` hari`; }
+                         string_masa_layanan += `</span>`;
+                         return string_masa_layanan;
+                       }
+                    },
+                    {
+                       data: 'nilai_kb',name: 'nilai_kb',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'no_kfs_spk',name: 'no_kfs_spk',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'no_kontrak',name: 'no_kontrak',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'jenis_kontrak',name: 'jenis_kontrak',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'quote_kontrak',name: 'quote_kontrak',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'nomor_akun',name: 'nomor_akun',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'skema_bayar',name: 'skema_bayar',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'status_order',name: 'status_order',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'keterangan',name: 'keterangan',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         // if(row.tgl_keterangan){ return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>'; }
+                         // else{ return '<span style="white-space:normal"></span>'; }
+                         return '<span white-space:normal><b>'+row.tgl_keterangan+'</b> '+data.substr(0,20)+'</span>';
+                       }
+                    },
+                    {
+                       data: 'revisi_count',name: 'revisi_count',searchable:false,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'user_create',name: 'user_create',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    },
+                    {
+                       data: 'user_update',name: 'user_update',searchable:true,orderable:false,
+                       "render": function ( data, type, row ) {
+                         return '<span style="white-space:normal">'+data+'</span>';
+                       }
+                    }
 
-                ],
-                // lengthChange:false,
-                paging:true,
-                // orderCellsTop: true,
-                pageLength: 50,
-              });
+                  ],
+                  // lengthChange:false,
+                  paging:true,
+                  // orderCellsTop: true,
+                  pageLength: 50,
+                });
+                // tableObl.ajax.reload(null,false);
+                tableObl.ajax.url("{{ route('obl.tables') }}?ajx_gdt="+gdt+"&ajx_cl="+cl+"&ajx_wl="+wl+"&fl_witel="+fl_witel+"&fl_tahun="+fl_tahun+"&fl_mitra="+fl_mitra+"&fl_plggn="+fl_plggn+"&fl_segmen="+fl_segmen+"&fl_status="+fl_status).load();
+              }
 
           });
           $.extend( $.fn.dataTable.defaults, {
