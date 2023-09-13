@@ -41,7 +41,7 @@ class RewardsController extends Controller
         ->whereRaw("
         f1_witel is not null and
         (deleted_at is null or to_char(deleted_at,'yyyy-mm-dd') = '') and deleted_by is null
-        and is_draf <> 8
+        and is_draf not in (7,8)
         ");
 
         $query2 = DB::connection('pgsql')->table('form_pralop')

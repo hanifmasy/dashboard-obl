@@ -96,6 +96,7 @@ Route::post('/dashboard/excel', [DashboardController::class, 'excel'])->middlewa
 Route::post('inputs/create', [InputsController::class, 'create'])->middleware(['auth','role_obl'])->name('inputs.create');
 Route::post('inputs-legacy/create', [InputsController::class, 'createLegacy'])->middleware(['auth','role_obl_non_view'])->name('inputs_legacy.create');
 
+Route::post('witels-pralop/review-kb', [PraLopController::class, 'reviewKB'])->middleware(['auth','role_pralop'])->name('witels.pralop.review_kb');
 Route::post('witels-pralop/ketdoc', [PraLopController::class, 'ketdoc'])->middleware(['auth','role_pralop'])->name('witels.pralop.ketdoc');
 Route::post('witels-pralop/langkah', [PraLopController::class, 'langkah'])->middleware(['auth','role_pralop'])->name('witels.pralop.langkah');
 Route::post('witels-pralop/detail/update', [PraLopController::class, 'update'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.update');

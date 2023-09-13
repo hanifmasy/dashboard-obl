@@ -280,7 +280,7 @@ class TableOblController extends Controller
         if($request->fl_segmen){ $query->where('f1_segmen',$request->fl_segmen); }
         if($request->fl_status){ $query->where('f1_jenis_kontrak',$request->fl_status); }
 
-        $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') and is_draf <> 8 ")
+        $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') and is_draf not in (7,8) ")
           ->orderByRaw("CASE WHEN obl.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.updated_at','DESC')
           ->orderByRaw("CASE WHEN obl.created_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.created_at','DESC')
           ->get();
@@ -470,7 +470,7 @@ class TableOblController extends Controller
       //     $query->whereIn('obl.id',$request->multi_obl_ids);
       // }
 
-      $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') and is_draf <> 8")
+      $data = $query->whereRaw(" (obl.deleted_at is null or to_char(obl.deleted_at,'yyyy-mm-dd') = '') and is_draf not in (7,8)")
         // ->orderBy('obl.created_at','DESC')
         // ->orderBy('obl.updated_at','DESC')
         // ->orderByRaw("CASE WHEN to_char(obl.created_at,'yyyy') IS NULL THEN 0 ELSE 1 END DESC")->orderBy('obl.created_at','DESC')

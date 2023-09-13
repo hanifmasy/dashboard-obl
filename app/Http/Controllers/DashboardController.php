@@ -15,21 +15,21 @@ class DashboardController extends Controller
     {
       if( $request->ajax() ){
 
-          $counted_dashboard_top_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'cancel' ");
-          $counted_dashboard_top_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null ");
+          $counted_dashboard_top_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'cancel' ");
+          $counted_dashboard_top_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf not in (7,8) and deleted_at is null ");
 
-          $counted_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'witel' ");
-          $timed_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'witel' ");
-          $counted_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses in ('obl','pjm') ");
-          $timed_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses in ('obl','pjm') ");
-          $counted_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'legal' ");
-          $timed_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'legal' ");
-          $counted_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses in ('mitra_obl','mitra_pjm') ");
-          $timed_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses in ('mitra_obl','mitra_pjm') ");
-          $counted_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'close_sm' ");
-          $timed_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'close_sm' ");
-          $counted_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'done' ");
-          $timed_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf <> 8 and deleted_at is null and f1_proses = 'done' ");
+          $counted_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'witel' ");
+          $timed_dashboard_bottom_1 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'witel' ");
+          $counted_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses in ('obl','pjm') ");
+          $timed_dashboard_bottom_2 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses in ('obl','pjm') ");
+          $counted_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'legal' ");
+          $timed_dashboard_bottom_3 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'legal' ");
+          $counted_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses in ('mitra_obl','mitra_pjm') ");
+          $timed_dashboard_bottom_4 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses in ('mitra_obl','mitra_pjm') ");
+          $counted_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'close_sm' ");
+          $timed_dashboard_bottom_5 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'close_sm' ");
+          $counted_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'done' ");
+          $timed_dashboard_bottom_6 = DB::connection('pgsql')->table('form_obl')->select(DB::raw("to_char(updated_at,'YYYY-MM-DD HH24:MI:SS') as tgl"))->whereRaw(" is_draf not in (7,8) and deleted_at is null and f1_proses = 'done' ");
 
           if(Auth::check()){
             $is_user = User::leftJoin('user_role as ur','ur.user_id','=','users.id')
@@ -232,23 +232,5 @@ class DashboardController extends Controller
 
     public function excel(Request $request){
       dd( $request->all() );
-      // !4 & !5 & !6
-      
-
-      // 4 || 5
-      // "fl_tahun" => null
-      //  "fl_mitra" => null
-      //  "fl_plggn" => null
-      //  "fl_segmen" => "DGS"
-      //  "fl_status" => null
-      //  "submit" => null
-
-      // 6
-     //  "fl_witel" => null
-     // "fl_tahun" => null
-     // "fl_plggn" => null
-     // "fl_segmen" => "DGS"
-     // "fl_status" => null
-     // "submit" => null
     }
 }

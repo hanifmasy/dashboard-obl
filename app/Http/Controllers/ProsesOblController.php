@@ -173,7 +173,9 @@ class ProsesOblController extends Controller
          'p1_dibuat_am' => $cek_dulu->p1_dibuat_am,
          'p1_diperiksa_manager' => $cek_dulu->p1_diperiksa_manager,
          'file_p0' => $cek_dulu->file_p0,
-         'file_p1' => $cek_dulu->file_p1
+         'file_p1' => $cek_dulu->file_p1,
+         'p1_paragraf' => $cek_dulu->p1_paragraf,
+         'p0_paragraf' => $cek_dulu->p0_paragraf
        ]);
        DB::connection('pgsql')->table('form_obl')->where('id',$var_obl_id)
        ->update([

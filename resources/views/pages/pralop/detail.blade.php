@@ -61,6 +61,52 @@
 
                       </div>
                   </div>
+
+                  <!-- start attachment and checklist -->
+                  @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
+                  <div class="row mt-2">
+                    <div class="card h-50">
+                      <div class="card-body p-3">
+
+                        <form class="" action="{{ route('witels.pralop.review_kb') }}" method="POST" enctype="multipart/form-data">
+                          @csrf
+                          <div class="row d-flex align-items-center">
+                            Attachment File KB dan lainnya:
+                            <div class="col d-flex">
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_attachment" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_attachment" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_attachment"><span id="label_file_attachment">Attachment (Multi files)</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_attachment" name="file_attachment[]" type="file" multiple>
+
+                              <button type="submit" name="submit" value="review_kb" class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2">Upload</button>
+                            </div>
+                          </div>
+                        </form>
+
+
+                      </div>
+                    </div>
+                  </div>
+                  @elseif( $user_pralop->role_id === 8 && $pralop->lop_review_kb === true)
+                  <div class="row mt-2">
+                    <div class="card h-25">
+                      TEST.
+                    </div>
+                  </div>
+                  @elseif( $user_pralop->role_id === 13 && $pralop->lop_review_kb === true)
+                  <div class="row mt-2">
+                    <div class="card h-25">
+                      TEST.
+                    </div>
+                  </div>
+                  @elseif( $user_pralop->role_id === 9 )
+                  <div class="row mt-2">
+                    <div class="card h-25">
+                      TEST.
+                    </div>
+                  </div>
+                  @endif
+                  <!-- end attachment and checklist -->
+
                     <div class="row mt-2">
                       <div class="card h-25">
                         <form id="formPraLop" class="" action="{{ route('witels.pralop.detail.update') }}" method="POST" enctype="multipart/form-data">
@@ -71,7 +117,12 @@
                                       <h6 class="mb-0">PRA LOP DETAIL</h6>
                                   </div>
                                   <div class="col-6 text-end">
+                                      @if( $user_pralop->role_id === 9 || $user_pralop->role_id === 8 )
                                       <button type="submit" name="submit" value="pralop_detail_{{ $pralop->id }}" class="btn bg-gradient-primary mb-0">SIMPAN</button>
+                                      @elseif( $user_pralop->role_id === 4 && $pralop->lop_review_kb === false )
+                                      <button type="submit" name="submit" value="pralop_detail_{{ $pralop->id }}" class="btn bg-gradient-primary mb-0">SIMPAN</button>
+                                      @elseif( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
+                                      @endif
                                   </div>
                               </div>
                           </div>
@@ -216,6 +267,8 @@
                                                   <span class="mb-2 text-xs">Saat Penggunaan (P1): <span
                                                           class="text-dark ms-sm-2 font-weight-bold">{{ $value->tgl_delivery_p1 ? \Carbon\Carbon::parse($value->tgl_delivery_p1)->translatedFormat('d F Y') : 'Belum Ada Input' }}</span></span>
                                               </div>
+
+                                              @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === false )
                                               <div class="ms-auto text-end float-right">
                                                   <input name="encrypted[]" value="{{ $encrypted }}" hidden>
                                                   <button class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button><br>
@@ -269,6 +322,63 @@
                                                   @endif
 
                                               </div>
+                                              @elseif( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
+                                              @elseif( $user_pralop->role_id === 9 || $user_pralop->role_id === 8 || $user_pralop->role_id === 13 )
+                                              <div class="ms-auto text-end float-right">
+                                                  <input name="encrypted[]" value="{{ $encrypted }}" hidden>
+                                                  <button class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button><br>
+                                                  @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
+                                                      <button class="btn btn-link bg-gradient-warning px-3 mb-0 mt-2" onclick="printLayanan('p1', {{ $value->id ? $value->id : '' }} )">Print P1</button>
+                                                      @if( $value->p0_nomor_p0 )
+                                                      <button class="btn btn-link bg-gradient-warning px-3 mb-0 mt-2" onclick="printLayanan('p0', {{ $value->id ? $value->id : '' }} )">Print P0</button><br>
+                                                      @else
+                                                      <br>
+                                                      @endif
+                                                  @endif
+                                                  @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
+
+                                                  <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p1_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
+                                                  <label for="file_p1_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p1_{{ $value->id }}"><span id="label_file_p1_{{ $value->id }}">Pilih File P1</span></label>
+                                                  <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p1_{{ $value->id }}" name="file_p1_{{ $value->id }}" type="file">
+
+                                                  <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload</button>
+                                                      @if( $value->file_p1 )
+                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
+                                                      @else
+                                                      <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
+                                                      @endif
+                                                  @else
+                                                      @if( $value->file_p1 )
+                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Download P1</button><br>
+                                                      @else
+                                                      <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Download P1</button><br>
+                                                      @endif
+                                                  @endif
+                                                  @if( $value->p0_nomor_p0 )
+                                                    @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
+
+                                                    <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p0_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
+                                                    <label for="file_p0_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p0_{{ $value->id }}"><span id="label_file_p0_{{ $value->id }}">Pilih File P0</span></label>
+                                                    <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p0_{{ $value->id }}" name="file_p0_{{ $value->id }}" type="file">
+
+                                                    <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload</button>
+                                                        @if( $value->file_p0 )
+                                                        <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
+                                                        @else
+                                                        <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
+                                                        @endif
+                                                    @else
+                                                        @if( $value->file_p0 )
+                                                        <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Download P0</button><br>
+                                                        @else
+                                                        <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Download P0</button><br>
+                                                        @endif
+                                                    @endif
+                                                  @endif
+
+                                              </div>
+                                              @endif
+
                                           </li>
                                         @endforeach
                                     @else
@@ -408,6 +518,34 @@
     </main>
     @push('js')
 
+    @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
+    <script type="text/javascript">
+
+    $('#file_attachment' ).val('');
+    $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`Attachment (Multi Files)`);
+
+    $('#btn_clear_attachment' ).on('click', function() {
+      $('#file_attachment' ).val('');
+      $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`Attachment (Multi Files)`);
+      $('.label_attachment' ).removeClass('bg-gradient-secondary'); $('.label_attachment' ).addClass('bg-gradient-light');
+    });
+    $('#file_attachment' ).change(function() {
+        let measure = 0;
+        let hasil = "";
+        if(this.files.length > 1){ measure = this.files.length;  hasil = measure + " files selected"; }
+        if(this.files.length === 1){ hasil = this.files[0].name; }
+        $('.label_attachment' ).removeClass('bg-gradient-light');
+        $('#label_file_attachment' ).empty();
+        $('#label_file_attachment' ).append(hasil);
+        $('.label_attachment' ).addClass('bg-gradient-secondary');
+    });
+
+    </script>
+    @elseif( $user_pralop->role_id === 8 && $pralop->lop_review_kb === true )
+    @elseif( $user_pralop->role_id === 13 && $pralop->lop_review_kb === true )
+    @elseif( $user_pralop->role_id === 9 )
+    @endif
+
     @if( isset($layanan) )
       @if( $layanan )
       <script type="text/javascript">
@@ -419,6 +557,39 @@
           </script>
           @endforeach
       @endif
+      <script type="text/javascript">
+      $.each(global_arr_index,function(index,value){
+        $('#file_p1_' + value ).val('');
+        $('#label_file_p1_' + value ).empty(); $('#label_file_p1_' + value ).append(`Pilih File P1`);
+
+        $('#btn_clear_p1_' + value ).on('click', function() {
+          $('#file_p1_' + value ).val('');
+          $('#label_file_p1_' + value ).empty(); $('#label_file_p1_' + value ).append(`Pilih File P1`);
+          $('.label_p1_' + value ).removeClass('bg-gradient-secondary'); $('.label_p1_' + value ).addClass('bg-gradient-light');
+        });
+        $('#file_p1_' + value ).change(function() {
+            $('.label_p1_' + value ).removeClass('bg-gradient-light');
+            $('#label_file_p1_' + value ).empty();
+            $('#label_file_p1_' + value ).append(this.files[0].name);
+            $('.label_p1_' + value ).addClass('bg-gradient-secondary');
+        });
+
+        $('#file_p0_' + value ).val('');
+        $('#label_file_p0_' + value ).empty(); $('#label_file_p0_' + value ).append(`Pilih File P0`);
+
+        $('#btn_clear_p0_' + value ).on('click', function() {
+          $('#file_p0_' + value ).val('');
+          $('#label_file_p0_' + value ).empty(); $('#label_file_p0_' + value ).append(`Pilih File P0`);
+          $('.label_p0_' + value ).removeClass('bg-gradient-secondary'); $('.label_p0_' + value ).addClass('bg-gradient-light');
+        });
+        $('#file_p0_' + value ).change(function() {
+            $('.label_p0_' + value ).removeClass('bg-gradient-light');
+            $('#label_file_p0_' + value ).empty();
+            $('#label_file_p0_' + value ).append(this.files[0].name);
+            $('.label_p0_' + value ).addClass('bg-gradient-secondary');
+        });
+      });
+      </script>
     @endif
 
     <script>
@@ -470,37 +641,7 @@
 
         $( document ).ready(function() {
 
-          $.each(global_arr_index,function(index,value){
-            $('#file_p1_' + value ).val('');
-            $('#label_file_p1_' + value ).empty(); $('#label_file_p1_' + value ).append(`Pilih File P1`);
 
-            $('#btn_clear_p1_' + value ).on('click', function() {
-              $('#file_p1_' + value ).val('');
-              $('#label_file_p1_' + value ).empty(); $('#label_file_p1_' + value ).append(`Pilih File P1`);
-              $('.label_p1_' + value ).removeClass('bg-gradient-secondary'); $('.label_p1_' + value ).addClass('bg-gradient-light');
-            });
-            $('#file_p1_' + value ).change(function() {
-                $('.label_p1_' + value ).removeClass('bg-gradient-light');
-                $('#label_file_p1_' + value ).empty();
-                $('#label_file_p1_' + value ).append(this.files[0].name);
-                $('.label_p1_' + value ).addClass('bg-gradient-secondary');
-            });
-
-            $('#file_p0_' + value ).val('');
-            $('#label_file_p0_' + value ).empty(); $('#label_file_p0_' + value ).append(`Pilih File P0`);
-
-            $('#btn_clear_p0_' + value ).on('click', function() {
-              $('#file_p0_' + value ).val('');
-              $('#label_file_p0_' + value ).empty(); $('#label_file_p0_' + value ).append(`Pilih File P0`);
-              $('.label_p0_' + value ).removeClass('bg-gradient-secondary'); $('.label_p0_' + value ).addClass('bg-gradient-light');
-            });
-            $('#file_p0_' + value ).change(function() {
-                $('.label_p0_' + value ).removeClass('bg-gradient-light');
-                $('#label_file_p0_' + value ).empty();
-                $('#label_file_p0_' + value ).append(this.files[0].name);
-                $('.label_p0_' + value ).addClass('bg-gradient-secondary');
-            });
-          });
 
 
             $("#modal-input-obl").modal({show:false});
@@ -569,7 +710,7 @@
                 var cols = '';
                 cols += '<td><button type="button" class="btn btn-danger" id="deleteRow"><i class="fa fa-trash"></i></button</td>';
                 cols += '<th scrope="row">' + counter + '</th>';
-                cols += '<td><input style="width:100%" type="text" name="f1_judul_projek[]" placeholder="Input Layanan"></td>';
+                cols += '<td><input style="width:100%" type="text" name="f1_judul_projek[]" placeholder="Input Layanan" autocomplete="off"></td>';
                 newRow.append(cols);
                 $("#table_layanan").append(newRow);
                 counter++;

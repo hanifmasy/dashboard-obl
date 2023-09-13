@@ -102,10 +102,10 @@ class PraLopController extends Controller
     ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
     ->where('fp.id',$edit_pralop_id)->first();
 
-    if( ($user_pralop->role_id === 4 || $user_pralop->role_id === 5) && $pralop->on_handling !== 'witel' ){
+    if( ($user_pralop->role_id === 4 || $user_pralop->role_id === 5) && ( $pralop->on_handling !== 'witel' && $pralop->on_handling !== 'final_pralop' ) ){
       return redirect()->route('witels.pralop');
     }
-    else if( $user_pralop->role_id === 8 && ($pralop->on_handling !== 'solution' && $pralop->on_handling !== 'final_pralop') ){
+    else if( $user_pralop->role_id === 8 && $pralop->on_handling !== 'solution' ){
       return redirect()->route('witels.pralop');
     }
     else if( $user_pralop->role_id === 13 && $pralop->on_handling !== 'legal' ){
@@ -379,12 +379,14 @@ class PraLopController extends Controller
         ->leftJoin('users as u','u.id','=','fo.updated_by')
         ->select('fo.f1_keterangan as keterangan',DB::raw(" to_char(fo.f1_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when fo.f1_tgl_keterangan is null then 0 else TO_CHAR(fo.f1_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
         ->where('fo.f1_id_form_pralop',$edit_pralop_id)
+        ->whereRaw(" is_draf <> 7 ")
         ->orderByRaw("CASE WHEN fo.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fo.updated_at','DESC')
         ->get()->toArray();
         $obl_histori = DB::connection('pgsql')->table('form_obl_histori as fo')
         ->leftJoin('users as u','u.id','=','fo.updated_by')
         ->select('fo.f1_keterangan as keterangan',DB::raw(" to_char(fo.f1_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when fo.f1_tgl_keterangan is null then 0 else TO_CHAR(fo.f1_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
         ->where('fo.f1_id_form_pralop',$edit_pralop_id)
+        ->whereRaw(" is_draf <> 7 ")
         ->orderByRaw("CASE WHEN fo.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fo.updated_at','DESC')
         ->get()->toArray();
 
@@ -415,7 +417,7 @@ class PraLopController extends Controller
     $pralop_id = '';
     $lop_count_revisi = 0;
     if($request->submit_verifikasi){
-      $proses = 'Lanjut Verifikasi';
+      $proses = 'Lanjut Verifikasi Solution';
       $on_handling = 'solution';
       $pralop_id = str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->submit_verifikasi)));
     }
@@ -442,19 +444,33 @@ class PraLopController extends Controller
     }
 
     $data_lama = $this->updatePraLopHistori($pralop_id);
-    DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
-      'on_handling' => $on_handling,
-      'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-      'lop_keterangan' => 'PRA LOP PROSES : ' . $proses,
-      'lop_count_revisi' => ($data_lama->lop_count_revisi + $lop_count_revisi),
-      'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-      'updated_by' => Auth::id()
-    ]);
+    if( $request->submit_final ){
+      DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
+        'on_handling' => $on_handling,
+        'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'lop_keterangan' => 'PRA LOP PROSES : ' . $proses,
+        'lop_count_revisi' => ($data_lama->lop_count_revisi + $lop_count_revisi),
+        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'updated_by' => Auth::id(),
+        'lop_review_kb' => true
+      ]);
+    }
+    else{
+      DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
+        'on_handling' => $on_handling,
+        'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'lop_keterangan' => 'PRA LOP PROSES : ' . $proses,
+        'lop_count_revisi' => ($data_lama->lop_count_revisi + $lop_count_revisi),
+        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'updated_by' => Auth::id(),
+        'lop_review_kb' => false
+      ]);
+    }
 
     if($request->submit_final){
       $data_lama_obl = $this->updatePraLopToObl($pralop_id);
       DB::connection('pgsql')->table('form_obl')->where('f1_id_form_pralop',$pralop_id)->update([
-        'is_draf' => 8,
+        'is_draf' => 7,
         'revisi_witel' => false,
         'revisi_witel_count' => 0,
         'submit' => 'solution_edit',
@@ -688,7 +704,7 @@ class PraLopController extends Controller
     ->get()->toArray();
     $arr_ids = [];
     foreach( $data_lama as $key => $value ){
-      array_push($arr,$value->id);
+      array_push($arr_ids,$value->id);
       DB::connection('pgsql')->table('form_obl_histori')
       ->insert([
         'obl_id' => $value->id,
@@ -1099,6 +1115,11 @@ class PraLopController extends Controller
       return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted[0]])->with('status','Oops! Gagal Download');
     }
 
+  }
+
+
+  public function reviewKB(Request $request){
+    dd($request->all());
   }
 
   public function layananEdit(Request $request){

@@ -341,7 +341,7 @@
                               </div>
                               <div class="row pt-2 ps-4">
                                 <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
-                                  <div class="btn-group" role="group">
+                                  <div class="btn-group" role="group">  
                                     <button class="btn btn-md bg-gradient-info" type="button" name="button" id="cari">CARI</button>
                                     <!-- <button class="btn btn-md bg-gradient-danger" type="button" name="button" id="reset">RESET</button> -->
                                   </div>

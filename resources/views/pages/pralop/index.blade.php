@@ -11,11 +11,11 @@
             }
 
             .truncate {
-  max-width:50px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+              max-width:50px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
 
             #table-data-obl .action-kembali-proses-witel.dropdown-item:hover {
               background-color:  	#E91E63;
@@ -299,6 +299,7 @@
                  ket_obl_id:ket_obl_id
                },
                success:function(data){
+                 // console.log(data);
                   if(data.status_id==='3' || data.status_id==='4'){
                     $('#ketdoc-table-obl').append(`
                       <div class="alert alert-danger alert-dismissible">
@@ -319,7 +320,7 @@
                   }
                   else{
                     let status_ket_obl = ``;
-                    if(data.arr_log_histori && data.arr_log_histori.length > 0){
+                    if(data.arr_log_histori && data.arr_log_histori.length > 0 && data.arr_log_histori.length !== 1 ){
                       $.each(data.arr_log_histori,function(index,value){
                         if( value.tgl_keterangan ){
                           if(index === 0){
@@ -339,8 +340,19 @@
                             `;
                           }
                         }
+
                       });
                     }
+                    else if( data.arr_log_histori && data.arr_log_histori.length === 1 ){
+                      if( !value.tgl_keterangan ){
+                        status_ket_obl=`
+                        <tr>
+                          <td colspan="2"><h6>NO DATA</h6></td>
+                        </tr>
+                        `;
+                      }
+                    }
+
 
                     $('#ketdoc-table-obl').append(`
                       <div class="alert alert-secondary alert-dismissible">
@@ -421,7 +433,7 @@
 
               var is_user = "{{ $user_pralop->role_id }}";
               var is_user_witel = "{{ $user_pralop->nama_witel }}";
-
+              var arr_untuk_solution = ["solution","review_kb"];
               var tableObl = $('#table-data-obl').DataTable({
                 language: {
                     url: "{{ asset('assets') }}/json/yajra_indonesia.json",
@@ -459,10 +471,10 @@
                   {
                      searchable:false,orderable:false,targets: 0,
                      render: function ( data, type, row ) {
-                         if( (row.on_handling === 'final_pralop' && is_user !== '9') || (is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7') ){
+                         if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' ){
                            return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
                          }
-                         else if( is_user === '4' && row.on_handling !== 'witel' ){
+                         else if( is_user === '4' && row.on_handling !== 'witel' && row.on_handling !== 'final_pralop' ){
                            return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
                          }
                          else if( is_user === '4' && row.on_handling === 'witel' ){
@@ -477,11 +489,23 @@
                                </div>
                                `;
                          }
+                         else if( is_user === '4' && row.on_handling === 'final_pralop' ){
+                           return `
+                               <div class="btn-group" role="group">
+                                 <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-info text-white mt-3" onclick="editDoc('`+row.id+`')">Review KB</button>
+                                    </div>
+                                 <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>
+                                    </div>
+                               </div>
+                               `;
+                         }
                          else if( is_user === '13' && row.on_handling === 'legal' ){
                            return `
                                <div class="btn-group" role="group">
                                  <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm btn-info text-white mt-3" onclick="editDoc('`+row.id+`')">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-info text-white mt-3" onclick="editDoc('`+row.id+`')">Review</button>
                                     </div>
                                  <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>
@@ -492,7 +516,7 @@
                          else if( is_user === '13' && row.on_handling !== 'legal' ){
                            return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
                          }
-                         else if( is_user === '8' && (row.on_handling === 'solution' || row.on_handling === 'final_pralop') ){
+                         else if( is_user === '8' && row.on_handling === 'solution' ){
                            return `
                                <div class="btn-group" role="group">
                                  <div class="btn-group" role="group">
@@ -504,7 +528,7 @@
                                </div>
                                `;
                          }
-                         else if( is_user === '8' && (row.on_handling !== 'solution' && row.on_handling !== 'final_pralop') ){
+                         else if( is_user === '8' && !arr_untuk_solution.includes(row.on_handling) ){
                            return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
                          }
                          else if( is_user === '9' ){
