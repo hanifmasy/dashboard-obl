@@ -58,6 +58,7 @@ class PraLopController extends Controller
         if($cl==='e'){ $query->whereRaw(" fp.on_handling = 'final_pralop' "); }
         if($cl==='f'){ $query->whereRaw(" fp.lop_count_revisi > 0 "); }
         if($cl==='g'){ $query->whereRaw(" fp.lop_count_revisi > 0 "); }
+        if($cl==='h'){ $query->whereRaw(" fp.on_handling = 'final_review_kb' "); }
       }
 
       $data = $query->whereRaw(" (fp.deleted_at is null or to_char(fp.deleted_at,'yyyy-mm-dd') = '') ")
@@ -101,7 +102,6 @@ class PraLopController extends Controller
     ->leftJoin('users as u','u.id','=','fp.updated_by')
     ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
     ->where('fp.id',$edit_pralop_id)->first();
-
     if( ($user_pralop->role_id === 4 || $user_pralop->role_id === 5) && ( $pralop->on_handling !== 'witel' && $pralop->on_handling !== 'final_pralop' ) ){
       return redirect()->route('witels.pralop');
     }
@@ -150,7 +150,15 @@ class PraLopController extends Controller
     ->get()->toArray();
     $encrypted = $request->edit_pralop_id;
 
-    return view('pages.pralop.detail',compact('pralop','pralop_histori','layanan','encrypted','user_pralop','arr_log_histori'));
+    $pralop_files = [];
+    if( $pralop->lop_review_kb === true ){
+      $pralop_files = DB::connection('pgsql')->table('form_pralop_files')
+      ->select('*')
+      ->where('pralop_id', $pralop->id)
+      ->get()->toArray();
+    }
+
+    return view('pages.pralop.detail',compact('pralop','pralop_histori','layanan','encrypted','user_pralop','arr_log_histori','pralop_files'));
   }
 
   public function updatePraLopHistori($var_pralop_id){
@@ -171,7 +179,47 @@ class PraLopController extends Controller
       'lop_tgl_keterangan' => $data_lama->lop_tgl_keterangan,
       'lop_keterangan' => $data_lama->lop_keterangan,
       'updated_at' => $data_lama->updated_at,
-      'updated_by' => $data_lama->updated_by
+      'updated_by' => $data_lama->updated_by,
+      'cs_list' => $data_lama->cs_list,
+      'cs_jenis_kontrak' => $data_lama->cs_jenis_kontrak,
+      'cs_remark_jenis_kontrak' => $data_lama->cs_remark_jenis_kontrak,
+      'cs_nomor_kontrak' => $data_lama->cs_nomor_kontrak,
+      'cs_remark_nomor_kontrak' => $data_lama->cs_remark_nomor_kontrak,
+      'cs_waktu_instal' => $data_lama->cs_waktu_instal,
+      'cs_remark_waktu_instal' => $data_lama->cs_remark_waktu_instal,
+      'cs_waktu_layanan' => $data_lama->cs_waktu_layanan,
+      'cs_remark_waktu_layanan' => $data_lama->cs_remark_waktu_layanan,
+      'cs_waktu_kontrak' => $data_lama->cs_waktu_kontrak,
+      'cs_remark_waktu_kontrak' => $data_lama->cs_remark_waktu_kontrak,
+      'cs_bayar_otc' => $data_lama->cs_bayar_otc,
+      'cs_remark_bayar_otc' => $data_lama->cs_remark_bayar_otc,
+      'cs_term_pay' => $data_lama->cs_term_pay,
+      'cs_remark_term_pay' => $data_lama->cs_remark_term_pay,
+      'cs_sesuai_top' => $data_lama->cs_sesuai_top,
+      'cs_remark_sesuai_top' => $data_lama->cs_remark_sesuai_top,
+      'cs_sesuai_boq' => $data_lama->cs_sesuai_boq,
+      'cs_remark_sesuai_boq' => $data_lama->cs_remark_sesuai_boq,
+      'cs_skema_bisnis' => $data_lama->cs_skema_bisnis,
+      'cs_remark_skema_bisnis' => $data_lama->cs_remark_skema_bisnis,
+      'cs_ruang' => $data_lama->cs_ruang,
+      'cs_remark_ruang' => $data_lama->cs_remark_ruang,
+      'cs_sla_slg' => $data_lama->cs_sla_slg,
+      'cs_remark_sla_slg' => $data_lama->cs_remark_sla_slg,
+      'cs_kb_ba_split' => $data_lama->cs_kb_ba_split,
+      'cs_remark_kb_ba_split' => $data_lama->cs_remark_kb_ba_split,
+      'cs_format_kontrak' => $data_lama->cs_format_kontrak,
+      'cs_remark_format_kontrak' => $data_lama->cs_remark_format_kontrak,
+      'cl_list' => $data_lama->cl_list,
+      'cl_cakap_ttd' => $data_lama->cl_cakap_ttd,
+      'cl_remark_cakap_ttd' => $data_lama->cl_remark_cakap_ttd,
+      'cl_jangka_waktu' => $data_lama->cl_jangka_waktu,
+      'cl_remark_jangka_waktu' => $data_lama->cl_remark_jangka_waktu,
+      'cl_skema_bisnis' => $data_lama->cl_skema_bisnis,
+      'cl_remark_skema_bisnis' => $data_lama->cl_remark_skema_bisnis,
+      'cl_cara_bayar' => $data_lama->cl_cara_bayar,
+      'cl_remark_cara_bayar' => $data_lama->cl_remark_cara_bayar,
+      'cl_mom' => $data_lama->cl_mom,
+      'cl_remark_mom' => $data_lama->cl_remark_mom
     ]);
     return $data_lama;
   }
@@ -444,15 +492,28 @@ class PraLopController extends Controller
     }
 
     $data_lama = $this->updatePraLopHistori($pralop_id);
-    if( $request->submit_final ){
+
+    if( $request->submit_witel ){
+      if( $data_lama->cs_list === true ){ $on_handling = 'final_pralop'; }
+    }
+
+    if( $request->submit_final && $data_lama->lop_review_kb === false ){
       DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
         'on_handling' => $on_handling,
         'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
         'lop_keterangan' => 'PRA LOP PROSES : ' . $proses,
-        'lop_count_revisi' => ($data_lama->lop_count_revisi + $lop_count_revisi),
         'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
         'updated_by' => Auth::id(),
         'lop_review_kb' => true
+      ]);
+    }
+    else if( $request->submit_final && $data_lama->lop_review_kb === true && $data_lama->cl_list === true ){
+      DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
+        'on_handling' => 'final_review_kb',
+        'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'lop_keterangan' => 'PRA LOP PROSES : Final Review KB',
+        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'updated_by' => Auth::id()
       ]);
     }
     else{
@@ -462,21 +523,31 @@ class PraLopController extends Controller
         'lop_keterangan' => 'PRA LOP PROSES : ' . $proses,
         'lop_count_revisi' => ($data_lama->lop_count_revisi + $lop_count_revisi),
         'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'updated_by' => Auth::id(),
-        'lop_review_kb' => false
+        'updated_by' => Auth::id()
       ]);
     }
 
-    if($request->submit_final){
+    if( $request->submit_final && $data_lama->lop_review_kb === false ){
       $data_lama_obl = $this->updatePraLopToObl($pralop_id);
       DB::connection('pgsql')->table('form_obl')->where('f1_id_form_pralop',$pralop_id)->update([
         'is_draf' => 7,
+        'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'f1_keterangan' => 'FINAL PRA LOP: ' . $data_lama->lop_judul_projek,
+        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'updated_by' => Auth::id()
+      ]);
+    }
+
+    if( $request->submit_final && $data_lama->lop_review_kb === true && $data_lama->cl_list === true ){
+      $data_lama_obl = $this->updatePraLopToObl($pralop_id);
+      DB::connection('pgsql')->table('form_obl')->where('f1_id_form_pralop',$pralop_id)->update([
+        'is_draf' => 6,
         'revisi_witel' => false,
         'revisi_witel_count' => 0,
         'submit' => 'solution_edit',
         'f1_proses' => 'witel',
         'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'f1_keterangan' => 'FINAL PRA LOP: ' . $data_lama->lop_judul_projek,
+        'f1_keterangan' => 'FINAL REVIEW KB: ' . $data_lama->lop_judul_projek,
         'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
         'updated_by' => Auth::id()
       ]);
@@ -657,41 +728,50 @@ class PraLopController extends Controller
     $is_skip = null;
     do{
         $hasil = Str::uuid()->toString();
-        $temp_id = $hasil . '.pdf';
-        $cek_uuid_db1 = DocObl::select('id')
+        $temp_id1 = $hasil . '.pdf';
+        $temp_id2 = $hasil . '.docx';
+
+        $cek_uuid_db1 = DB::connection('pgsql')->table('form_pralop_files')->select('id')
         ->whereRaw("
-        file_p0 = '$temp_id' or
-        file_p1 = '$temp_id' or
-        file_p2 = '$temp_id' or
-        file_p3 = '$temp_id' or
-        file_p4 = '$temp_id' or
-        file_p5 = '$temp_id' or
-        file_p6 = '$temp_id' or
-        file_p7 = '$temp_id' or
-        file_p8 = '$temp_id' or
-        file_sp = '$temp_id' or
-        file_wo = '$temp_id' or
-        file_kl = '$temp_id'
+         ( nama_simpan_files = '$temp_id1' or nama_simpan_files = '$temp_id2' )
         ")
         ->get()->toArray();
 
-        $cek_uuid_db2 = DocOblHistori::select('id')
+        $cek_uuid_db2 = DocObl::select('id')
         ->whereRaw("
-        file_p0 = '$temp_id' or
-        file_p1 = '$temp_id' or
-        file_p2 = '$temp_id' or
-        file_p3 = '$temp_id' or
-        file_p4 = '$temp_id' or
-        file_p5 = '$temp_id' or
-        file_p6 = '$temp_id' or
-        file_p7 = '$temp_id' or
-        file_p8 = '$temp_id' or
-        file_sp = '$temp_id' or
-        file_wo = '$temp_id' or
-        file_kl = '$temp_id'
+        ( file_p0 = '$temp_id1' or file_p0 = '$temp_id2' ) or
+        ( file_p1 = '$temp_id1' or file_p1 = '$temp_id2' ) or
+        ( file_p2 = '$temp_id1' or file_p2 = '$temp_id2' ) or
+        ( file_p3 = '$temp_id1' or file_p3 = '$temp_id2' ) or
+        ( file_p4 = '$temp_id1' or file_p4 = '$temp_id2' ) or
+        ( file_p5 = '$temp_id1' or file_p5 = '$temp_id2' ) or
+        ( file_p6 = '$temp_id1' or file_p6 = '$temp_id2' ) or
+        ( file_p7 = '$temp_id1' or file_p7 = '$temp_id2' ) or
+        ( file_p8 = '$temp_id1' or file_p8 = '$temp_id2' ) or
+        ( file_sp = '$temp_id1' or file_sp = '$temp_id2' ) or
+        ( file_wo = '$temp_id1' or file_wo = '$temp_id2' ) or
+        ( file_kl = '$temp_id1' or file_kl = '$temp_id2' )
         ")
         ->get()->toArray();
-        if( ($cek_uuid_db1 && count($cek_uuid_db1)>0) || ($cek_uuid_db2 && count($cek_uuid_db2)>0) ){ $is_skip = true; }
+
+        $cek_uuid_db3 = DocOblHistori::select('id')
+        ->whereRaw("
+        ( file_p0 = '$temp_id1' or file_p0 = '$temp_id2' ) or
+        ( file_p1 = '$temp_id1' or file_p1 = '$temp_id2' ) or
+        ( file_p2 = '$temp_id1' or file_p2 = '$temp_id2' ) or
+        ( file_p3 = '$temp_id1' or file_p3 = '$temp_id2' ) or
+        ( file_p4 = '$temp_id1' or file_p4 = '$temp_id2' ) or
+        ( file_p5 = '$temp_id1' or file_p5 = '$temp_id2' ) or
+        ( file_p6 = '$temp_id1' or file_p6 = '$temp_id2' ) or
+        ( file_p7 = '$temp_id1' or file_p7 = '$temp_id2' ) or
+        ( file_p8 = '$temp_id1' or file_p8 = '$temp_id2' ) or
+        ( file_sp = '$temp_id1' or file_sp = '$temp_id2' ) or
+        ( file_wo = '$temp_id1' or file_wo = '$temp_id2' ) or
+        ( file_kl = '$temp_id1' or file_kl = '$temp_id2' )
+        ")
+        ->get()->toArray();
+
+        if( ($cek_uuid_db1 && count($cek_uuid_db1)>0) || ($cek_uuid_db2 && count($cek_uuid_db2)>0) || ($cek_uuid_db3 && count($cek_uuid_db3)>0) ){ $is_skip = true; }
         else{ $is_skip = false; }
     }while($is_skip==true);
     return $hasil;
@@ -1034,7 +1114,7 @@ class PraLopController extends Controller
   public function layananUpload(Request $request){
 
     if(  $request->file_upload  && $request->hasFile('file_'.$request->file_upload) === false ){
-        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted[0]])->with('status','Oops! Gagal File Upload');
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted[0]])->with('status','Oops! File Upload Kosong / ID Upload File Tidak Sesuai');
     }
     else if(  $request->file_upload  && $request->hasFile('file_'.$request->file_upload) === true ){
       $tipe_doc_1 = 'pdf';
@@ -1053,6 +1133,8 @@ class PraLopController extends Controller
           Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_'.$request->file_upload), 'r+') );
       }
       $data_lama = $this->updateOblHistori( substr($request->file_upload, strpos($request->file_upload, "_") + 1) );
+      if( ucwords(strtok($request->file_upload,'_')) === 'P1' && $data_lama->file_p1 && Storage::disk('sftp')->exists( $data_lama->file_p1 ) ){ Storage::disk('sftp')->delete( $data_lama->file_p1 ); }
+      if( ucwords(strtok($request->file_upload,'_')) === 'P0' && $data_lama->file_p0 && Storage::disk('sftp')->exists( $data_lama->file_p0 ) ){ Storage::disk('sftp')->delete( $data_lama->file_p0 ); }
       $data_update = [
         'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
         'updated_by' => Auth::id(),
@@ -1119,7 +1201,198 @@ class PraLopController extends Controller
 
 
   public function reviewKB(Request $request){
-    dd($request->all());
+    // dd($request->all());
+    if($request->submit && $request->submit === 'review_kb'){
+      if( $request->hasFile('file_attachment') === false ){
+          return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Tidak Ada File Upload');
+      }
+      if( $request->hasFile('file_attachment') === true && count($request->file_attachment) > 0 ){
+
+        foreach( $request->file('file_attachment') as $value ){
+          if( $value->getClientOriginalExtension() !== 'pdf' && $value->getClientOriginalExtension() !== 'docx' ){
+              return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Format File Upload PDF atau DOCX.');
+          }
+        }
+
+        $pralop_files_ids = DB::connection('pgsql')->table('form_pralop_files')
+        ->select('id','nama_simpan_files')->where('pralop_id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))))->get()->toArray();
+        if( $pralop_files_ids && count($pralop_files_ids) > 0 ){
+          foreach( $pralop_files_ids as $key => $value ){
+            Storage::disk('sftp')->delete( $value->nama_simpan_files );
+          }
+        }
+        DB::connection('pgsql')->table('form_pralop_files')
+        ->where('pralop_id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))) )
+        ->delete();
+
+        foreach( $request->file('file_attachment') as $value ){
+            $filenametostore = $this->generateUniqueId() . '.' . $value->getClientOriginalExtension();
+            Storage::disk('sftp')->put( $filenametostore, fopen( $value , 'r+') );
+
+            DB::connection('pgsql')->table('form_pralop_files')
+            ->insert([
+              'pralop_id' => str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))),
+              'nama_asli_files' => $value->getClientOriginalName(),
+              'nama_simpan_files' => $filenametostore
+            ]);
+        }
+
+        $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))) );
+        DB::connection('pgsql')->table('form_pralop')
+        ->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))) )
+        ->update([
+          'on_handling' => 'solution',
+          'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+          'lop_keterangan' => 'PRA LOP PROSES : Upload Attachment File KB',
+          'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+          'updated_by' => Auth::id()
+        ]);
+
+        return redirect()->route('witels.pralop')->with('status','Sukses Upload Attachment File KB');
+      }
+    }
+    else{
+      return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Gagal Routing');
+    }
+  }
+
+  public function reviewKBFiles(Request $request){
+    // dd($request->all());
+    if( $request->file_download ){
+      $files = DB::connection('pgsql')->table('form_pralop_files')
+      ->where('id', $request->file_download)
+      ->first();
+      $headers = '';
+      if( str_contains($files->nama_simpan_files,'.pdf') ){
+        $headers  = array(
+             'Content-Type: application/pdf',
+           );
+      }
+      if( str_contains($files->nama_simpan_files,'.docx') ){
+        $headers  = array(
+             'Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+           );
+      }
+
+      return Storage::disk('sftp')->download($files->nama_simpan_files,$files->nama_asli_files,$headers);
+    }
+    else if( $request->file_preview ){
+      $files = DB::connection('pgsql')->table('form_pralop_files')
+      ->where('id', $request->file_preview)
+      ->first();
+      return Storage::disk('sftp')->response($files->nama_simpan_files);
+    }
+  }
+
+  public function reviewKBSolution(Request $request){
+    // dd($request->all());
+    if( $request->submit && $request->submit === 'checklist_solution' ){
+      if(
+        !$request->cs_jenis_kontrak &&
+        !$request->cs_nomor_kontrak &&
+        !$request->cs_waktu_instal &&
+        !$request->cs_waktu_layanan &&
+        !$request->cs_waktu_kontrak &&
+        !$request->cs_bayar_otc &&
+        !$request->cs_term_pay &&
+        !$request->cs_sesuai_top &&
+        !$request->cs_sesuai_boq &&
+        !$request->cs_skema_bisnis &&
+        !$request->cs_ruang &&
+        !$request->cs_sla_slg &&
+        !$request->cs_kb_ba_split &&
+        !$request->cs_format_kontrak
+      ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Review KB - Checklist Solution Kosong');
+      }
+      else{
+        $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) );
+        // update pralop -> cs_list = true
+        DB::connection('pgsql')->table('form_pralop')->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) )
+        ->update([
+          'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+          'lop_keterangan' => 'PRA LOP PROSES : Review KB - Checklist Solution',
+          'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+          'updated_by' => Auth::id(),
+          'cs_list' => true,
+          'cs_jenis_kontrak' => $request->cs_jenis_kontrak,
+          'cs_remark_jenis_kontrak' => $request->cs_remark_jenis_kontrak,
+          'cs_nomor_kontrak' => $request->cs_nomor_kontrak,
+          'cs_remark_nomor_kontrak' => $request->cs_remark_nomor_kontrak,
+          'cs_waktu_instal' => $request->cs_waktu_instal,
+          'cs_remark_waktu_instal' => $request->cs_remark_waktu_instal,
+          'cs_waktu_layanan' => $request->cs_waktu_layanan,
+          'cs_remark_waktu_layanan' => $request->cs_remark_waktu_layanan,
+          'cs_waktu_kontrak' => $request->cs_waktu_kontrak,
+          'cs_remark_waktu_kontrak' => $request->cs_remark_waktu_kontrak,
+          'cs_bayar_otc' => $request->cs_bayar_otc,
+          'cs_remark_bayar_otc' => $request->cs_remark_bayar_otc,
+          'cs_term_pay' => $request->cs_term_pay,
+          'cs_remark_term_pay' => $request->cs_remark_term_pay,
+          'cs_sesuai_top' => $request->cs_sesuai_top,
+          'cs_remark_sesuai_top' => $request->cs_remark_sesuai_top,
+          'cs_sesuai_boq' => $request->cs_sesuai_boq,
+          'cs_remark_sesuai_boq' => $request->cs_remark_sesuai_boq,
+          'cs_skema_bisnis' => $request->cs_skema_bisnis,
+          'cs_remark_skema_bisnis' => $request->cs_remark_skema_bisnis,
+          'cs_ruang' => $request->cs_ruang,
+          'cs_remark_ruang' => $request->cs_remark_ruang,
+          'cs_sla_slg' => $request->cs_sla_slg,
+          'cs_remark_sla_slg' => $request->cs_remark_sla_slg,
+          'cs_kb_ba_split' => $request->cs_kb_ba_split,
+          'cs_remark_kb_ba_split' => $request->cs_remark_kb_ba_split,
+          'cs_format_kontrak' => $request->cs_format_kontrak,
+          'cs_remark_format_kontrak' => $request->cs_remark_format_kontrak
+        ]);
+
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Sukses Simpan Checklist Solution');
+      }
+    }
+    else{
+      return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Gagal Routing');
+    }
+  }
+
+  public function reviewKBLegal(Request $request){
+    // dd($request->all());
+    if( $request->submit && $request->submit === 'checklist_legal' ){
+      if(
+        !$request->cl_cakap_ttd &&
+        !$request->cl_jangka_waktu &&
+        !$request->cl_skema_bisnis &&
+        !$request->cl_cara_bayar &&
+        !$request->cl_mom
+      ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Review KB - Checklist Legal Kosong');
+      }
+      else{
+        $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) );
+        // update pralop -> cl_list = true
+        DB::connection('pgsql')->table('form_pralop')->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) )
+        ->update([
+          'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+          'lop_keterangan' => 'PRA LOP PROSES : Review KB - Checklist Legal',
+          'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+          'updated_by' => Auth::id(),
+          'cl_list' => true,
+          'cl_cakap_ttd' => $request->cl_cakap_ttd,
+          'cl_remark_cakap_ttd' => $request->cl_remark_cakap_ttd,
+          'cl_jangka_waktu' => $request->cl_jangka_waktu,
+          'cl_remark_jangka_waktu' => $request->cl_remark_jangka_waktu,
+          'cl_skema_bisnis' => $request->cl_skema_bisnis,
+          'cl_remark_skema_bisnis' => $request->cl_remark_skema_bisnis,
+          'cl_cara_bayar' => $request->cl_cara_bayar,
+          'cl_remark_cara_bayar' => $request->cl_remark_cara_bayar,
+          'cl_mom' => $request->cl_mom,
+          'cl_remark_mom' => $request->cl_remark_mom
+        ]);
+
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Sukses Simpan Checklist Legal');
+      }
+    }
+    else{
+      return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Gagal Routing');
+    }
   }
 
   public function layananEdit(Request $request){

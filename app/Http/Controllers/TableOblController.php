@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Models\User;
 use App\Models\MitraVendor;
 use App\Models\DocObl;
+use App\Models\DocOblHistori;
 use Carbon\Carbon;
 use DataTables;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -524,6 +525,7 @@ class TableOblController extends Controller
           $edit_obl_id = $request->edit_obl_id;
           $edit_obl_id = intval($edit_obl_id);
           $table_edit = null;
+          $table_edit_histori = null;
           $table_edit_p4_attendees = null;
           $mitra_vendor = null;
           $table_edit_keterangan = null;

@@ -1,5 +1,5 @@
 @props([
-    'table_edit','mitra_vendor'
+    'table_edit','table_edit_keterangan','mitra_vendor'
 ])
 
 <div class="card-body px-0 pb-2">
@@ -326,8 +326,8 @@
                             @if(isset($table_edit_keterangan))
                               @foreach($table_edit_keterangan as $tunjuk => $nilai)
                                 <tr>
-                                  <td class=" justify-content-center">[{{ $nilai['f1_tgl_keterangan'] }}]</td>
-                                  <td>{{ $nilai['f1_keterangan'] }}</td>
+                                  <td class=" justify-content-center">[{{ $nilai->f1_tgl_keterangan }}]</td>
+                                  <td>{{ $nilai->f1_keterangan }}</td>
                                 </tr>
                               @endforeach
                             @endif

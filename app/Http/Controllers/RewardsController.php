@@ -52,6 +52,7 @@ class RewardsController extends Controller
           DB::raw("sum(case when on_handling = 'solution' then 1 else 0 end) as total_solution"),
           DB::raw("sum(case when on_handling = 'legal' then 1 else 0 end) as total_legal"),
           DB::raw("sum(case when on_handling = 'final_pralop' then 1 else 0 end) as total_final_pralop"),
+          DB::raw("sum(case when on_handling = 'final_review_kb' then 1 else 0 end) as total_final_reviewkb"),
           DB::raw("sum(case when lop_count_revisi > 0 then 1 else 0 end) as total_doc_rev"),
           DB::raw("sum(lop_count_revisi) as total_prs_rev")
         );

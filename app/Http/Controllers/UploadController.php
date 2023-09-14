@@ -149,41 +149,50 @@ class UploadController extends Controller
       $is_skip = null;
       do{
           $hasil = Str::uuid()->toString();
-          $temp_id = $hasil . '.pdf';
-          $cek_uuid_db1 = DocObl::select('id')
+          $temp_id1 = $hasil . '.pdf';
+          $temp_id2 = $hasil . '.docx';
+
+          $cek_uuid_db1 = DB::connection('pgsql')->table('form_pralop_files')->select('id')
           ->whereRaw("
-          file_p0 = '$temp_id' or
-          file_p1 = '$temp_id' or
-          file_p2 = '$temp_id' or
-          file_p3 = '$temp_id' or
-          file_p4 = '$temp_id' or
-          file_p5 = '$temp_id' or
-          file_p6 = '$temp_id' or
-          file_p7 = '$temp_id' or
-          file_p8 = '$temp_id' or
-          file_sp = '$temp_id' or
-          file_wo = '$temp_id' or
-          file_kl = '$temp_id'
+           ( nama_simpan_files = '$temp_id1' or nama_simpan_files = '$temp_id2' )
           ")
           ->get()->toArray();
 
-          $cek_uuid_db2 = DocOblHistori::select('id')
+          $cek_uuid_db2 = DocObl::select('id')
           ->whereRaw("
-          file_p0 = '$temp_id' or
-          file_p1 = '$temp_id' or
-          file_p2 = '$temp_id' or
-          file_p3 = '$temp_id' or
-          file_p4 = '$temp_id' or
-          file_p5 = '$temp_id' or
-          file_p6 = '$temp_id' or
-          file_p7 = '$temp_id' or
-          file_p8 = '$temp_id' or
-          file_sp = '$temp_id' or
-          file_wo = '$temp_id' or
-          file_kl = '$temp_id'
+          ( file_p0 = '$temp_id1' or file_p0 = '$temp_id2' ) or
+          ( file_p1 = '$temp_id1' or file_p1 = '$temp_id2' ) or
+          ( file_p2 = '$temp_id1' or file_p2 = '$temp_id2' ) or
+          ( file_p3 = '$temp_id1' or file_p3 = '$temp_id2' ) or
+          ( file_p4 = '$temp_id1' or file_p4 = '$temp_id2' ) or
+          ( file_p5 = '$temp_id1' or file_p5 = '$temp_id2' ) or
+          ( file_p6 = '$temp_id1' or file_p6 = '$temp_id2' ) or
+          ( file_p7 = '$temp_id1' or file_p7 = '$temp_id2' ) or
+          ( file_p8 = '$temp_id1' or file_p8 = '$temp_id2' ) or
+          ( file_sp = '$temp_id1' or file_sp = '$temp_id2' ) or
+          ( file_wo = '$temp_id1' or file_wo = '$temp_id2' ) or
+          ( file_kl = '$temp_id1' or file_kl = '$temp_id2' )
           ")
           ->get()->toArray();
-          if( ($cek_uuid_db1 && count($cek_uuid_db1)>0) || ($cek_uuid_db2 && count($cek_uuid_db2)>0) ){ $is_skip = true; }
+
+          $cek_uuid_db3 = DocOblHistori::select('id')
+          ->whereRaw("
+          ( file_p0 = '$temp_id1' or file_p0 = '$temp_id2' ) or
+          ( file_p1 = '$temp_id1' or file_p1 = '$temp_id2' ) or
+          ( file_p2 = '$temp_id1' or file_p2 = '$temp_id2' ) or
+          ( file_p3 = '$temp_id1' or file_p3 = '$temp_id2' ) or
+          ( file_p4 = '$temp_id1' or file_p4 = '$temp_id2' ) or
+          ( file_p5 = '$temp_id1' or file_p5 = '$temp_id2' ) or
+          ( file_p6 = '$temp_id1' or file_p6 = '$temp_id2' ) or
+          ( file_p7 = '$temp_id1' or file_p7 = '$temp_id2' ) or
+          ( file_p8 = '$temp_id1' or file_p8 = '$temp_id2' ) or
+          ( file_sp = '$temp_id1' or file_sp = '$temp_id2' ) or
+          ( file_wo = '$temp_id1' or file_wo = '$temp_id2' ) or
+          ( file_kl = '$temp_id1' or file_kl = '$temp_id2' )
+          ")
+          ->get()->toArray();
+
+          if( ($cek_uuid_db1 && count($cek_uuid_db1)>0) || ($cek_uuid_db2 && count($cek_uuid_db2)>0) || ($cek_uuid_db3 && count($cek_uuid_db3)>0) ){ $is_skip = true; }
           else{ $is_skip = false; }
       }while($is_skip==true);
       return $hasil;

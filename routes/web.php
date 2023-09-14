@@ -97,13 +97,17 @@ Route::post('inputs/create', [InputsController::class, 'create'])->middleware(['
 Route::post('inputs-legacy/create', [InputsController::class, 'createLegacy'])->middleware(['auth','role_obl_non_view'])->name('inputs_legacy.create');
 
 Route::post('witels-pralop/review-kb', [PraLopController::class, 'reviewKB'])->middleware(['auth','role_pralop'])->name('witels.pralop.review_kb');
+Route::post('witels-pralop/review-kb/files', [PraLopController::class, 'reviewKBFiles'])->middleware(['auth','role_pralop'])->name('witels.pralop.review_kb.files');
+Route::post('witels-pralop/review-kb/checklist-solution', [PraLopController::class, 'reviewKBSolution'])->middleware(['auth','role_pralop'])->name('witels.pralop.review_kb.checklist_solution');
+Route::post('witels-pralop/review-kb/checklist-legal', [PraLopController::class, 'reviewKBLegal'])->middleware(['auth','role_pralop'])->name('witels.pralop.review_kb.checklist_legal');
+
 Route::post('witels-pralop/ketdoc', [PraLopController::class, 'ketdoc'])->middleware(['auth','role_pralop'])->name('witels.pralop.ketdoc');
 Route::post('witels-pralop/langkah', [PraLopController::class, 'langkah'])->middleware(['auth','role_pralop'])->name('witels.pralop.langkah');
-Route::post('witels-pralop/detail/update', [PraLopController::class, 'update'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.update');
+Route::post('witels-pralop/detail/update', [PraLopController::class, 'update'])->middleware(['auth','role_pralop'])->name('witels.pralop.detail.update');
 Route::post('witels-pralop/detail/layanan/update', [PraLopController::class, 'layananUpdate'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.update');
 Route::post('witels-pralop/detail/layanan/print', [PraLopController::class, 'layananPrint'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.print');
 Route::post('witels-pralop/detail/layanan/upload', [PraLopController::class, 'layananUpload'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.upload');
-Route::post('witels-pralop/detail/layanan/download', [PraLopController::class, 'layananDownload'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.download');
+Route::post('witels-pralop/detail/layanan/download', [PraLopController::class, 'layananDownload'])->middleware(['auth','role_pralop'])->name('witels.pralop.detail.layanan.download');
 Route::post('witels-pralop/detail/layanan/edit', [PraLopController::class, 'layananEdit'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.edit');
 Route::post('witels-pralop/detail/layanan/edit/update', [PraLopController::class, 'layananEditUpdate'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.edit.update');
 

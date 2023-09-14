@@ -207,7 +207,11 @@
                                 <div class="bg-gradient-primary border-radius-lg pt-4 pb-3">
                                   <h6 class="text-capitalize ps-3 text-white">REPORT PRA LOP</h6>
                               </div>
-                                @elseif( $is_user->role_id !== 4 && $is_user->role_id !== 5 )
+                                @elseif( $is_user->role_id === 13 )
+                                <div class="bg-gradient-warning border-radius-lg pt-4 pb-3">
+                                  <h6 class="text-capitalize ps-3 text-white">REPORT PRA LOP</h6>
+                                </div>
+                                @elseif( $is_user->role_id !== 4 && $is_user->role_id !== 5 && $is_user->role_id !== 13 )
                                 <div class="bg-gradient-light shadow-primary border-radius-lg pt-4 pb-3">
                                   <h6 class="text-capitalize ps-3">REPORT PRA LOP</h6>
                                 </div>
@@ -557,7 +561,8 @@
                        if(data==='witel'){ return '<span class="badge badge-sm bg-gradient-primary">WITEL</span>'; }
                        else if(data==='solution'){ return '<span class="badge badge-sm bg-gradient-info">SOLUTION</span>'; }
                        else if(data==='legal'){ return '<span class="badge badge-sm bg-gradient-warning">LEGAL</span>'; }
-                       else if(data==='final_pralop'){ return '<span class="badge badge-sm bg-gradient-warning">FINAL PRA LOP</span>'; }
+                       else if(data==='final_pralop'){ return '<span class="badge badge-sm bg-gradient-primary">FINAL PRA LOP</span>'; }
+                       else if(data==='final_review_kb'){ return '<span class="badge badge-sm bg-gradient-success">FINAL REVIEW KB</span>'; }
                        else { return '-'; }
                      }
                   },

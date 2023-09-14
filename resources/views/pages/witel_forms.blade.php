@@ -320,12 +320,24 @@
                                                   <input type="text" name="encrypted" value="{{ isset($encrypted) ? $encrypted : '' }}" hidden>
                                                   @if( isset($user_in_is) )
                                                     @if( $user_in_is->role_id === 4 )
-                                                    <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="ms-6 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      @if( $encrypted )
+                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="ms-6 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      @else
+                                                      <a href="{{ route('obl.tables') }}" class="ms-6 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      @endif
                                                     <button type="submit" class="btn bg-gradient-primary"><h6 class="mb-0 text-sm" style="color:white;">SIMPAN</h6></button>
                                                     @elseif( $user_in_is->role_id === 13 )
-                                                    <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      @if( $encrypted )
+                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      @else
+                                                      <a href="{{ route('obl.tables') }}" class="btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      @endif
                                                     @elseif( $user_in_is->role_id === 8 || $user_in_is->role_id === 9 )
-                                                    <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class=" btn bg-gradient-secondary"><h6 class="mb-0 text-sm text-white">KEMBALI</h6></a>
+                                                      @if( $encrypted )
+                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class=" btn bg-gradient-secondary"><h6 class="mb-0 text-sm text-white">KEMBALI</h6></a>
+                                                      @else
+                                                      <a href="{{ route('obl.tables') }}" class=" btn bg-gradient-secondary"><h6 class="mb-0 text-sm text-white">KEMBALI</h6></a>
+                                                      @endif
                                                     <button type="submit" class="btn" style="background:#2a623d;"><h6 class="mb-0 text-sm" style="color:white;">SIMPAN</h6></button>
                                                     @endif
                                                   @endif

@@ -71,7 +71,7 @@
                               @if( $user_edit->role_id === 4 )
                               <x-edits.witel :table_edit="$table_edit" :mitra_vendor="$mitra_vendor"></x-edits.witel>
                               @elseif( $user_edit->role_id === 2 || $user_edit->role_id === 8  || $user_edit->role_id === 9 )
-                              <x-edits.obl :table_edit="$table_edit" :mitra_vendor="$mitra_vendor"></x-edits.obl>
+                              <x-edits.obl :table_edit="$table_edit" :table_edit_keterangan="$table_edit_keterangan" :mitra_vendor="$mitra_vendor"></x-edits.obl>
                               @endif
                             @else
                             DATA PARSING KOSONG!
@@ -90,7 +90,7 @@
           @if( $user_edit->role_id === 4 )
           <x-editsjs.witel :table_edit="$table_edit"></x-editsjs.witel>
           @elseif( $user_edit->role_id === 2 || $user_edit->role_id === 8 || $user_edit->role_id === 9 )
-          <x-editsjs.obl :table_edit="$table_edit" :table_edit_p4_attendees="$table_edit_p4_attendees"></x-editsjs.obl>
+          <x-editsjs.obl :table_edit="$table_edit" :table_edit_keterangan="$table_edit_keterangan" :table_edit_p4_attendees="$table_edit_p4_attendees"></x-editsjs.obl>
           @endif
         @else
         DATA PARSING KOSONG!

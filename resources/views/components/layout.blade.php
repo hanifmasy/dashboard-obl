@@ -20,6 +20,7 @@
     <link href="{{ asset('assets') }}/css/materialicons.css" rel="stylesheet">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets') }}/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+    <link href="{{ asset('assets') }}/css/boot_table.min.css" rel="stylesheet" />
     <link href="{{ asset('assets') }}/DataTables/datatables.min.css" rel="stylesheet" />
     <link href="{{ asset('assets') }}/DataTables/Buttons-2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
 </head>
@@ -125,6 +126,7 @@
 <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
 <script src="{{ asset('assets') }}/js/latest_boot.min.js"></script>
 <script src="{{ asset('assets') }}/js/alertboot.min.js"></script>
+<script src="{{ asset('assets') }}/js/boot_table.min.js"></script>
 <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
 <script src="{{ asset('assets') }}/DataTables/datatables.min.js"></script>
 <script src="{{ asset('assets') }}/DataTables/JSZip-3.10.1/jszip.min.js"></script>

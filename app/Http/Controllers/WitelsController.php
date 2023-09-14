@@ -53,6 +53,8 @@ class WitelsController extends Controller
             $filtered->put('lop_witel',$user_in_is->nama_witel);
             $filtered->put('on_view',true);
             $filtered->put('lop_review_kb',false);
+            $filtered->put('cs_list',false);
+            $filtered->put('cl_list',false);
             $filtered->put('on_handling','witel');
             $filtered->put('lop_count_revisi',0);
 

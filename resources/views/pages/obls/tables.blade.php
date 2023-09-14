@@ -254,7 +254,11 @@
                                 <div class="bg-gradient-mitra border-radius-lg pt-4 pb-3">
                                   <h6 class="text-capitalize ps-3 text-white">TABEL DOKUMEN</h6>
                               </div>
-                                @elseif( $is_user->role_id !== 4 && $is_user->role_id !== 5 && $is_user->role_id !== 6 )
+                                @elseif( $is_user->role_id == 13 )
+                                <div class="bg-gradient-warning border-radius-lg pt-4 pb-3">
+                                  <h6 class="text-capitalize ps-3 text-white">TABEL DOKUMEN</h6>
+                              </div>
+                                @elseif( $is_user->role_id !== 4 && $is_user->role_id !== 5 && $is_user->role_id !== 6 && $is_user->role_id !== 13 )
                                 <div class="bg-gradient-light shadow-primary border-radius-lg pt-4 pb-3">
                                   <h6 class="text-capitalize ps-3">TABEL DOKUMEN</h6>
                                 </div>
@@ -341,9 +345,9 @@
                               </div>
                               <div class="row pt-2 ps-4">
                                 <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
-                                  <div class="btn-group" role="group">  
-                                    <button class="btn btn-md bg-gradient-info" type="button" name="button" id="cari">CARI</button>
-                                    <!-- <button class="btn btn-md bg-gradient-danger" type="button" name="button" id="reset">RESET</button> -->
+                                  <div class="btn-group" role="group">
+                                    <button class="btn btn-sm bg-gradient-info" type="button" name="button" id="cari">CARI</button>
+                                    <button class="btn btn-sm bg-gradient-danger" type="button" name="button" id="reset">RESET</button>
                                   </div>
                                 </div>
                               </div>
@@ -1734,12 +1738,19 @@
                 cl = @json($cl);
                 wl = @json($wl);
 
-                fl_witel = $('#fl_witel').val('');
-                fl_tahun = $('#fl_tahun').val('');
-                fl_mitra = $('#fl_mitra').val('');
-                fl_plggn = $('#fl_plggn').val('');
-                fl_segmen = $('#fl_segmen').val('');
-                fl_status = $('#fl_status').val('');
+                $('#fl_witel').val('');
+                $('#fl_tahun').val('');
+                $('#fl_mitra').val('');
+                $('#fl_plggn').val('');
+                $('#fl_segmen').val('');
+                $('#fl_status').val('');
+
+                fl_witel = $('#fl_witel').val();
+                fl_tahun = $('#fl_tahun').val();
+                fl_mitra = $('#fl_mitra').val();
+                fl_plggn = $('#fl_plggn').val();
+                fl_segmen = $('#fl_segmen').val();
+                fl_status = $('#fl_status').val();
 
                 // console.log(is_user,gdt,cl,wl,fl_witel,fl_tahun,fl_mitra,fl_plggn,fl_segmen,fl_status);
                 yajra(is_user,gdt,cl,wl,fl_witel,fl_tahun,fl_mitra,fl_plggn,fl_segmen,fl_status);
@@ -1861,7 +1872,7 @@
                          }
                          else{
                            if( is_user === '6' ){ return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>'; }
-                           else if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' ){ return `
+                           else if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' || is_user === '13' ){ return `
                              <div class="dropdown">
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
                                 <div class="dropdown-menu">
@@ -2034,7 +2045,7 @@
                        data: 'proses',name: 'proses',searchable:true,orderable:false,
                        "render": function ( data, type, row ) {
                          if(data==='witel'){ return '<span class="badge badge-sm bg-gradient-primary">WITEL</span>'; }
-                         else if(data==='obl'){ return '<span class="badge badge-sm bg-gradient-info">OBL</span>'; }
+                         else if(data==='obl' || data==='pjm'){ return '<span class="badge badge-sm bg-gradient-info">OBL</span>'; }
                          else if(data==='legal'){ return '<span class="badge badge-sm bg-gradient-warning">LEGAL</span>'; }
                          else if(data==='mitra_obl'||data==='mitra_pjm'){ return '<span class="badge badge-sm bg-gradient-info">MITRA OBL</span>'; }
                          else if(data==='close_sm'){ return '<span class="badge badge-sm bg-gradient-danger">CLOSE SM</span>'; }

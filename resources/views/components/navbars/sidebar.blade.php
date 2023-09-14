@@ -32,9 +32,9 @@
                     <span class="nav-link-text ms-1">DASHBOARD</span>
                 </a>
                 @elseif( $is_user->role_id == 13  )
-                <a class="nav-link {{ $activePage == 'dashboard' ? ' active text-dark' : ' text-white ' }}" style="{{ $activePage == 'dashboard' ? ' background:#ffa31a;' : '' }}"
+                <a class="nav-link {{ $activePage == 'dashboard' ? ' active text-white' : ' text-white ' }}" style="{{ $activePage == 'dashboard' ? ' background:#ffa31a;' : '' }}"
                     href="{{ route('dashboard') }}">
-                    <div class="{{ $activePage == 'dashboard' ? ' active text-dark' : ' text-white ' }} text-center me-2 d-flex align-items-center justify-content-center">
+                    <div class="{{ $activePage == 'dashboard' ? ' active text-white' : ' text-white ' }} text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">dashboard</i>
                     </div>
                     <span class="nav-link-text ms-1">DASHBOARD</span>
@@ -261,18 +261,18 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">LEGAL</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' active text-dark' : ' text-white ' }} " style=" {{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' background: #ffa31a;' : '' }} "
+                <a class="nav-link {{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' active text-white' : ' text-white ' }} " style=" {{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' background: #ffa31a;' : '' }} "
                     href="{{ route('witels.pralop') }}">
-                    <div class="{{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' active text-dark' : ' text-white ' }} text-center me-2 d-flex align-items-center justify-content-center">
+                    <div class="{{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' active text-white' : ' text-white ' }} text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
                     <span class="nav-link-text ms-1">REPORT PRA LOP</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $activePage == 'obl-tables' ? ' active text-dark' : ' text-white ' }} " style=" {{ $activePage == 'obl-tables' ? ' background: #ffa31a;' : '' }} "
+                <a class="nav-link {{ $activePage == 'obl-tables' ? ' active text-white' : ' text-white ' }} " style=" {{ $activePage == 'obl-tables' ? ' background: #ffa31a;' : '' }} "
                     href="{{ route('obl.tables') }}">
-                    <div class="{{ $activePage == 'obl-tables' ? ' active text-dark' : ' text-white ' }} text-center me-2 d-flex align-items-center justify-content-center">
+                    <div class="{{ $activePage == 'obl-tables' ? ' active text-white' : ' text-white ' }} text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">table_rows</i>
                     </div>
                     <span class="nav-link-text ms-1">DOKUMEN OBL</span>

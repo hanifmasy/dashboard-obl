@@ -10,6 +10,11 @@
             textarea {
               max-width: 200%;
             }
+
+            input[type="radio"]:disabled {
+              accent-color : #696;
+            }
+
         </style>
 
         <!-- modal alerts -->
@@ -34,13 +39,13 @@
             <div class="row">
                 <div class="col-lg-8">
                   <div class="row">
-                      <div class="col-md-12 ms-2 d-flex align-items-center">
+                      <div class="col-lg-12 ms-2 d-flex align-items-center">
                         <a href="{{ route('witels.pralop') }}" role="button" class="btn btn-md bg-gradient-dark text-white" >KEMBALI</a>
 
                         <form class="" action="{{ route('witels.pralop.langkah') }}" method="POST" enctype="multipart/form-data">
                           @csrf
                           @if( $user_pralop )
-                            @if( $user_pralop->role_id === 4 )
+                            @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === false )
                             <button type="submit" name="submit_verifikasi" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-info text-white" >LANJUT VERIFIKASI</button>
                             @elseif( $user_pralop->role_id === 5 || $user_pralop->role_id === 7 )
                             @elseif( $user_pralop->role_id === 13 )
@@ -64,15 +69,282 @@
 
                   <!-- start attachment and checklist -->
                   @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
+
+                  @if( $pralop->cl_list === true )
+                  <div class="row mt-2">
+                    <div class="card h-25">
+                      <h6 class="text-sm mt-1 bg-warning text-white text-center">Review KB - Checklist Legal</h6>
+
+                        <div class="table-responsive">
+                          <table class="table thead-dark table-striped text-center">
+                            <thead>
+                              <tr>
+                                <th rowSpan="2">No.</th>
+                                <th rowSpan="2">Checklist</th>
+                                <th colSpan="2">Check</th>
+                                <th rowSpan="2">Remark</th>
+                              </tr>
+                              <tr>
+                                <th>OK</th>
+                                <th>NOK</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>Para Pihak /<br>Kecakapan Penandatangan</td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_cakap_ttd" name="cl_cakap_ttd" value="ok" autocomplete="off" {{ $pralop->cl_cakap_ttd === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_cakap_ttd"></label></td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_cakap_ttd" name="cl_cakap_ttd" value="nok" autocomplete="off" {{ $pralop->cl_cakap_ttd === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_cakap_ttd"></label></td>
+                                <td><textarea disabled name="cl_remark_cakap_ttd" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_cakap_ttd ? $pralop->cl_remark_cakap_ttd : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>Jangka Waktu</td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_jangka_waktu" name="cl_jangka_waktu" value="ok" autocomplete="off" {{ $pralop->cl_jangka_waktu === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_jangka_waktu"></label></td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_jangka_waktu" name="cl_jangka_waktu" value="nok" autocomplete="off" {{ $pralop->cl_jangka_waktu === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_jangka_waktu"></label></td>
+                                <td><textarea disabled name="cl_remark_jangka_waktu" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_jangka_waktu ? $pralop->cl_remark_jangka_waktu : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>Skema Bisnis</td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_skema_bisnis" name="cl_skema_bisnis" value="ok" autocomplete="off" {{ $pralop->cl_skema_bisnis === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_skema_bisnis"></label></td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_skema_bisnis" name="cl_skema_bisnis" value="nok" autocomplete="off" {{ $pralop->cl_skema_bisnis === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_skema_bisnis"></label></td>
+                                <td><textarea disabled name="cl_remark_skema_bisnis" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_skema_bisnis ? $pralop->cl_remark_skema_bisnis : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>4</td>
+                                <td>Cara Pembayaran</td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_cara_bayar" name="cl_cara_bayar" value="ok" autocomplete="off" {{ $pralop->cl_cara_bayar === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_cara_bayar"></label></td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_cara_bayar" name="cl_cara_bayar" value="nok" autocomplete="off" {{ $pralop->cl_cara_bayar === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_cara_bayar"></label></td>
+                                <td><textarea disabled name="cl_remark_cara_bayar" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_cara_bayar ? $pralop->cl_remark_cara_bayar : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>5</td>
+                                <td>MOM / Dokumen Pengantar<br>sebelum Kontrak / BA Nego</td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_mom" name="cl_mom" value="ok" autocomplete="off" {{ $pralop->cl_mom === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_mom"></label></td>
+                                <td><input disabled class="form-check-input" type="radio" id="cl_mom" name="cl_mom" value="nok" autocomplete="off" {{ $pralop->cl_mom === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_mom"></label></td>
+                                <td><textarea disabled name="cl_remark_mom" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_mom ? $pralop->cl_remark_mom : '' }} </textarea> </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                    </div>
+                  </div>
+                  @endif
+
+                    @if( $pralop->cs_list === true )
+                    <div class="row mt-2">
+                      <div class="card h-50">
+                        <div class="card-body p-2">
+                          <h6 class="text-sm bg-success text-white text-center">Review KB - Checklist Solution</h6>
+                          <div class="table-responsive">
+                            <table class="table thead-dark table-striped text-center">
+                              <thead>
+                                <tr>
+                                  <th rowSpan="2">No.</th>
+                                  <th rowSpan="2">Checklist</th>
+                                  <th colSpan="2">Check</th>
+                                  <th rowSpan="2">Remark</th>
+                                  <th rowSpan="2">Guidance</th>
+                                </tr>
+                                <tr>
+                                  <th>OK</th>
+                                  <th>NOK</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>Jenis Kontrak</td>
+                                  <td><input class="form-check-input" type="radio" id="cs_jenis_kontrak" name="cs_jenis_kontrak" value="ok" autocomplete="off" disabled {{ $pralop->cs_jenis_kontrak === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_jenis_kontrak"></label></td>
+                                  <td><input class="form-check-input" type="radio" id="jenis_kontrak" name="cs_jenis_kontrak" value="nok" autocomplete="off" disabled {{ $pralop->cs_jenis_kontrak === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_jenis_kontrak"></label></td>
+                                  <td><textarea name="cs_remark_jenis_kontrak" rows="1" cols="15" autocomplete="off" disabled> {{ $pralop->cs_remark_jenis_kontrak ? $pralop->cs_remark_jenis_kontrak : '' }} </textarea> </td>
+                                  <td>PSB, Renewal,<br>Amandemen Perpanjangan,<br>Amandemen</td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>Nomor Kontrak</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_nomor_kontrak" name="cs_nomor_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_nomor_kontrak === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_nomor_kontrak"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_nomor_kontrak" name="cs_nomor_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_nomor_kontrak === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_nomor_kontrak"></label></td>
+                                  <td><textarea disabled name="cs_remark_nomor_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_nomor_kontrak ? $pralop->cs_remark_nomor_kontrak : '' }} </textarea> </td>
+                                  <td></td>
+                                </tr>
+                                <tr>
+                                  <td>3</td>
+                                  <td>Jangka Waktu<br>Instalasi</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_waktu_instal" name="cs_waktu_instal" value="ok" autocomplete="off" {{ $pralop->cs_waktu_instal === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_waktu_instal"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_waktu_instal" name="cs_waktu_instal" value="nok" autocomplete="off" {{ $pralop->cs_waktu_instal === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_waktu_instal"></label></td>
+                                  <td><textarea disabled name="cs_remark_waktu_instal" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_instal ? $pralop->cs_remark_waktu_instal : '' }} </textarea> </td>
+                                  <td>Sesuaikan dengan SPH<br>atau Komitmen dari Mitra,<br>Koordinasi dengan Unit<br>POQA</td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>Jangka Waktu<br>Layanan</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_waktu_layanan" name="cs_waktu_layanan" value="ok" autocomplete="off" {{ $pralop->cs_waktu_layanan === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_waktu_layanan"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_waktu_layanan" name="cs_waktu_layanan" value="nok" autocomplete="off" {{ $pralop->cs_waktu_layanan === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_waktu_layanan"></label></td>
+                                  <td><textarea disabled name="cs_remark_waktu_layanan" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_layanan ? $pralop->cs_remark_waktu_layanan : '' }} </textarea> </td>
+                                  <td></td>
+                                </tr>
+                                <tr>
+                                  <td>5</td>
+                                  <td>Jangka Waktu<br>Kontrak</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_waktu_kontrak" name="cs_waktu_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_waktu_kontrak === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_waktu_kontrak"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_waktu_kontrak" name="cs_waktu_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_waktu_kontrak === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_waktu_kontrak"></label></td>
+                                  <td><textarea disabled name="cs_remark_waktu_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_kontrak ? $pralop->cs_remark_waktu_kontrak : '' }} </textarea> </td>
+                                  <td>Jangka Waktu Instalasi<br>+ Jangka Waktu Layanan</td>
+                                </tr>
+                                <tr>
+                                  <td>6</td>
+                                  <td>Cara Pembayaran<br>OTC</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_bayar_otc" name="cs_bayar_otc" value="ok" autocomplete="off" {{ $pralop->cs_bayar_otc === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_bayar_otc"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_bayar_otc" name="cs_bayar_otc" value="nok" autocomplete="off" {{ $pralop->cs_bayar_otc === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_bayar_otc"></label></td>
+                                  <td><textarea disabled name="cs_remark_bayar_otc" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_bayar_otc ? $pralop->cs_remark_bayar_otc : '' }} </textarea> </td>
+                                  <td></td>
+                                </tr>
+                                <tr>
+                                  <td>7</td>
+                                  <td>Term Of Payment</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_term_pay" name="cs_term_pay" value="ok" autocomplete="off" {{ $pralop->cs_term_pay === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_term_pay"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_term_pay" name="cs_term_pay" value="nok" autocomplete="off" {{ $pralop->cs_term_pay === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_term_pay"></label></td>
+                                  <td><textarea disabled name="cs_remark_term_pay" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_term_pay ? $pralop->cs_remark_term_pay : '' }} </textarea> </td>
+                                  <td></td>
+                                </tr>
+                                <tr>
+                                  <td>8</td>
+                                  <td>Kesesuaian TOP<br>Telkom dengan Mitra</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_sesuai_top" name="cs_sesuai_top" value="ok" autocomplete="off" {{ $pralop->cs_sesuai_top === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_sesuai_top"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_sesuai_top" name="cs_sesuai_top" value="nok" autocomplete="off" {{ $pralop->cs_sesuai_top === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_sesuai_top"></label></td>
+                                  <td><textarea disabled name="cs_remark_sesuai_top" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sesuai_top ? $pralop->cs_remark_sesuai_top : '' }} </textarea> </td>
+                                  <td>Sesuaikan dengan<br>SPH atau<br>Komitmen Mitra</td>
+                                </tr>
+                                <tr>
+                                  <td>9</td>
+                                  <td>Kesesuaian BoQ<br>Telkom dengan Mitra</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_sesuai_boq" name="cs_sesuai_boq" value="ok" autocomplete="off" {{ $pralop->cs_sesuai_boq === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_sesuai_boq"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_sesuai_boq" name="cs_sesuai_boq" value="nok" autocomplete="off" {{ $pralop->cs_sesuai_boq === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_sesuai_boq"></label></td>
+                                  <td><textarea disabled name="cs_remark_sesuai_boq" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sesuai_boq ? $pralop->cs_remark_sesuai_boq : '' }} </textarea> </td>
+                                  <td>Perhitungan Profitability</td>
+                                </tr>
+                                <tr>
+                                  <td>10</td>
+                                  <td>Skema Bisnis</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_skema_bisnis" name="cs_skema_bisnis" value="ok" autocomplete="off" {{ $pralop->cs_skema_bisnis === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_skema_bisnis"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_skema_bisnis" name="cs_skema_bisnis" value="nok" autocomplete="off" {{ $pralop->cs_skema_bisnis === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_skema_bisnis"></label></td>
+                                  <td><textarea disabled name="cs_remark_skema_bisnis" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_skema_bisnis ? $pralop->cs_remark_skema_bisnis : '' }} </textarea> </td>
+                                  <td>Jual Beli/Sewa Menyewa<br>/Berlangganan<br>/Managed Service/Lainnya<br>Sesuai PK KB 511.02.02</td>
+                                </tr>
+                                <tr>
+                                  <td>11</td>
+                                  <td>Ruang Lingkup<br>Bisnis</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_ruang" name="cs_ruang" value="ok" autocomplete="off" {{ $pralop->cs_ruang === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_ruang"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_ruang" name="cs_ruang" value="nok" autocomplete="off" {{ $pralop->cs_ruang === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_ruang"></label></td>
+                                  <td><textarea disabled name="cs_remark_ruang" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_ruang ? $pralop->cs_remark_ruang : '' }} </textarea> </td>
+                                  <td>KAK, SSUK, MoM,<br>Proposal Layanan</td>
+                                </tr>
+                                <tr>
+                                  <td>12</td>
+                                  <td>Kesesuaian SLA/SLG<br>Layanan (Connectivity dan Mitra)</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_sla_slg" name="cs_sla_slg" value="ok" autocomplete="off" {{ $pralop->cs_sla_slg === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_sla_slg"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_sla_slg" name="cs_sla_slg" value="nok" autocomplete="off" {{ $pralop->cs_sla_slg === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_sla_slg"></label></td>
+                                  <td><textarea disabled name="cs_remark_sla_slg" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sla_slg ? $pralop->cs_remark_sla_slg : '' }} </textarea> </td>
+                                  <td></td>
+                                </tr>
+                                <tr>
+                                  <td>13</td>
+                                  <td>Kesesuaian Layanan<br>KB dan BA Splitting</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_kb_ba_split" name="cs_kb_ba_split" value="ok" autocomplete="off" {{ $pralop->cs_kb_ba_split === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_kb_ba_split"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_kb_ba_split" name="cs_kb_ba_split" value="nok" autocomplete="off" {{ $pralop->cs_kb_ba_split === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_kb_ba_split"></label></td>
+                                  <td><textarea disabled name="cs_remark_kb_ba_split" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_kb_ba_split ? $pralop->cs_remark_kb_ba_split : '' }} </textarea> </td>
+                                  <td>Acuan Splitting</td>
+                                </tr>
+                                <tr>
+                                  <td>14</td>
+                                  <td>Format Kontrak</td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_format_kontrak" name="cs_format_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_format_kontrak === 'ok' ? " checked " : "" }}>
+                                    <label for="cs_format_kontrak"></label></td>
+                                  <td><input class="form-check-input" disabled type="radio" id="cs_format_kontrak" name="cs_format_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_format_kontrak === 'nok' ? " checked " : "" }}>
+                                    <label for="cs_format_kontrak"></label></td>
+                                  <td><textarea disabled name="cs_remark_format_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_format_kontrak ? $pralop->cs_remark_format_kontrak : '' }} </textarea> </td>
+                                  <td>KBFL</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card h-25 mt-2">
+                        <div class="card-body p-2">
+                          <h6 class="text-sm ms-2">Attachment Files on Review: </h6>
+
+                          <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                          <div class="row d-flex align-items-center mt-1 mb-1 p-1">
+                            <div class="col-md-12">
+                            @if( isset($pralop_files) )
+                              @if( $pralop_files )
+                                @foreach( $pralop_files as $key => $value )
+                                  <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                                @endforeach
+                              @endif
+                            @endif
+                          </div>
+                        </div>
+
+                          </form>
+
+                        </div>
+                      </div>
+                    </div>
+                    @endif
                   <div class="row mt-2">
                     <div class="card h-50">
                       <div class="card-body p-3">
 
                         <form class="" action="{{ route('witels.pralop.review_kb') }}" method="POST" enctype="multipart/form-data">
                           @csrf
+                          <input type="text" name="pralop_id" value="{{ $encrypted }}" hidden>
                           <div class="row d-flex align-items-center">
-                            Attachment File KB dan lainnya:
-                            <div class="col d-flex">
+                            <div class="col-4">
+                              <h6 class="text-sm">Attachment File KB dan lainnya:</h6><p class="d-flex text-xs">( otomatis update lanjut solution setelah upload )</p>
+                            </div>
+                            <div class="col-8 d-flex">
                               <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_attachment" ><i class="material-icons opacity-7">backspace</i></button>
                               <label for="file_attachment" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_attachment"><span id="label_file_attachment">Attachment (Multi files)</span></label>
                               <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_attachment" name="file_attachment[]" type="file" multiple>
@@ -86,24 +358,599 @@
                       </div>
                     </div>
                   </div>
-                  @elseif( $user_pralop->role_id === 8 && $pralop->lop_review_kb === true)
+                  @elseif( $user_pralop->role_id === 8 && $pralop->lop_review_kb === true )
+
+                    @if( $pralop->cl_list === true )
+                    <div class="row mt-2">
+                      <div class="card h-25">
+                        <h6 class="text-sm mt-1 bg-warning text-white text-center">Review KB - Checklist Legal</h6>
+
+                          <div class="table-responsive">
+                            <table class="table thead-dark table-striped text-center">
+                              <thead>
+                                <tr>
+                                  <th rowSpan="2">No.</th>
+                                  <th rowSpan="2">Checklist</th>
+                                  <th colSpan="2">Check</th>
+                                  <th rowSpan="2">Remark</th>
+                                </tr>
+                                <tr>
+                                  <th>OK</th>
+                                  <th>NOK</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>Para Pihak /<br>Kecakapan Penandatangan</td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_cakap_ttd" name="cl_cakap_ttd" value="ok" autocomplete="off" {{ $pralop->cl_cakap_ttd === 'ok' ? " checked " : "" }}>
+                                    <label for="cl_cakap_ttd"></label></td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_cakap_ttd" name="cl_cakap_ttd" value="nok" autocomplete="off" {{ $pralop->cl_cakap_ttd === 'nok' ? " checked " : "" }}>
+                                    <label for="cl_cakap_ttd"></label></td>
+                                  <td><textarea disabled name="cl_remark_cakap_ttd" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_cakap_ttd ? $pralop->cl_remark_cakap_ttd : '' }} </textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>Jangka Waktu</td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_jangka_waktu" name="cl_jangka_waktu" value="ok" autocomplete="off" {{ $pralop->cl_jangka_waktu === 'ok' ? " checked " : "" }}>
+                                    <label for="cl_jangka_waktu"></label></td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_jangka_waktu" name="cl_jangka_waktu" value="nok" autocomplete="off" {{ $pralop->cl_jangka_waktu === 'nok' ? " checked " : "" }}>
+                                    <label for="cl_jangka_waktu"></label></td>
+                                  <td><textarea disabled name="cl_remark_jangka_waktu" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_jangka_waktu ? $pralop->cl_remark_jangka_waktu : '' }} </textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>3</td>
+                                  <td>Skema Bisnis</td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_skema_bisnis" name="cl_skema_bisnis" value="ok" autocomplete="off" {{ $pralop->cl_skema_bisnis === 'ok' ? " checked " : "" }}>
+                                    <label for="cl_skema_bisnis"></label></td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_skema_bisnis" name="cl_skema_bisnis" value="nok" autocomplete="off" {{ $pralop->cl_skema_bisnis === 'nok' ? " checked " : "" }}>
+                                    <label for="cl_skema_bisnis"></label></td>
+                                  <td><textarea disabled name="cl_remark_skema_bisnis" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_skema_bisnis ? $pralop->cl_remark_skema_bisnis : '' }} </textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>Cara Pembayaran</td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_cara_bayar" name="cl_cara_bayar" value="ok" autocomplete="off" {{ $pralop->cl_cara_bayar === 'ok' ? " checked " : "" }}>
+                                    <label for="cl_cara_bayar"></label></td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_cara_bayar" name="cl_cara_bayar" value="nok" autocomplete="off" {{ $pralop->cl_cara_bayar === 'nok' ? " checked " : "" }}>
+                                    <label for="cl_cara_bayar"></label></td>
+                                  <td><textarea disabled name="cl_remark_cara_bayar" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_cara_bayar ? $pralop->cl_remark_cara_bayar : '' }} </textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>5</td>
+                                  <td>MOM / Dokumen Pengantar<br>sebelum Kontrak / BA Nego</td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_mom" name="cl_mom" value="ok" autocomplete="off" {{ $pralop->cl_mom === 'ok' ? " checked " : "" }}>
+                                    <label for="cl_mom"></label></td>
+                                  <td><input disabled class="form-check-input" type="radio" id="cl_mom" name="cl_mom" value="nok" autocomplete="off" {{ $pralop->cl_mom === 'nok' ? " checked " : "" }}>
+                                    <label for="cl_mom"></label></td>
+                                  <td><textarea disabled name="cl_remark_mom" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_mom ? $pralop->cl_remark_mom : '' }} </textarea> </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                      </div>
+                    </div>
+                    @endif
+
                   <div class="row mt-2">
                     <div class="card h-25">
-                      TEST.
+                      <h6 class="text-sm mt-1 bg-success text-white text-center">Review KB - Checklist Solution</h6>
+                      <form class="" action="{{ route('witels.pralop.review_kb.checklist_solution') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="table-responsive">
+                          <table class="table thead-dark table-striped text-center">
+                            <thead>
+                              <tr>
+                                <th rowSpan="2">No.</th>
+                                <th rowSpan="2">Checklist</th>
+                                <th colSpan="2">Check</th>
+                                <th rowSpan="2">Remark</th>
+                                <th rowSpan="2">Guidance</th>
+                              </tr>
+                              <tr>
+                                <th>OK</th>
+                                <th>NOK</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>Jenis Kontrak</td>
+                                <td><input type="radio" id="cs_jenis_kontrak" name="cs_jenis_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_jenis_kontrak === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_jenis_kontrak"></label></td>
+                                <td><input type="radio" id="jenis_kontrak" name="cs_jenis_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_jenis_kontrak === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_jenis_kontrak"></label></td>
+                                <td><textarea name="cs_remark_jenis_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_jenis_kontrak ? $pralop->cs_remark_jenis_kontrak : '' }} </textarea> </td>
+                                <td>PSB, Renewal,<br>Amandemen Perpanjangan,<br>Amandemen</td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>Nomor Kontrak</td>
+                                <td><input type="radio" id="cs_nomor_kontrak" name="cs_nomor_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_nomor_kontrak === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_nomor_kontrak"></label></td>
+                                <td><input type="radio" id="cs_nomor_kontrak" name="cs_nomor_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_nomor_kontrak === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_nomor_kontrak"></label></td>
+                                <td><textarea name="cs_remark_nomor_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_nomor_kontrak ? $pralop->cs_remark_nomor_kontrak : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>Jangka Waktu<br>Instalasi</td>
+                                <td><input type="radio" id="cs_waktu_instal" name="cs_waktu_instal" value="ok" autocomplete="off" {{ $pralop->cs_waktu_instal === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_instal"></label></td>
+                                <td><input type="radio" id="cs_waktu_instal" name="cs_waktu_instal" value="nok" autocomplete="off" {{ $pralop->cs_waktu_instal === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_instal"></label></td>
+                                <td><textarea name="cs_remark_waktu_instal" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_instal ? $pralop->cs_remark_waktu_instal : '' }} </textarea> </td>
+                                <td>Sesuaikan dengan SPH<br>atau Komitmen dari Mitra,<br>Koordinasi dengan Unit<br>POQA</td>
+                              </tr>
+                              <tr>
+                                <td>4</td>
+                                <td>Jangka Waktu<br>Layanan</td>
+                                <td><input type="radio" id="cs_waktu_layanan" name="cs_waktu_layanan" value="ok" autocomplete="off" {{ $pralop->cs_waktu_layanan === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_layanan"></label></td>
+                                <td><input type="radio" id="cs_waktu_layanan" name="cs_waktu_layanan" value="nok" autocomplete="off" {{ $pralop->cs_waktu_layanan === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_layanan"></label></td>
+                                <td><textarea name="cs_remark_waktu_layanan" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_layanan ? $pralop->cs_remark_waktu_layanan : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>5</td>
+                                <td>Jangka Waktu<br>Kontrak</td>
+                                <td><input type="radio" id="cs_waktu_kontrak" name="cs_waktu_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_waktu_kontrak === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_kontrak"></label></td>
+                                <td><input type="radio" id="cs_waktu_kontrak" name="cs_waktu_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_waktu_kontrak === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_kontrak"></label></td>
+                                <td><textarea name="cs_remark_waktu_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_kontrak ? $pralop->cs_remark_waktu_kontrak : '' }} </textarea> </td>
+                                <td>Jangka Waktu Instalasi<br>+ Jangka Waktu Layanan</td>
+                              </tr>
+                              <tr>
+                                <td>6</td>
+                                <td>Cara Pembayaran<br>OTC</td>
+                                <td><input type="radio" id="cs_bayar_otc" name="cs_bayar_otc" value="ok" autocomplete="off" {{ $pralop->cs_bayar_otc === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_bayar_otc"></label></td>
+                                <td><input type="radio" id="cs_bayar_otc" name="cs_bayar_otc" value="nok" autocomplete="off" {{ $pralop->cs_bayar_otc === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_bayar_otc"></label></td>
+                                <td><textarea name="cs_remark_bayar_otc" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_bayar_otc ? $pralop->cs_remark_bayar_otc : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>7</td>
+                                <td>Term Of Payment</td>
+                                <td><input type="radio" id="cs_term_pay" name="cs_term_pay" value="ok" autocomplete="off" {{ $pralop->cs_term_pay === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_term_pay"></label></td>
+                                <td><input type="radio" id="cs_term_pay" name="cs_term_pay" value="nok" autocomplete="off" {{ $pralop->cs_term_pay === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_term_pay"></label></td>
+                                <td><textarea name="cs_remark_term_pay" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_term_pay ? $pralop->cs_remark_term_pay : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>8</td>
+                                <td>Kesesuaian TOP<br>Telkom dengan Mitra</td>
+                                <td><input type="radio" id="cs_sesuai_top" name="cs_sesuai_top" value="ok" autocomplete="off" {{ $pralop->cs_sesuai_top === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_sesuai_top"></label></td>
+                                <td><input type="radio" id="cs_sesuai_top" name="cs_sesuai_top" value="nok" autocomplete="off" {{ $pralop->cs_sesuai_top === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_sesuai_top"></label></td>
+                                <td><textarea name="cs_remark_sesuai_top" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sesuai_top ? $pralop->cs_remark_sesuai_top : '' }} </textarea> </td>
+                                <td>Sesuaikan dengan<br>SPH atau<br>Komitmen Mitra</td>
+                              </tr>
+                              <tr>
+                                <td>9</td>
+                                <td>Kesesuaian BoQ<br>Telkom dengan Mitra</td>
+                                <td><input type="radio" id="cs_sesuai_boq" name="cs_sesuai_boq" value="ok" autocomplete="off" {{ $pralop->cs_sesuai_boq === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_sesuai_boq"></label></td>
+                                <td><input type="radio" id="cs_sesuai_boq" name="cs_sesuai_boq" value="nok" autocomplete="off" {{ $pralop->cs_sesuai_boq === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_sesuai_boq"></label></td>
+                                <td><textarea name="cs_remark_sesuai_boq" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sesuai_boq ? $pralop->cs_remark_sesuai_boq : '' }} </textarea> </td>
+                                <td>Perhitungan Profitability</td>
+                              </tr>
+                              <tr>
+                                <td>10</td>
+                                <td>Skema Bisnis</td>
+                                <td><input type="radio" id="cs_skema_bisnis" name="cs_skema_bisnis" value="ok" autocomplete="off" {{ $pralop->cs_skema_bisnis === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_skema_bisnis"></label></td>
+                                <td><input type="radio" id="cs_skema_bisnis" name="cs_skema_bisnis" value="nok" autocomplete="off" {{ $pralop->cs_skema_bisnis === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_skema_bisnis"></label></td>
+                                <td><textarea name="cs_remark_skema_bisnis" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_skema_bisnis ? $pralop->cs_remark_skema_bisnis : '' }} </textarea> </td>
+                                <td>Jual Beli/Sewa Menyewa<br>/Berlangganan<br>/Managed Service/Lainnya<br>Sesuai PK KB 511.02.02</td>
+                              </tr>
+                              <tr>
+                                <td>11</td>
+                                <td>Ruang Lingkup<br>Bisnis</td>
+                                <td><input type="radio" id="cs_ruang" name="cs_ruang" value="ok" autocomplete="off" {{ $pralop->cs_ruang === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_ruang"></label></td>
+                                <td><input type="radio" id="cs_ruang" name="cs_ruang" value="nok" autocomplete="off" {{ $pralop->cs_ruang === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_ruang"></label></td>
+                                <td><textarea name="cs_remark_ruang" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_ruang ? $pralop->cs_remark_ruang : '' }} </textarea> </td>
+                                <td>KAK, SSUK, MoM,<br>Proposal Layanan</td>
+                              </tr>
+                              <tr>
+                                <td>12</td>
+                                <td>Kesesuaian SLA/SLG<br>Layanan (Connectivity dan Mitra)</td>
+                                <td><input type="radio" id="cs_sla_slg" name="cs_sla_slg" value="ok" autocomplete="off" {{ $pralop->cs_sla_slg === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_sla_slg"></label></td>
+                                <td><input type="radio" id="cs_sla_slg" name="cs_sla_slg" value="nok" autocomplete="off" {{ $pralop->cs_sla_slg === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_sla_slg"></label></td>
+                                <td><textarea name="cs_remark_sla_slg" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sla_slg ? $pralop->cs_remark_sla_slg : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>13</td>
+                                <td>Kesesuaian Layanan<br>KB dan BA Splitting</td>
+                                <td><input type="radio" id="cs_kb_ba_split" name="cs_kb_ba_split" value="ok" autocomplete="off" {{ $pralop->cs_kb_ba_split === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_kb_ba_split"></label></td>
+                                <td><input type="radio" id="cs_kb_ba_split" name="cs_kb_ba_split" value="nok" autocomplete="off" {{ $pralop->cs_kb_ba_split === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_kb_ba_split"></label></td>
+                                <td><textarea name="cs_remark_kb_ba_split" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_kb_ba_split ? $pralop->cs_remark_kb_ba_split : '' }} </textarea> </td>
+                                <td>Acuan Splitting</td>
+                              </tr>
+                              <tr>
+                                <td>14</td>
+                                <td>Format Kontrak</td>
+                                <td><input type="radio" id="cs_format_kontrak" name="cs_format_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_format_kontrak === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_format_kontrak"></label></td>
+                                <td><input type="radio" id="cs_format_kontrak" name="cs_format_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_format_kontrak === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_format_kontrak"></label></td>
+                                <td><textarea name="cs_remark_format_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_format_kontrak ? $pralop->cs_remark_format_kontrak : '' }} </textarea> </td>
+                                <td>KBFL</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <input type="text" name="encrypted" value="{{ $encrypted }}" hidden>
+                        <button type="submit" name="submit" value="checklist_solution" class="ms-2 btn btn-sm bg-gradient-primary">SIMPAN CHECKLIST</button>
+                      </form>
                     </div>
                   </div>
+
+                  <div class="row mt-2">
+                    <div class="card h-25">
+                      <h6 class="text-sm mt-1 p-1">Attachment Files KB:</h6> <br>
+                      <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                      <div class="row d-flex align-items-center mt-1 mb-1 p-1">
+                        <div class="col-md-12">
+                        @if( isset($pralop_files) )
+                          @if( $pralop_files )
+                            @foreach( $pralop_files as $key => $value )
+                              <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                            @endforeach
+                          @endif
+                        @endif
+                      </div>
+                    </div>
+
+                      </form>
+                    </div>
+                  </div>
+
                   @elseif( $user_pralop->role_id === 13 && $pralop->lop_review_kb === true)
+
                   <div class="row mt-2">
                     <div class="card h-25">
-                      TEST.
+                      <h6 class="text-sm mt-1">Review KB - Checklist Legal</h6>
+                      <form class="" action="{{ route('witels.pralop.review_kb.checklist_legal') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="table-responsive">
+                          <table class="table thead-dark table-striped text-center">
+                            <thead>
+                              <tr>
+                                <th rowSpan="2">No.</th>
+                                <th rowSpan="2">Checklist</th>
+                                <th colSpan="2">Check</th>
+                                <th rowSpan="2">Remark</th>
+                              </tr>
+                              <tr>
+                                <th>OK</th>
+                                <th>NOK</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>Para Pihak /<br>Kecakapan Penandatangan</td>
+                                <td><input type="radio" id="cl_cakap_ttd" name="cl_cakap_ttd" value="ok" autocomplete="off" {{ $pralop->cl_cakap_ttd === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_cakap_ttd"></label></td>
+                                <td><input type="radio" id="cl_cakap_ttd" name="cl_cakap_ttd" value="nok" autocomplete="off" {{ $pralop->cl_cakap_ttd === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_cakap_ttd"></label></td>
+                                <td><textarea name="cl_remark_cakap_ttd" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_cakap_ttd ? $pralop->cl_remark_cakap_ttd : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>Jangka Waktu</td>
+                                <td><input type="radio" id="cl_jangka_waktu" name="cl_jangka_waktu" value="ok" autocomplete="off" {{ $pralop->cl_jangka_waktu === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_jangka_waktu"></label></td>
+                                <td><input type="radio" id="cl_jangka_waktu" name="cl_jangka_waktu" value="nok" autocomplete="off" {{ $pralop->cl_jangka_waktu === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_jangka_waktu"></label></td>
+                                <td><textarea name="cl_remark_jangka_waktu" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_jangka_waktu ? $pralop->cl_remark_jangka_waktu : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>Skema Bisnis</td>
+                                <td><input type="radio" id="cl_skema_bisnis" name="cl_skema_bisnis" value="ok" autocomplete="off" {{ $pralop->cl_skema_bisnis === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_skema_bisnis"></label></td>
+                                <td><input type="radio" id="cl_skema_bisnis" name="cl_skema_bisnis" value="nok" autocomplete="off" {{ $pralop->cl_skema_bisnis === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_skema_bisnis"></label></td>
+                                <td><textarea name="cl_remark_skema_bisnis" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_skema_bisnis ? $pralop->cl_remark_skema_bisnis : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>4</td>
+                                <td>Cara Pembayaran</td>
+                                <td><input type="radio" id="cl_cara_bayar" name="cl_cara_bayar" value="ok" autocomplete="off" {{ $pralop->cl_cara_bayar === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_cara_bayar"></label></td>
+                                <td><input type="radio" id="cl_cara_bayar" name="cl_cara_bayar" value="nok" autocomplete="off" {{ $pralop->cl_cara_bayar === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_cara_bayar"></label></td>
+                                <td><textarea name="cl_remark_cara_bayar" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_cara_bayar ? $pralop->cl_remark_cara_bayar : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>5</td>
+                                <td>MOM / Dokumen Pengantar<br>sebelum Kontrak / BA Nego</td>
+                                <td><input type="radio" id="cl_mom" name="cl_mom" value="ok" autocomplete="off" {{ $pralop->cl_mom === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_mom"></label></td>
+                                <td><input type="radio" id="cl_mom" name="cl_mom" value="nok" autocomplete="off" {{ $pralop->cl_mom === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_mom"></label></td>
+                                <td><textarea name="cl_remark_mom" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_mom ? $pralop->cl_remark_mom : '' }} </textarea> </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <input type="text" name="encrypted" value="{{ $encrypted }}" hidden>
+                        <button type="submit" name="submit" value="checklist_legal" class="ms-2 btn btn-sm bg-gradient-primary">SIMPAN CHECKLIST</button>
+                      </form>
                     </div>
                   </div>
+
+                  <div class="row mt-2">
+                    <div class="card h-25">
+                      <h6 class="text-sm mt-1 p-1">Attachment Files KB:</h6> <br>
+                      <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                      <div class="row d-flex align-items-center mt-1 mb-1 p-1">
+                        <div class="col-md-12">
+                        @if( isset($pralop_files) )
+                          @if( $pralop_files )
+                            @foreach( $pralop_files as $key => $value )
+                              <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                            @endforeach
+                          @endif
+                        @endif
+                      </div>
+                    </div>
+
+                      </form>
+                    </div>
+                  </div>
+
                   @elseif( $user_pralop->role_id === 9 )
                   <div class="row mt-2">
                     <div class="card h-25">
                       TEST.
                     </div>
                   </div>
+
+                  <div class="row mt-2">
+                    <div class="card h-25">
+                      <h6 class="text-sm mt-1">Review KB - Checklist Solution</h6>
+                      <form class="" action="{{ route('witels.pralop.review_kb.checklist_solution') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="table-responsive">
+                          <table class="table thead-dark table-striped text-center">
+                            <thead>
+                              <tr>
+                                <th rowSpan="2">No.</th>
+                                <th rowSpan="2">Checklist</th>
+                                <th colSpan="2">Check</th>
+                                <th rowSpan="2">Remark</th>
+                                <th rowSpan="2">Guidance</th>
+                              </tr>
+                              <tr>
+                                <th>OK</th>
+                                <th>NOK</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>Jenis Kontrak</td>
+                                <td><input type="radio" id="cs_jenis_kontrak" name="cs_jenis_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_jenis_kontrak === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_jenis_kontrak"></label></td>
+                                <td><input type="radio" id="jenis_kontrak" name="cs_jenis_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_jenis_kontrak === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_jenis_kontrak"></label></td>
+                                <td><textarea name="cs_remark_jenis_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_jenis_kontrak ? $pralop->cs_remark_jenis_kontrak : '' }} </textarea> </td>
+                                <td>PSB, Renewal,<br>Amandemen Perpanjangan,<br>Amandemen</td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>Nomor Kontrak</td>
+                                <td><input type="radio" id="cs_nomor_kontrak" name="cs_nomor_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_nomor_kontrak === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_nomor_kontrak"></label></td>
+                                <td><input type="radio" id="cs_nomor_kontrak" name="cs_nomor_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_nomor_kontrak === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_nomor_kontrak"></label></td>
+                                <td><textarea name="cs_remark_nomor_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_nomor_kontrak ? $pralop->cs_remark_nomor_kontrak : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>Jangka Waktu<br>Instalasi</td>
+                                <td><input type="radio" id="cs_waktu_instal" name="cs_waktu_instal" value="ok" autocomplete="off" {{ $pralop->cs_waktu_instal === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_instal"></label></td>
+                                <td><input type="radio" id="cs_waktu_instal" name="cs_waktu_instal" value="nok" autocomplete="off" {{ $pralop->cs_waktu_instal === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_instal"></label></td>
+                                <td><textarea name="cs_remark_waktu_instal" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_instal ? $pralop->cs_remark_waktu_instal : '' }} </textarea> </td>
+                                <td>Sesuaikan dengan SPH<br>atau Komitmen dari Mitra,<br>Koordinasi dengan Unit<br>POQA</td>
+                              </tr>
+                              <tr>
+                                <td>4</td>
+                                <td>Jangka Waktu<br>Layanan</td>
+                                <td><input type="radio" id="cs_waktu_layanan" name="cs_waktu_layanan" value="ok" autocomplete="off" {{ $pralop->cs_waktu_layanan === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_layanan"></label></td>
+                                <td><input type="radio" id="cs_waktu_layanan" name="cs_waktu_layanan" value="nok" autocomplete="off" {{ $pralop->cs_waktu_layanan === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_layanan"></label></td>
+                                <td><textarea name="cs_remark_waktu_layanan" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_layanan ? $pralop->cs_remark_waktu_layanan : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>5</td>
+                                <td>Jangka Waktu<br>Kontrak</td>
+                                <td><input type="radio" id="cs_waktu_kontrak" name="cs_waktu_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_waktu_kontrak === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_kontrak"></label></td>
+                                <td><input type="radio" id="cs_waktu_kontrak" name="cs_waktu_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_waktu_kontrak === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_waktu_kontrak"></label></td>
+                                <td><textarea name="cs_remark_waktu_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_waktu_kontrak ? $pralop->cs_remark_waktu_kontrak : '' }} </textarea> </td>
+                                <td>Jangka Waktu Instalasi<br>+ Jangka Waktu Layanan</td>
+                              </tr>
+                              <tr>
+                                <td>6</td>
+                                <td>Cara Pembayaran<br>OTC</td>
+                                <td><input type="radio" id="cs_bayar_otc" name="cs_bayar_otc" value="ok" autocomplete="off" {{ $pralop->cs_bayar_otc === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_bayar_otc"></label></td>
+                                <td><input type="radio" id="cs_bayar_otc" name="cs_bayar_otc" value="nok" autocomplete="off" {{ $pralop->cs_bayar_otc === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_bayar_otc"></label></td>
+                                <td><textarea name="cs_remark_bayar_otc" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_bayar_otc ? $pralop->cs_remark_bayar_otc : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>7</td>
+                                <td>Term Of Payment</td>
+                                <td><input type="radio" id="cs_term_pay" name="cs_term_pay" value="ok" autocomplete="off" {{ $pralop->cs_term_pay === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_term_pay"></label></td>
+                                <td><input type="radio" id="cs_term_pay" name="cs_term_pay" value="nok" autocomplete="off" {{ $pralop->cs_term_pay === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_term_pay"></label></td>
+                                <td><textarea name="cs_remark_term_pay" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_term_pay ? $pralop->cs_remark_term_pay : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>8</td>
+                                <td>Kesesuaian TOP<br>Telkom dengan Mitra</td>
+                                <td><input type="radio" id="cs_sesuai_top" name="cs_sesuai_top" value="ok" autocomplete="off" {{ $pralop->cs_sesuai_top === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_sesuai_top"></label></td>
+                                <td><input type="radio" id="cs_sesuai_top" name="cs_sesuai_top" value="nok" autocomplete="off" {{ $pralop->cs_sesuai_top === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_sesuai_top"></label></td>
+                                <td><textarea name="cs_remark_sesuai_top" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sesuai_top ? $pralop->cs_remark_sesuai_top : '' }} </textarea> </td>
+                                <td>Sesuaikan dengan<br>SPH atau<br>Komitmen Mitra</td>
+                              </tr>
+                              <tr>
+                                <td>9</td>
+                                <td>Kesesuaian BoQ<br>Telkom dengan Mitra</td>
+                                <td><input type="radio" id="cs_sesuai_boq" name="cs_sesuai_boq" value="ok" autocomplete="off" {{ $pralop->cs_sesuai_boq === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_sesuai_boq"></label></td>
+                                <td><input type="radio" id="cs_sesuai_boq" name="cs_sesuai_boq" value="nok" autocomplete="off" {{ $pralop->cs_sesuai_boq === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_sesuai_boq"></label></td>
+                                <td><textarea name="cs_remark_sesuai_boq" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sesuai_boq ? $pralop->cs_remark_sesuai_boq : '' }} </textarea> </td>
+                                <td>Perhitungan Profitability</td>
+                              </tr>
+                              <tr>
+                                <td>10</td>
+                                <td>Skema Bisnis</td>
+                                <td><input type="radio" id="cs_skema_bisnis" name="cs_skema_bisnis" value="ok" autocomplete="off" {{ $pralop->cs_skema_bisnis === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_skema_bisnis"></label></td>
+                                <td><input type="radio" id="cs_skema_bisnis" name="cs_skema_bisnis" value="nok" autocomplete="off" {{ $pralop->cs_skema_bisnis === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_skema_bisnis"></label></td>
+                                <td><textarea name="cs_remark_skema_bisnis" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_skema_bisnis ? $pralop->cs_remark_skema_bisnis : '' }} </textarea> </td>
+                                <td>Jual Beli/Sewa Menyewa<br>/Berlangganan<br>/Managed Service/Lainnya<br>Sesuai PK KB 511.02.02</td>
+                              </tr>
+                              <tr>
+                                <td>11</td>
+                                <td>Ruang Lingkup<br>Bisnis</td>
+                                <td><input type="radio" id="cs_ruang" name="cs_ruang" value="ok" autocomplete="off" {{ $pralop->cs_ruang === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_ruang"></label></td>
+                                <td><input type="radio" id="cs_ruang" name="cs_ruang" value="nok" autocomplete="off" {{ $pralop->cs_ruang === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_ruang"></label></td>
+                                <td><textarea name="cs_remark_ruang" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_ruang ? $pralop->cs_remark_ruang : '' }} </textarea> </td>
+                                <td>KAK, SSUK, MoM,<br>Proposal Layanan</td>
+                              </tr>
+                              <tr>
+                                <td>12</td>
+                                <td>Kesesuaian SLA/SLG<br>Layanan (Connectivity dan Mitra)</td>
+                                <td><input type="radio" id="cs_sla_slg" name="cs_sla_slg" value="ok" autocomplete="off" {{ $pralop->cs_sla_slg === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_sla_slg"></label></td>
+                                <td><input type="radio" id="cs_sla_slg" name="cs_sla_slg" value="nok" autocomplete="off" {{ $pralop->cs_sla_slg === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_sla_slg"></label></td>
+                                <td><textarea name="cs_remark_sla_slg" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_sla_slg ? $pralop->cs_remark_sla_slg : '' }} </textarea> </td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>13</td>
+                                <td>Kesesuaian Layanan<br>KB dan BA Splitting</td>
+                                <td><input type="radio" id="cs_kb_ba_split" name="cs_kb_ba_split" value="ok" autocomplete="off" {{ $pralop->cs_kb_ba_split === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_kb_ba_split"></label></td>
+                                <td><input type="radio" id="cs_kb_ba_split" name="cs_kb_ba_split" value="nok" autocomplete="off" {{ $pralop->cs_kb_ba_split === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_kb_ba_split"></label></td>
+                                <td><textarea name="cs_remark_kb_ba_split" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_kb_ba_split ? $pralop->cs_remark_kb_ba_split : '' }} </textarea> </td>
+                                <td>Acuan Splitting</td>
+                              </tr>
+                              <tr>
+                                <td>14</td>
+                                <td>Format Kontrak</td>
+                                <td><input type="radio" id="cs_format_kontrak" name="cs_format_kontrak" value="ok" autocomplete="off" {{ $pralop->cs_format_kontrak === 'ok' ? " checked " : "" }}>
+                                  <label for="cs_format_kontrak"></label></td>
+                                <td><input type="radio" id="cs_format_kontrak" name="cs_format_kontrak" value="nok" autocomplete="off" {{ $pralop->cs_format_kontrak === 'nok' ? " checked " : "" }}>
+                                  <label for="cs_format_kontrak"></label></td>
+                                <td><textarea name="cs_remark_format_kontrak" rows="1" cols="15" autocomplete="off"> {{ $pralop->cs_remark_format_kontrak ? $pralop->cs_remark_format_kontrak : '' }} </textarea> </td>
+                                <td>KBFL</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <input type="text" name="encrypted" value="{{ $encrypted }}" hidden>
+                        <button type="submit" name="submit" value="checklist_solution" class="ms-2 btn btn-sm bg-gradient-primary">SIMPAN CHECKLIST</button>
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="row mt-2">
+                    <div class="card h-25">
+                      <h6 class="text-sm mt-1 p-1">Attachment Files KB:</h6> <br>
+                      <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                      <div class="row d-flex align-items-center mt-1 mb-1 p-1">
+                        <div class="col-md-12">
+                        @if( isset($pralop_files) )
+                          @if( $pralop_files )
+                            @foreach( $pralop_files as $key => $value )
+                              <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                            @endforeach
+                          @endif
+                        @endif
+                      </div>
+                    </div>
+
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="row mt-2">
+                    <div class="card h-50">
+                      <div class="card-body p-3">
+
+                        <form class="" action="{{ route('witels.pralop.review_kb') }}" method="POST" enctype="multipart/form-data">
+                          @csrf
+                          <input type="text" name="pralop_id" value="{{ $encrypted }}" hidden>
+                          <div class="row d-flex align-items-center">
+                            <div class="col-4">
+                              <h6 class="text-sm">Attachment File KB dan lainnya:</h6><p class="d-flex text-xs">( otomatis update lanjut solution setelah upload )</p>
+                            </div>
+                            <div class="col-8 d-flex">
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_attachment" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_attachment" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_attachment"><span id="label_file_attachment">Attachment (Multi files)</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_attachment" name="file_attachment[]" type="file" multiple>
+
+                              <button type="submit" name="submit" value="review_kb" class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2">Upload</button>
+                            </div>
+                          </div>
+                        </form>
+
+
+                      </div>
+                    </div>
+                  </div>
+
+
                   @endif
                   <!-- end attachment and checklist -->
 
@@ -135,19 +982,19 @@
                                             <tbody>
                                               <tr>
                                                 <td>Nama Projek:&nbsp;</td>
-                                                <td>@if( $errors->has('lop_judul_projek') ) <textarea class="outline-input-merah" cols="35" type="text" name="lop_judul_projek"  autocomplete="off">{{ old('lop_judul_projek', $pralop->lop_judul_projek) }}</textarea>  @else <textarea cols="35" type="text" name="lop_judul_projek"  autocomplete="off">{{ old('lop_judul_projek', $pralop->lop_judul_projek) }}</textarea>  @endif</td>
+                                                <td>@if( $errors->has('lop_judul_projek') ) <textarea class="outline-input-merah" cols="20" type="text" name="lop_judul_projek"  autocomplete="off">{{ old('lop_judul_projek', $pralop->lop_judul_projek) }}</textarea>  @else <textarea cols="20" type="text" name="lop_judul_projek"  autocomplete="off">{{ old('lop_judul_projek', $pralop->lop_judul_projek) }}</textarea>  @endif</td>
                                               </tr>
                                               <tr>
                                                 <td>Nama Pelanggan:&nbsp;</td>
-                                                <td>@if( $errors->has('lop_nama_plggn') ) <textarea class="outline-input-merah" cols="35" type="text" name="lop_nama_plggn"  autocomplete="off">{{ old('lop_nama_plggn', $pralop->lop_nama_plggn) }}</textarea>  @else <textarea cols="35" type="text" name="lop_nama_plggn"  autocomplete="off">{{ old('lop_nama_plggn', $pralop->lop_nama_plggn) }}</textarea>  @endif</td>
+                                                <td>@if( $errors->has('lop_nama_plggn') ) <textarea class="outline-input-merah" cols="20" type="text" name="lop_nama_plggn"  autocomplete="off">{{ old('lop_nama_plggn', $pralop->lop_nama_plggn) }}</textarea>  @else <textarea cols="20" type="text" name="lop_nama_plggn"  autocomplete="off">{{ old('lop_nama_plggn', $pralop->lop_nama_plggn) }}</textarea>  @endif</td>
                                               </tr>
                                               <tr>
                                                 <td>Alamat Pelanggan:&nbsp;</td>
-                                                <td><textarea cols="35" type="text" name="lop_alamat_plggn"  autocomplete="off">{{ old('lop_alamat_plggn', $pralop->lop_alamat_plggn) }}</textarea> </td>
+                                                <td><textarea cols="20" type="text" name="lop_alamat_plggn"  autocomplete="off">{{ old('lop_alamat_plggn', $pralop->lop_alamat_plggn) }}</textarea> </td>
                                               </tr>
                                               <tr>
                                                 <td>PIC Pelanggan:&nbsp;</td>
-                                                <td><textarea cols="35" type="text" name="lop_pic_plggn"  autocomplete="off">{{ old('lop_pic_plggn', $pralop->lop_pic_plggn) }}</textarea> </td>
+                                                <td><textarea cols="20" type="text" name="lop_pic_plggn"  autocomplete="off">{{ old('lop_pic_plggn', $pralop->lop_pic_plggn) }}</textarea> </td>
                                               </tr>
                                             </tbody>
                                           </table>
@@ -160,15 +1007,15 @@
                                             <tbody>
                                               <tr>
                                                 <td>ID LOP:&nbsp;</td>
-                                                <td><input style="width:100%;" type="text" name="lop_id_mytens" value="{{ old('lop_id_mytens', $pralop->lop_id_mytens) }}" autocomplete="off"> </td>
+                                                <td><textarea cols="20" rows="1" name="lop_id_mytens"  autocomplete="off"> {{ old('lop_id_mytens', $pralop->lop_id_mytens) }} </textarea> </td>
                                               </tr>
                                               <tr>
                                                 <td>Nomor Akun:&nbsp;</td>
-                                                <td><input  style="width:100%;" type="text" name="lop_nomor_akun" value="{{ old('lop_nomor_akun', $pralop->lop_nomor_akun) }}" autocomplete="off"> </td>
+                                                <td><textarea cols="20" rows="1" name="lop_nomor_akun"  autocomplete="off"> {{ old('lop_nomor_akun', $pralop->lop_nomor_akun) }} </textarea> </td>
                                               </tr>
                                               <tr>
                                                 <td>Estimasi Opportunity:&nbsp;</td>
-                                                <td><input  style="width:100%;" type="text" name="lop_nilai_kb" id="lop_nilai_kb" value="{{ old('lop_nilai_kb', $pralop->lop_nilai_kb) }}" autocomplete="off"> </td>
+                                                <td><textarea cols="20" rows="1" name="lop_nilai_kb" id="lop_nilai_kb"  autocomplete="off"> {{ old('lop_nilai_kb', $pralop->lop_nilai_kb) }} </textarea> </td>
                                               </tr>
                                               <tr>
                                                 <td>Segmen:&nbsp;</td>
@@ -191,7 +1038,7 @@
                                               </tr>
                                               <tr>
                                                 <td>Status Order:&nbsp;</td>
-                                                <td><select name="lop_status_order" id="lop_status_order" autocomplete="off">
+                                                <td><select name="lop_status_order" id="lop_status_order" autocomplete="off" style="width:80%;">
                                                     <option value="" disabled selected>Pilih Status</option>
                                                     <option value="inprogress_provision_issued" {{ old('lop_status_order', $pralop->lop_status_order) == 'inprogress_provision_issued' ? ' selected="selected"' : '' }}>In Progress - Provision Issued</option>
                                                     <option value="inprogress_provision_start" {{ old('lop_status_order', $pralop->lop_status_order) == 'inprogress_provision_start' ? ' selected="selected"' : '' }}>In Progress - Provision Start</option>
@@ -431,11 +1278,11 @@
                                             @if( $errors->has('lop_keterangan') )
                                             <textarea class="outline-input-merah" name="lop_keterangan" rows="5" cols="50" placeholder="INPUT KETERANGAN" autocomplete="off">{{ old('lop_keterangan') }}</textarea>
                                             @else
-                                            <textarea name="lop_keterangan" rows="5" cols="50" placeholder="INPUT KETERANGAN" autocomplete="off">{{ old('lop_keterangan') }}</textarea>
+                                            <textarea name="lop_keterangan" rows="5" cols="30" placeholder="INPUT KETERANGAN" autocomplete="off">{{ old('lop_keterangan') }}</textarea>
                                             @endif
                                         </div>
                                         <div class="row mt-1">
-                                          <div class="col-md-6 ">
+                                          <div class="col-md-8 ">
                                             <button type="submit" class="btn btn-sm bg-gradient-primary" name="submit" value="lop_keterangan_{{ $pralop->id }}">SIMPAN KETERANGAN</button>
                                           </div>
                                         </div>
@@ -454,7 +1301,7 @@
                                   @if( $value['tgl_keterangan'] )
                                   @if($key === 0)
                                   <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg alert alert-success" role="alert">
-                                      <div class="d-flex align-items-center p-3">
+                                      <div class="d-flex align-items-center p-1 m-1">
                                           <div class="d-flex flex-column">
                                               <div class="d-flex align-items-center text-white text-md font-weight-bold">
                                                   {{ $value['keterangan'] }}
@@ -470,7 +1317,7 @@
                                   </li>
                                   @else
                                   <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg alert alert-light" role="alert">
-                                      <div class="d-flex align-items-center p-3">
+                                      <div class="d-flex align-items-center p-1 m-1">
                                           <div class="d-flex flex-column opacity-7">
                                               <div class="d-flex align-items-center text-black opacity-7 text-xs font-weight-bold">
                                                   {{ $value['keterangan'] }}
@@ -521,6 +1368,15 @@
     @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
     <script type="text/javascript">
 
+    function downloadKB(var_pralop_files){
+      $('#formReviewKB').attr('action', "");
+      $("<input />").attr("type", "hidden")
+        .attr("name", "file_download")
+        .attr("value", var_pralop_files )
+        .appendTo("#formReviewKB");
+      $('#formReviewKB').attr('action', "{{ route('witels.pralop.review_kb.files') }}").submit();
+    }
+
     $('#file_attachment' ).val('');
     $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`Attachment (Multi Files)`);
 
@@ -542,8 +1398,88 @@
 
     </script>
     @elseif( $user_pralop->role_id === 8 && $pralop->lop_review_kb === true )
+    <script type="text/javascript">
+    function previewKB(var_pralop_files){
+      $('#formReviewKB').attr('action', "");
+      $("<input />").attr("type", "hidden")
+        .attr("name", "file_preview")
+        .attr("value", var_pralop_files )
+        .appendTo("#formReviewKB");
+      $('#formReviewKB').attr('action', "{{ route('witels.pralop.review_kb.files') }}").submit();
+    }
+
+    function downloadKB(var_pralop_files){
+      $('#formReviewKB').attr('action', "");
+      $("<input />").attr("type", "hidden")
+        .attr("name", "file_download")
+        .attr("value", var_pralop_files )
+        .appendTo("#formReviewKB");
+      $('#formReviewKB').attr('action', "{{ route('witels.pralop.review_kb.files') }}").submit();
+    }
+
+    </script>
     @elseif( $user_pralop->role_id === 13 && $pralop->lop_review_kb === true )
+    <script type="text/javascript">
+    function previewKB(var_pralop_files){
+      $('#formReviewKB').attr('action', "");
+      $("<input />").attr("type", "hidden")
+        .attr("name", "file_preview")
+        .attr("value", var_pralop_files )
+        .appendTo("#formReviewKB");
+      $('#formReviewKB').attr('action', "{{ route('witels.pralop.review_kb.files') }}").submit();
+    }
+
+    function downloadKB(var_pralop_files){
+      $('#formReviewKB').attr('action', "");
+      $("<input />").attr("type", "hidden")
+        .attr("name", "file_download")
+        .attr("value", var_pralop_files )
+        .appendTo("#formReviewKB");
+      $('#formReviewKB').attr('action', "{{ route('witels.pralop.review_kb.files') }}").submit();
+    }
+
+    </script>
     @elseif( $user_pralop->role_id === 9 )
+    <script type="text/javascript">
+
+    function previewKB(var_pralop_files){
+      $('#formReviewKB').attr('action', "");
+      $("<input />").attr("type", "hidden")
+        .attr("name", "file_preview")
+        .attr("value", var_pralop_files )
+        .appendTo("#formReviewKB");
+      $('#formReviewKB').attr('action', "{{ route('witels.pralop.review_kb.files') }}").submit();
+    }
+
+    function downloadKB(var_pralop_files){
+      $('#formReviewKB').attr('action', "");
+      $("<input />").attr("type", "hidden")
+        .attr("name", "file_download")
+        .attr("value", var_pralop_files )
+        .appendTo("#formReviewKB");
+      $('#formReviewKB').attr('action', "{{ route('witels.pralop.review_kb.files') }}").submit();
+    }
+
+    $('#file_attachment' ).val('');
+    $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`Attachment (Multi Files)`);
+
+    $('#btn_clear_attachment' ).on('click', function() {
+      $('#file_attachment' ).val('');
+      $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`Attachment (Multi Files)`);
+      $('.label_attachment' ).removeClass('bg-gradient-secondary'); $('.label_attachment' ).addClass('bg-gradient-light');
+    });
+    $('#file_attachment' ).change(function() {
+        let measure = 0;
+        let hasil = "";
+        if(this.files.length > 1){ measure = this.files.length;  hasil = measure + " files selected"; }
+        if(this.files.length === 1){ hasil = this.files[0].name; }
+        $('.label_attachment' ).removeClass('bg-gradient-light');
+        $('#label_file_attachment' ).empty();
+        $('#label_file_attachment' ).append(hasil);
+        $('.label_attachment' ).addClass('bg-gradient-secondary');
+    });
+
+    </script>
     @endif
 
     @if( isset($layanan) )
