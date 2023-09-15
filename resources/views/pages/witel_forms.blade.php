@@ -303,6 +303,75 @@
                                                   <textarea name="p0_paragraf" rows="8" cols="80" autocomplete="off">{{ $witel_form->p0_paragraf ? $witel_form->p0_paragraf : '' }}</textarea>
                                                 </td>
                                               </tr>
+                                              <tr>
+                                                <td colSpan="2"><hr></td>
+                                              </tr>
+                                              <tr >
+                                                  <td>
+                                                      <div class="d-flex px-2 py-1">
+                                                          <div class="d-flex flex-column justify-content-center">
+                                                              <h6 class="mb-0 text-sm">Dibuat Oleh</h6>
+                                                          </div>
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                    <select name="p1_dibuat_am" id="p1_dibuat_am">
+                                                        <option value="" disabled selected autocomplete="off">Pilih Account Manager</option>
+                                                        @if( isset($acc_mgr) )
+                                                          @if( $acc_mgr )
+                                                            @foreach( $acc_mgr as $key => $value )
+                                                            <option value="{{ $value->nama_nik }}" {{ $value->nama_nik === $witel_form->p1_dibuat_am ? ' selected="selected" ' : '' }}>{{ $value->nama_nik }}</option>
+                                                            @endforeach
+                                                          @endif
+                                                        @endif
+                                                    </select>
+                                                  </td>
+                                              </tr>
+                                              <tr >
+                                                  <td>
+                                                      <div class="d-flex px-2 py-1">
+                                                          <div class="d-flex flex-column justify-content-center">
+                                                              <h6 class="mb-0 text-sm">Diperiksa Oleh</h6>
+                                                          </div>
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                    <select name="p1_diperiksa_manager" id="p1_diperiksa_manager">
+                                                        <option value="" disabled selected autocomplete="off">Pilih Manager</option>
+                                                        @if( isset($mgr_service) )
+                                                          @if( $mgr_service )
+                                                            @foreach( $mgr_service as $key => $value )
+                                                            <option value="{{ $value->id }}" {{ $value->nama_nik === $witel_form->p1_diperiksa_manager ? ' selected="selected" ' : '' }}>{{ $value->nama_nik }}</option>
+                                                            @endforeach
+                                                          @endif
+                                                        @endif
+                                                    </select>
+                                                  </td>
+                                              </tr>
+                                              <tr >
+                                                  <td>
+                                                      <div class="d-flex px-2 py-1">
+                                                          <div class="d-flex flex-column justify-content-center">
+                                                              <h6 class="mb-0 text-sm">Disetujui Oleh</h6>
+                                                          </div>
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                    <select name="p1_disetujui_gm" id="p1_disetujui_gm">
+                                                        <option value="" disabled selected autocomplete="off">Pilih GM</option>
+                                                        @if( isset($gm_witel) )
+                                                          @if( $gm_witel )
+                                                            @foreach( $gm_witel as $key => $value )
+                                                            <option value="{{ $value->nama_nik }}" {{ $value->nama_nik === $witel_form->p1_disetujui_gm ? ' selected="selected" ' : '' }}>{{ $value->nama_nik }}</option>
+                                                            @endforeach
+                                                          @endif
+                                                        @endif
+                                                    </select>
+                                                  </td>
+                                              </tr>
+                                              <tr>
+                                                <td colSpan="2"><hr></td>
+                                              </tr>
                                               <tr class="button-p0">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">

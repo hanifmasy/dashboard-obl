@@ -84,6 +84,7 @@ Route::get('inputs-legacy', function () {
 	$mitra_vendor = MitraVendor::get()->toArray();
 	return view('pages.inputs_legacy',compact('mitra_vendor','list_nomor_kb')); })->middleware(['auth','role_obl_non_view'])->name('inputs_legacy');
 Route::get('witels', function () { $mitra_vendor = MitraVendor::get()->toArray(); return view('pages.witels',compact('mitra_vendor')); })->middleware(['auth','role_witel'])->name('witels');
+Route::get('witels-pralop/master-input', [WitelsController::class, 'masterInput'])->middleware(['auth','role_witel'])->name('witels.master_input');
 Route::get('witels-pralop', [PraLopController::class, 'index'])->middleware(['auth','role_pralop'])->name('witels.pralop');
 Route::get('witels-pralop/detail', [PraLopController::class, 'detail'])->middleware(['auth','role_pralop'])->name('witels.pralop.detail');
 Route::get('witels-pralop/detail/layanan', [PraLopController::class, 'layanan'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan');
@@ -95,6 +96,10 @@ Route::post('/dashboard/excel', [DashboardController::class, 'excel'])->middlewa
 
 Route::post('inputs/create', [InputsController::class, 'create'])->middleware(['auth','role_obl'])->name('inputs.create');
 Route::post('inputs-legacy/create', [InputsController::class, 'createLegacy'])->middleware(['auth','role_obl_non_view'])->name('inputs_legacy.create');
+
+Route::post('witels-pralop/master-input/submit', [WitelsController::class, 'masterInputSubmit'])->middleware(['auth','role_witel'])->name('witels.master_input.submit');
+Route::post('witels-pralop/master-input/update-list', [WitelsController::class, 'masterInputUpdateList'])->middleware(['auth','role_witel'])->name('witels.master_input.update_list');
+Route::post('witels-pralop/master-input/delete-list', [WitelsController::class, 'masterInputDeleteList'])->middleware(['auth','role_witel'])->name('witels.master_input.delete_list');
 
 Route::post('witels-pralop/review-kb', [PraLopController::class, 'reviewKB'])->middleware(['auth','role_pralop'])->name('witels.pralop.review_kb');
 Route::post('witels-pralop/review-kb/files', [PraLopController::class, 'reviewKBFiles'])->middleware(['auth','role_pralop'])->name('witels.pralop.review_kb.files');

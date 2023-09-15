@@ -74,7 +74,7 @@
         .outline-input-merah-2 {
           outline: 2px solid red;
         }
-        #table-input-obl {
+        #table-input-obl,#table-input,#table-master-input {
           border: 0px #ffffff;
         }
 

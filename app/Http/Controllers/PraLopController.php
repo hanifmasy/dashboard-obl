@@ -147,6 +147,7 @@ class PraLopController extends Controller
     ->leftJoin('mitras as m','m.id','=','fo.f1_mitra_id')
     ->select('fo.*','m.nama_mitra',DB::raw("to_char(fo.p1_tgl_delivery,'yyyy-mm-dd') as tgl_delivery_p1"))
     ->where('fo.f1_id_form_pralop',$edit_pralop_id)
+    ->orderByRaw("CASE WHEN fo.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fo.updated_at','DESC')
     ->get()->toArray();
     $encrypted = $request->edit_pralop_id;
 

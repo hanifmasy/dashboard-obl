@@ -13,8 +13,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use App\Models\User;
+use App\Models\MitraVendor;
+use App\Models\DocObl;
+use App\Models\DocOblHistori;
+use Carbon\Carbon;
+use DataTables;
 
 class WitelsController extends Controller
 {
@@ -173,7 +177,21 @@ class WitelsController extends Controller
         DB::raw("to_char(p1_tgl_doc_plggn,'yyyy-mm-dd') as tgl_doc_plggn_p1")
       )->where('id',$obl_id)->first();
 
-      return view('pages.witel_forms',compact('obl_id','encrypted','witel_form','user_in_is'));
+      $acc_mgr_query = DB::connection('pgsql')->table('master_input_witel') ->select('*')->where('role_witel',1)->where('status','aktif');
+      $mgr_service_query = DB::connection('pgsql')->table('master_input_witel')->select('*')->whereIn('role_witel',[2,3,4])->where('status','aktif');
+      $gm_witel_query = DB::connection('pgsql')->table('master_input_witel')->select('*')->where('role_witel',5)->where('status','aktif');
+
+      if( $user_in_is->role_id === 4 || $user_in_is->role_id === 5 ){
+        $acc_mgr_query->where('witel', $user_in_is->nama_witel );
+        $mgr_service_query->where('witel', $user_in_is->nama_witel );
+        $gm_witel_query->where('witel', $user_in_is->nama_witel );
+      }
+
+      $acc_mgr = $acc_mgr_query->get()->toArray();
+      $mgr_service = $mgr_service_query->get()->toArray();
+      $gm_witel = $gm_witel_query->get()->toArray();
+
+      return view('pages.witel_forms',compact('obl_id','encrypted','witel_form','user_in_is','acc_mgr','mgr_service','gm_witel'));
     }
 
     public function updateOblHistori($var_obl_id){
@@ -365,14 +383,32 @@ class WitelsController extends Controller
                '_token',
                'obl_id',
                'encrypted',
-               'tambah_p0'
+               'tambah_p0',
+               'p1_diperiksa_manager'
            ]);
+
+           $p1_diperiksa_manager = null;
+           if( $request->p1_diperiksa_manager ){
+             $p1_diperiksa_manager = DB::connection('pgsql')->table('master_input_witel as miw')
+             ->leftJoin('role_witel as rw','rw.id','=','miw.role_witel')
+             ->select('miw.*','rw.p1_pemeriksa')->where('miw.id', $request->p1_diperiksa_manager)->first();
+             $filtered->put('p1_pemeriksa', $p1_diperiksa_manager->p1_pemeriksa );
+             $filtered->put('p1_diperiksa_manager', $p1_diperiksa_manager->nama_nik );
+           }
 
            $tambah_p0 = false;
            if($request->tambah_p0){ $tambah_p0 = $request->tambah_p0; }
            $filtered->put('updated_by',Auth::id());
            $filtered->put('updated_at',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
-           if($tambah_p0){ $filtered->put('f1_keterangan','[SISTEM] Update Form P1 & P0 Layanan: ' . $request->f1_judul_projek); }
+           if($tambah_p0){
+             $filtered->put('f1_keterangan','[SISTEM] Update Form P1 & P0 Layanan: ' . $request->f1_judul_projek);
+             if( $request->p1_dibuat_am ){ $filtered->put('p0_nik_am', $request->p1_dibuat_am ); }
+             if( $request->p1_diperiksa_manager ){
+               $filtered->put('p0_pemeriksa', $p1_diperiksa_manager->p1_pemeriksa );
+               $filtered->put('p0_nik_manager', $p1_diperiksa_manager->nama_nik );
+             }
+             if( $request->p1_disetujui_gm ){ $filtered->put('p0_nik_gm', $request->p1_disetujui_gm ); }
+           }
            else{ $filtered->put('f1_keterangan','[SISTEM] Update Form P1 Layanan: ' . $request->f1_judul_projek); }
            $filtered->put('f1_tgl_keterangan',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
            if( $request->p1_tgl_p1 ){
@@ -382,10 +418,6 @@ class WitelsController extends Controller
            // $filtered->put('p0_tgl_submit',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
            // $filtered->put('p1_tgl_p1',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
            // $filtered->put('f1_nilai_kb', $request->p1_estimasi_harga);
-           // $filtered->put('p1_pemeriksa', $request->p0_pemeriksa);
-           // $filtered->put('p1_disetujui_gm', $request->p0_nik_gm);
-           // $filtered->put('p1_dibuat_am', $request->p0_nik_am);
-           // $filtered->put('p1_diperiksa_manager', $request->p0_nik_manager);
 
            $temp_histori = $this->updateOblHistori($request->obl_id);
            DB::connection('pgsql')->table('form_obl')->where('id',$request->obl_id)->update( $filtered->all() );
@@ -432,6 +464,107 @@ class WitelsController extends Controller
          }
        }
       else{ return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Salah Routing.'); }
+    }
+
+    public function masterInput(Request $request){
+      // dd($request->all());
+      if($request->ajax()){
+        $user_master_input = User::leftJoin('user_role','user_role.user_id','=','users.id')
+        ->leftJoin('witels','witels.id','=','users.witel_id')
+        ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+        ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+        ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+        ->where('users.id',Auth::id())->first();
+
+        $query = DB::connection('pgsql')->table('master_input_witel as miw')
+        ->leftJoin('role_witel as rw','rw.id','=','miw.role_witel')
+        ->select('miw.id','miw.role_witel','miw.witel','miw.nama_nik','rw.jabatan','miw.status');
+
+        if( $user_master_input->role_id === 4 || $user_master_input->role_id === 5 ){ $query->where('miw.witel', $user_master_input->nama_witel); }
+        // if( $user_master_input->role_id === 9  ){ $query->where('miw.witel', $user_master_input->nama_witel); }
+
+        $data = $query->get();
+
+        return DataTables::of($data)->addIndexColumn()->make(true);
+      }
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+      ->where('users.id',Auth::id())->first();
+      return view('pages.master_input.witel',compact('user_in_is'));
+    }
+
+    public function masterInputSubmit(Request $request){
+      // dd($request->all());
+
+      if( $request->submit && $request->submit === 'submit_master_input_witel' ){
+        $user_master_input = User::leftJoin('user_role','user_role.user_id','=','users.id')
+        ->leftJoin('witels','witels.id','=','users.witel_id')
+        ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+        ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+        ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+        ->where('users.id',Auth::id())->first();
+        $hasil = '';
+        if( $request->acc_mgr ){ DB::connection('pgsql')->table('master_input_witel')->insert(['nama_nik'=>$request->acc_mgr,'role_witel'=>1,'witel'=>$user_master_input->nama_witel,'status'=>'aktif']); $hasil = $hasil . ' Account Manager |'; }
+        if( $request->mgr_bs ){ DB::connection('pgsql')->table('master_input_witel')->insert(['nama_nik'=>$request->mgr_bs,'role_witel'=>2,'witel'=>$user_master_input->nama_witel,'status'=>'aktif']); $hasil = $hasil . ' Manager Business |'; }
+        if( $request->mgr_gs ){ DB::connection('pgsql')->table('master_input_witel')->insert(['nama_nik'=>$request->mgr_gs,'role_witel'=>3,'witel'=>$user_master_input->nama_witel,'status'=>'aktif']); $hasil = $hasil . ' Manager Government |'; }
+        if( $request->mgr_es ){ DB::connection('pgsql')->table('master_input_witel')->insert(['nama_nik'=>$request->mgr_es,'role_witel'=>4,'witel'=>$user_master_input->nama_witel,'status'=>'aktif']); $hasil = $hasil . ' Manager Enterprise |'; }
+        if( $request->gm_witel ){ DB::connection('pgsql')->table('master_input_witel')->insert(['nama_nik'=>$request->gm_witel,'role_witel'=>5,'witel'=>$user_master_input->nama_witel,'status'=>'aktif']); $hasil = $hasil . ' GM Witel |'; }
+
+        return redirect()->route('witels.master_input')->with('status','Sukses Simpan: ' . $hasil);
+      }
+      else{
+        return redirect()->route('witels.master_input')->with('status','Oops! Gagal Routing');
+      }
+    }
+
+    public function masterInputUpdateList(Request $request){
+      // dd($request->all(), $request->has('acc_mgr_'.$request->var_update_id), $request->get('acc_mgr_'.$request->var_update_id), $request->get('status_'.$request->var_update_id) );
+      if( $request->var_update_id ){
+
+        $hasil = '';
+
+        if( $request->has('acc_mgr_'.$request->var_update_id) ){
+          DB::connection('pgsql')->table('master_input_witel')->where('id', $request->var_update_id )->update(['nama_nik'=>$request->get('acc_mgr_'.$request->var_update_id),'status'=>$request->get('status_'.$request->var_update_id)]);
+          $hasil = ' Account Manager - ' . $request->get('acc_mgr_'.$request->var_update_id) . ' - Status ' . ucwords( $request->get('status_'.$request->var_update_id) );
+        }
+        if( $request->has('mgr_bs_'.$request->var_update_id) ){
+          DB::connection('pgsql')->table('master_input_witel')->where('id', $request->var_update_id )->update(['nama_nik'=>$request->get('mgr_bs_'.$request->var_update_id),'status'=>$request->get('status_'.$request->var_update_id)]);
+          $hasil = ' Manager Business - ' . $request->get('mgr_bs_'.$request->var_update_id) . ' - Status ' . ucwords( $request->get('status_'.$request->var_update_id) );
+        }
+        if( $request->has('mgr_gs_'.$request->var_update_id) ){
+          DB::connection('pgsql')->table('master_input_witel')->where('id', $request->var_update_id )->update(['nama_nik'=>$request->get('mgr_gs_'.$request->var_update_id),'status'=>$request->get('status_'.$request->var_update_id)]);
+          $hasil = ' Manager Government - ' . $request->get('mgr_gs_'.$request->var_update_id) . ' - Status ' . ucwords( $request->get('status_'.$request->var_update_id) );
+        }
+        if( $request->has('mgr_es_'.$request->var_update_id) ){
+          DB::connection('pgsql')->table('master_input_witel')->where('id', $request->var_update_id )->update(['nama_nik'=>$request->get('mgr_es_'.$request->var_update_id),'status'=>$request->get('status_'.$request->var_update_id)]);
+          $hasil = ' Manager Enterprise - ' . $request->get('mgr_es_'.$request->var_update_id) . ' - Status ' . ucwords( $request->get('status_'.$request->var_update_id) );
+        }
+        if( $request->has('gm_witel_'.$request->var_update_id) ){
+          DB::connection('pgsql')->table('master_input_witel')->where('id', $request->var_update_id )->update(['nama_nik'=>$request->get('gm_witel_'.$request->var_update_id),'status'=>$request->get('status_'.$request->var_update_id)]);
+          $hasil = ' GM Witel - ' . $request->get('gm_witel_'.$request->var_update_id) . ' - Status ' . ucwords( $request->get('status_'.$request->var_update_id) );
+        }
+
+        return redirect()->route('witels.master_input')->with('status','Sukses Simpan List Master Input: ' . $hasil);
+      }
+      else{
+        return redirect()->route('witels.master_input')->with('status','Oops! Gagal Routing');
+      }
+    }
+
+    public function masterInputDeleteList(Request $request){
+      // dd($request->all());
+      if( $request->var_delete_id ){
+
+        DB::connection('pgsql')->table('master_input_witel')->where('id', $request->var_delete_id )->delete();
+
+        return redirect()->route('witels.master_input')->with('status','Sukses Hapus List');
+      }
+      else{
+        return redirect()->route('witels.master_input')->with('status','Oops! Gagal Routing');
+      }
     }
 
     public function files(Request $request){
