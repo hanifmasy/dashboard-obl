@@ -2,7 +2,7 @@
         <x-navbars.sidebar activePage="obl-tables"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="TABEL DOKUMEN"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="DOKUMEN OBL"></x-navbars.navs.auth>
             <!-- End Navbar -->
             <style media="screen">
             .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
@@ -248,19 +248,19 @@
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 @if( $is_user->role_id == 4 || $is_user->role_id == 5 )
                                 <div class="bg-gradient-primary border-radius-lg pt-4 pb-3">
-                                  <h6 class="text-capitalize ps-3 text-white">TABEL DOKUMEN</h6>
+                                  <h6 class="text-capitalize ps-3 text-white">DOKUMEN OBL</h6>
                               </div>
                                 @elseif( $is_user->role_id == 6 )
                                 <div class="bg-gradient-mitra border-radius-lg pt-4 pb-3">
-                                  <h6 class="text-capitalize ps-3 text-white">TABEL DOKUMEN</h6>
+                                  <h6 class="text-capitalize ps-3 text-white">DOKUMEN OBL</h6>
                               </div>
                                 @elseif( $is_user->role_id == 13 )
                                 <div class="bg-gradient-warning border-radius-lg pt-4 pb-3">
-                                  <h6 class="text-capitalize ps-3 text-white">TABEL DOKUMEN</h6>
+                                  <h6 class="text-capitalize ps-3 text-white">DOKUMEN OBL</h6>
                               </div>
                                 @elseif( $is_user->role_id !== 4 && $is_user->role_id !== 5 && $is_user->role_id !== 6 && $is_user->role_id !== 13 )
                                 <div class="bg-gradient-light shadow-primary border-radius-lg pt-4 pb-3">
-                                  <h6 class="text-capitalize ps-3">TABEL DOKUMEN</h6>
+                                  <h6 class="text-capitalize ps-3">DOKUMEN OBL</h6>
                                 </div>
                                 @endif
 

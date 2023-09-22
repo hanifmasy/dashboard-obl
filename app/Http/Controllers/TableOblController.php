@@ -17,6 +17,8 @@ use App\Models\DocOblHistori;
 use Carbon\Carbon;
 use DataTables;
 use Rap2hpoutre\FastExcel\FastExcel;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class TableOblController extends Controller
 {
@@ -640,7 +642,8 @@ class TableOblController extends Controller
       ->where('users.id',Auth::user()->id)
       ->first();
 
-      $edit_obl_id = $request->edit_obl_id;
+      $edit_obl_id = null;
+      if( $request->edit_obl_id ){ $edit_obl_id = $request->edit_obl_id; }
       $submit_sekarang = Carbon::now()->translatedFormat('Y-m-d H:i:s');
 
       $cek_doc_obl_update = DB::connection('pgsql')->table('form_obl')
@@ -873,7 +876,7 @@ class TableOblController extends Controller
             if($request->p6_harga_negosiasi !== ''){ $p7_harga_pekerjaan = $request->p6_harga_negosiasi; }
             else{ $p7_harga_pekerjaan = null; }
           }
-          catch(Throwable $e){ return back()->withInput()->with('status','Oops! Gagal Check P6 HARGA NEGO.'); }
+          catch(Throwable $e){ return redirect()->route('obl.tables.edit',['edit_obl_id'=>$request->edit_draf_id])->withInput()->with('status','Oops! Gagal Check P6 HARGA NEGO.'); }
         }
         // ENKRIPSI KL_REK_BANK_MITRA
         // $kl_rek_bank_mitra = '';
@@ -889,7 +892,7 @@ class TableOblController extends Controller
             $inputan_masuk_draf['f1_nama_plggn'] = 'required';
             $validasi_draf = $request->all();
             $validator_draf = Validator::make($validasi_draf,$inputan_masuk_draf);
-            if($validator_draf->fails()){ return back()->withErrors($validator_draf)->withInput(); }
+            if($validator_draf->fails()){ return redirect()->route('obl.tables.edit',['edit_obl_id'=>$request->edit_draf_id])->withErrors($validator_draf)->withInput(); }
 
             $collection_draf = collect($request->all());
             $filtered_draf = $collection_draf->except([
@@ -1061,7 +1064,9 @@ class TableOblController extends Controller
               'file_p8' => $cek_doc_obl_update->file_p8,
               'file_sp' => $cek_doc_obl_update->file_sp,
               'file_wo' => $cek_doc_obl_update->file_wo,
-              'file_kl' => $cek_doc_obl_update->file_kl
+              'file_kl' => $cek_doc_obl_update->file_kl,
+              'p0_paragraf' => $cek_doc_obl_update->p0_paragraf,
+              'p1_paragraf' => $cek_doc_obl_update->p1_paragraf
             ]);
 
             DocObl::where('id',$edit_draf_id)
@@ -1112,7 +1117,7 @@ class TableOblController extends Controller
           $inputan_masuk['f1_nama_plggn'] = 'required';
           $validasi = $request->all();
           $validator = Validator::make($validasi,$inputan_masuk);
-          if($validator->fails()){ return back()->withErrors($validator)->withInput(); }
+          if($validator->fails()){ return redirect()->route('obl.tables.edit',['edit_obl_id'=>$request->edit_draf_id])->withErrors($validator)->withInput(); }
           // $validated = $validator->validated();
           // dd($validated);
 
@@ -1150,8 +1155,8 @@ class TableOblController extends Controller
               $Y = $tanggal_mulai->year;
               $tgl_p2 = Carbon::create($Y,$m,$d,0)->addDay(1);
 
-              $tahun = $tgl_p1->translatedFormat('Y');
-              $is_december = $tgl_p1->translatedFormat('m');
+              $tahun = $tgl_p2->translatedFormat('Y');
+              $is_december = $tgl_p2->translatedFormat('m');
               $libur_nasional_res1 = null;
               $libur_nasional_res2 = null;
               $cuti_bersama_res3 = null;
@@ -1218,6 +1223,8 @@ class TableOblController extends Controller
                   if($value->is_cuti == true){ array_push($cuti_bersama,$value->tanggal); }
                 }
               }
+
+              // dd( $libur_nasional, $cuti_bersama );
 
               $tgl_p2 = $tgl_p1->addDay(1);
               $docs = 40; // 1 hari = 40 dokumen

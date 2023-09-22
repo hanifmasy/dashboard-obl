@@ -30,9 +30,9 @@
                     </td>
                     <td>
                       @if($errors->has('f1_quote_kontrak'))
-                      <input style="width:350px;" class="outline-input-merah" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak',$table_edit[0]['f1_quote_kontrak']) }}" autocomplete="off" required>
+                      <input style="width:350px;" class="outline-input-merah" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak',$table_edit[0]['f1_quote_kontrak']) }}" autocomplete="off">
                       @else
-                      <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak',$table_edit[0]['f1_quote_kontrak']) }}" autocomplete="off" required>
+                      <input style="width:350px;" type="text" name="f1_quote_kontrak" id="f1_quote_kontrak" value="{{ old('f1_quote_kontrak',$table_edit[0]['f1_quote_kontrak']) }}" autocomplete="off">
                       @endif
                     </td>
                 </tr>
@@ -103,7 +103,7 @@
                     </td>
                     <td>
                       @if($errors->has('f1_mitra_id'))
-                      <select class="outline-input-merah" id="f1_mitra_id" name="f1_mitra_id" required>
+                      <select class="outline-input-merah" id="f1_mitra_id" name="f1_mitra_id">
                         <option value="" disabled selected>Pilih Vendor</option>
                         @if(isset($mitra_vendor))
                           @foreach($mitra_vendor as $key => $value)
@@ -112,7 +112,7 @@
                         @endif
                       </select>
                       @else
-                      <select class="" id="f1_mitra_id" name="f1_mitra_id" required>
+                      <select class="" id="f1_mitra_id" name="f1_mitra_id">
                         <option value="" disabled selected>Pilih Vendor</option>
                         @if(isset($mitra_vendor))
                           @foreach($mitra_vendor as $key => $value)
@@ -133,14 +133,14 @@
                     </td>
                     <td>
                         @if($errors->has('f1_segmen'))
-                        <select name="f1_segmen" id="f1_segmen" class="outline-input-merah" required>
+                        <select name="f1_segmen" id="f1_segmen" class="outline-input-merah" >
                             <option value="" disabled selected>Pilih Segmen</option>
                             <option value="DES" {{ old('f1_segmen',$table_edit[0]['f1_segmen']) == 'DES' ? ' selected="selected"' : '' }}>DES</option>
                             <option value="DGS" {{ old('f1_segmen',$table_edit[0]['f1_segmen']) == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>
                             <option value="DBS" {{ old('f1_segmen',$table_edit[0]['f1_segmen']) == 'DBS' ? ' selected="selected"' : '' }}>DBS</option>
                         </select>
                         @else
-                        <select name="f1_segmen" id="f1_segmen" required>
+                        <select name="f1_segmen" id="f1_segmen" >
                             <option value="" disabled selected>Pilih Segmen</option>
                             <option value="DES" {{ old('f1_segmen',$table_edit[0]['f1_segmen']) == 'DES' ? ' selected="selected"' : '' }}>DES</option>
                             <option value="DGS" {{ old('f1_segmen',$table_edit[0]['f1_segmen']) == 'DGS' ? ' selected="selected"' : '' }}>DGS</option>

@@ -59,6 +59,7 @@ class WitelsController extends Controller
             $filtered->put('lop_review_kb',false);
             $filtered->put('cs_list',false);
             $filtered->put('cl_list',false);
+            $filtered->put('cekpoin',0);
             $filtered->put('on_handling','witel');
             $filtered->put('lop_count_revisi',0);
 
@@ -166,16 +167,17 @@ class WitelsController extends Controller
       if( $request->forms_obl_id ){ $obl_id = $request->forms_obl_id; }
       $encrypted = '';
       if( $request->encrypted ){ $encrypted = $request->encrypted[0]; }
-      $witel_form = DB::connection('pgsql')->table('form_obl')
+      $witel_form = DB::connection('pgsql')->table('form_obl as fo')
+      ->leftJoin('mitras as m','m.id','=','fo.f1_mitra_id')
       ->select(
-        '*',
+        'fo.*','m.nama_mitra',
         DB::raw("to_char(p1_tgl_p1,'yyyy-mm-dd') as tgl_p1"),
         DB::raw("to_char(p1_tgl_delivery,'yyyy-mm-dd') as tgl_delivery_p1"),
         DB::raw("to_char(p0_tgl_submit,'yyyy-mm-dd') as tgl_submit_p0"),
         DB::raw("to_char(p1_tgl_kontrak_mulai,'yyyy-mm-dd') as tgl_kontrak_mulai_p1"),
         DB::raw("to_char(p1_tgl_kontrak_akhir,'yyyy-mm-dd') as tgl_kontrak_akhir_p1"),
         DB::raw("to_char(p1_tgl_doc_plggn,'yyyy-mm-dd') as tgl_doc_plggn_p1")
-      )->where('id',$obl_id)->first();
+      )->where('fo.id',$obl_id)->first();
 
       $acc_mgr_query = DB::connection('pgsql')->table('master_input_witel') ->select('*')->where('role_witel',1)->where('status','aktif');
       $mgr_service_query = DB::connection('pgsql')->table('master_input_witel')->select('*')->whereIn('role_witel',[2,3,4])->where('status','aktif');
@@ -191,7 +193,9 @@ class WitelsController extends Controller
       $mgr_service = $mgr_service_query->get()->toArray();
       $gm_witel = $gm_witel_query->get()->toArray();
 
-      return view('pages.witel_forms',compact('obl_id','encrypted','witel_form','user_in_is','acc_mgr','mgr_service','gm_witel'));
+      $mitra_vendor = MitraVendor::get()->toArray();
+
+      return view('pages.witel_forms',compact('obl_id','encrypted','witel_form','user_in_is','acc_mgr','mgr_service','gm_witel','mitra_vendor'));
     }
 
     public function updateOblHistori($var_obl_id){
@@ -356,7 +360,10 @@ class WitelsController extends Controller
        'f1_lop_id_mytens' => $temp_histori->f1_lop_id_mytens,
        'f1_id_form_pralop' => $temp_histori->f1_id_form_pralop,
        'p1_paragraf' => $temp_histori->p1_paragraf,
-       'p0_paragraf' => $temp_histori->p0_paragraf
+       'p0_paragraf' => $temp_histori->p0_paragraf,
+       'p1_aspek_strategis' => $temp_histori->p1_aspek_strategis,
+       'p1_lingkup_kerja' => $temp_histori->p1_lingkup_kerja,
+       'p1_slg' => $temp_histori->p1_slg
       ]);
       return $temp_histori;
     }
@@ -396,12 +403,17 @@ class WitelsController extends Controller
              $filtered->put('p1_diperiksa_manager', $p1_diperiksa_manager->nama_nik );
            }
 
+           $role_updated = '';
+           if( $user_in_is->role_id === 4 ){ $role_updated = 'WITEL'; }
+           if( $user_in_is->role_id === 8 || $user_in_is->role_id === 9 ){ $role_updated = 'SOLUTION'; }
+           if( $user_in_is->role_id === 13 ){ $role_updated = 'LEGAL'; }
+
            $tambah_p0 = false;
            if($request->tambah_p0){ $tambah_p0 = $request->tambah_p0; }
            $filtered->put('updated_by',Auth::id());
            $filtered->put('updated_at',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
            if($tambah_p0){
-             $filtered->put('f1_keterangan','[SISTEM] Update Form P1 & P0 Layanan: ' . $request->f1_judul_projek);
+             $filtered->put('f1_keterangan','['.$role_updated.'] Update Form P1 & P0 Layanan: ' . $request->f1_judul_projek);
              if( $request->p1_dibuat_am ){ $filtered->put('p0_nik_am', $request->p1_dibuat_am ); }
              if( $request->p1_diperiksa_manager ){
                $filtered->put('p0_pemeriksa', $p1_diperiksa_manager->p1_pemeriksa );
@@ -409,7 +421,7 @@ class WitelsController extends Controller
              }
              if( $request->p1_disetujui_gm ){ $filtered->put('p0_nik_gm', $request->p1_disetujui_gm ); }
            }
-           else{ $filtered->put('f1_keterangan','[SISTEM] Update Form P1 Layanan: ' . $request->f1_judul_projek); }
+           else{ $filtered->put('f1_keterangan','['.$role_updated.'] Update Form P1 Layanan: ' . $request->f1_judul_projek); }
            $filtered->put('f1_tgl_keterangan',Carbon::now()->translatedFormat('Y-m-d H:i:s'));
            if( $request->p1_tgl_p1 ){
              $filtered->put('f2_tgl_p1',Carbon::parse($request->p1_tgl_p1)->translatedFormat('Y-m-d H:i:s'));

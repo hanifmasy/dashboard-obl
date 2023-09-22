@@ -2,7 +2,7 @@
         <x-navbars.sidebar activePage="obl-tables-edit"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
             <!-- Navbar -->
-            <x-navbars.navs.auth titlePage="TABEL DOKUMEN / EDIT"></x-navbars.navs.auth>
+            <x-navbars.navs.auth titlePage="DOKUMEN OBL / EDIT"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
             <style media="screen">
@@ -39,11 +39,11 @@
                               @if( isset($user_edit) )
                                 @if( $user_edit->role_id === 4 )
                                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-capitalize text-white ps-3">TABEL DOKUMEN: EDIT</h6>
+                                    <h6 class="text-capitalize text-white ps-3">DOKUMEN OBL: EDIT</h6>
                                 </div>
                                 @elseif( $user_edit->role_id === 2 || $user_edit->role_id === 8 || $user_edit->role_id === 9 )
                                 <div class="bg-gradient-edit border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-capitalize text-white ps-3">TABEL DOKUMEN: EDIT</h6>
+                                    <h6 class="text-capitalize text-white ps-3">DOKUMEN OBL: EDIT</h6>
                                 </div>
                                 @endif
                               @endif
@@ -67,6 +67,7 @@
 
                             <form id="formObl" action="{{ route('obl.tables.edit.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
+
                             @if( isset($user_edit) )
                               @if( $user_edit->role_id === 4 )
                               <x-edits.witel :table_edit="$table_edit" :mitra_vendor="$mitra_vendor"></x-edits.witel>
@@ -76,6 +77,7 @@
                             @else
                             DATA PARSING KOSONG!
                             @endif
+
                             </form>
                         </div>
                     </div>

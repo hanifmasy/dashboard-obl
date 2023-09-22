@@ -123,7 +123,7 @@ Route::post('witels/forms/create', [WitelsController::class, 'formsCreate'])->mi
 Route::post('witels/files', [WitelsController::class, 'files'])->middleware(['auth','role_witel'])->name('witels.files');
 Route::post('witels/files/upload', [WitelsController::class, 'upload'])->middleware(['auth','role_witel'])->name('witels.files.upload');
 
-Route::post('obl-tables/edit', [TableOblController::class, 'edit'])->middleware(['auth','role_files_upload'])->name('obl.tables.edit');
+Route::any('obl-tables/edit', [TableOblController::class, 'edit'])->middleware(['auth','role_files_upload'])->name('obl.tables.edit');
 Route::post('obl-tables/excel', [TableOblController::class, 'excel'])->middleware('auth')->name('obl.tables.excel');
 Route::post('obl-tables/ketdoc', [TableOblController::class, 'ketdoc'])->middleware('auth')->name('obl.tables.ketdoc');
 Route::post('obl-tables/delete', [TableOblController::class, 'delete'])->middleware(['auth','role_delete_doc'])->name('obl.tables.delete');

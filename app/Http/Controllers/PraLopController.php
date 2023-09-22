@@ -26,6 +26,8 @@ use App\Models\DocObl;
 use App\Models\DocOblHistori;
 use Carbon\Carbon;
 use DataTables;
+use ZipArchive;
+use File;
 
 class PraLopController extends Controller
 {
@@ -93,45 +95,50 @@ class PraLopController extends Controller
 
   public function detail(Request $request){
     $edit_pralop_id = str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->edit_pralop_id)));
+
     $user_pralop = User::leftJoin('user_role','user_role.user_id','=','users.id')
     ->leftJoin('witels','witels.id','=','users.witel_id')
     ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
     ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
     ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
+
     $pralop = DB::connection('pgsql')->table('form_pralop as fp')
     ->leftJoin('users as u','u.id','=','fp.updated_by')
-    ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
+    ->leftJoin('user_role as ur','ur.user_id','=','fp.updated_by')
+    ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update','ur.role_id')
     ->where('fp.id',$edit_pralop_id)->first();
-    if( ($user_pralop->role_id === 4 || $user_pralop->role_id === 5) && ( $pralop->on_handling !== 'witel' && $pralop->on_handling !== 'final_pralop' ) ){
+
+    if( ($user_pralop->role_id === 4 || $user_pralop->role_id === 5) && $pralop->on_handling !== 'witel' ){
       return redirect()->route('witels.pralop');
     }
-    else if( $user_pralop->role_id === 8 && $pralop->on_handling !== 'solution' ){
+    else if( $user_pralop->role_id === 8 && ( $pralop->on_handling !== 'solution' && $pralop->on_handling !== 'final_pralop' ) ){
       return redirect()->route('witels.pralop');
     }
     else if( $user_pralop->role_id === 13 && $pralop->on_handling !== 'legal' ){
       return redirect()->route('witels.pralop');
     }
-    else if($user_pralop->role_id !== 9 && $user_pralop->role_id !== 4 && $user_pralop->role_id !== 5 && $user_pralop->role_id !== 8 && $user_pralop->role_id !== 13){
+    else if( $user_pralop->role_id !== 9 && $user_pralop->role_id !== 4 && $user_pralop->role_id !== 5 && $user_pralop->role_id !== 8 && $user_pralop->role_id !== 13 ){
       return redirect()->route('witels.pralop');
     }
 
-
-
     $pralop_histori = DB::connection('pgsql')->table('form_pralop_histori as fp')
     ->leftJoin('users as u','u.id','=','fp.updated_by')
-    ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
+    ->leftJoin('user_role as ur','ur.user_id','=','fp.updated_by')
+    ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update','ur.role_id')
     ->where('lop_id_pralop',$edit_pralop_id)->orderBy('updated_at','desc')
     ->orderByRaw("CASE WHEN fp.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fp.updated_at','DESC')
     ->get()->toArray();
     $obl = DB::connection('pgsql')->table('form_obl as fo')
     ->leftJoin('users as u','u.id','=','fo.updated_by')
-    ->select('fo.f1_keterangan as keterangan',DB::raw(" to_char(fo.f1_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when fo.f1_tgl_keterangan is null then 0 else TO_CHAR(fo.f1_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
+    ->leftJoin('user_role as ur','ur.user_id','=','fo.updated_by')
+    ->select('fo.f1_keterangan as keterangan',DB::raw(" to_char(fo.f1_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when fo.f1_tgl_keterangan is null then 0 else TO_CHAR(fo.f1_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update','ur.role_id')
     ->where('fo.f1_id_form_pralop',$edit_pralop_id)
     ->orderByRaw("CASE WHEN fo.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fo.updated_at','DESC')
     ->get()->toArray();
     $obl_histori = DB::connection('pgsql')->table('form_obl_histori as fo')
     ->leftJoin('users as u','u.id','=','fo.updated_by')
-    ->select('fo.f1_keterangan as keterangan',DB::raw(" to_char(fo.f1_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when fo.f1_tgl_keterangan is null then 0 else TO_CHAR(fo.f1_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update')
+    ->leftJoin('user_role as ur','ur.user_id','=','fo.updated_by')
+    ->select('fo.f1_keterangan as keterangan',DB::raw(" to_char(fo.f1_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when fo.f1_tgl_keterangan is null then 0 else TO_CHAR(fo.f1_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update','ur.role_id')
     ->where('fo.f1_id_form_pralop',$edit_pralop_id)
     ->orderByRaw("CASE WHEN fo.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fo.updated_at','DESC')
     ->get()->toArray();
@@ -149,15 +156,13 @@ class PraLopController extends Controller
     ->where('fo.f1_id_form_pralop',$edit_pralop_id)
     ->orderByRaw("CASE WHEN fo.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fo.updated_at','DESC')
     ->get()->toArray();
+
     $encrypted = $request->edit_pralop_id;
 
-    $pralop_files = [];
-    if( $pralop->lop_review_kb === true ){
-      $pralop_files = DB::connection('pgsql')->table('form_pralop_files')
-      ->select('*')
-      ->where('pralop_id', $pralop->id)
-      ->get()->toArray();
-    }
+    $pralop_files = DB::connection('pgsql')->table('form_pralop_files')
+    ->select('*')
+    ->where('pralop_id', $pralop->id)
+    ->get()->toArray();
 
     return view('pages.pralop.detail',compact('pralop','pralop_histori','layanan','encrypted','user_pralop','arr_log_histori','pralop_files'));
   }
@@ -220,7 +225,8 @@ class PraLopController extends Controller
       'cl_cara_bayar' => $data_lama->cl_cara_bayar,
       'cl_remark_cara_bayar' => $data_lama->cl_remark_cara_bayar,
       'cl_mom' => $data_lama->cl_mom,
-      'cl_remark_mom' => $data_lama->cl_remark_mom
+      'cl_remark_mom' => $data_lama->cl_remark_mom,
+      'cekpoin' => $data_lama->cekpoin
     ]);
     return $data_lama;
   }
@@ -316,6 +322,8 @@ class PraLopController extends Controller
     // if( $user_in_is->role_id === 9 ){ $on_handling = 'superadmin'; }
 
     if( $request->simpan_layanan_id && $request->f1_judul_projek && count($request->f1_judul_projek) > 0 ){
+
+      // PENAMAAN FOLDER & SUBFOLDER
       $nama_folder = '';
       $temp_folder_old_name = '';
       $temp_folder_old_id = '';
@@ -324,26 +332,58 @@ class PraLopController extends Controller
       $tahun_ini = $hari->year;
       $tahun_ini = strval($tahun_ini);
       $hari_ini = ($hari_ini*40);
-      $skip_folder = null;
-      do{
-        $string_hari_ini = sprintf("%04d", $hari_ini);
-        $nama_folder = $string_hari_ini;
-        $cek_nama_folder = DB::connection('pgsql')->table('form_obl')->select('id','f1_folder')
-        ->where(DB::raw("to_char(created_at,'yyyy')"),'=',$tahun_ini)
-        ->where(DB::raw("NULLIF(regexp_replace(f1_folder, '\D','','g'), '')"),'=',$nama_folder)->first();
-        if( $cek_nama_folder ){ $skip_folder = true; $hari_ini++; }
-        else{ $skip_folder = false; }
-      }while($skip_folder==true);
+      $cek_quote_kontrak = DB::connection('pgsql')->table('form_obl')->select('id','f1_folder')->where('f1_id_form_pralop',$request->simpan_layanan_id)->orderBy('created_at','DESC')->first();
+      if( $cek_quote_kontrak ){ // JIKA PRALOP EXIST
+        $cek_quote_kontrak_numeric = preg_replace("/ *[A-Za-z].*/s", "",$cek_quote_kontrak->f1_folder);
+        $cek_quote_kontrak_alphabet = preg_replace("/[^a-zA-Z]+/", "", $cek_quote_kontrak->f1_folder);
+        if( $cek_quote_kontrak_alphabet !== "" ){
+          $cek_quote_kontrak_alphabet++;
+          $nama_folder = $cek_quote_kontrak_numeric . $cek_quote_kontrak_alphabet;
+        }
+        else if( $cek_quote_kontrak_alphabet === "" ){
+          $temp_folder_old_id = $cek_quote_kontrak->id;
+          $temp_alphabet = 'A';
+          $temp_folder_old_name = $cek_quote_kontrak->f1_folder . $temp_alphabet;
+          $temp_alphabet++;
+          $nama_folder = $cek_quote_kontrak_numeric . $temp_alphabet;
+        }
+      }
+      else{ // JIKA PRALOP DONT EXIST
+        $skip_folder = null;
+        do{
+          $string_hari_ini = sprintf("%04d", $hari_ini);
+          $nama_folder = $string_hari_ini;
+          $cek_nama_folder = DB::connection('pgsql')->table('form_obl')->select('id','f1_folder')
+          ->where(DB::raw("to_char(created_at,'yyyy')"),'=',$tahun_ini)
+          ->where(DB::raw("NULLIF(regexp_replace(f1_folder, '\D','','g'), '')"),'=',$nama_folder)->first();
+          if( $cek_nama_folder ){ $skip_folder = true; $hari_ini++; }
+          else{ $skip_folder = false; }
+        }while($skip_folder==true);
+      }
+
+      $nama_folder_numeric = preg_replace("/ *[A-Za-z].*/s", "",$nama_folder);
+      $nama_folder_alpabet = preg_replace("/[^a-zA-Z]+/", "", $nama_folder);
+      // dd( $request->all(), $nama_folder_numeric, $nama_folder_alpabet );
+
+      if($temp_folder_old_name && $temp_folder_old_id){
+        $data_lama = $this->updateOblHistori( $temp_folder_old_id );
+        DB::connection('pgsql')->table('form_obl')->where('id',$temp_folder_old_id)
+        ->update([
+          'f1_folder' => $temp_folder_old_name,
+          'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+          'updated_by' => Auth::id()
+        ]);
+      }
 
       $data_lama = $this->updatePraLopHistori($request->simpan_layanan_id);
 
       $nama_layanan = '';
-      $alpabet = 'A';
+      $alpabet = $nama_folder_alpabet;
       $arr_f1_judul_projek = [];
       if( count($request->f1_judul_projek) > 1 ){
         foreach($request->f1_judul_projek as $key => $value){
           array_push($arr_f1_judul_projek,[
-              'f1_judul_projek' => $data_lama->lop_judul_projek . ' Layanan ' . $value,
+              'f1_judul_projek' => $value,
               'f1_id_form_pralop' => $data_lama->id,
               'f1_witel' => $data_lama->lop_witel,
               'f1_nama_plggn' => $data_lama->lop_nama_plggn,
@@ -360,7 +400,7 @@ class PraLopController extends Controller
               'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
               'updated_by' => Auth::id(),
               'is_draf' => 8,
-              'f1_folder' => $nama_folder . $alpabet
+              'f1_folder' => $nama_folder_numeric . $alpabet
           ] );
           $nama_layanan = $nama_layanan . '  [' . ($key+1) . '] ' . $value;
           $alpabet++;
@@ -369,7 +409,7 @@ class PraLopController extends Controller
       if( count($request->f1_judul_projek) === 1 ){
         foreach($request->f1_judul_projek as $key => $value){
           array_push($arr_f1_judul_projek,[
-              'f1_judul_projek' => $data_lama->lop_judul_projek . ' Layanan ' . $value,
+              'f1_judul_projek' => $value,
               'f1_id_form_pralop' => $data_lama->id,
               'f1_witel' => $data_lama->lop_witel,
               'f1_nama_plggn' => $data_lama->lop_nama_plggn,
@@ -386,16 +426,18 @@ class PraLopController extends Controller
               'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
               'updated_by' => Auth::id(),
               'is_draf' => 8,
-              'f1_folder' => $nama_folder
+              'f1_folder' => $nama_folder_numeric
           ] );
           $nama_layanan = $value;
         }
       }
 
+      // dd( $request->all(), $arr_f1_judul_projek );
+
       DB::connection('pgsql')->table('form_pralop')->where('id',$request->simpan_layanan_id)->update([
         'on_handling' => $on_handling,
         'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'lop_keterangan' => '[SISTEM] TAMBAH LAYANAN: ' . $nama_layanan,
+        'lop_keterangan' => 'TAMBAH LAYANAN: ' . $nama_layanan,
         'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
         'updated_by' => Auth::id()
       ]);
@@ -461,6 +503,7 @@ class PraLopController extends Controller
 
 
   public function langkah(Request $request){
+    // dd( $request->all() );
     $proses = '';
     $on_handling = '';
     $pralop_id = '';
@@ -477,7 +520,7 @@ class PraLopController extends Controller
       $pralop_id = str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->submit_witel)));
     }
     if($request->submit_legal){
-      $proses = 'Lanjut Ke Legal';
+      $proses = 'Lanjut Verifikasi Legal';
       $on_handling = 'legal';
       $pralop_id = str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->submit_legal)));
     }
@@ -487,6 +530,12 @@ class PraLopController extends Controller
       $pralop_id = str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->submit_solution)));
     }
     if($request->submit_final){
+
+      $cek_cl_list = DB::connection('pgsql')->table('form_pralop')->select('id','cl_list')->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->submit_final))) )->first();
+      if( $cek_cl_list->cl_list === false ||  $cek_cl_list->cl_list === null ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->submit_final])->with('status','Oops! Mohon Isi Dahulu Checklist Anda.');
+      }
+
       $proses = 'Final PRA LOP';
       $on_handling = 'final_pralop';
       $pralop_id = str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->submit_final)));
@@ -494,52 +543,16 @@ class PraLopController extends Controller
 
     $data_lama = $this->updatePraLopHistori($pralop_id);
 
-    if( $request->submit_witel ){
-      if( $data_lama->cs_list === true ){ $on_handling = 'final_pralop'; }
-    }
+    DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
+      'on_handling' => $on_handling,
+      'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+      'lop_keterangan' => 'PRA LOP PROSES : ' . $proses,
+      'lop_count_revisi' => ($data_lama->lop_count_revisi + $lop_count_revisi),
+      'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+      'updated_by' => Auth::id()
+    ]);
 
-    if( $request->submit_final && $data_lama->lop_review_kb === false ){
-      DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
-        'on_handling' => $on_handling,
-        'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'lop_keterangan' => 'PRA LOP PROSES : ' . $proses,
-        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'updated_by' => Auth::id(),
-        'lop_review_kb' => true
-      ]);
-    }
-    else if( $request->submit_final && $data_lama->lop_review_kb === true && $data_lama->cl_list === true ){
-      DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
-        'on_handling' => 'final_review_kb',
-        'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'lop_keterangan' => 'PRA LOP PROSES : Final Review KB',
-        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'updated_by' => Auth::id()
-      ]);
-    }
-    else{
-      DB::connection('pgsql')->table('form_pralop')->where('id',$pralop_id)->update([
-        'on_handling' => $on_handling,
-        'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'lop_keterangan' => 'PRA LOP PROSES : ' . $proses,
-        'lop_count_revisi' => ($data_lama->lop_count_revisi + $lop_count_revisi),
-        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'updated_by' => Auth::id()
-      ]);
-    }
-
-    if( $request->submit_final && $data_lama->lop_review_kb === false ){
-      $data_lama_obl = $this->updatePraLopToObl($pralop_id);
-      DB::connection('pgsql')->table('form_obl')->where('f1_id_form_pralop',$pralop_id)->update([
-        'is_draf' => 7,
-        'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'f1_keterangan' => 'FINAL PRA LOP: ' . $data_lama->lop_judul_projek,
-        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'updated_by' => Auth::id()
-      ]);
-    }
-
-    if( $request->submit_final && $data_lama->lop_review_kb === true && $data_lama->cl_list === true ){
+    if( $request->submit_final && $data_lama->cl_list === true ){
       $data_lama_obl = $this->updatePraLopToObl($pralop_id);
       DB::connection('pgsql')->table('form_obl')->where('f1_id_form_pralop',$pralop_id)->update([
         'is_draf' => 6,
@@ -548,7 +561,7 @@ class PraLopController extends Controller
         'submit' => 'solution_edit',
         'f1_proses' => 'witel',
         'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-        'f1_keterangan' => 'FINAL REVIEW KB: ' . $data_lama->lop_judul_projek,
+        'f1_keterangan' => 'FINAL PRA LOP: ' . $data_lama->lop_judul_projek,
         'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
         'updated_by' => Auth::id()
       ]);
@@ -624,14 +637,7 @@ class PraLopController extends Controller
   public function generateDocP1($var_obl_id){
     $docs = DB::connection('pgsql')->table('form_obl')->leftJoin('mitras','mitras.id','=','f1_mitra_id')
     ->select(
-      'form_obl.id',
-      'f1_nama_plggn',
-      'f1_judul_projek',
-      'p1_nomor_p1',
-      'p1_pemeriksa',
-      'f1_witel',
-      'p1_tgl_delivery',
-      'p1_tgl_p1',
+      'form_obl.*','mitras.nama_mitra',
       DB::raw("
       case
       when p1_skema_bayar = 'otc' then 'One Time Charge (OTC)'
@@ -656,22 +662,10 @@ class PraLopController extends Controller
       else ''
       end as mekanisme_bayar
       "),
-      DB::raw(" date_part('month', age(p1_tgl_kontrak_akhir ,p1_tgl_kontrak_mulai) ) as periode_bulan"),
-      'p1_estimasi_harga',
-      'f1_nilai_kb',
-      'f1_mitra_id',
-      'mitras.nama_mitra',
-      'p1_dibuat_am',
-      'p1_diperiksa_manager',
-      'p1_disetujui_gm',
-      'p1_lokasi_instal',
-      'p1_tgl_doc_plggn',
-      'f1_segmen',
-      'f1_folder',
-      'created_at',
-      'p1_paragraf'
+      DB::raw(" date_part('month', age(p1_tgl_kontrak_akhir ,p1_tgl_kontrak_mulai) ) as periode_bulan")
     )
     ->where('form_obl.id',$var_obl_id)->first();
+
     $docs_year = new Carbon($docs->created_at);
     $docs_year = $docs_year->translatedFormat('Y');
     $p1_tgl_p1 = new Carbon($docs->p1_tgl_p1);
@@ -681,10 +675,36 @@ class PraLopController extends Controller
     $p1_tgl_doc_plggn = new Carbon($docs->p1_tgl_doc_plggn);
     $p1_tgl_doc_plggn = $p1_tgl_doc_plggn->translatedFormat('d F Y');
 
+    $p1_pemeriksa = '';
+    $p1_gm_witel = '';
+    $p1_mgr_pemeriksa = '';
+    if( $docs->f1_segmen === 'DBS' ){
+      $p1_pemeriksa = 'Business Service Witel ' . ucfirst((strtolower($docs->f1_witel)));
+      $p1_mgr_pemeriksa = 'Manager Business Service Witel ' . ucfirst((strtolower($docs->f1_witel)));
+      $p1_gm_witel = 'GM Telkom Witel ' . ucfirst((strtolower($docs->f1_witel)));
+    }
+    if( $docs->f1_segmen === 'DES' ){
+      $p1_pemeriksa = 'Enterprise Service Regional';
+      $p1_mgr_pemeriksa = 'Manager Enterprise Regional';
+      $p1_gm_witel = 'GM RGES';
+    }
+    if( $docs->f1_segmen === 'DGS' ){
+      $p1_pemeriksa = 'Government Service Regional';
+      $p1_mgr_pemeriksa = 'Manager Government Regional';
+      $p1_gm_witel = 'GM RGES';
+    }
+
+    $harga_mrc = '';
+    $harga_otc = '';
+    if( $docs->p1_skema_bayar === 'otc' ){ $harga_otc = $docs->p1_estimasi_harga; }
+    if( $docs->p1_skema_bayar === 'recurring' ){ $harga_mrc = $docs->p1_estimasi_harga; }
+
     $templateProcessor = new TemplateProcessor(public_path() . '/basic_documents/basic_p1_doc.docx');
     $templateProcessor->setValues([
         'p1_nomor_p1' => $docs->p1_nomor_p1,
-        'p1_pemeriksa' => strtoupper(((string)strtok($docs->p1_pemeriksa,'_'))),
+        'p1_pemeriksa' => $p1_pemeriksa,
+        'p1_mgr_pemeriksa' => $p1_mgr_pemeriksa,
+        'p1_gm_witel' => $p1_gm_witel,
         'f1_witel' =>  ucfirst((strtolower($docs->f1_witel))),
         'p1_tgl_p1' => $p1_tgl_p1,
         'p1_tgl_delivery' => $p1_tgl_delivery,
@@ -693,18 +713,28 @@ class PraLopController extends Controller
         'p1_skema_bayar' => $docs->skema_bayar,
         'p1_skema_bisnis' => $docs->skema_bisnis,
         'p1_mekanisme_bayar' => $docs->mekanisme_bayar,
-        'p1_estimasi_harga' => $docs->p1_estimasi_harga,
-        'string_p1_estimasi_harga' => RupiahFormat::terbilang( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
-        'revenue' =>   RupiahFormat::currency( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ),
-        'harga_ke_mitra' => RupiahFormat::currency( ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) - ( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ) ) ),
         'f1_nama_plggn' => $docs->f1_nama_plggn,
         'f1_judul_projek' => $docs->f1_judul_projek,
         'periode_bulan' => $docs->periode_bulan,
+        'string_periode_bulan' => NumberToWords::transformNumber('id', (int)$docs->periode_bulan),
         'f1_mitra_id' => $docs->nama_mitra,
+        'f1_nilai_kb' => $docs->f1_nilai_kb,
         'p1_dibuat_am' => $docs->p1_dibuat_am,
         'p1_diperiksa_manager' => $docs->p1_diperiksa_manager,
         'p1_disetujui_gm' => $docs->p1_disetujui_gm,
-        'p1_paragraf' => $docs->p1_paragraf
+        'p1_paragraf' => $docs->p1_paragraf,
+        'p1_aspek_strategis' => $docs->p1_aspek_strategis,
+        'p1_lingkup_kerja' => $docs->p1_lingkup_kerja,
+        'p1_slg' => $docs->p1_slg,
+        'harga_mrc' => $harga_mrc,
+        'harga_otc' => $harga_otc,
+        'ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) * 0.11 ),
+        'total_ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) + ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) * 0.11 ) ),
+        'rev_total_telkom' => RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->f1_nilai_kb,',')))) - (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
+        'p1_estimasi_harga' => $docs->p1_estimasi_harga,
+        'string_p1_estimasi_harga' => RupiahFormat::terbilang( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
+        'revenue' =>   RupiahFormat::currency( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ),
+        'harga_ke_mitra' => RupiahFormat::currency( ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) - ( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ) ) )
     ]);
     $filename = Auth::id() . '_' . (string) Str::uuid();
     $file_path = public_path().'/temp_saved_docs';
@@ -716,11 +746,227 @@ class PraLopController extends Controller
   }
 
   public function layananPrint(Request $request){
+    // dd( $request->all() );
     if( $request->file_print ){
-      if( str_contains($request->file_print,'p1_') ){ return $this->generateDocP1(str_replace('p1_','',$request->file_print)); }
-      if( str_contains($request->file_print,'p0_') ){ return $this->generateDocP0(str_replace('p0_','',$request->file_print)); }
+      $all_files = DB::connection('pgsql')->table('form_obl')->leftJoin('mitras','mitras.id','=','f1_mitra_id')
+      ->select(
+        'form_obl.*','mitras.nama_mitra',
+        DB::raw("
+        case
+        when p1_skema_bayar = 'otc' then 'One Time Charge (OTC)'
+        when p1_skema_bayar = 'recurring' then 'Recurring'
+        when p1_skema_bayar = 'termin' then 'Termin'
+        when p1_skema_bayar = 'otc_recurring' then 'OTC Recurring'
+        else ''
+        end as skema_bayar
+        "),
+        DB::raw("
+        case
+        when p1_skema_bisnis = 'sewa_murni' then 'Sewa Murni'
+        when p1_skema_bisnis = 'sewa_beli' then 'Sewa Beli'
+        when p1_skema_bisnis = 'beli_putus' then 'Pengadaan Beli Putus'
+        else ''
+        end as skema_bisnis
+        "),
+        DB::raw("
+        case
+        when p1_mekanisme_bayar = 'back_to_back' then 'Back To Back'
+        when p1_mekanisme_bayar = 'non_back_to_back' then 'Non Back To Back'
+        else ''
+        end as mekanisme_bayar
+        "),
+        DB::raw(" date_part('month', age(p1_tgl_kontrak_akhir ,p1_tgl_kontrak_mulai) ) as periode_bulan")
+      )
+      ->where('f1_id_form_pralop', $request->file_print )->get()->toArray();
+
+      if( !$all_files ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted[0]])->with('status','Oops! Belum Ada Layanan');
+      }
+      elseif( $all_files && count($all_files) === 1 ){
+        if( $all_files[0]->p0_nomor_p0 && $all_files[0]->p0_tgl_submit ){
+          // dd( $request->all(), $all_files, 'p1-p0' );
+          return $this->printZipFiles( $all_files );
+        }
+        else{
+          // dd( $request->all(), $all_files, 'p1' );
+          return $this->generateDocP1( $all_files[0]->id );
+        }
+      }
+      elseif( $all_files && count($all_files) > 1 ){
+        // dd( $request->all(), $all_files, 'multifiles' );
+        return $this->printZipFiles( $all_files );
+      }
     }
     else{ return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted[0]])->with('status','Oops! Gagal Print'); }
+  }
+
+  public function printZipFiles( $array_files ){
+    $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+    ->leftJoin('roles','roles.id','=','user_role.role_id')
+    ->leftJoin('witels','witels.id','=','users.witel_id')
+    ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+    ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+    ->select('users.id','user_role.role_id','roles.nama_role','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
+
+    // print Form P1-P0
+    $hasil = $this->printFormP1P0( $array_files );
+
+    $zip = new ZipArchive();
+    $temp_filename = Str::uuid()->toString().'.zip';
+    $filename = 'print_'.$hasil.'.zip';
+
+    $files = File::files( public_path().'/temp_saved_docs/user_'.$user_in_is->id );
+    if( $zip->open(public_path().'/temp_saved_docs/'.$temp_filename, ZipArchive::CREATE) === true ){
+        foreach( $files as $key => $value ){
+              $relativeName = basename($value);
+              $zip->addFile($value, $relativeName);
+        }
+        $zip->close();
+    }
+
+    // dd( $request->all(), $files, $zip );
+    File::deleteDirectory( public_path().'/temp_saved_docs/user_'.$user_in_is->id );
+    $headers = array( 'Content-Type: application/zip', );
+    return response()->download(public_path().'/temp_saved_docs/'.$temp_filename,$filename,$headers)->deleteFileAfterSend(true);
+  }
+
+  public function printFormP1P0( $array_files ){
+    $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+    ->leftJoin('roles','roles.id','=','user_role.role_id')
+    ->leftJoin('witels','witels.id','=','users.witel_id')
+    ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+    ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+    ->select('users.id','user_role.role_id','roles.nama_role','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
+
+    $dir_user_file = public_path().'/temp_saved_docs/user_'.$user_in_is->id;
+    File::makeDirectory( $dir_user_file );
+
+    foreach( $array_files as $key => $value ){
+      // get all necessary data
+      $docs_year = new Carbon($value->created_at);
+      $docs_year = $docs_year->translatedFormat('Y');
+      $p1_tgl_p1 = new Carbon($value->p1_tgl_p1);
+      $p1_tgl_p1 = $p1_tgl_p1->translatedFormat('d F Y');
+      $p1_tgl_delivery = new Carbon($value->p1_tgl_delivery);
+      $p1_tgl_delivery = $p1_tgl_delivery->translatedFormat('d F Y');
+      $p1_tgl_doc_plggn = new Carbon($value->p1_tgl_doc_plggn);
+      $p1_tgl_doc_plggn = $p1_tgl_doc_plggn->translatedFormat('d F Y');
+
+      $p1_pemeriksa = '';
+      $p1_gm_witel = '';
+      $p1_mgr_pemeriksa = '';
+      if( $value->f1_segmen === 'DBS' ){
+        $p1_pemeriksa = 'Business Service Witel ' . ucfirst((strtolower($value->f1_witel)));
+        $p1_mgr_pemeriksa = 'Manager Business Service Witel ' . ucfirst((strtolower($value->f1_witel)));
+        $p1_gm_witel = 'GM Telkom Witel ' . ucfirst((strtolower($value->f1_witel)));
+      }
+      if( $value->f1_segmen === 'DES' ){
+        $p1_pemeriksa = 'Enterprise Service Regional';
+        $p1_mgr_pemeriksa = 'Manager Enterprise Regional';
+        $p1_gm_witel = 'GM RGES';
+      }
+      if( $value->f1_segmen === 'DGS' ){
+        $p1_pemeriksa = 'Government Service Regional';
+        $p1_mgr_pemeriksa = 'Manager Government Regional';
+        $p1_gm_witel = 'GM RGES';
+      }
+
+      $harga_mrc = '';
+      $harga_otc = '';
+      if( $value->p1_skema_bayar === 'otc' ){ $harga_otc = $value->p1_estimasi_harga; }
+      if( $value->p1_skema_bayar === 'recurring' ){ $harga_mrc = $value->p1_estimasi_harga; }
+
+      $templateProcessor = new TemplateProcessor(public_path() . '/basic_documents/basic_p1_doc.docx');
+      $templateProcessor->setValues([
+          'p1_nomor_p1' => $value->p1_nomor_p1,
+          'p1_pemeriksa' => $p1_pemeriksa,
+          'p1_mgr_pemeriksa' => $p1_mgr_pemeriksa,
+          'p1_gm_witel' => $p1_gm_witel,
+          'f1_witel' =>  ucfirst((strtolower($value->f1_witel))),
+          'p1_tgl_p1' => $p1_tgl_p1,
+          'p1_tgl_delivery' => $p1_tgl_delivery,
+          'p1_tgl_doc_plggn' => $p1_tgl_doc_plggn,
+          'p1_lokasi_instal' => $value->p1_lokasi_instal,
+          'p1_skema_bayar' => $value->skema_bayar,
+          'p1_skema_bisnis' => $value->skema_bisnis,
+          'p1_mekanisme_bayar' => $value->mekanisme_bayar,
+          'f1_nama_plggn' => $value->f1_nama_plggn,
+          'f1_judul_projek' => $value->f1_judul_projek,
+          'periode_bulan' => $value->periode_bulan,
+          'string_periode_bulan' => NumberToWords::transformNumber('id', (int)$value->periode_bulan),
+          'f1_mitra_id' => $value->nama_mitra,
+          'f1_nilai_kb' => $value->f1_nilai_kb,
+          'p1_dibuat_am' => $value->p1_dibuat_am,
+          'p1_diperiksa_manager' => $value->p1_diperiksa_manager,
+          'p1_disetujui_gm' => $value->p1_disetujui_gm,
+          'p1_paragraf' => $value->p1_paragraf,
+          'p1_aspek_strategis' => $value->p1_aspek_strategis,
+          'p1_lingkup_kerja' => $value->p1_lingkup_kerja,
+          'p1_slg' => $value->p1_slg,
+          'harga_mrc' => $harga_mrc,
+          'harga_otc' => $harga_otc,
+          'ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) * 0.11 ),
+          'total_ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) + ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) * 0.11 ) ),
+          'rev_total_telkom' => RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->f1_nilai_kb,',')))) - (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) ),
+          'p1_estimasi_harga' => $value->p1_estimasi_harga,
+          'string_p1_estimasi_harga' => RupiahFormat::terbilang( (int)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) ),
+          'revenue' =>   RupiahFormat::currency( (int)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,','))))  * 0.1 ),
+          'harga_ke_mitra' => RupiahFormat::currency( ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) - ( (int)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,','))))  * 0.1 ) ) )
+      ]);
+      $filename = 'P1_'.$value->f1_folder.'_'.Carbon::parse($value->created_at)->translatedFormat('Y');
+      $templateProcessor->saveAs($dir_user_file.'/'.$filename.'.docx');
+
+      if( $value->p0_nomor_p0 && $value->p0_tgl_submit ){
+        // print & save form P0
+        $tgl_submit = new Carbon($value->p0_tgl_submit);
+        $tgl_submit = $tgl_submit->translatedFormat('d F Y');
+
+        $templateProcessor2 = new TemplateProcessor(public_path() . '/basic_documents/basic_p0_doc.docx');
+        $templateProcessor2->setValues([
+          'p0_nomor_p0' => $value->p0_nomor_p0,
+          'p0_tgl_submit' => $tgl_submit,
+          'p1_pemeriksa' => $p1_pemeriksa,
+          'p1_mgr_pemeriksa' => $p1_mgr_pemeriksa,
+          'p1_gm_witel' => $p1_gm_witel,
+          'f1_witel' =>  ucfirst((strtolower($value->f1_witel))),
+          'p1_tgl_p1' => $p1_tgl_p1,
+          'p1_tgl_delivery' => $p1_tgl_delivery,
+          'p1_tgl_doc_plggn' => $p1_tgl_doc_plggn,
+          'p1_lokasi_instal' => $value->p1_lokasi_instal,
+          'p1_skema_bayar' => $value->skema_bayar,
+          'p1_skema_bisnis' => $value->skema_bisnis,
+          'p1_mekanisme_bayar' => $value->mekanisme_bayar,
+          'f1_nama_plggn' => $value->f1_nama_plggn,
+          'f1_judul_projek' => $value->f1_judul_projek,
+          'periode_bulan' => $value->periode_bulan,
+          'string_periode_bulan' => NumberToWords::transformNumber('id', (int)$value->periode_bulan),
+          'f1_mitra_id' => $value->nama_mitra,
+          'f1_nilai_kb' => $value->f1_nilai_kb,
+          'p1_dibuat_am' => $value->p1_dibuat_am,
+          'p1_diperiksa_manager' => $value->p1_diperiksa_manager,
+          'p1_disetujui_gm' => $value->p1_disetujui_gm,
+          'p1_paragraf' => $value->p1_paragraf,
+          'p1_aspek_strategis' => $value->p1_aspek_strategis,
+          'p1_lingkup_kerja' => $value->p1_lingkup_kerja,
+          'p1_slg' => $value->p1_slg,
+          'harga_mrc' => $harga_mrc,
+          'harga_otc' => $harga_otc,
+          'ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) * 0.11 ),
+          'total_ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) + ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) * 0.11 ) ),
+          'rev_total_telkom' => RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->f1_nilai_kb,',')))) - (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) ),
+          'p1_estimasi_harga' => $value->p1_estimasi_harga,
+          'string_p1_estimasi_harga' => RupiahFormat::terbilang( (int)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) ),
+          'revenue' =>   RupiahFormat::currency( (int)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,','))))  * 0.1 ),
+          'harga_ke_mitra' => RupiahFormat::currency( ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,',')))) - ( (int)str_replace('.','',str_replace('Rp. ','',(strtok($value->p1_estimasi_harga,','))))  * 0.1 ) ) )
+        ]);
+        $filename2 = 'P0_'.$value->f1_folder.'_'.Carbon::parse($value->created_at)->translatedFormat('Y');
+        $templateProcessor2->saveAs($dir_user_file.'/'.$filename2.'.docx');
+      }
+
+    }
+
+    $hasil = 'folder_' . preg_replace("/ *[A-Za-z].*/s", "",$array_files[0]->f1_folder) . '_tahun_' . Carbon::parse($array_files[0]->created_at)->translatedFormat('Y');
+    return $hasil;
   }
 
 
@@ -941,7 +1187,10 @@ class PraLopController extends Controller
         'file_wo' => $value->file_wo,
         'file_kl' => $value->file_kl,
         'p1_paragraf' => $value->p1_paragraf,
-        'p0_paragraf' => $value->p0_paragraf
+        'p0_paragraf' => $value->p0_paragraf,
+        'p1_aspek_strategis' => $value->p1_aspek_strategis,
+        'p1_lingkup_kerja' => $value->p1_lingkup_kerja,
+        'p1_slg' => $value->p1_slg
       ]);
     }
 
@@ -1107,7 +1356,10 @@ class PraLopController extends Controller
       'file_wo' => $data_lama->file_wo,
       'file_kl' => $data_lama->file_kl,
       'p1_paragraf' => $data_lama->p1_paragraf,
-      'p0_paragraf' => $data_lama->p0_paragraf
+      'p0_paragraf' => $data_lama->p0_paragraf,
+      'p1_aspek_strategis' => $data_lama->p1_aspek_strategis,
+      'p1_lingkup_kerja' => $data_lama->p1_lingkup_kerja,
+      'p1_slg' => $data_lama->p1_slg
     ]);
     return $data_lama;
   }
@@ -1153,46 +1405,65 @@ class PraLopController extends Controller
   }
 
   public function layananDownload(Request $request){
-    $data_download = DB::connection('pgsql')->table('form_obl')
-    ->select('*',DB::raw("to_char(created_at,'yyyy-mm-dd') as tgl_create"))
-    ->where('id', substr($request->file_download, strpos($request->file_download, "_") + 1) )
-    ->first();
-    $headers = null;
-    $file_new_name = '';
-    $docs_year = Carbon::parse($data_download->tgl_create)->translatedFormat('Y');
+    // dd( $request->all(),
+    // Storage::disk('local')->deleteDirectory('temp_'.Auth::id())
+       // Storage::disk('local')->path('')
+    // );
+    Storage::disk('public')->deleteDirectory('temp_'.Auth::id());
+    if( $request->file_download ){
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('roles','roles.id','=','user_role.role_id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','roles.nama_role','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')
+      ->where('users.id',Auth::id())->first();
 
-    if( ucwords(strtok($request->file_download,'_')) === 'P1' ){
-      $file_new_name = $data_download->f1_segmen . '_' . $data_download->f1_folder . '_'. $docs_year . '_Form_P1.';
-      if( substr($data_download->file_p1, strpos($data_download->file_p1, ".") + 1) === 'pdf' ){
-        $headers  = array(
-             'Content-Type: application/pdf',
-           );
-      }
-      if( substr($data_download->file_p1, strpos($data_download->file_p1, ".") + 1) === 'docx' ){
-        $headers = array(
-            'Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        );
-      }
+      $data_download = DB::connection('pgsql')->table('form_obl')
+      ->select('*',DB::raw("to_char(created_at,'yyyy-mm-dd') as tgl_create"))
+      ->where('f1_id_form_pralop', $request->file_download )
+      ->orderBy('created_at','asc')
+      ->get()->toArray();
 
-      if(Storage::disk('sftp')->exists($data_download->file_p1)) {
-        return Storage::disk('sftp')->download($data_download->file_p1,$file_new_name . substr($data_download->file_p1, strpos($data_download->file_p1, ".") + 1),$headers);
-      }
-    }
-    else if( ucwords(strtok($request->file_download,'_')) === 'P0' ){
-      $file_new_name = $data_download->f1_segmen . '_' . $data_download->f1_folder . '_'. $docs_year . '_Form_P0.';
-      if( substr($data_download->file_p0, strpos($data_download->file_p0, ".") + 1) === 'pdf' ){
-        $headers  = array(
-             'Content-Type: application/pdf',
-           );
-      }
-      if( substr($data_download->file_p0, strpos($data_download->file_p0, ".") + 1) === 'docx' ){
-        $headers = array(
-            'Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        );
-      }
-      if(Storage::disk('sftp')->exists($data_download->file_p0)) {
-        return Storage::disk('sftp')->download($data_download->file_p0,$file_new_name . substr($data_download->file_p0, strpos($data_download->file_p0, ".") + 1),$headers);
-      }
+       $zip = new ZipArchive();
+       $temp_filename = Str::uuid()->toString().'.zip';
+       $filename = 'download_layanan_'.$data_download[0]->f1_folder.'_'.Carbon::parse($data_download[0]->created_at)->translatedFormat('Y').'.zip';
+
+       $dir_user_download = 'temp_'.Auth::id();
+       Storage::disk('public')->makeDirectory( $dir_user_download );
+       foreach( $data_download as $key => $value ){
+            Storage::disk('public')->put( $dir_user_download.'/'.$value->file_p1 , Storage::disk('sftp')->get( $value->file_p1 ) );
+
+            if( $value->file_p0 ){ Storage::disk('public')->put( $dir_user_download.'/'.$value->file_p0 , Storage::disk('sftp')->get( $value->file_p0 ) ); }
+       }
+
+       // dd(
+       //   basename( Storage::disk('public')->path( $dir_user_download.'/'.'e91dd06f-3387-4f50-8ce3-f0ca080fa8d1.docx' ) ),
+       //   Storage::disk('public')->path( $dir_user_download.'/'.'e91dd06f-3387-4f50-8ce3-f0ca080fa8d1.docx' )
+       // );
+
+
+       if( $zip->open(public_path().'/temp_saved_docs/'.$temp_filename, ZipArchive::CREATE) === true ){
+           foreach( $data_download as $key => $value ){
+             strtok($value->file_p1, '.');
+             $ext = strtok("");
+             $relativeName = basename( 'P1_'.$value->f1_folder.'_'.Carbon::parse($value->created_at)->translatedFormat('Y').'.'.$ext );
+             $zip->addFile( Storage::disk('public')->path( 'temp_'.Auth::id().'/'. $value->file_p1 ), $relativeName );
+
+             if( $value->file_p0 ){
+               strtok($value->file_p0, '.');
+               $ext2 = strtok("");
+               $relativeName2 = basename( 'P0_'.$value->f1_folder.'_'.Carbon::parse($value->created_at)->translatedFormat('Y').'.'.$ext2 );
+               $zip->addFile( Storage::disk('public')->path( 'temp_'.Auth::id().'/'. $value->file_p0 ) , $relativeName2 );
+             }
+
+           }
+           $zip->close();
+       }
+
+       Storage::disk('public')->deleteDirectory( $dir_user_download );
+       $headers = array( 'Content-Type: application/zip', );
+       return response()->download(public_path().'/temp_saved_docs/'.$temp_filename,$filename,$headers)->deleteFileAfterSend(true);
     }
     else{
       return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted[0]])->with('status','Oops! Gagal Download');
@@ -1204,53 +1475,157 @@ class PraLopController extends Controller
   public function reviewKB(Request $request){
     // dd($request->all());
     if($request->submit && $request->submit === 'review_kb'){
-      if( $request->hasFile('file_attachment') === false ){
+      // JIKA KOSONG UPLOAD
+      if(
+        $request->hasFile('file_draf_kb') === false && $request->hasFile('file_rab') === false  &&
+        $request->hasFile('file_mom') === false && $request->hasFile('file_basplit') === false && $request->hasFile('file_skk') === false &&
+        $request->hasFile('file_attachment') === false
+        ){
           return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Tidak Ada File Upload');
       }
+
+      // DRAF KB & RAB MANDATORY
+      $inputan_masuk_file = [];
+      $inputan_masuk_file['file_draf_kb'] = 'required';
+      $inputan_masuk_file['file_rab'] = 'required';
+      $validasi_file = $request->all();
+      $validator_file = Validator::make($validasi_file,$inputan_masuk_file);
+      if($validator_file->fails()){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->withErrors($validator_file);
+      }
+
+      // CHECK FILE FORMAT
+      if( $request->has('file_draf_kb') === true && ( $request->file('file_draf_kb')->getClientOriginalExtension() !== 'pdf' && $request->file('file_draf_kb')->getClientOriginalExtension() !== 'docx' )  ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Format File Draf KB adalah PDF atau DOCX.');
+      }
+      if( $request->has('file_rab') === true && ( $request->file('file_rab')->getClientOriginalExtension() !== 'pdf' && $request->file('file_rab')->getClientOriginalExtension() !== 'docx' ) ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Format File RAB adalah PDF atau DOCX.');
+      }
+      if( $request->has('file_mom') === true && ( $request->file('file_mom')->getClientOriginalExtension() !== 'pdf' && $request->file('file_mom')->getClientOriginalExtension() !== 'docx' ) ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Format File MOM adalah PDF atau DOCX.');
+      }
+      if( $request->has('file_basplit') === true && ( $request->file('file_basplit')->getClientOriginalExtension() !== 'pdf' && $request->file('file_basplit')->getClientOriginalExtension() !== 'docx' ) ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Format File BA Splitting adalah PDF atau DOCX.');
+      }
+      if( $request->has('file_skk') === true && ( $request->file('file_skk')->getClientOriginalExtension() !== 'pdf' && $request->file('file_skk')->getClientOriginalExtension() !== 'docx' ) ){
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Format File SKK adalah PDF atau DOCX.');
+      }
       if( $request->hasFile('file_attachment') === true && count($request->file_attachment) > 0 ){
-
-        foreach( $request->file('file_attachment') as $value ){
-          if( $value->getClientOriginalExtension() !== 'pdf' && $value->getClientOriginalExtension() !== 'docx' ){
-              return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Format File Upload PDF atau DOCX.');
+          foreach( $request->file('file_attachment') as $value ){
+            if( $value->getClientOriginalExtension() !== 'pdf' && $value->getClientOriginalExtension() !== 'docx' ){
+                return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Format File Tambahan adalah PDF atau DOCX.');
+            }
           }
-        }
+      }
 
-        $pralop_files_ids = DB::connection('pgsql')->table('form_pralop_files')
-        ->select('id','nama_simpan_files')->where('pralop_id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))))->get()->toArray();
-        if( $pralop_files_ids && count($pralop_files_ids) > 0 ){
-          foreach( $pralop_files_ids as $key => $value ){
+      // UPLOAD FILES
+      $pralop_files_ids = DB::connection('pgsql')->table('form_pralop_files')->select('*')->where('pralop_id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))))->get()->toArray();
+
+      if( $pralop_files_ids && count($pralop_files_ids) > 0 ){
+        foreach( $pralop_files_ids as $key => $value ){
+          if( $value->tipe_file === 'file_draf_kb' && $request->has('file_draf_kb') === true ){
             Storage::disk('sftp')->delete( $value->nama_simpan_files );
+            DB::connection('pgsql')->table('form_pralop_files')->where('id', $value->id )->delete();
           }
+          if( $value->tipe_file === 'file_rab' && $request->has('file_rab') === true ){ Storage::disk('sftp')->delete( $value->nama_simpan_files ); }
+          if( $value->tipe_file === 'file_mom' && $request->has('file_mom') === true ){ Storage::disk('sftp')->delete( $value->nama_simpan_files ); }
+          if( $value->tipe_file === 'file_basplit' && $request->has('file_basplit') === true ){ Storage::disk('sftp')->delete( $value->nama_simpan_files ); }
+          if( $value->tipe_file === 'file_skk' && $request->has('file_skk') === true ){ Storage::disk('sftp')->delete( $value->nama_simpan_files ); }
+          if( $value->tipe_file === 'file_attachment' && $request->has('file_attachment') === true ){ Storage::disk('sftp')->delete( $value->nama_simpan_files ); }
         }
+      }
+
+      $file_yang_diupload = '';
+      $filenametostore = '';
+      if( $request->has('file_draf_kb') === true ){
+        $filenametostore = $this->generateUniqueId() . '.' . $request->file('file_draf_kb')->getClientOriginalExtension();
+        Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_draf_kb') , 'r+') );
         DB::connection('pgsql')->table('form_pralop_files')
-        ->where('pralop_id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))) )
-        ->delete();
+        ->insert([
+          'pralop_id' => str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))),
+          'nama_asli_files' => $request->file('file_draf_kb')->getClientOriginalName(),
+          'nama_simpan_files' => $filenametostore,
+          'tipe_file' => 'file_draf_kb'
+        ]);
+        $file_yang_diupload = $file_yang_diupload . ' Draf KB | ';
+      }
+      if( $request->has('file_rab') === true ){
+        $filenametostore = $this->generateUniqueId() . '.' . $request->file('file_rab')->getClientOriginalExtension();
+        Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_rab') , 'r+') );
+        DB::connection('pgsql')->table('form_pralop_files')
+        ->insert([
+          'pralop_id' => str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))),
+          'nama_asli_files' => $request->file('file_rab')->getClientOriginalName(),
+          'nama_simpan_files' => $filenametostore,
+          'tipe_file' => 'file_rab'
+        ]);
+        $file_yang_diupload = $file_yang_diupload . ' RAB | ';
+      }
+      if( $request->has('file_mom') === true ){
+        $filenametostore = $this->generateUniqueId() . '.' . $request->file('file_mom')->getClientOriginalExtension();
+        Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_mom') , 'r+') );
+        DB::connection('pgsql')->table('form_pralop_files')
+        ->insert([
+          'pralop_id' => str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))),
+          'nama_asli_files' => $request->file('file_mom')->getClientOriginalName(),
+          'nama_simpan_files' => $filenametostore,
+          'tipe_file' => 'file_mom'
+        ]);
+        $file_yang_diupload = $file_yang_diupload . ' MOM | ';
+      }
+      if( $request->has('file_basplit') === true ){
+        $filenametostore = $this->generateUniqueId() . '.' . $request->file('file_basplit')->getClientOriginalExtension();
+        Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_basplit') , 'r+') );
+        DB::connection('pgsql')->table('form_pralop_files')
+        ->insert([
+          'pralop_id' => str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))),
+          'nama_asli_files' => $request->file('file_basplit')->getClientOriginalName(),
+          'nama_simpan_files' => $filenametostore,
+          'tipe_file' => 'file_basplit'
+        ]);
+        $file_yang_diupload = $file_yang_diupload . ' BA Splitting | ';
+      }
+      if( $request->has('file_skk') === true ){
+        $filenametostore = $this->generateUniqueId() . '.' . $request->file('file_skk')->getClientOriginalExtension();
+        Storage::disk('sftp')->put( $filenametostore, fopen( $request->file('file_skk') , 'r+') );
+        DB::connection('pgsql')->table('form_pralop_files')
+        ->insert([
+          'pralop_id' => str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))),
+          'nama_asli_files' => $request->file('file_skk')->getClientOriginalName(),
+          'nama_simpan_files' => $filenametostore,
+          'tipe_file' => 'file_skk'
+        ]);
+        $file_yang_diupload = $file_yang_diupload . ' SKK | ';
+      }
+      if( $request->has('file_attachment') === true && count($request->file_attachment) > 0 ){
 
         foreach( $request->file('file_attachment') as $value ){
             $filenametostore = $this->generateUniqueId() . '.' . $value->getClientOriginalExtension();
             Storage::disk('sftp')->put( $filenametostore, fopen( $value , 'r+') );
-
             DB::connection('pgsql')->table('form_pralop_files')
             ->insert([
               'pralop_id' => str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))),
               'nama_asli_files' => $value->getClientOriginalName(),
-              'nama_simpan_files' => $filenametostore
+              'nama_simpan_files' => $filenametostore,
+              'tipe_file' => 'file_attachment'
             ]);
         }
 
-        $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))) );
-        DB::connection('pgsql')->table('form_pralop')
-        ->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))) )
-        ->update([
-          'on_handling' => 'solution',
-          'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-          'lop_keterangan' => 'PRA LOP PROSES : Upload Attachment File KB',
-          'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
-          'updated_by' => Auth::id()
-        ]);
-
-        return redirect()->route('witels.pralop')->with('status','Sukses Upload Attachment File KB');
+        $file_yang_diupload = $file_yang_diupload . ' File Tambahan | ';
       }
+
+      $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))) );
+      DB::connection('pgsql')->table('form_pralop')
+      ->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->pralop_id))) )
+      ->update([
+        'lop_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'lop_keterangan' => 'PRA LOP PROSES : Upload Attachment File ' . $file_yang_diupload,
+        'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+        'updated_by' => Auth::id()
+      ]);
+
+      return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Sukses Upload Attachment File');
+
     }
     else{
       return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->pralop_id])->with('status','Oops! Gagal Routing');
@@ -1289,25 +1664,45 @@ class PraLopController extends Controller
     // dd($request->all());
     if( $request->submit && $request->submit === 'checklist_solution' ){
       if(
-        !$request->cs_jenis_kontrak &&
-        !$request->cs_nomor_kontrak &&
-        !$request->cs_waktu_instal &&
-        !$request->cs_waktu_layanan &&
-        !$request->cs_waktu_kontrak &&
-        !$request->cs_bayar_otc &&
-        !$request->cs_term_pay &&
-        !$request->cs_sesuai_top &&
-        !$request->cs_sesuai_boq &&
-        !$request->cs_skema_bisnis &&
-        !$request->cs_ruang &&
-        !$request->cs_sla_slg &&
-        !$request->cs_kb_ba_split &&
+        !$request->cs_jenis_kontrak ||
+        !$request->cs_nomor_kontrak ||
+        !$request->cs_waktu_instal ||
+        !$request->cs_waktu_layanan ||
+        !$request->cs_waktu_kontrak ||
+        !$request->cs_bayar_otc ||
+        !$request->cs_term_pay ||
+        !$request->cs_sesuai_top ||
+        !$request->cs_sesuai_boq ||
+        !$request->cs_skema_bisnis ||
+        !$request->cs_ruang ||
+        !$request->cs_sla_slg ||
+        !$request->cs_kb_ba_split ||
         !$request->cs_format_kontrak
       ){
-        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Review KB - Checklist Solution Kosong');
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Mohon Lengkapi Checklist Solution.');
       }
       else{
         $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) );
+
+        $cekpoin = 0;
+        if( $request->cs_jenis_kontrak && $request->cs_jenis_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_nomor_kontrak && $request->cs_nomor_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_waktu_instal && $request->cs_waktu_instal === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_waktu_layanan && $request->cs_waktu_layanan === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_waktu_kontrak && $request->cs_waktu_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_bayar_otc && $request->cs_bayar_otc === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_term_pay && $request->cs_term_pay === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_sesuai_top && $request->cs_sesuai_top === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_sesuai_boq && $request->cs_sesuai_boq === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_skema_bisnis && $request->cs_skema_bisnis === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_ruang && $request->cs_ruang === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_sla_slg && $request->cs_sla_slg === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_kb_ba_split && $request->cs_kb_ba_split === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cs_format_kontrak && $request->cs_format_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
+
+        // hanya checklist pertama yang dihitung
+        if( $data_lama->cs_list === true ){ $cekpoin = $data_lama->cekpoin; }
+
         // update pralop -> cs_list = true
         DB::connection('pgsql')->table('form_pralop')->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) )
         ->update([
@@ -1315,6 +1710,7 @@ class PraLopController extends Controller
           'lop_keterangan' => 'PRA LOP PROSES : Review KB - Checklist Solution',
           'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
           'updated_by' => Auth::id(),
+          'cekpoin' => $cekpoin,
           'cs_list' => true,
           'cs_jenis_kontrak' => $request->cs_jenis_kontrak,
           'cs_remark_jenis_kontrak' => $request->cs_remark_jenis_kontrak,
@@ -1358,16 +1754,27 @@ class PraLopController extends Controller
     // dd($request->all());
     if( $request->submit && $request->submit === 'checklist_legal' ){
       if(
-        !$request->cl_cakap_ttd &&
-        !$request->cl_jangka_waktu &&
-        !$request->cl_skema_bisnis &&
-        !$request->cl_cara_bayar &&
+        !$request->cl_cakap_ttd ||
+        !$request->cl_jangka_waktu ||
+        !$request->cl_skema_bisnis ||
+        !$request->cl_cara_bayar ||
         !$request->cl_mom
       ){
-        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Review KB - Checklist Legal Kosong');
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Mohon Lengkapi Checklist Legal.');
       }
       else{
         $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) );
+
+        $cekpoin = 0;
+        if( $request->cl_cakap_ttd && $request->cl_cakap_ttd === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cl_jangka_waktu && $request->cl_jangka_waktu === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cl_skema_bisnis && $request->cl_skema_bisnis === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cl_cara_bayar && $request->cl_cara_bayar === 'ok' ){ $cekpoin = $cekpoin + 1; }
+        if( $request->cl_mom && $request->cl_mom === 'ok' ){ $cekpoin = $cekpoin + 1; }
+
+        // hanya checklist legal pertama yang dihitung
+        if( $data_lama->cl_list === true ){ $cekpoin = $data_lama->cekpoin; }
+
         // update pralop -> cl_list = true
         DB::connection('pgsql')->table('form_pralop')->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) )
         ->update([
@@ -1375,6 +1782,7 @@ class PraLopController extends Controller
           'lop_keterangan' => 'PRA LOP PROSES : Review KB - Checklist Legal',
           'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
           'updated_by' => Auth::id(),
+          'cekpoin' => $cekpoin,
           'cl_list' => true,
           'cl_cakap_ttd' => $request->cl_cakap_ttd,
           'cl_remark_cakap_ttd' => $request->cl_remark_cakap_ttd,

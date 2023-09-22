@@ -273,7 +273,7 @@
                 <a class="nav-link {{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' active text-white' : ' text-white ' }} " style=" {{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' background: #ffa31a;' : '' }} "
                     href="{{ route('witels.pralop') }}">
                     <div class="{{ $activePage == 'witels-pralop' || $activePage == 'witels-pralop-detail' ? ' active text-white' : ' text-white ' }} text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">table_rows</i>
+                        <i class="material-icons opacity-10">app_registration</i>
                     </div>
                     <span class="nav-link-text ms-1">REPORT PRA LOP</span>
                 </a>

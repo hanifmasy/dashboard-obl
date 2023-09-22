@@ -50,7 +50,7 @@
                                                   <td colspan="2">
                                                       <div class="d-flex px-2 py-1">
                                                           <div class="d-flex flex-column justify-content-center">
-                                                              <h5 class="mb-0 text-sm">FORM P1</h5>
+                                                              <h5 class="mb-0 text-sm"><b>FORM P1</b></h5>
                                                           </div>
                                                       </div>
                                                   </td>
@@ -153,12 +153,36 @@
                                                   <td>
                                                       <div class="d-flex px-2 py-1">
                                                           <div class="d-flex flex-column justify-content-center">
-                                                              <h6 class="mb-0 text-sm">Paragraf Latar Belakang</h6>
+                                                              <h6 class="mb-0 text-sm">Latar Belakang</h6>
                                                           </div>
                                                       </div>
                                                   </td>
                                                   <td>
-                                                       <textarea name="p1_paragraf" rows="8" cols="80">{{ $witel_form->p1_paragraf ? $witel_form->p1_paragraf : '' }}</textarea>
+                                                       <textarea name="p1_paragraf" rows="2" cols="60">{{ $witel_form->p1_paragraf ? $witel_form->p1_paragraf : '' }}</textarea>
+                                                  </td>
+                                              </tr>
+                                              <tr >
+                                                  <td>
+                                                      <div class="d-flex px-2 py-1">
+                                                          <div class="d-flex flex-column justify-content-center">
+                                                              <h6 class="mb-0 text-sm">Aspek Strategis</h6>
+                                                          </div>
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                       <textarea name="p1_aspek_strategis" rows="2" cols="60">{{ $witel_form->p1_aspek_strategis ? $witel_form->p1_aspek_strategis : '' }}</textarea>
+                                                  </td>
+                                              </tr>
+                                              <tr >
+                                                  <td>
+                                                      <div class="d-flex px-2 py-1">
+                                                          <div class="d-flex flex-column justify-content-center">
+                                                              <h6 class="mb-0 text-sm">Lingkup Kerja</h6>
+                                                          </div>
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                       <textarea name="p1_lingkup_kerja" rows="2" cols="60">{{ $witel_form->p1_lingkup_kerja ? $witel_form->p1_lingkup_kerja : '' }}</textarea>
                                                   </td>
                                               </tr>
                                               <tr >
@@ -254,13 +278,51 @@
                                                        <input type="date" name="p1_tgl_doc_plggn" id="p1_tgl_doc_plggn" autocomplete="off" value="{{ $witel_form->tgl_doc_plggn_p1 ? $witel_form->tgl_doc_plggn_p1 : '' }}" style="width:350px;">
                                                   </td>
                                               </tr>
+                                              <tr >
+                                                  <td colSpan="2"><hr></td>
+                                              </tr>
+                                              <tr >
+                                                  <td>
+                                                      <div class="d-flex px-2 py-1">
+                                                          <div class="d-flex flex-column justify-content-center">
+                                                              <h6 class="mb-0 text-sm">Rekomendasi Calon Mitra (Bila Spesifik)</h6>
+                                                              <p class="text-xs text-secondary mb-0">
+                                                                  *Input ini terkunci setelah form disimpan</p>
+                                                          </div>
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                    <select class="" id="f1_mitra_id" name="f1_mitra_id" >
+                                                      <option value="" disabled selected>Pilih Vendor</option>
+                                                      @if( $witel_form->f1_mitra_id )
+                                                        <option disabled selected value="{{ $witel_form->f1_mitra_id }}" > {{ $witel_form->nama_mitra }} </option>
+                                                      @elseif(isset($mitra_vendor))
+                                                        @foreach($mitra_vendor as $key => $value)
+                                                          <option value="{{ $value['id'] }}" >{{ $value['nama_mitra'] }}</option>
+                                                        @endforeach
+                                                      @endif
+                                                    </select>
+                                                  </td>
+                                              </tr>
+                                              <tr >
+                                                  <td>
+                                                      <div class="d-flex px-2 py-1">
+                                                          <div class="d-flex flex-column justify-content-center">
+                                                              <h6 class="mb-0 text-sm"><i>Service Level Guarantee</i> (SLG)</h6>
+                                                          </div>
+                                                      </div>
+                                                  </td>
+                                                  <td>
+                                                       <input type="text" name="p1_slg" id="p1_slg" autocomplete="off" value="{{ $witel_form->p1_slg ? $witel_form->p1_slg : '' }}" style="width:60px;"> %
+                                                  </td>
+                                              </tr>
 
                                               <tr  class="show-p0"><td colspan="2"><hr></td></tr>
                                               <tr class="show-p0">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Form P0</h6>
+                                                            <h5 class="mb-0 text-sm"><b>FORM P0</b></h5>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -289,18 +351,6 @@
                                                 </td>
                                                 <td >
                                                   <input style="width:350px;" autocomplete="off" type="text" name="p0_nomor_p0" value="{{ $witel_form->p0_nomor_p0 ? $witel_form->p0_nomor_p0 : '' }}">
-                                                </td>
-                                              </tr>
-                                              <tr class="show-p0">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Paragraf Latar Belakang</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td >
-                                                  <textarea name="p0_paragraf" rows="8" cols="80" autocomplete="off">{{ $witel_form->p0_paragraf ? $witel_form->p0_paragraf : '' }}</textarea>
                                                 </td>
                                               </tr>
                                               <tr>
@@ -390,22 +440,22 @@
                                                   @if( isset($user_in_is) )
                                                     @if( $user_in_is->role_id === 4 )
                                                       @if( $encrypted )
-                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="ms-6 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="ms-2 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
                                                       @else
-                                                      <a href="{{ route('obl.tables') }}" class="ms-6 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      <a href="{{ route('obl.tables') }}" class="ms-2 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
                                                       @endif
                                                     <button type="submit" class="btn bg-gradient-primary"><h6 class="mb-0 text-sm" style="color:white;">SIMPAN</h6></button>
                                                     @elseif( $user_in_is->role_id === 13 )
                                                       @if( $encrypted )
-                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="ms-2 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
                                                       @else
-                                                      <a href="{{ route('obl.tables') }}" class="btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
+                                                      <a href="{{ route('obl.tables') }}" class="ms-2 btn bg-gradient-light shadow-primary"><h6 class="mb-0 text-sm text-black">KEMBALI</h6></a>
                                                       @endif
                                                     @elseif( $user_in_is->role_id === 8 || $user_in_is->role_id === 9 )
                                                       @if( $encrypted )
-                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class=" btn bg-gradient-secondary"><h6 class="mb-0 text-sm text-white">KEMBALI</h6></a>
+                                                      <a href="{{ route('witels.pralop.detail',['edit_pralop_id'=>$encrypted]) }}" class="ms-2 btn bg-gradient-secondary"><h6 class="mb-0 text-sm text-white">KEMBALI</h6></a>
                                                       @else
-                                                      <a href="{{ route('obl.tables') }}" class=" btn bg-gradient-secondary"><h6 class="mb-0 text-sm text-white">KEMBALI</h6></a>
+                                                      <a href="{{ route('obl.tables') }}" class="ms-2 btn bg-gradient-secondary"><h6 class="mb-0 text-sm text-white">KEMBALI</h6></a>
                                                       @endif
                                                     <button type="submit" class="btn" style="background:#2a623d;"><h6 class="mb-0 text-sm" style="color:white;">SIMPAN</h6></button>
                                                     @endif
@@ -466,6 +516,9 @@
             $( document ).ready(function() {
 
                 clearNameFile();
+
+
+
                 // STARTLINE: FORMAT RUPIAH
                 var rupiah = document.getElementById('p1_estimasi_harga');
                 rupiah.addEventListener('keyup', function(e){

@@ -39,13 +39,13 @@
             <div class="row">
                 <div class="col-lg-8">
                   <div class="row">
-                      <div class="col-lg-12 ms-2 d-flex align-items-center">
+                      <div class="col-lg-12 ms-1 d-flex align-items-center">
                         <a href="{{ route('witels.pralop') }}" role="button" class="btn btn-md bg-gradient-dark text-white" >KEMBALI</a>
 
                         <form class="" action="{{ route('witels.pralop.langkah') }}" method="POST" enctype="multipart/form-data">
                           @csrf
                           @if( $user_pralop )
-                            @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === false )
+                            @if( $user_pralop->role_id === 4 )
                             <button type="submit" name="submit_verifikasi" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-info text-white" >LANJUT VERIFIKASI</button>
                             @elseif( $user_pralop->role_id === 5 || $user_pralop->role_id === 7 )
                             @elseif( $user_pralop->role_id === 13 )
@@ -55,11 +55,24 @@
                             <button type="submit" name="submit_witel" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-secondary text-white" >KEMBALI KE WITEL</button>
                             <button type="submit" name="submit_legal" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-warning text-white" >LANJUT KE LEGAL</button>
                             @elseif($user_pralop->role_id === 9 )
-                            <button type="submit" name="submit_verifikasi" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-info text-white" >LANJUT VERIFIKASI</button>
-                            <button type="submit" name="submit_witel" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-secondary text-white" >KEMBALI KE WITEL</button>
-                            <button type="submit" name="submit_legal" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-warning text-white" >LANJUT KE LEGAL</button>
-                            <button type="submit" name="submit_solution" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-secondary text-white" >KEMBALI KE SOLUTION</button>
-                            <button type="submit" name="submit_final" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-danger text-white" >FINAL VERIFIKASI</button>
+                            <div class="row d-flex align-items-center">
+                              <div class="col d-flex ">
+                                <button type="submit" name="submit_verifikasi" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-info text-white" >LANJUT VERIFIKASI</button>
+                              </div>
+                            </div>
+                            <div class="row d-flex align-items-center">
+                              <div class="col d-flex ">
+                                <button type="submit" name="submit_witel" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-secondary text-white" >KEMBALI KE WITEL</button>
+                                <button type="submit" name="submit_legal" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-warning text-white" >LANJUT KE LEGAL</button>
+                              </div>
+                            </div>
+                            <div class="row d-flex align-items-center">
+                              <div class="col d-flex ">
+                                <button type="submit" name="submit_solution" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-secondary text-white" >KEMBALI KE SOLUTION</button>
+                                <button type="submit" name="submit_final" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-danger text-white" >FINAL VERIFIKASI</button>
+                              </div>
+                            </div>
+
                             @endif
                           @endif
                         </form>
@@ -68,12 +81,12 @@
                   </div>
 
                   <!-- start attachment and checklist -->
-                  @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
+                  @if( $user_pralop->role_id === 4 )
 
                   @if( $pralop->cl_list === true )
                   <div class="row mt-2">
                     <div class="card h-25">
-                      <h6 class="text-sm mt-1 bg-warning text-white text-center">Review KB - Checklist Legal</h6>
+                      <h5 class="text-sm mt-1 bg-warning text-white text-center">REVIEW KB - CHECKLIST LEGAL</h5>
 
                         <div class="table-responsive">
                           <table class="table thead-dark table-striped text-center">
@@ -146,7 +159,7 @@
                     <div class="row mt-2">
                       <div class="card h-50">
                         <div class="card-body p-2">
-                          <h6 class="text-sm bg-success text-white text-center">Review KB - Checklist Solution</h6>
+                          <h5 class="text-sm bg-success text-white text-center">REVIEW KB - CHECKLIST SOLUTION</h5>
                           <div class="table-responsive">
                             <table class="table thead-dark table-striped text-center">
                               <thead>
@@ -308,48 +321,75 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card h-25 mt-2">
-                        <div class="card-body p-2">
-                          <h6 class="text-sm ms-2">Attachment Files on Review: </h6>
 
-                          <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
-                            @csrf
-
-                          <div class="row d-flex align-items-center mt-1 mb-1 p-1">
-                            <div class="col-md-12">
-                            @if( isset($pralop_files) )
-                              @if( $pralop_files )
-                                @foreach( $pralop_files as $key => $value )
-                                  <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
-                                @endforeach
-                              @endif
-                            @endif
-                          </div>
-                        </div>
-
-                          </form>
-
-                        </div>
-                      </div>
                     </div>
                     @endif
                   <div class="row mt-2">
-                    <div class="card h-50">
+
+                    <div class="card h-75">
                       <div class="card-body p-3">
 
                         <form class="" action="{{ route('witels.pralop.review_kb') }}" method="POST" enctype="multipart/form-data">
                           @csrf
                           <input type="text" name="pralop_id" value="{{ $encrypted }}" hidden>
+
                           <div class="row d-flex align-items-center">
                             <div class="col-4">
-                              <h6 class="text-sm">Attachment File KB dan lainnya:</h6><p class="d-flex text-xs">( otomatis update lanjut solution setelah upload )</p>
+                              <h6 class="">UPLOAD ATTACHMENT FILE:</h6>
                             </div>
-                            <div class="col-8 d-flex">
-                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_attachment" ><i class="material-icons opacity-7">backspace</i></button>
-                              <label for="file_attachment" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_attachment"><span id="label_file_attachment">Attachment (Multi files)</span></label>
-                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_attachment" name="file_attachment[]" type="file" multiple>
+                          </div>
 
-                              <button type="submit" name="submit" value="review_kb" class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2">Upload</button>
+                          <div class="row d-flex align-items-center">
+                            <div class="col d-flex">
+
+                              @if( $errors->has('file_draf_kb') )
+                              <button class="btn btn-link px-3 mb-0 mt-2 " type="button" id="btn_clear_draf_kb" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_draf_kb" class="outline-input-merah px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_draf_kb"><span id="label_file_draf_kb">Draf KB</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_draf_kb" name="file_draf_kb" type="file" ><p class="text-danger text-sm">*mandatory</p>
+                              @else
+                              <button class="btn btn-link px-3 mb-0 mt-2 " type="button" id="btn_clear_draf_kb" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_draf_kb" class=" px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_draf_kb"><span id="label_file_draf_kb">Draf KB</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_draf_kb" name="file_draf_kb" type="file" >
+                              @endif
+
+                              @if( $errors->has('file_rab') )
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_rab" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_rab" class="outline-input-merah px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_rab"><span id="label_file_rab">RAB</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_rab" name="file_rab" type="file" ><p class="text-danger text-sm">*mandatory</p>
+                              @else
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_rab" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_rab" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_rab"><span id="label_file_rab">RAB</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_rab" name="file_rab" type="file" >
+                              @endif
+
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex">
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_mom" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_mom" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_mom"><span id="label_file_mom">MOM</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_mom" name="file_mom" type="file">
+
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_basplit" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_basplit" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_basplit"><span id="label_file_basplit">BA Splitting</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_basplit" name="file_basplit" type="file">
+
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_skk" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_skk" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_skk"><span id="label_file_skk">SKK</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_skk" name="file_skk" type="file">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex">
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_attachment" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_attachment" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_attachment"><span id="label_file_attachment">File Tambahan</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_attachment" name="file_attachment[]" type="file" multiple>
+                            </div>
+                          </div>
+
+                          <div class="row mt-4">
+                            <div class="col">
+                              <button type="submit" name="submit" value="review_kb" class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2">Upload Attachment</button>
                             </div>
                           </div>
                         </form>
@@ -357,13 +397,39 @@
 
                       </div>
                     </div>
+                    <div class="card h-50 mt-3">
+                      <div class="card-body p-2">
+                        <h6 class=" ms-2">ATTACHMENT FILES: </h6>
+
+                        <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
+                          @csrf
+
+                        <div class="row d-flex align-items-center mt-1 mb-1 p-1">
+                          <div class="col-md-12">
+                          @if( isset($pralop_files) )
+                            @if( $pralop_files )
+                              @foreach( $pralop_files as $key => $value )
+                                <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                              @endforeach
+                            @else
+                              <h5 class="text-danger text-xs">[ BELUM ADA FILE ]</h5>
+                            @endif
+                          @endif
+                        </div>
+                      </div>
+
+                        </form>
+
+                      </div>
+                    </div>
+
                   </div>
-                  @elseif( $user_pralop->role_id === 8 && $pralop->lop_review_kb === true )
+                  @elseif( $user_pralop->role_id === 8 )
 
                     @if( $pralop->cl_list === true )
                     <div class="row mt-2">
                       <div class="card h-25">
-                        <h6 class="text-sm mt-1 bg-warning text-white text-center">Review KB - Checklist Legal</h6>
+                        <h5 class="text-sm mt-1 bg-warning text-white text-center">REVIEW KB - CHECKLIST LEGAL</h5>
 
                           <div class="table-responsive">
                             <table class="table thead-dark table-striped text-center">
@@ -434,7 +500,7 @@
 
                   <div class="row mt-2">
                     <div class="card h-25">
-                      <h6 class="text-sm mt-1 bg-success text-white text-center">Review KB - Checklist Solution</h6>
+                      <h5 class="text-sm mt-1 bg-success text-white text-center">REVIEW KB - CHECKLIST SOLUTION</h5>
                       <form class="" action="{{ route('witels.pralop.review_kb.checklist_solution') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -605,7 +671,7 @@
 
                   <div class="row mt-2">
                     <div class="card h-25">
-                      <h6 class="text-sm mt-1 p-1">Attachment Files KB:</h6> <br>
+                      <h5 class="text-sm mt-1 p-1">ATTACHMENT FILES:</h5> <br>
                       <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -625,11 +691,11 @@
                     </div>
                   </div>
 
-                  @elseif( $user_pralop->role_id === 13 && $pralop->lop_review_kb === true)
+                  @elseif( $user_pralop->role_id === 13 )
 
                   <div class="row mt-2">
                     <div class="card h-25">
-                      <h6 class="text-sm mt-1">Review KB - Checklist Legal</h6>
+                      <h5 class="text-sm mt-1 text-center bg-warning text-white">REVIEW KB - CHECKLIST LEGAL</h5>
                       <form class="" action="{{ route('witels.pralop.review_kb.checklist_legal') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -704,7 +770,7 @@
 
                   <div class="row mt-2">
                     <div class="card h-25">
-                      <h6 class="text-sm mt-1 p-1">Attachment Files KB:</h6> <br>
+                      <h5 class="text-sm mt-1 p-1">ATTACHMENT FILES:</h5> <br>
                       <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -727,13 +793,82 @@
                   @elseif( $user_pralop->role_id === 9 )
                   <div class="row mt-2">
                     <div class="card h-25">
-                      TEST.
+                      <h5 class="text-sm mt-1 text-center bg-warning text-white">REVIEW KB - CHECKLIST LEGAL</h5>
+                      <form class="" action="{{ route('witels.pralop.review_kb.checklist_legal') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="table-responsive">
+                          <table class="table thead-dark table-striped text-center">
+                            <thead>
+                              <tr>
+                                <th rowSpan="2">No.</th>
+                                <th rowSpan="2">Checklist</th>
+                                <th colSpan="2">Check</th>
+                                <th rowSpan="2">Remark</th>
+                              </tr>
+                              <tr>
+                                <th>OK</th>
+                                <th>NOK</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>Para Pihak /<br>Kecakapan Penandatangan</td>
+                                <td><input type="radio" id="cl_cakap_ttd" name="cl_cakap_ttd" value="ok" autocomplete="off" {{ $pralop->cl_cakap_ttd === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_cakap_ttd"></label></td>
+                                <td><input type="radio" id="cl_cakap_ttd" name="cl_cakap_ttd" value="nok" autocomplete="off" {{ $pralop->cl_cakap_ttd === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_cakap_ttd"></label></td>
+                                <td><textarea name="cl_remark_cakap_ttd" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_cakap_ttd ? $pralop->cl_remark_cakap_ttd : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>Jangka Waktu</td>
+                                <td><input type="radio" id="cl_jangka_waktu" name="cl_jangka_waktu" value="ok" autocomplete="off" {{ $pralop->cl_jangka_waktu === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_jangka_waktu"></label></td>
+                                <td><input type="radio" id="cl_jangka_waktu" name="cl_jangka_waktu" value="nok" autocomplete="off" {{ $pralop->cl_jangka_waktu === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_jangka_waktu"></label></td>
+                                <td><textarea name="cl_remark_jangka_waktu" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_jangka_waktu ? $pralop->cl_remark_jangka_waktu : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>Skema Bisnis</td>
+                                <td><input type="radio" id="cl_skema_bisnis" name="cl_skema_bisnis" value="ok" autocomplete="off" {{ $pralop->cl_skema_bisnis === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_skema_bisnis"></label></td>
+                                <td><input type="radio" id="cl_skema_bisnis" name="cl_skema_bisnis" value="nok" autocomplete="off" {{ $pralop->cl_skema_bisnis === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_skema_bisnis"></label></td>
+                                <td><textarea name="cl_remark_skema_bisnis" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_skema_bisnis ? $pralop->cl_remark_skema_bisnis : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>4</td>
+                                <td>Cara Pembayaran</td>
+                                <td><input type="radio" id="cl_cara_bayar" name="cl_cara_bayar" value="ok" autocomplete="off" {{ $pralop->cl_cara_bayar === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_cara_bayar"></label></td>
+                                <td><input type="radio" id="cl_cara_bayar" name="cl_cara_bayar" value="nok" autocomplete="off" {{ $pralop->cl_cara_bayar === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_cara_bayar"></label></td>
+                                <td><textarea name="cl_remark_cara_bayar" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_cara_bayar ? $pralop->cl_remark_cara_bayar : '' }} </textarea> </td>
+                              </tr>
+                              <tr>
+                                <td>5</td>
+                                <td>MOM / Dokumen Pengantar<br>sebelum Kontrak / BA Nego</td>
+                                <td><input type="radio" id="cl_mom" name="cl_mom" value="ok" autocomplete="off" {{ $pralop->cl_mom === 'ok' ? " checked " : "" }}>
+                                  <label for="cl_mom"></label></td>
+                                <td><input type="radio" id="cl_mom" name="cl_mom" value="nok" autocomplete="off" {{ $pralop->cl_mom === 'nok' ? " checked " : "" }}>
+                                  <label for="cl_mom"></label></td>
+                                <td><textarea name="cl_remark_mom" rows="1" cols="15" autocomplete="off"> {{ $pralop->cl_remark_mom ? $pralop->cl_remark_mom : '' }} </textarea> </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <input type="text" name="encrypted" value="{{ $encrypted }}" hidden>
+                        <button type="submit" name="submit" value="checklist_legal" class="ms-2 btn btn-sm bg-gradient-primary">SIMPAN CHECKLIST</button>
+                      </form>
                     </div>
                   </div>
 
                   <div class="row mt-2">
                     <div class="card h-25">
-                      <h6 class="text-sm mt-1">Review KB - Checklist Solution</h6>
+                      <h5 class="text-sm mt-1 text-center bg-success text-white ">REVIEW KB - CHECKLIST SOLUTION</h5>
                       <form class="" action="{{ route('witels.pralop.review_kb.checklist_solution') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -903,44 +1038,71 @@
                   </div>
 
                   <div class="row mt-2">
-                    <div class="card h-25">
-                      <h6 class="text-sm mt-1 p-1">Attachment Files KB:</h6> <br>
-                      <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
-                        @csrf
 
-                      <div class="row d-flex align-items-center mt-1 mb-1 p-1">
-                        <div class="col-md-12">
-                        @if( isset($pralop_files) )
-                          @if( $pralop_files )
-                            @foreach( $pralop_files as $key => $value )
-                              <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
-                            @endforeach
-                          @endif
-                        @endif
-                      </div>
-                    </div>
-
-                      </form>
-                    </div>
-                  </div>
-
-                  <div class="row mt-2">
-                    <div class="card h-50">
+                    <div class="card h-75">
                       <div class="card-body p-3">
 
                         <form class="" action="{{ route('witels.pralop.review_kb') }}" method="POST" enctype="multipart/form-data">
                           @csrf
                           <input type="text" name="pralop_id" value="{{ $encrypted }}" hidden>
+
                           <div class="row d-flex align-items-center">
                             <div class="col-4">
-                              <h6 class="text-sm">Attachment File KB dan lainnya:</h6><p class="d-flex text-xs">( otomatis update lanjut solution setelah upload )</p>
+                              <h6 class="">UPLOAD ATTACHMENT FILE:</h6>
                             </div>
-                            <div class="col-8 d-flex">
-                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_attachment" ><i class="material-icons opacity-7">backspace</i></button>
-                              <label for="file_attachment" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_attachment"><span id="label_file_attachment">Attachment (Multi files)</span></label>
-                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_attachment" name="file_attachment[]" type="file" multiple>
+                          </div>
 
-                              <button type="submit" name="submit" value="review_kb" class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2">Upload</button>
+                          <div class="row d-flex align-items-center">
+                            <div class="col d-flex">
+
+                              @if( $errors->has('file_draf_kb') )
+                              <button class="btn btn-link px-3 mb-0 mt-2 " type="button" id="btn_clear_draf_kb" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_draf_kb" class="outline-input-merah px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_draf_kb"><span id="label_file_draf_kb">Draf KB</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_draf_kb" name="file_draf_kb" type="file" ><p class="text-danger text-sm">*mandatory</p>
+                              @else
+                              <button class="btn btn-link px-3 mb-0 mt-2 " type="button" id="btn_clear_draf_kb" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_draf_kb" class=" px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_draf_kb"><span id="label_file_draf_kb">Draf KB</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_draf_kb" name="file_draf_kb" type="file" >
+                              @endif
+
+                              @if( $errors->has('file_rab') )
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_rab" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_rab" class="outline-input-merah px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_rab"><span id="label_file_rab">RAB</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_rab" name="file_rab" type="file" ><p class="text-danger text-sm">*mandatory</p>
+                              @else
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_rab" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_rab" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_rab"><span id="label_file_rab">RAB</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_rab" name="file_rab" type="file" >
+                              @endif
+
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex">
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_mom" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_mom" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_mom"><span id="label_file_mom">MOM</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_mom" name="file_mom" type="file">
+
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_basplit" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_basplit" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_basplit"><span id="label_file_basplit">BA Splitting</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_basplit" name="file_basplit" type="file">
+
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_skk" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_skk" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_skk"><span id="label_file_skk">SKK</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_skk" name="file_skk" type="file">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex">
+                              <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_attachment" ><i class="material-icons opacity-7">backspace</i></button>
+                              <label for="file_attachment" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_attachment"><span id="label_file_attachment">File Tambahan</span></label>
+                              <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_attachment" name="file_attachment[]" type="file" multiple>
+                            </div>
+                          </div>
+
+                          <div class="row mt-4">
+                            <div class="col">
+                              <button type="submit" name="submit" value="review_kb" class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2">Upload Attachment</button>
                             </div>
                           </div>
                         </form>
@@ -948,7 +1110,35 @@
 
                       </div>
                     </div>
+                    <div class="card h-50 mt-3">
+                      <div class="card-body p-2">
+                        <h6 class=" ms-2">ATTACHMENT FILES: </h6>
+
+                        <form id="formReviewKB" class="" action="" method="POST" enctype="multipart/form-data">
+                          @csrf
+
+                        <div class="row d-flex align-items-center mt-1 mb-1 p-1">
+                          <div class="col-md-12">
+                          @if( isset($pralop_files) )
+                            @if( $pralop_files )
+                              @foreach( $pralop_files as $key => $value )
+                                <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                              @endforeach
+                            @else
+                              <h5 class="text-danger text-xs">[ BELUM ADA FILE ]</h5>
+                            @endif
+                          @endif
+                        </div>
+                      </div>
+
+                        </form>
+
+                      </div>
+                    </div>
+
                   </div>
+
+
 
 
                   @endif
@@ -966,9 +1156,8 @@
                                   <div class="col-6 text-end">
                                       @if( $user_pralop->role_id === 9 || $user_pralop->role_id === 8 )
                                       <button type="submit" name="submit" value="pralop_detail_{{ $pralop->id }}" class="btn bg-gradient-primary mb-0">SIMPAN</button>
-                                      @elseif( $user_pralop->role_id === 4 && $pralop->lop_review_kb === false )
+                                      @elseif( $user_pralop->role_id === 4 )
                                       <button type="submit" name="submit" value="pralop_detail_{{ $pralop->id }}" class="btn bg-gradient-primary mb-0">SIMPAN</button>
-                                      @elseif( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
                                       @endif
                                   </div>
                               </div>
@@ -1071,23 +1260,35 @@
                       </div>
                     </div>
                     <br>
+                    <!-- Sub Layanan -->
                     <div class="row">
                       <div class="card h-100">
-                        <form id="formLayanan" action="" method="POST" enctype="multipart/form-data">
+                        <form id="formSubLayanan" class="" action="" method="POST" enctype="multipart/form-data">
                           @csrf
+
                           <div class="card-header pb-0 px-3">
                             <div class="row">
                               <div class="col-6 d-flex align-items-center">
                                   <h6 class="mb-0">LAYANAN</h6>
                               </div>
-                              @if( isset($layanan) )
-                                @if( $layanan )
-                                @else
-                                <div class="col-6 text-end">
-                                    <button onclick="simpanLayanan( {{ $pralop->id ? $pralop->id : '' }} )" name="submit" value="pralop_detail_layanan" class="btn bg-gradient-primary mb-0">SIMPAN LAYANAN</button>
-                                </div>
+                              <div class="col ms-auto text-end float-right">
+                                @if( isset($layanan) )
+                                  @if( $layanan )
+
+                                    @if( $user_pralop->role_id === 13 )
+                                    @else
+                                    <button type="button" class="btn btn-link bg-gradient-warning px-3 mb-0 mt-2" onclick="printLayanan({{ $pralop->id ? $pralop->id : '' }})">Print P1/P0</button>
+                                    @endif
+
+                                    @if( $layanan[0]->file_p1 )
+                                    <button type="button" class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan({{ $pralop->id ? $pralop->id : '' }})">Download P1/P0</button><br>
+                                    @else
+                                    <button disabled type="button" class="btn bg-gradient-secondary px-3 mb-0 mt-2" >Download P1/P0</button><br>
+                                    @endif
+
+                                  @endif
                                 @endif
-                              @endif
+                              </div>
 
                             </div>
                           </div>
@@ -1115,113 +1316,30 @@
                                                           class="text-dark ms-sm-2 font-weight-bold">{{ $value->tgl_delivery_p1 ? \Carbon\Carbon::parse($value->tgl_delivery_p1)->translatedFormat('d F Y') : 'Belum Ada Input' }}</span></span>
                                               </div>
 
-                                              @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === false )
+                                              @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 9 || $user_pralop->role_id === 8 )
                                               <div class="ms-auto text-end float-right">
                                                   <input name="encrypted[]" value="{{ $encrypted }}" hidden>
-                                                  <button class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button><br>
-                                                  @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
-                                                      <button class="btn btn-link bg-gradient-warning px-3 mb-0 mt-2" onclick="printLayanan('p1', {{ $value->id ? $value->id : '' }} )">Print P1</button>
-                                                      @if( $value->p0_nomor_p0 )
-                                                      <button class="btn btn-link bg-gradient-warning px-3 mb-0 mt-2" onclick="printLayanan('p0', {{ $value->id ? $value->id : '' }} )">Print P0</button><br>
-                                                      @else
-                                                      <br>
-                                                      @endif
-                                                  @endif
-                                                  @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
+                                                  <button type="button" class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button><br>
 
                                                   <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p1_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
                                                   <label for="file_p1_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p1_{{ $value->id }}"><span id="label_file_p1_{{ $value->id }}">Pilih File P1</span></label>
                                                   <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p1_{{ $value->id }}" name="file_p1_{{ $value->id }}" type="file">
 
-                                                  <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload</button>
-                                                      @if( $value->file_p1 )
-                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
-                                                      @else
-                                                      <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
-                                                      @endif
-                                                  @else
-                                                      @if( $value->file_p1 )
-                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Download P1</button><br>
-                                                      @else
-                                                      <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Download P1</button><br>
-                                                      @endif
-                                                  @endif
+                                                  <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload</button><br>
                                                   @if( $value->p0_nomor_p0 )
-                                                    @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
 
                                                     <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p0_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
                                                     <label for="file_p0_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p0_{{ $value->id }}"><span id="label_file_p0_{{ $value->id }}">Pilih File P0</span></label>
                                                     <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p0_{{ $value->id }}" name="file_p0_{{ $value->id }}" type="file">
 
                                                     <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload</button>
-                                                        @if( $value->file_p0 )
-                                                        <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
-                                                        @else
-                                                        <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
-                                                        @endif
-                                                    @else
-                                                        @if( $value->file_p0 )
-                                                        <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Download P0</button><br>
-                                                        @else
-                                                        <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Download P0</button><br>
-                                                        @endif
-                                                    @endif
                                                   @endif
 
                                               </div>
-                                              @elseif( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
-                                              @elseif( $user_pralop->role_id === 9 || $user_pralop->role_id === 8 || $user_pralop->role_id === 13 )
+                                              @elseif( $user_pralop->role_id === 13 )
                                               <div class="ms-auto text-end float-right">
                                                   <input name="encrypted[]" value="{{ $encrypted }}" hidden>
-                                                  <button class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button><br>
-                                                  @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
-                                                      <button class="btn btn-link bg-gradient-warning px-3 mb-0 mt-2" onclick="printLayanan('p1', {{ $value->id ? $value->id : '' }} )">Print P1</button>
-                                                      @if( $value->p0_nomor_p0 )
-                                                      <button class="btn btn-link bg-gradient-warning px-3 mb-0 mt-2" onclick="printLayanan('p0', {{ $value->id ? $value->id : '' }} )">Print P0</button><br>
-                                                      @else
-                                                      <br>
-                                                      @endif
-                                                  @endif
-                                                  @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
-
-                                                  <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p1_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
-                                                  <label for="file_p1_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p1_{{ $value->id }}"><span id="label_file_p1_{{ $value->id }}">Pilih File P1</span></label>
-                                                  <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p1_{{ $value->id }}" name="file_p1_{{ $value->id }}" type="file">
-
-                                                  <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload</button>
-                                                      @if( $value->file_p1 )
-                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
-                                                      @else
-                                                      <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
-                                                      @endif
-                                                  @else
-                                                      @if( $value->file_p1 )
-                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Download P1</button><br>
-                                                      @else
-                                                      <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Download P1</button><br>
-                                                      @endif
-                                                  @endif
-                                                  @if( $value->p0_nomor_p0 )
-                                                    @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
-
-                                                    <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p0_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
-                                                    <label for="file_p0_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p0_{{ $value->id }}"><span id="label_file_p0_{{ $value->id }}">Pilih File P0</span></label>
-                                                    <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p0_{{ $value->id }}" name="file_p0_{{ $value->id }}" type="file">
-
-                                                    <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload</button>
-                                                        @if( $value->file_p0 )
-                                                        <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
-                                                        @else
-                                                        <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )"><i class="material-icons opacity-7">download</i></button><br>
-                                                        @endif
-                                                    @else
-                                                        @if( $value->file_p0 )
-                                                        <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Download P0</button><br>
-                                                        @else
-                                                        <button disabled class="btn bg-gradient-secondary px-3 mb-0 mt-2" onclick="downloadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Download P0</button><br>
-                                                        @endif
-                                                    @endif
-                                                  @endif
+                                                  <button type="button" class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button><br>
 
                                               </div>
                                               @endif
@@ -1229,6 +1347,38 @@
                                           </li>
                                         @endforeach
                                     @else
+                                      <h5 class="text-danger text-xs">[ BELUM ADA LAYANAN ]</h5>
+                                    @endif
+                                  @endif
+
+                              </ul>
+                          </div>
+
+                        </form>
+                      </div>
+                    </div><br>
+                    <!-- End Sub Layanan -->
+
+                    <!-- Tambah Layanan -->
+                    @if( $user_pralop->role_id === 4 && ( $pralop->cs_list === false || $pralop->cs_list === null ) )
+                    <div class="row">
+                      <div class="card h-100">
+                        <form id="formLayanan" action="" method="POST" enctype="multipart/form-data">
+                          @csrf
+
+                          <div class="card-header pb-0 px-3">
+                            <div class="row">
+                              <div class="col-6 d-flex align-items-center">
+                                  <h6 class="mb-0">TAMBAH LAYANAN</h6>
+                              </div>
+                                <div class="col-6 text-end">
+                                    <button onclick="simpanLayanan( {{ $pralop->id ? $pralop->id : '' }} )" name="submit" value="pralop_detail_layanan" class="btn bg-gradient-primary mb-0">SIMPAN LAYANAN</button>
+                                </div>
+
+                            </div>
+                          </div>
+                          <div class="card-body pt-4 p-3">
+                              <ul class="list-group">
                                     <li class="list-group-item border-0 p-4 mb-2 bg-gray-100 border-radius-lg">
                                       <div class="table-responsive col col-lg-12">
                                           <table class="table" id="table_layanan">
@@ -1246,14 +1396,14 @@
                                       <br>
                                       <button type="button" class="btn bg-gradient-info" id="insertRow"><i class="fa fa-plus-square"></i></button>
                                     </li>
-                                    @endif
-                                  @endif
-
                               </ul>
                           </div>
+
                         </form>
                       </div>
                     </div>
+                    @endif
+                    <!-- End Tambah Layanan -->
 
                 </div>
                 <div class="col-lg-4">
@@ -1299,39 +1449,57 @@
                               @if( $arr_log_histori )
                                 @foreach( $arr_log_histori as $key => $value )
                                   @if( $value['tgl_keterangan'] )
-                                  @if($key === 0)
-                                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg alert alert-success" role="alert">
-                                      <div class="d-flex align-items-center p-1 m-1">
-                                          <div class="d-flex flex-column">
-                                              <div class="d-flex align-items-center text-white text-md font-weight-bold">
-                                                  {{ $value['keterangan'] }}
-                                              </div>
-                                              <div class="d-flex align-items-center text-white text-md font-weight-bold">
-                                                  <h6 class="d-flex align-items-center text-white text-md">
-                                                    <i class="material-icons text-md">person</i> {{ $value['user_update'] }}
 
-                                                    <i class="material-icons text-md ps-2">schedule</i> {{ \Carbon\Carbon::parse($value['tgl_keterangan'])->translatedFormat('l, d F Y') }}</h6>
+                                      @if( $value['role_id'] === 8 || $value['role_id'] === 9 )
+                                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg alert alert-success" role="alert">
+                                          <div class="d-flex align-items-center p-1 m-1">
+                                              <div class="d-flex flex-column">
+                                                  <div class="d-flex align-items-center text-white text-sm font-weight-bold">
+                                                      {{ $value['keterangan'] }}
+                                                  </div>
+                                                  <div class="d-flex align-items-center text-white text-sm font-weight-bold">
+                                                      <h6 class="d-flex align-items-center text-white text-sm mt-2">
+                                                        <i class="material-icons text-sm">person</i> {{ $value['user_update'] }}
+
+                                                        <i class="material-icons text-sm ps-2">schedule</i> {{ \Carbon\Carbon::parse($value['tgl_keterangan'])->translatedFormat('l, d F Y') }}</h6>
+                                                  </div>
                                               </div>
                                           </div>
-                                      </div>
-                                  </li>
-                                  @else
-                                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg alert alert-light" role="alert">
-                                      <div class="d-flex align-items-center p-1 m-1">
-                                          <div class="d-flex flex-column opacity-7">
-                                              <div class="d-flex align-items-center text-black opacity-7 text-xs font-weight-bold">
-                                                  {{ $value['keterangan'] }}
-                                              </div>
-                                              <div class="d-flex align-items-center text-black opacity-7 text-xs font-weight-bold">
-                                                  <h6 class="d-flex align-items-center text-black opacity-7 text-xs">
-                                                    <i class="material-icons text-xs ">person</i> {{ $value['user_update'] }}
+                                      </li>
+                                      @elseif( $value['role_id'] === 4 )
+                                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg alert alert-primary" role="alert">
+                                          <div class="d-flex align-items-center p-1 m-1">
+                                              <div class="d-flex flex-column ">
+                                                  <div class="d-flex align-items-center text-white text-xs font-weight-bold">
+                                                      {{ $value['keterangan'] }}
+                                                  </div>
+                                                  <div class="d-flex align-items-center text-white  text-xs font-weight-bold">
+                                                      <h6 class="d-flex align-items-center text-white text-xs mt-2">
+                                                        <i class="material-icons text-xs ">person</i> {{ $value['user_update'] }}
 
-                                                    <i class="material-icons text-xs ps-2  ">schedule</i> {{ \Carbon\Carbon::parse($value['tgl_keterangan'])->translatedFormat('l, d F Y') }}</h6>
+                                                        <i class="material-icons text-xs ps-2  ">schedule</i> {{ \Carbon\Carbon::parse($value['tgl_keterangan'])->translatedFormat('l, d F Y') }}</h6>
+                                                  </div>
                                               </div>
                                           </div>
-                                      </div>
-                                  </li>
-                                  @endif
+                                      </li>
+                                      @elseif( $value['role_id'] === 13 )
+                                      <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg alert alert-warning" role="alert">
+                                          <div class="d-flex align-items-center p-1 m-1">
+                                              <div class="d-flex flex-column ">
+                                                  <div class="d-flex align-items-center text-white  text-xs font-weight-bold">
+                                                      {{ $value['keterangan'] }}
+                                                  </div>
+                                                  <div class="d-flex align-items-center text-white  text-xs font-weight-bold">
+                                                      <h6 class="d-flex align-items-center text-white  text-xs mt-2">
+                                                        <i class="material-icons text-xs ">person</i> {{ $value['user_update'] }}
+
+                                                        <i class="material-icons text-xs ps-2  ">schedule</i> {{ \Carbon\Carbon::parse($value['tgl_keterangan'])->translatedFormat('l, d F Y') }}</h6>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </li>
+                                      @endif
+
                                   @endif
                                 @endforeach
                               @else
@@ -1365,7 +1533,7 @@
     </main>
     @push('js')
 
-    @if( $user_pralop->role_id === 4 && $pralop->lop_review_kb === true )
+    @if( $user_pralop->role_id === 4 )
     <script type="text/javascript">
 
     function downloadKB(var_pralop_files){
@@ -1377,12 +1545,88 @@
       $('#formReviewKB').attr('action', "{{ route('witels.pralop.review_kb.files') }}").submit();
     }
 
+    // button & input file attachment
+    $('#file_draf_kb' ).val('');
+    $('#label_file_draf_kb' ).empty(); $('#label_file_draf_kb' ).append(`Draf KB`);
+
+    $('#btn_clear_draf_kb' ).on('click', function() {
+      $('#file_draf_kb' ).val('');
+      $('#label_file_draf_kb' ).empty(); $('#label_file_draf_kb' ).append(`Draf KB`);
+      $('.label_draf_kb' ).removeClass('bg-gradient-secondary'); $('.label_draf_kb' ).addClass('bg-gradient-light');
+    });
+    $('#file_draf_kb' ).change(function() {
+        $('.label_draf_kb' ).removeClass('bg-gradient-light');
+        $('#label_file_draf_kb' ).empty();
+        $('#label_file_draf_kb' ).append( this.files[0].name );
+        $('.label_draf_kb' ).addClass('bg-gradient-secondary');
+    });
+
+    $('#file_rab' ).val('');
+    $('#label_file_rab' ).empty(); $('#label_file_rab' ).append(`RAB`);
+
+    $('#btn_clear_rab' ).on('click', function() {
+      $('#file_rab' ).val('');
+      $('#label_file_rab' ).empty(); $('#label_file_rab' ).append(`RAB`);
+      $('.label_rab' ).removeClass('bg-gradient-secondary'); $('.label_rab' ).addClass('bg-gradient-light');
+    });
+    $('#file_rab' ).change(function() {
+        $('.label_rab' ).removeClass('bg-gradient-light');
+        $('#label_file_rab' ).empty();
+        $('#label_file_rab' ).append( this.files[0].name );
+        $('.label_rab' ).addClass('bg-gradient-secondary');
+    });
+
+    $('#file_mom' ).val('');
+    $('#label_file_mom' ).empty(); $('#label_file_mom' ).append(`MOM`);
+
+    $('#btn_clear_mom' ).on('click', function() {
+      $('#file_mom' ).val('');
+      $('#label_file_mom' ).empty(); $('#label_file_mom' ).append(`MOM`);
+      $('.label_mom' ).removeClass('bg-gradient-secondary'); $('.label_mom' ).addClass('bg-gradient-light');
+    });
+    $('#file_mom' ).change(function() {
+        $('.label_mom' ).removeClass('bg-gradient-light');
+        $('#label_file_mom' ).empty();
+        $('#label_file_mom' ).append( this.files[0].name );
+        $('.label_mom' ).addClass('bg-gradient-secondary');
+    });
+
+    $('#file_basplit' ).val('');
+    $('#label_file_basplit' ).empty(); $('#label_file_basplit' ).append(`BA Splitting`);
+
+    $('#btn_clear_basplit' ).on('click', function() {
+      $('#file_basplit' ).val('');
+      $('#label_file_basplit' ).empty(); $('#label_file_basplit' ).append(`BA Splitting`);
+      $('.label_basplit' ).removeClass('bg-gradient-secondary'); $('.label_basplit' ).addClass('bg-gradient-light');
+    });
+    $('#file_basplit' ).change(function() {
+        $('.label_basplit' ).removeClass('bg-gradient-light');
+        $('#label_file_basplit' ).empty();
+        $('#label_file_basplit' ).append( this.files[0].name );
+        $('.label_basplit' ).addClass('bg-gradient-secondary');
+    });
+
+    $('#file_skk' ).val('');
+    $('#label_file_skk' ).empty(); $('#label_file_skk' ).append(`SKK`);
+
+    $('#btn_clear_skk' ).on('click', function() {
+      $('#file_skk' ).val('');
+      $('#label_file_skk' ).empty(); $('#label_file_skk' ).append(`SKK`);
+      $('.label_skk' ).removeClass('bg-gradient-secondary'); $('.label_skk' ).addClass('bg-gradient-light');
+    });
+    $('#file_skk' ).change(function() {
+        $('.label_skk' ).removeClass('bg-gradient-light');
+        $('#label_file_skk' ).empty();
+        $('#label_file_skk' ).append( this.files[0].name );
+        $('.label_skk' ).addClass('bg-gradient-secondary');
+    });
+
     $('#file_attachment' ).val('');
-    $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`Attachment (Multi Files)`);
+    $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`File Tambahan`);
 
     $('#btn_clear_attachment' ).on('click', function() {
       $('#file_attachment' ).val('');
-      $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`Attachment (Multi Files)`);
+      $('#label_file_attachment' ).empty(); $('#label_file_attachment' ).append(`File Tambahan`);
       $('.label_attachment' ).removeClass('bg-gradient-secondary'); $('.label_attachment' ).addClass('bg-gradient-light');
     });
     $('#file_attachment' ).change(function() {
@@ -1395,9 +1639,10 @@
         $('#label_file_attachment' ).append(hasil);
         $('.label_attachment' ).addClass('bg-gradient-secondary');
     });
+    // end button & input file attachment
 
     </script>
-    @elseif( $user_pralop->role_id === 8 && $pralop->lop_review_kb === true )
+    @elseif( $user_pralop->role_id === 8 )
     <script type="text/javascript">
     function previewKB(var_pralop_files){
       $('#formReviewKB').attr('action', "");
@@ -1418,7 +1663,7 @@
     }
 
     </script>
-    @elseif( $user_pralop->role_id === 13 && $pralop->lop_review_kb === true )
+    @elseif( $user_pralop->role_id === 13 )
     <script type="text/javascript">
     function previewKB(var_pralop_files){
       $('#formReviewKB').attr('action', "");
@@ -1538,45 +1783,46 @@
         $('#formLayanan').attr('action', "{{ route('witels.pralop.detail.layanan.update') }}").submit();
       }
 
-      function editLayanan(forms_obl_id){
-        $('#formLayanan').attr('action', "");
-        $("<input />").attr("type", "hidden")
-          .attr("name", "forms_obl_id")
-          .attr("value", forms_obl_id )
-          .appendTo("#formLayanan");
-        $('#formLayanan').attr('action', "{{ route('witels.forms') }}").submit();
-      }
 
-      function downloadLayanan(var_file,var_obl_id){
-        $('#formLayanan').attr('action', "");
+
+      function downloadLayanan(var_file){
+        $('#formSubLayanan').attr('action', "");
         $("<input />").attr("type", "hidden")
           .attr("name", "file_download")
-          .attr("value", var_file + "_" + var_obl_id )
-          .appendTo("#formLayanan");
-        $('#formLayanan').attr('action', "{{ route('witels.pralop.detail.layanan.download') }}").submit();
+          .attr("value", var_file )
+          .appendTo("#formSubLayanan");
+        $('#formSubLayanan').attr('action', "{{ route('witels.pralop.detail.layanan.download') }}").submit();
       }
 
       function uploadLayanan(var_file,var_obl_id){
-        $('#formLayanan').attr('action', "");
+        $('#formSubLayanan').attr('action', "");
         $("<input />").attr("type", "hidden")
           .attr("name", "file_upload")
           .attr("value", var_file + "_" + var_obl_id )
-          .appendTo("#formLayanan");
-        $('#formLayanan').attr('action', "{{ route('witels.pralop.detail.layanan.upload') }}").submit();
+          .appendTo("#formSubLayanan");
+        $('#formSubLayanan').attr('action', "{{ route('witels.pralop.detail.layanan.upload') }}").submit();
       }
 
-      function printLayanan(var_file,var_obl_id){
-        $('#formLayanan').attr('action', "");
+      function printLayanan(var_file){
+        $('#formSubLayanan').attr('action', "");
         $("<input />").attr("type", "hidden")
           .attr("name", "file_print")
-          .attr("value", var_file + "_" + var_obl_id )
-          .appendTo("#formLayanan");
-        $('#formLayanan').attr('action', "{{ route('witels.pralop.detail.layanan.print') }}").submit();
+          .attr("value", var_file )
+          .appendTo("#formSubLayanan");
+        $('#formSubLayanan').attr('action', "{{ route('witels.pralop.detail.layanan.print') }}").submit();
+      }
+
+      function editLayanan(forms_obl_id){
+        $('#formSubLayanan').attr('action', "");
+        $("<input />").attr("type", "hidden")
+          .attr("name", "forms_obl_id")
+          .attr("value", forms_obl_id )
+          .appendTo("#formSubLayanan");
+        $('#formSubLayanan').attr('action', "{{ route('witels.forms') }}").submit();
       }
 
 
         $( document ).ready(function() {
-
 
 
 
@@ -1595,9 +1841,9 @@
                 `);
                 $('#modal-input-obl').modal('show');
               }
-              else if(session_status.includes('Draf')){
+              else if(session_status.includes('Oops')){
                 $('#status-input-obl').append(`
-                  <div class="alert alert-warning alert-dismissible">
+                  <div class="alert alert-danger alert-dismissible">
                       <div class="text-center">
                           <h5 class="text-white">`+session_status+`</h5>
                       </div>
@@ -1607,7 +1853,7 @@
               }
               else{
                 $('#status-input-obl').append(`
-                  <div class="alert alert-danger alert-dismissible">
+                  <div class="alert alert-warning alert-dismissible">
                       <div class="text-center">
                           <h5 class="text-white">`+session_status+`</h5>
                       </div>
