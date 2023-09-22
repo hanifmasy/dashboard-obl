@@ -1684,7 +1684,7 @@ class PraLopController extends Controller
       else{
         $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) );
 
-        $cekpoin = 0;
+        $cekpoin = $data_lama->cekpoin;
         if( $request->cs_jenis_kontrak && $request->cs_jenis_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
         if( $request->cs_nomor_kontrak && $request->cs_nomor_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
         if( $request->cs_waktu_instal && $request->cs_waktu_instal === 'ok' ){ $cekpoin = $cekpoin + 1; }
@@ -1765,7 +1765,7 @@ class PraLopController extends Controller
       else{
         $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) );
 
-        $cekpoin = 0;
+        $cekpoin = $data_lama->cekpoin;
         if( $request->cl_cakap_ttd && $request->cl_cakap_ttd === 'ok' ){ $cekpoin = $cekpoin + 1; }
         if( $request->cl_jangka_waktu && $request->cl_jangka_waktu === 'ok' ){ $cekpoin = $cekpoin + 1; }
         if( $request->cl_skema_bisnis && $request->cl_skema_bisnis === 'ok' ){ $cekpoin = $cekpoin + 1; }
