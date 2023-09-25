@@ -33,6 +33,31 @@
             </div>
           </div>
         </div>
+
+        <div class="modal fade" id="modal-status-table-obl-delete" tabindex="-1" aria-labelledby="modal-status-table-obl-delete" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Hapus Layanan:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="">
+                    <div class="text-center">
+                        <h5 class="">Anda Yakin Hapus Layanan?</h5>
+                    </div>
+                </div>
+              </div>
+              <form action="{{ route('witels.pralop.detail.layanan.delete') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-footer" id="modal-pilihan-table-obl-hapus">
+                </div>
+                <input type="text" name="encrypted" value="{{ $encrypted }}" hidden>
+              </form>
+            </div>
+          </div>
+        </div>
+
         <!-- end modal alerts -->
 
         <div class="container-fluid py-4">
@@ -409,7 +434,22 @@
                           @if( isset($pralop_files) )
                             @if( $pralop_files )
                               @foreach( $pralop_files as $key => $value )
-                                <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                                <div class="btn-group ps-2" role="group">
+                                  @if( $value->tipe_file === 'file_draf_kb' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> DRAF KB </button>
+                                  @elseif( $value->tipe_file === 'file_rab' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> RAB </button>
+                                  @elseif( $value->tipe_file === 'file_mom' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> MOM </button>
+                                  @elseif( $value->tipe_file === 'file_basplit' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> BA Splitting </button>
+                                  @elseif( $value->tipe_file === 'file_skk' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> SKK </button>
+                                  @elseif( $value->tipe_file === 'file_attachment' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> File Tambahan </button>
+                                  @endif
+                                  <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 btn btn-link bg-gradient-secondary"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                                </div>
                               @endforeach
                             @else
                               <h5 class="text-danger text-xs">[ BELUM ADA FILE ]</h5>
@@ -1319,7 +1359,8 @@
                                               @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 9 || $user_pralop->role_id === 8 )
                                               <div class="ms-auto text-end float-right">
                                                   <input name="encrypted[]" value="{{ $encrypted }}" hidden>
-                                                  <button type="button" class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button><br>
+                                                  <button type="button" class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button>
+                                                  <button type="button" class="btn btn-link bg-gradient-danger px-3 mb-0" onclick="deleteLayanan( {{ $value->id ? $value->id : '' }} )">Delete</button><br>
 
                                                   <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p1_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
                                                   <label for="file_p1_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p1_{{ $value->id }}"><span id="label_file_p1_{{ $value->id }}">Pilih File P1</span></label>
@@ -1360,7 +1401,7 @@
                     <!-- End Sub Layanan -->
 
                     <!-- Tambah Layanan -->
-                    @if( $user_pralop->role_id === 4 && ( $pralop->cs_list === false || $pralop->cs_list === null ) )
+                    @if( $user_pralop->role_id === 4 )
                     <div class="row">
                       <div class="card h-100">
                         <form id="formLayanan" action="" method="POST" enctype="multipart/form-data">
@@ -1737,40 +1778,41 @@
             global_arr_index.push( '{{ $value->id }}' );
           </script>
           @endforeach
+
+          <script type="text/javascript">
+          $.each(global_arr_index,function(index,value){
+            $('#file_p1_' + value ).val('');
+            $('#label_file_p1_' + value ).empty(); $('#label_file_p1_' + value ).append(`Pilih File P1`);
+
+            $('#btn_clear_p1_' + value ).on('click', function() {
+              $('#file_p1_' + value ).val('');
+              $('#label_file_p1_' + value ).empty(); $('#label_file_p1_' + value ).append(`Pilih File P1`);
+              $('.label_p1_' + value ).removeClass('bg-gradient-secondary'); $('.label_p1_' + value ).addClass('bg-gradient-light');
+            });
+            $('#file_p1_' + value ).change(function() {
+                $('.label_p1_' + value ).removeClass('bg-gradient-light');
+                $('#label_file_p1_' + value ).empty();
+                $('#label_file_p1_' + value ).append(this.files[0].name);
+                $('.label_p1_' + value ).addClass('bg-gradient-secondary');
+            });
+
+            $('#file_p0_' + value ).val('');
+            $('#label_file_p0_' + value ).empty(); $('#label_file_p0_' + value ).append(`Pilih File P0`);
+
+            $('#btn_clear_p0_' + value ).on('click', function() {
+              $('#file_p0_' + value ).val('');
+              $('#label_file_p0_' + value ).empty(); $('#label_file_p0_' + value ).append(`Pilih File P0`);
+              $('.label_p0_' + value ).removeClass('bg-gradient-secondary'); $('.label_p0_' + value ).addClass('bg-gradient-light');
+            });
+            $('#file_p0_' + value ).change(function() {
+                $('.label_p0_' + value ).removeClass('bg-gradient-light');
+                $('#label_file_p0_' + value ).empty();
+                $('#label_file_p0_' + value ).append(this.files[0].name);
+                $('.label_p0_' + value ).addClass('bg-gradient-secondary');
+            });
+          });
+          </script>
       @endif
-      <script type="text/javascript">
-      $.each(global_arr_index,function(index,value){
-        $('#file_p1_' + value ).val('');
-        $('#label_file_p1_' + value ).empty(); $('#label_file_p1_' + value ).append(`Pilih File P1`);
-
-        $('#btn_clear_p1_' + value ).on('click', function() {
-          $('#file_p1_' + value ).val('');
-          $('#label_file_p1_' + value ).empty(); $('#label_file_p1_' + value ).append(`Pilih File P1`);
-          $('.label_p1_' + value ).removeClass('bg-gradient-secondary'); $('.label_p1_' + value ).addClass('bg-gradient-light');
-        });
-        $('#file_p1_' + value ).change(function() {
-            $('.label_p1_' + value ).removeClass('bg-gradient-light');
-            $('#label_file_p1_' + value ).empty();
-            $('#label_file_p1_' + value ).append(this.files[0].name);
-            $('.label_p1_' + value ).addClass('bg-gradient-secondary');
-        });
-
-        $('#file_p0_' + value ).val('');
-        $('#label_file_p0_' + value ).empty(); $('#label_file_p0_' + value ).append(`Pilih File P0`);
-
-        $('#btn_clear_p0_' + value ).on('click', function() {
-          $('#file_p0_' + value ).val('');
-          $('#label_file_p0_' + value ).empty(); $('#label_file_p0_' + value ).append(`Pilih File P0`);
-          $('.label_p0_' + value ).removeClass('bg-gradient-secondary'); $('.label_p0_' + value ).addClass('bg-gradient-light');
-        });
-        $('#file_p0_' + value ).change(function() {
-            $('.label_p0_' + value ).removeClass('bg-gradient-light');
-            $('#label_file_p0_' + value ).empty();
-            $('#label_file_p0_' + value ).append(this.files[0].name);
-            $('.label_p0_' + value ).addClass('bg-gradient-secondary');
-        });
-      });
-      </script>
     @endif
 
     <script>
@@ -1822,9 +1864,19 @@
       }
 
 
+      $("#modal-status-table-obl-delete").modal({show:false});
+      function deleteLayanan(delete_id){
+          if(delete_id && typeof delete_id !== undefined){
+            $('#modal-pilihan-table-obl-hapus').empty();
+              $('#modal-pilihan-table-obl-hapus').append(`
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">TIDAK</button>
+                <button type="submit" name="obl_doc_action" value="delete_`+delete_id+`" class="btn btn-danger">HAPUS</button>
+              `);
+              $('#modal-status-table-obl-delete').modal('show');
+          }
+      }
+
         $( document ).ready(function() {
-
-
 
             $("#modal-input-obl").modal({show:false});
             var session_status = "{{ session('status') }}";

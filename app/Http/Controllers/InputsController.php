@@ -766,4 +766,55 @@ class InputsController extends Controller
       }
 
     }
+
+    public function masterInput(Request $request){
+      $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
+      ->leftJoin('witels','witels.id','=','users.witel_id')
+      ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
+      ->leftJoin('mitras','mitras.id','=','user_mitra.mitra_id')
+      ->select('users.id','user_role.role_id','users.witel_id','witels.nama_witel','mitras.nama_mitra','mitras.id as mitra_id')->where('users.id',Auth::id())->first();
+
+      return view('pages.master_input.obl',compact('user_in_is'));
+    }
+
+    public function submitMitra(Request $request){
+      dd( $request->all() );
+      if( $request->submit && $request->submit === 'submit_master_input_mitra' ){
+        if( $request->nama_mitra ){
+          DB::connection('pgsql')->table('mitras')->insert(['nama_mitra'=>$request->nama_mitra,'kode_mitra'=>null]);
+
+          return $this->masterInput($request)->with('status','Sukses Submit Mitra.');
+        }
+        else{
+            return $this->masterInput($request)->with('status','Oops! Isilah Nama Mitra.');
+        }
+      }
+      else{
+        return $this->masterInput($request)->with('status','Oops! Gagal Routing.');
+      }
+    }
+    public function submitTgl(Request $request){
+      dd( $request->all() );
+      if( $request->submit && $request->submit === 'submit_master_input_tgl' ){
+        if( $request->tgl_libur_1 ){
+          // do
+        }
+        if( $request->tgl_libur_2 && $request->tgl_libur_3 ){
+          // do
+        }
+      }
+      else{
+        return $this->masterInput($request)->with('status','Oops! Gagal Routing.');
+      }
+    }
+    public function submitTtd(Request $request){
+      dd( $request->all() );
+      if( $request->submit && $request->submit === 'submit_master_input_ttd' ){
+        // do sum
+      }
+      else{
+        return $this->masterInput($request)->with('status','Oops! Gagal Routing.');
+      }
+    }
+
 }

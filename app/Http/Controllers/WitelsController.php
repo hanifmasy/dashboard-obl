@@ -59,7 +59,8 @@ class WitelsController extends Controller
             $filtered->put('lop_review_kb',false);
             $filtered->put('cs_list',false);
             $filtered->put('cl_list',false);
-            $filtered->put('cekpoin',0);
+            $filtered->put('cekpoin_sol',0);
+            $filtered->put('cekpoin_leg',0);
             $filtered->put('on_handling','witel');
             $filtered->put('lop_count_revisi',0);
 

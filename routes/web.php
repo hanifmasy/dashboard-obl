@@ -83,6 +83,7 @@ Route::get('inputs-legacy', function () {
 		)->get()->toArray();
 	$mitra_vendor = MitraVendor::get()->toArray();
 	return view('pages.inputs_legacy',compact('mitra_vendor','list_nomor_kb')); })->middleware(['auth','role_obl_non_view'])->name('inputs_legacy');
+Route::get('master-inputs', [InputsController::class, 'masterInput'])->middleware(['auth','role_obl'])->name('inputs.master');
 Route::get('witels', function () { $mitra_vendor = MitraVendor::get()->toArray(); return view('pages.witels',compact('mitra_vendor')); })->middleware(['auth','role_witel'])->name('witels');
 Route::get('witels-pralop/master-input', [WitelsController::class, 'masterInput'])->middleware(['auth','role_witel'])->name('witels.master_input');
 Route::get('witels-pralop', [PraLopController::class, 'index'])->middleware(['auth','role_pralop'])->name('witels.pralop');
@@ -97,6 +98,10 @@ Route::post('/dashboard/excel', [DashboardController::class, 'excel'])->middlewa
 Route::post('inputs/create', [InputsController::class, 'create'])->middleware(['auth','role_obl'])->name('inputs.create');
 Route::post('inputs-legacy/create', [InputsController::class, 'createLegacy'])->middleware(['auth','role_obl_non_view'])->name('inputs_legacy.create');
 
+Route::post('master-inputs/submit-mitra', [InputsController::class, 'submitMitra'])->middleware(['auth','role_obl'])->name('inputs.master.submit_mitra');
+Route::post('master-inputs/submit-tgl', [InputsController::class, 'submitTgl'])->middleware(['auth','role_obl'])->name('inputs.master.submit_tgl');
+Route::post('master-inputs/submit-ttd', [InputsController::class, 'submitTtd'])->middleware(['auth','role_obl'])->name('inputs.master.submit_ttd');
+
 Route::post('witels-pralop/master-input/submit', [WitelsController::class, 'masterInputSubmit'])->middleware(['auth','role_witel'])->name('witels.master_input.submit');
 Route::post('witels-pralop/master-input/update-list', [WitelsController::class, 'masterInputUpdateList'])->middleware(['auth','role_witel'])->name('witels.master_input.update_list');
 Route::post('witels-pralop/master-input/delete-list', [WitelsController::class, 'masterInputDeleteList'])->middleware(['auth','role_witel'])->name('witels.master_input.delete_list');
@@ -109,6 +114,7 @@ Route::post('witels-pralop/review-kb/checklist-legal', [PraLopController::class,
 Route::post('witels-pralop/ketdoc', [PraLopController::class, 'ketdoc'])->middleware(['auth','role_pralop'])->name('witels.pralop.ketdoc');
 Route::post('witels-pralop/langkah', [PraLopController::class, 'langkah'])->middleware(['auth','role_pralop'])->name('witels.pralop.langkah');
 Route::post('witels-pralop/detail/update', [PraLopController::class, 'update'])->middleware(['auth','role_pralop'])->name('witels.pralop.detail.update');
+Route::post('witels-pralop/detail/layanan/delete', [PraLopController::class, 'layananDelete'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.delete');
 Route::post('witels-pralop/detail/layanan/update', [PraLopController::class, 'layananUpdate'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.update');
 Route::post('witels-pralop/detail/layanan/print', [PraLopController::class, 'layananPrint'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.print');
 Route::post('witels-pralop/detail/layanan/upload', [PraLopController::class, 'layananUpload'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan.upload');

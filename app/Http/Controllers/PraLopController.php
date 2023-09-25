@@ -154,7 +154,8 @@ class PraLopController extends Controller
     ->leftJoin('mitras as m','m.id','=','fo.f1_mitra_id')
     ->select('fo.*','m.nama_mitra',DB::raw("to_char(fo.p1_tgl_delivery,'yyyy-mm-dd') as tgl_delivery_p1"))
     ->where('fo.f1_id_form_pralop',$edit_pralop_id)
-    ->orderByRaw("CASE WHEN fo.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fo.updated_at','DESC')
+    ->whereRaw(" deleted_at is null or to_char(deleted_at,'yyyymmdd') = '' ")
+    ->orderBy('fo.f1_folder','ASC') // ->orderByRaw("CASE WHEN fo.updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('fo.updated_at','DESC')
     ->get()->toArray();
 
     $encrypted = $request->edit_pralop_id;
@@ -226,7 +227,9 @@ class PraLopController extends Controller
       'cl_remark_cara_bayar' => $data_lama->cl_remark_cara_bayar,
       'cl_mom' => $data_lama->cl_mom,
       'cl_remark_mom' => $data_lama->cl_remark_mom,
-      'cekpoin' => $data_lama->cekpoin
+      'cekpoin' => $data_lama->cekpoin,
+      'cekpoin_sol' => $data_lama->cekpoin_sol,
+      'cekpoin_leg' => $data_lama->cekpoin_leg
     ]);
     return $data_lama;
   }
@@ -308,6 +311,35 @@ class PraLopController extends Controller
     }
   }
 
+  public function layananDelete(Request $request){
+    // dd( $request->all(), strpos($request->obl_doc_action,'delete_'), substr($request->obl_doc_action,7,strlen($request->obl_doc_action)-7) );
+    if($request->obl_doc_action){
+      if( strpos($request->obl_doc_action,'delete_') !== false ){
+        $delete_id = substr($request->obl_doc_action,7,strlen($request->obl_doc_action)-7);
+        $delete_id = intval($delete_id);
+
+        $data_lama = DocObl::where('id', $delete_id )->first();
+
+        $delete_status = DocObl::where('id', $delete_id )->update([
+          'deleted_at'=> Carbon::now()->translatedFormat('Y-m-d H:i:s'),
+          'deleted_by'=> Auth::id(),
+          'f1_keterangan' => 'Layanan Terhapus: ' . $data_lama->f1_judul_projek,
+          'f1_tgl_keterangan' => Carbon::now()->translatedFormat('Y-m-d H:i:s')
+        ]);
+
+        if( $delete_status ){ return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted]); }
+        else{ return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Gagal Hapus Layanan.'); }
+      }
+      else {
+        return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Gagal Proses.');
+      }
+    }
+    else{
+      return redirect()->route('witels.pralop.detail',['edit_pralop_id'=>$request->encrypted])->with('status','Oops! Gagal Routing.');
+    }
+
+  }
+
   public function layananUpdate(Request $request){
     // dd($request->all());
     $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
@@ -332,10 +364,11 @@ class PraLopController extends Controller
       $tahun_ini = $hari->year;
       $tahun_ini = strval($tahun_ini);
       $hari_ini = ($hari_ini*40);
-      $cek_quote_kontrak = DB::connection('pgsql')->table('form_obl')->select('id','f1_folder')->where('f1_id_form_pralop',$request->simpan_layanan_id)->orderBy('created_at','DESC')->first();
+      $cek_quote_kontrak = DB::connection('pgsql')->table('form_obl')->select('id','f1_folder')->where('f1_id_form_pralop',$request->simpan_layanan_id)->orderByRaw("CASE WHEN updated_at IS NULL THEN 0 ELSE 1 END DESC")->orderBy('updated_at','DESC')->get()->toArray();
+      // dd( $cek_quote_kontrak[ count($cek_quote_kontrak) - 1 ]->f1_folder );
       if( $cek_quote_kontrak ){ // JIKA PRALOP EXIST
-        $cek_quote_kontrak_numeric = preg_replace("/ *[A-Za-z].*/s", "",$cek_quote_kontrak->f1_folder);
-        $cek_quote_kontrak_alphabet = preg_replace("/[^a-zA-Z]+/", "", $cek_quote_kontrak->f1_folder);
+        $cek_quote_kontrak_numeric = preg_replace("/ *[A-Za-z].*/s", "", $cek_quote_kontrak[ count($cek_quote_kontrak) - 1 ]->f1_folder);
+        $cek_quote_kontrak_alphabet = preg_replace("/[^a-zA-Z]+/", "",  $cek_quote_kontrak[ count($cek_quote_kontrak) - 1 ]->f1_folder);
         if( $cek_quote_kontrak_alphabet !== "" ){
           $cek_quote_kontrak_alphabet++;
           $nama_folder = $cek_quote_kontrak_numeric . $cek_quote_kontrak_alphabet;
@@ -363,7 +396,7 @@ class PraLopController extends Controller
 
       $nama_folder_numeric = preg_replace("/ *[A-Za-z].*/s", "",$nama_folder);
       $nama_folder_alpabet = preg_replace("/[^a-zA-Z]+/", "", $nama_folder);
-      // dd( $request->all(), $nama_folder_numeric, $nama_folder_alpabet );
+      // dd( $request->all(), $nama_folder_numeric, $nama_folder_alpabet, $temp_folder_old_name, $temp_folder_old_id );
 
       if($temp_folder_old_name && $temp_folder_old_id){
         $data_lama = $this->updateOblHistori( $temp_folder_old_id );
@@ -1684,7 +1717,10 @@ class PraLopController extends Controller
       else{
         $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) );
 
-        $cekpoin = $data_lama->cekpoin;
+        $cekpoin = null;
+        if( $data_lama->cekpoin_sol ){ $cekpoin = $data_lama->cekpoin_sol; }
+        else{ $cekpoin = 0; }
+
         if( $request->cs_jenis_kontrak && $request->cs_jenis_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
         if( $request->cs_nomor_kontrak && $request->cs_nomor_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
         if( $request->cs_waktu_instal && $request->cs_waktu_instal === 'ok' ){ $cekpoin = $cekpoin + 1; }
@@ -1701,7 +1737,7 @@ class PraLopController extends Controller
         if( $request->cs_format_kontrak && $request->cs_format_kontrak === 'ok' ){ $cekpoin = $cekpoin + 1; }
 
         // hanya checklist pertama yang dihitung
-        if( $data_lama->cs_list === true ){ $cekpoin = $data_lama->cekpoin; }
+        if( $data_lama->cs_list === true ){ $cekpoin = $data_lama->cekpoin_sol; }
 
         // update pralop -> cs_list = true
         DB::connection('pgsql')->table('form_pralop')->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) )
@@ -1710,7 +1746,7 @@ class PraLopController extends Controller
           'lop_keterangan' => 'PRA LOP PROSES : Review KB - Checklist Solution',
           'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
           'updated_by' => Auth::id(),
-          'cekpoin' => $cekpoin,
+          'cekpoin_sol' => $cekpoin,
           'cs_list' => true,
           'cs_jenis_kontrak' => $request->cs_jenis_kontrak,
           'cs_remark_jenis_kontrak' => $request->cs_remark_jenis_kontrak,
@@ -1765,7 +1801,10 @@ class PraLopController extends Controller
       else{
         $data_lama = $this->updatePraLopHistori( str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) );
 
-        $cekpoin = $data_lama->cekpoin;
+        $cekpoin = null;
+        if( $data_lama->cekpoin_leg ){ $cekpoin = $data_lama->cekpoin_leg; }
+        else{ $cekpoin = 0; }
+
         if( $request->cl_cakap_ttd && $request->cl_cakap_ttd === 'ok' ){ $cekpoin = $cekpoin + 1; }
         if( $request->cl_jangka_waktu && $request->cl_jangka_waktu === 'ok' ){ $cekpoin = $cekpoin + 1; }
         if( $request->cl_skema_bisnis && $request->cl_skema_bisnis === 'ok' ){ $cekpoin = $cekpoin + 1; }
@@ -1773,7 +1812,7 @@ class PraLopController extends Controller
         if( $request->cl_mom && $request->cl_mom === 'ok' ){ $cekpoin = $cekpoin + 1; }
 
         // hanya checklist legal pertama yang dihitung
-        if( $data_lama->cl_list === true ){ $cekpoin = $data_lama->cekpoin; }
+        if( $data_lama->cl_list === true ){ $cekpoin = $data_lama->cekpoin_leg; }
 
         // update pralop -> cl_list = true
         DB::connection('pgsql')->table('form_pralop')->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted))) )
@@ -1782,7 +1821,7 @@ class PraLopController extends Controller
           'lop_keterangan' => 'PRA LOP PROSES : Review KB - Checklist Legal',
           'updated_at' => Carbon::now()->translatedFormat('Y-m-d H:i:s'),
           'updated_by' => Auth::id(),
-          'cekpoin' => $cekpoin,
+          'cekpoin_leg' => $cekpoin,
           'cl_list' => true,
           'cl_cakap_ttd' => $request->cl_cakap_ttd,
           'cl_remark_cakap_ttd' => $request->cl_remark_cakap_ttd,

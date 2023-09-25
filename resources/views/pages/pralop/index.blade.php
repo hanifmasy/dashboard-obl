@@ -245,7 +245,8 @@
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">segmen</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">skema bayar<br>ke pelanggan</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">status order</th>
-                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Check Poin</th>
+                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Check Poin<br>Solution</th>
+                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Check Poin<br>Legal</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">keterangan</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">created at</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">created by</th>
@@ -641,7 +642,15 @@
                   },
 
                   {
-                     data: 'cekpoin',name: 'cekpoin',searchable:false,orderable:false,
+                     data: 'cekpoin_sol',name: 'cekpoin_sol',searchable:false,orderable:false,
+                     "render": function ( data, type, row ) {
+                       if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
+                       else{ return '<span style="white-space:normal">-</span>'; }
+                     }
+                  },
+
+                  {
+                     data: 'cekpoin_leg',name: 'cekpoin_leg',searchable:false,orderable:false,
                      "render": function ( data, type, row ) {
                        if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
                        else{ return '<span style="white-space:normal">-</span>'; }
