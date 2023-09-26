@@ -295,7 +295,7 @@
                                        <form id="" class="" action="" method="POST" enctype="multipart/form-data">
                                          @csrf
                                         <div class="table-responsive p-3">
-                                            <table id="" class="table align-items-center justify-content-center mb-0 table-hover text-center" >
+                                            <table id="table-mitra" class="table align-items-center justify-content-center mb-0 table-hover text-center" >
                                                 <thead>
                                                     <tr >
                                                         <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7"></th>
@@ -330,7 +330,7 @@
                                        <form id="" class="" action="" method="POST" enctype="multipart/form-data">
                                          @csrf
                                         <div class="table-responsive p-3">
-                                            <table id="" class="table align-items-center justify-content-center mb-0 table-hover text-center" >
+                                            <table id="table-tgl" class="table align-items-center justify-content-center mb-0 table-hover text-center" >
                                                 <thead>
                                                     <tr >
                                                         <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7"></th>
@@ -377,7 +377,7 @@
                                        <form id="" class="" action="" method="POST" enctype="multipart/form-data">
                                          @csrf
                                         <div class="table-responsive p-3">
-                                            <table id="" class="table align-items-center justify-content-center mb-0 table-hover text-center" >
+                                            <table id="table-ttd" class="table align-items-center justify-content-center mb-0 table-hover text-center" >
                                                 <thead>
                                                     <tr >
                                                         <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7"></th>
@@ -550,18 +550,56 @@
 
                 $('#pilih_card').change(function(){
                     if( $(this).val() === 'card_mitra' ){
-                      $('#card_mitra').show(); $('#table_mitra').show();
+                      $('#card_mitra').show(); $('#table_mitra').show(); tableMitra();
                       $('#card_tgl').hide(); $('#table_tgl').hide(); $('#card_ttd').hide(); $('#table_ttd').hide();
                     }
                     if( $(this).val() === 'card_tgl' ){
-                      $('#card_tgl').show(); $('#table_tgl').show();
+                      $('#card_tgl').show(); $('#table_tgl').show(); // tableTgl();
                       $('#card_ttd').hide(); $('#table_ttd').hide(); $('#card_mitra').hide(); $('#table_mitra').hide();
                     }
                     if( $(this).val() === 'card_ttd' ){
-                      $('#card_ttd').show(); $('#table_ttd').show();
+                      $('#card_ttd').show(); $('#table_ttd').show(); // tableTtd();
                       $('#card_tgl').hide(); $('#table_tgl').hide(); $('#card_mitra').hide(); $('#table_mitra').hide();
                     }
                 });
+
+                var tableMitra;
+                var tableTgl;
+                var tableTtd;
+                function tableMitra(){
+
+                  tableMitra = $('#table-mitra').DataTable({
+                    language: {
+                        url: "{{ asset('assets') }}/json/yajra_indonesia.json",
+                    },
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    retrieve: true,
+                    aaSorting: [],
+                    ajax: "{{ route('inputs.master') }}?ajx_fr=mitra",
+                    columns: [
+                      {
+                         data: 'DT_RowIndex',searchable:false,orderable:false,
+                         "render": function ( data, type, row ) {
+                           return '<b>'+data+'</b>';
+                         }
+                      },
+                      {
+                         data: 'nama_mitra',name: 'nama_mitra',searchable:true,orderable:false,
+                         "render": function ( data, type, row ) {
+                           return '<span style="white-space:normal">'+data+'</span>';
+                         }
+                      },
+
+                    ],
+                    // lengthChange:false,
+                    paging:true,
+                    // orderCellsTop: true,
+                    pageLength: 50,
+                  });
+
+                }
 
                 // START TABLE MASTER INPUT
                 // END TABLE MASTER INPUT

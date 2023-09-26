@@ -1805,7 +1805,7 @@
                               return 'Table_Dokumen_OBL_' + today;
                           },
                         exportOptions: {
-                             columns: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+                             columns: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
                          }
                     }
                   ],
@@ -1845,7 +1845,6 @@
                                   <div class="dropdown-menu">
                                     <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
                                     <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
-                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
                                     <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
                                     <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
                                     <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
@@ -1871,8 +1870,19 @@
                            }
                          }
                          else{
-                           if( is_user === '6' ){ return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>'; }
-                           else if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' || is_user === '13' ){ return `
+                           if( is_user === '6' && row.proses !== 'mitra_obl' ){ return '<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc('+row.obl_id+')"><i class="material-icons" style="font-size:18px;">note</i></button>'; }
+                           else if( is_user === '6' && row.proses === 'mitra_obl' ){
+                             return `
+                               <div class="dropdown">
+                                  <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                  <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                  </div>
+                                  </div>
+                               `;
+                           }
+                           else if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' ){ return `
                              <div class="dropdown">
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
                                 <div class="dropdown-menu">
@@ -1881,6 +1891,20 @@
                                 </div>
                                 </div>
                              `; }
+                           else if( is_user === '13' && row.proses !== 'legal' ){
+                             return `<button type="button" class="btn btn-sm btn-secondary mt-3" data-bs-toggle="popover" title="Keterangan OBL" onclick="ketDoc(`+row.obl_id+`)"><i class="material-icons" style="font-size:18px;">note</i></button>`;
+                           }
+                           else if( is_user === '13' && row.proses === 'legal' ){
+                             return `
+                               <div class="dropdown">
+                                  <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
+                                  <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
+                                    <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
+                                  </div>
+                                  </div>
+                               `;
+                           }
                            else if( is_user === '4' && row.is_revisi === false ){ return `
                              <div class="dropdown">
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
@@ -1954,7 +1978,6 @@
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
                                 <div class="dropdown-menu">
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
@@ -1981,7 +2004,6 @@
                                 <button data-bs-toggle="dropdown" class="btn btn-sm bg-gradient-light dropdown-toggle" aria-haspopup="true" aria-expanded="false">PILIHAN <span class="caret"></span></button>
                                 <div class="dropdown-menu">
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
@@ -2009,7 +2031,6 @@
                                 <div class="dropdown-menu">
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-edit" onclick="editDoc(`+row.obl_id+`)">EDIT</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-forms" onclick="formsDoc(`+row.obl_id+`)">FORM P0-P1</button>
-                                  <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-lampiran" onclick="lampiranDoc(`+row.obl_id+`)">LAMPIRAN</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-print" onclick="printDoc(`+row.obl_id+`)">PRINT</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-upload" onclick="uploadDoc(`+row.obl_id+`)">FILES</button>
                                   <button type="button" class="dropdown-item  font-weight-bolder opacity-9 action-ketdoc" onclick="ketDoc(`+row.obl_id+`)">KETERANGAN</button>
@@ -2170,9 +2191,15 @@
                     {
                        data: 'keterangan',name: 'keterangan',searchable:true,orderable:false,
                        "render": function ( data, type, row ) {
-                         // if(row.tgl_keterangan){ return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>'; }
-                         // else{ return '<span style="white-space:normal"></span>'; }
-                         return '<span white-space:normal><b>'+row.tgl_keterangan+'</b> '+data.substr(0,20)+'</span>';
+
+                         if( row.is_draf === 9 ){
+                            return '<span white-space:normal><b>'+row.tgl_keterangan+'</b> '+data.substr(0,20)+'</span>';
+                         }
+                         else{
+                           if( row.tgl_keterangan ){ return '<span style="white-space:normal"><b>'+row.tgl_keterangan+'</b><br> '+data+'</span>'; }
+                           else{ return '<span style="white-space:normal"></span>'; }
+                         }
+
                        }
                     },
                     {

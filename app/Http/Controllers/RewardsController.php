@@ -54,7 +54,10 @@ class RewardsController extends Controller
           DB::raw("sum(case when on_handling = 'final_pralop' then 1 else 0 end) as total_final_pralop"),
           DB::raw("sum(case when lop_count_revisi > 0 then 1 else 0 end) as total_doc_rev"),
           DB::raw("sum(lop_count_revisi) as total_prs_rev")
-        );
+        )
+        ->whereRaw("
+        (deleted_at is null or to_char(deleted_at,'yyyy-mm-dd') = '') and deleted_by is null
+        ");
 
         $obl = $query->groupBy('f1_witel')->orderBy('f1_witel','asc')->get()->toArray();
         $pralop = $query2->groupBy('lop_witel')->orderBy('lop_witel','asc')->get()->toArray();

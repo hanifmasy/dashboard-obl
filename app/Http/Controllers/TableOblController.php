@@ -592,7 +592,7 @@ class TableOblController extends Controller
                 ->get()->toArray();
               $table_edit_p4_attendees = DB::connection('pgsql')->table('form_p4_attendees')->select('*')->where('obl_id',$edit_obl_id)->get()->toArray();
               $mitra_vendor = DB::connection('pgsql')->table('mitras')->select('*')->get()->toArray();
-              $table_edit_keterangan = DB::connection('pgsql')->table('form_obl_histori')->select('f1_tgl_keterangan','f1_keterangan')->where('obl_id',$edit_obl_id)->orderBy('f1_tgl_keterangan','DESC')->get()->toArray();
+              $table_edit_keterangan = DB::connection('pgsql')->table('form_obl_histori')->select('is_draf','f1_tgl_keterangan','f1_keterangan')->where('obl_id',$edit_obl_id)->orderBy('f1_tgl_keterangan','DESC')->get()->toArray();
               $list_nomor_kb = DB::connection('pgsql')->table('form_obl')
               ->select(
                 DB::raw(

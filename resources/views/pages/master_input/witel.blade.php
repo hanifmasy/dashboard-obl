@@ -103,7 +103,7 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Manager Business Witel {{ $user_in_is ? $user_in_is->nama_witel : '' }}</h6>
+                                                            <h6 class="mb-0 text-sm">Manager Business Service Witel {{ $user_in_is ? $user_in_is->nama_witel : '' }}</h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -119,7 +119,7 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Manager Government Witel {{ $user_in_is ? $user_in_is->nama_witel : '' }}</h6>
+                                                            <h6 class="mb-0 text-sm">Manager Government Regional </h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -135,7 +135,7 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Manager Enterprise Witel {{ $user_in_is ? $user_in_is->nama_witel : '' }}</h6>
+                                                            <h6 class="mb-0 text-sm">Manager Enterprise Regional</h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -151,7 +151,7 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">GM Witel {{ $user_in_is ? $user_in_is->nama_witel : '' }}</h6>
+                                                            <h6 class="mb-0 text-sm">GM Witel / GM RGES </h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -340,7 +340,10 @@
                     {
                        data: 'jabatan',name: 'jabatan',searchable:true,orderable:false,
                        "render": function ( data, type, row ) {
-                         return '<span class="text-center" style="white-space:normal">'+data+'</span>';
+                         if( data === 'GM Witel' ){
+                           return '<span class="text-center" style="white-space:normal">GM Witel / GM RGES</span>';
+                         }
+                         else{ return '<span class="text-center" style="white-space:normal">'+data+'</span>'; }
                        }
                     },
                     {

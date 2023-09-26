@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use DataTables;
 use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -768,6 +769,15 @@ class InputsController extends Controller
     }
 
     public function masterInput(Request $request){
+      // if( $request->ajax() ){
+      //   $query = null;
+      //
+      //   if(){}
+      //
+      //   return DataTables::of($data)
+      //   ->addIndexColumn()
+      //   ->make(true);
+      // }
       $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
       ->leftJoin('witels','witels.id','=','users.witel_id')
       ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')

@@ -139,13 +139,13 @@ Route::post('obl-tables/edit/update', [TableOblController::class, 'update'])->mi
 Route::post('obl-tables/kembali-witel', [SolutionController::class, 'kembaliWitel'])->middleware(['auth','role_solution'])->name('obl.tables.kembali_witel');
 Route::post('obl-tables/lanjut-obl', [SolutionController::class, 'lanjutObl'])->middleware(['auth','role_solution'])->name('obl.tables.lanjut_obl');
 
- Route::post('obl-tables/proses-witel', [ProsesOblController::class, 'prosesWitel'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.proses_witel');
- Route::post('obl-tables/proses-obl', [ProsesOblController::class, 'prosesObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.proses_obl');
- Route::post('obl-tables/legal-obl', [ProsesOblController::class, 'legalObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.legal_obl');
- Route::post('obl-tables/mitra-obl', [ProsesOblController::class, 'mitraObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.mitra_obl');
- Route::post('obl-tables/closesm-obl', [ProsesOblController::class, 'closesmObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.closesm_obl');
- Route::post('obl-tables/done-obl', [ProsesOblController::class, 'doneObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.done_obl');
- Route::post('obl-tables/cancel-obl', [ProsesOblController::class, 'cancelObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.cancel_obl');
+Route::post('obl-tables/proses-witel', [ProsesOblController::class, 'prosesWitel'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.proses_witel');
+Route::post('obl-tables/proses-obl', [ProsesOblController::class, 'prosesObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.proses_obl');
+Route::post('obl-tables/legal-obl', [ProsesOblController::class, 'legalObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.legal_obl');
+Route::post('obl-tables/mitra-obl', [ProsesOblController::class, 'mitraObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.mitra_obl');
+Route::post('obl-tables/closesm-obl', [ProsesOblController::class, 'closesmObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.closesm_obl');
+Route::post('obl-tables/done-obl', [ProsesOblController::class, 'doneObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.done_obl');
+Route::post('obl-tables/cancel-obl', [ProsesOblController::class, 'cancelObl'])->middleware(['auth','role_obl_non_view'])->name('obl.tables.cancel_obl');
 
 Route::post('obl-lampiran', [LampiransController::class, 'index'])->middleware(['auth','role_obl_non_view'])->name('obl.lampiran.index');
 Route::post('obl-lampiran/create', [LampiransController::class, 'create'])->middleware(['auth','role_obl_non_view'])->name('obl.lampiran.create');

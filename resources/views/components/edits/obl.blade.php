@@ -320,16 +320,38 @@
                             </tr>
                           </thead>
                           <tbody>
+
+                            @if( $value['is_draf'] === 9 )
                             <tr>
                               <td class=" justify-content-center"><h6 class="text-sm">▶️ [{{ $value['f1_tgl_keterangan'] }}]</h6></td>
                               <td class="ps-4"><h6 class="text-sm">{{ $value['f1_keterangan'] }}</h6></td>
                             </tr>
+                            @else
+                              @if( $value['f1_tgl_keterangan'] )
+                              <tr>
+                                <td class=" justify-content-center"><h6 class="text-sm">▶️ [{{ $value['f1_tgl_keterangan'] }}]</h6></td>
+                                <td class="ps-4"><h6 class="text-sm">{{ $value['f1_keterangan'] }}</h6></td>
+                              </tr>
+                              @endif
+                            @endif
+
                             @if(isset($table_edit_keterangan))
                               @foreach($table_edit_keterangan as $tunjuk => $nilai)
+
+                              @if( $nilai->is_draf === 9 )
+                              <tr>
+                                <td class=" justify-content-center">[{{ $nilai->f1_tgl_keterangan }}]</td>
+                                <td>{{ $nilai->f1_keterangan }}</td>
+                              </tr>
+                              @else
+                                @if( $nilai->f1_tgl_keterangan )
                                 <tr>
                                   <td class=" justify-content-center">[{{ $nilai->f1_tgl_keterangan }}]</td>
                                   <td>{{ $nilai->f1_keterangan }}</td>
                                 </tr>
+                                @endif
+                              @endif
+
                               @endforeach
                             @endif
                           </tbody>

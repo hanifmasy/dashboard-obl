@@ -61,7 +61,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">OBL/SOLUTION</h6>
                 @endif
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link {{ $activePage == 'inputs-master' ? ' active bg-gradient-light ' : '' }} "
                     href="{{ route('inputs.master') }}">
                     <div class="text-center me-2 d-flex align-items-center justify-content-center" style="{{ $activePage == 'inputs-master' ? ' color:#2a2526;' : '' }}">
@@ -69,7 +69,7 @@
                     </div>
                     <span class="nav-link-text ms-1" style="{{ $activePage == 'inputs-master' ? ' color:#2a2526;' : '' }}">MASTER INPUT</span>
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link {{ $activePage == 'inputs' ? ' active bg-gradient-light ' : '' }} "
                     href="{{ route('inputs') }}">
