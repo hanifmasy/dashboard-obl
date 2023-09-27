@@ -61,6 +61,8 @@ class PraLopController extends Controller
         if($cl==='f'){ $query->whereRaw(" fp.lop_count_revisi > 0 "); }
         if($cl==='g'){ $query->whereRaw(" fp.lop_count_revisi > 0 "); }
         if($cl==='h'){ $query->whereRaw(" fp.on_handling = 'final_review_kb' "); }
+        if($cl==='j'){ $query->whereRaw(" fp.cekpoin_sol is not null and fp.cekpoin_sol > 0 "); }
+        if($cl==='k'){ $query->whereRaw(" fp.cekpoin_leg is not null and fp.cekpoin_leg > 0 "); }
       }
 
       $data = $query->whereRaw(" (fp.deleted_at is null or to_char(fp.deleted_at,'yyyy-mm-dd') = '') ")

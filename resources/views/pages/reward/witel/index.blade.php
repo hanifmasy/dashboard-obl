@@ -80,6 +80,16 @@
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                 TOTAL<br>PROSES REVISI
                                             </th>
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                TOTAL POIN<br>SOLUTION
+                                            </th>
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                TOTAL POIN<br>LEGAL
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-xs" id="data-pra-lop">
@@ -238,6 +248,8 @@
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('e') }}" class="text-black">`+value.total_final_pralop+`</a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('f') }}" class="text-black">`+value.total_doc_rev+`</a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('g') }}" class="text-black">`+value.total_prs_rev+`</a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('j') }}" class="text-black">`+value.total_poin_sol+`</a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('k') }}" class="text-black">`+value.total_poin_leg+`</a></td>
                           </tr>
                           `;
                       }
@@ -253,6 +265,8 @@
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('e') }}" class="text-black"><b>`+value.total_final_pralop+`</b></a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('f') }}" class="text-black"><b>`+value.total_doc_rev+`</b></a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('g') }}" class="text-black"><b>`+value.total_prs_rev+`</b></a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('j') }}" class="text-black"><b>`+value.total_poin_sol+`</b></a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('k') }}" class="text-black"><b>`+value.total_poin_leg+`</b></a></td>
                           </tr>
                           `;
                         }
@@ -267,6 +281,8 @@
                             <td>`+value.total_final_pralop+`</td>
                             <td>`+value.total_doc_rev+`</td>
                             <td>`+value.total_prs_rev+`</td>
+                            <td>`+value.total_poin_sol+`</td>
+                            <td>`+value.total_poin_leg+`</td>
                           </tr>
                           `;
                         }

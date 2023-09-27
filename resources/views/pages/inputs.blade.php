@@ -427,9 +427,9 @@
                                             <tr class="filterKontrak"><td colspan="2"><br></td></tr>
                                             <tr class="filterKontrak"><td colspan="2">
                                                 <button type="button" id="backFilterKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali </h6></button>
-                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success ms-10"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema WO </h6></button>
+                                                <button type="button" id="lanjutWO2" class="btn bg-gradient-success ms-6"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema WO </h6></button>
                                                 <button type="button" id="lanjutFilter" class="btn bg-gradient-info ms-1"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Skema KL / SP </h6></button>
-                                                <button type="submit" name="submit" value="draf_filter_kontrak" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_filter_kontrak" id="saveDraf" class="save-draf btn bg-gradient-primary ms-6"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <tr class="filterAwal"><td colspan="2"><br></td></tr>
                                             <tr class="filterAwal"><td colspan="2" id="judulFilter"><h6 class="ps-2">FILTER KL</h6></td></tr>
@@ -470,7 +470,7 @@
                                             <tr class="filterAwal"><td colspan="2">
                                                 <button type="button" id="backKontrak" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter Kontrak</h6></button>
                                                 <button type="button" id="lanjutP2" class="btn bg-gradient-info hide-filterkl"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P2</h6></button>
-                                                <button type="submit" name="submit" value="draf_filter_kl" id="saveDraf" class="hide-filterkl save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_filter_kl" id="saveDraf" class="hide-filterkl save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P2 -->
                                             <tr class="formP2"><td colspan="2"><br></td></tr>
@@ -543,7 +543,7 @@
                                             <tr class="formP2"><td colspan="2">
                                                 <button type="button" id="backFilter" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Filter KL</h6></button>
                                                 <button type="button" id="lanjutP3" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P3</h6></button>
-                                                <button type="submit" name="submit" value="draf_p2" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_p2" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P3 -->
                                             <tr class="formP3"><td colspan="2"><br></td></tr>
@@ -565,7 +565,7 @@
                                             <tr class="formP3"><td colspan="2">
                                                 <button type="button" id="backP2" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P2</h6></button>
                                                 <button type="button" id="lanjutP4" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P4</h6></button>
-                                                <button type="submit" name="submit" value="draf_p3" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_p3" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P4 -->
                                             <tr class="formP4"><td colspan="2"><br></td></tr>
@@ -698,7 +698,7 @@
                                             <tr class="formP4"><td colspan="2">
                                                 <button type="button" id="backP3" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P3</h6></button>
                                                 <button type="button" id="lanjutP5" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P5</h6></button>
-                                                <button type="submit" name="submit" value="draf_p4" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_p4" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P5 -->
                                             <tr class="formP5"><td colspan="2"><br></td></tr>
@@ -736,7 +736,7 @@
                                             <tr class="formP5"><td colspan="2">
                                                 <button type="button" id="backP4" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P4</h6></button>
                                                 <button type="button" id="lanjutP6" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P6</h6></button>
-                                                <button type="submit" name="submit" value="draf_p5" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_p5" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P6 -->
                                             <tr class="formP6"><td colspan="2"><br></td></tr>
@@ -830,7 +830,7 @@
                                                 <button type="button" id="backP5" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P5</h6></button>
                                                 <button type="button" id="lanjutP7" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P7</h6></button>
                                                 <button type="button" id="lanjutWO3" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form WO</h6></button>
-                                                <button type="submit" name="submit" value="draf_p6" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_p6" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P7 -->
                                             <tr class="formP7"><td colspan="2"><br></td></tr>
@@ -900,7 +900,7 @@
                                                 <button type="button" id="backP6" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
                                                 <button type="button" id="lanjutP8" class="diatas-100 btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form P8</h6></button>
                                                 <button type="button" id="lanjutSP" class="dibawah-100 btn bg-gradient-info" ><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form SP</h6></button>
-                                                <button type="submit" name="submit" value="draf_p7" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_p7" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- P8 -->
                                             <tr class="formP8"><td colspan="2"><br></td></tr>
@@ -925,7 +925,7 @@
                                             <tr class="formP8"><td colspan="2">
                                                 <button type="button" id="backP7" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
                                                 <button type="button" id="lanjutKL" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Lanjut Form KL</h6></button>
-                                                <button type="submit" name="submit" value="draf_p8" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_p8" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- WO -->
                                             <tr class="formWO"><td colspan="2"><br></td></tr>
@@ -1109,7 +1109,7 @@
                                             <tr class="formWO"><td colspan="2">
                                                 <button type="button" id="backP62" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P6</h6></button>
                                                 <button type="submit" name="submit" value="submit_wo" class="btn bg-gradient-success"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema WO</h6></button>
-                                                <button type="submit" name="submit" value="draf_wo" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_wo" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- SP -->
                                             <tr class="formSP"><td colspan="2"><br></td></tr>
@@ -1130,7 +1130,7 @@
                                             <tr class="formSP"><td colspan="2">
                                                 <button type="button" id="backP72" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P7</h6></button>
                                                 <button type="submit" name="submit" value="submit_sp" class="btn bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">Submit Skema SP</h6></button>
-                                                <button type="submit" name="submit" value="draf_sp" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_sp" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
                                             <!-- KL -->
                                             <tr class="formKL"><td colspan="2"><br></td></tr>
@@ -1406,7 +1406,7 @@
                                             <tr class="formKL"><td colspan="2">
                                                 <button type="button" id="backP8" class="btn bg-gradient-secondary"><h6 class="mb-0 text-sm" style="color:white;">Kembali Form P8</h6></button>
                                                 <button type="submit" name="submit" value="submit_kl" class="btn bg-gradient-info" ><h6 class="mb-0 text-sm" style="color:white;">Submit Skema KL</h6></button>
-                                                <button type="submit" name="submit" value="draf_kl" id="saveDraf" class="save-draf btn bg-gradient-primary ms-10"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
+                                                <button type="submit" name="submit" value="draf_kl" id="saveDraf" class="save-draf btn bg-gradient-primary ms-8"><h6 class="mb-0 text-sm" style="color:white;">Simpan sebagai Draf</h6></button>
                                             </td></tr>
 
                                             <!-- <tr class="diatas-100">

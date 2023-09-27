@@ -1366,14 +1366,14 @@
                                                   <label for="file_p1_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p1_{{ $value->id }}"><span id="label_file_p1_{{ $value->id }}">Pilih File P1</span></label>
                                                   <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p1_{{ $value->id }}" name="file_p1_{{ $value->id }}" type="file">
 
-                                                  <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload</button><br>
+                                                  <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload P1</button><br>
                                                   @if( $value->p0_nomor_p0 )
 
                                                     <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p0_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
                                                     <label for="file_p0_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p0_{{ $value->id }}"><span id="label_file_p0_{{ $value->id }}">Pilih File P0</span></label>
                                                     <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p0_{{ $value->id }}" name="file_p0_{{ $value->id }}" type="file">
 
-                                                    <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload</button>
+                                                    <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload P0</button>
                                                   @endif
 
                                               </div>

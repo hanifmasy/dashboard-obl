@@ -53,7 +53,9 @@ class RewardsController extends Controller
           DB::raw("sum(case when on_handling = 'legal' then 1 else 0 end) as total_legal"),
           DB::raw("sum(case when on_handling = 'final_pralop' then 1 else 0 end) as total_final_pralop"),
           DB::raw("sum(case when lop_count_revisi > 0 then 1 else 0 end) as total_doc_rev"),
-          DB::raw("sum(lop_count_revisi) as total_prs_rev")
+          DB::raw("sum(lop_count_revisi) as total_prs_rev"),
+          DB::raw("sum(case when cekpoin_sol is null then 0 else cekpoin_sol end) as total_poin_sol"),
+          DB::raw("sum(case when cekpoin_leg is null then 0 else cekpoin_leg end) as total_poin_leg")
         )
         ->whereRaw("
         (deleted_at is null or to_char(deleted_at,'yyyy-mm-dd') = '') and deleted_by is null
