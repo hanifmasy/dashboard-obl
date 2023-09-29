@@ -225,9 +225,46 @@
 
                                                   <!-- FILES USER WITEL VIEW -->
                                                   @if( $user_in_is->role_id === 5 )
-                                                    @if( isset($upload_doc) )
-                                                    @else
-                                                    @endif
+                                                      @if( isset($upload_doc) )
+                                                      <div class="row">
+                                                        <div class="col">
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                              @if( $upload_doc[0]['nama_p0'] !== '' )
+                                                              <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @else
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @endif
+                                                              <label class="btn btn-sm bg-gradient-light label_p0">File P0</label>
+                                                              <input style="visibility:hidden;" type="file" disabled>
+                                                            </div>
+                                                          </div>
+                                                          <div class="row">
+                                                            <div class="col d-flex">
+
+                                                              @if( $upload_doc[0]['nama_p1'] !== '' )
+                                                              <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @else
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                              @endif
+                                                              <label class="btn btn-sm bg-gradient-light label_p0">File P1</label>
+                                                              <input style="visibility:hidden;" type="file" disabled>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      @else
+                                                      <div class="row">
+                                                        <div class="col">
+                                                          [FILE FOR WITEL VIEW - ROUTING INDEX]
+                                                        </div>
+                                                      </div>
+                                                      @endif
                                                   @endif
                                                   <!-- END FILES USER WITEL VIEW -->
 
@@ -269,17 +306,52 @@
                                                     @else
                                                     <div class="row">
                                                       <div class="col">
-                                                        FILE FOR USER VIEW - ROUTING INDEX
+                                                        [FILE FOR ROLES VIEW - ROUTING INDEX]
                                                       </div>
                                                     </div>
                                                     @endif
                                                   @endif
                                                   <!-- END FILE USER VIEW -->
 
-                                                  <!-- FILES FOR WITEL/SOLUTION -->
-                                                  @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 )
+                                                  <!-- FILES FOR WITEL/LEGAL/SOLUTION/SUPERADMIN FOR P1 & P0 -->
+                                                  @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 || $user_in_is->role_id === 13 || $user_in_is->role_id === 9 )
                                                     @if( isset($upload_doc) )
-                                                      @if( $user_in_is->role_id === 4 && $upload_doc[0]['revisi_witel'] === true )
+                                                        @if( $user_in_is->role_id === 13 && $upload_doc[0]['f1_proses'] === 'legal' )
+                                                        <div class="row">
+                                                          <div class="col">
+                                                            <div class="row">
+                                                              <div class="col d-flex">
+
+                                                                @if( $upload_doc[0]['nama_p0'] !== '' )
+                                                                <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p0')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @else
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                @endif
+                                                                <label  class="btn btn-sm bg-gradient-light label_p1">File P0</label>
+                                                                <input style="visibility:hidden;" type="file" disabled>
+
+                                                              </div>
+                                                            </div>
+                                                            <div class="row">
+                                                              <div class="col d-flex">
+
+                                                                  @if( $upload_doc[0]['nama_p1'] !== '' )
+                                                                  <a target="_blank" href="{{ route('obl.files.visibility',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-visibility  d-flex py-2 mb-2"><i class="material-icons opacity-7">visibility</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                  <a href="{{ route('obl.files.download',['rt'=>1,'st'=>$upload_doc[0]['id'],'ft'=>Crypt::encrypt('p1')]) }}" role="button" class="mt-0 btn btn-link  btn-setting btn-link-download  d-flex py-2 mb-2"><i class="material-icons opacity-7">download</i></a>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                  @else
+                                                                  <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">visibility</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                  <button type="button" class="mt-0 btn btn-link  btn-setting bg-btn-disabled  d-flex py-2 mb-2" disabled><i class="material-icons opacity-5">download</i></button>&nbsp;&nbsp;▪&nbsp;&nbsp;
+                                                                  @endif
+                                                                  <label  class="btn btn-sm bg-gradient-light label_p1">File P1</label>
+                                                                  <input style="visibility:hidden;" type="file" disabled>
+
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      @elseif( $user_in_is->role_id === 4 && $upload_doc[0]['revisi_witel'] === true )
                                                       <div class="row">
                                                         <div class="col">
                                                           <div class="row">
@@ -351,7 +423,7 @@
                                                           </div>
                                                         </div>
                                                       </div>
-                                                      @elseif( $user_in_is->role_id === 8 && $upload_doc[0]['f1_proses'] === 'witel' )
+                                                      @elseif( ( $user_in_is->role_id === 8 && $upload_doc[0]['f1_proses'] === 'witel' ) || $user_in_is->role_id === 9 )
                                                       <div class="row">
                                                         <div class="col">
                                                           <div class="row">
@@ -427,7 +499,7 @@
                                                     @else
                                                       <div class="row">
                                                         <div class="col">
-                                                          @if( $user_in_is->role_id === 8 )
+                                                          @if( $user_in_is->role_id === 8 || $user_in_is->role_id === 13  || $user_in_is->role_id === 9 )
                                                           <div class="row">
                                                             <div class="col d-flex">
                                                               <span class="d-flex" id="btns_file_p0"></span>
@@ -445,7 +517,7 @@
                                                   @endif
                                                   <!-- END FILE USER WITEL/SOLUTION -->
 
-                                                  <!-- FILES FOR OBL USER -->
+                                                  <!-- FILES FOR OBL/SOLUTION/SUPERADMIN -->
                                                   @if( $user_in_is->role_id === 2 || $user_in_is->role_id === 8  || $user_in_is->role_id === 9 )
                                                   <div class="row">
                                                     <div class="col">
@@ -648,20 +720,23 @@
                                                     </div>
                                                   </div>
                                                   @endif
-                                                  <!-- END FILE USER OBL -->
+                                                  <!-- END FILE USER OBL/SOLUTION/SUPERADMIN -->
 
                                                 </td>
                                             </tr>
                                             <tr><td>
 
                                               @if(isset($upload_doc))
+
                                                   @if( $user_in_is->role_id === 5  )
                                                   <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-light shadow-primary text-sm" aria-pressed="true">KEMBALI</a>
                                                   @endif
+
                                                   @if( $user_in_is->role_id === 1 || $user_in_is->role_id === 3  || $user_in_is->role_id === 7 )
                                                   <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
                                                   @endif
-                                                  @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 )
+
+                                                  @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 || $user_in_is->role_id === 13 )
                                                     @if( $user_in_is->role_id === 4 && $upload_doc[0]['revisi_witel'] === true )
                                                     <input type="text" name="submit_upload_doc_id" value="{{ $upload_doc[0]['id'] }}" hidden>
                                                     <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-light shadow-primary text-sm" aria-pressed="true">KEMBALI</a>
@@ -676,17 +751,23 @@
                                                     <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
                                                     <button type="submit" name="submit" id="submit_upload" class="btn btn-lg bg-upload-btn"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
                                                     <button type="button" id="submit_upload_loading" class="btn btn-lg bg-upload-btn btn-submit-loading" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
+                                                    @elseif( $user_in_is->role_id === 13 && $upload_doc[0]['f1_proses'] === 'legal' )
+                                                    <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
                                                     @endif
                                                   @endif
+
                                                   @if( $user_in_is->role_id === 2 || $user_in_is->role_id === 9 )
                                                   <input type="text" name="submit_upload_doc_id" value="{{ $upload_doc[0]['id'] }}" hidden>
                                                   <a href="{{ route('obl.tables') }}" role="button" id="btn-kembali-upload" class="mb-3 btn btn-lg bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
                                                   <button type="submit" name="submit" id="submit_upload" class="btn btn-lg bg-upload-btn"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
                                                   <button type="button" id="submit_upload_loading" class="btn btn-lg bg-upload-btn btn-submit-loading" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
                                                   @endif
+
                                               @else
+
                                                   @if( $user_in_is->role_id === 1 || $user_in_is->role_id === 3 || $user_in_is->role_id === 5 || $user_in_is->role_id === 7 )
                                                   @endif
+
                                                   @if( $user_in_is->role_id === 4 || $user_in_is->role_id === 8 )
                                                     @if( isset($upload_doc) )
                                                     @else
@@ -699,12 +780,14 @@
                                                         @endif
                                                     @endif
                                                   @endif
+
                                                   @if( $user_in_is->role_id === 2 || $user_in_is->role_id === 9 )
                                                   <input type="text" name="submit_upload_doc_id" id="submit_upload_doc_id"  hidden>
                                                   <a href="{{ route('obl.upload.index') }}" role="button" id="btn-kembali-upload" class="mb-8 btn btn-lg btn-kembali-upload bg-gradient-secondary text-sm" aria-pressed="true">KEMBALI</a>
                                                   <button type="submit" name="submit" id="submit_upload" class="mt-3 btn btn-lg btn-submit-upload bg-gradient-info"><h6 class="mb-0 text-sm" style="color:white;">UPLOAD</h6></button>
                                                   <button type="button" id="submit_upload_loading" class="mt-3 btn btn-lg btn-submit-loading bg-gradient-info" disabled><h6 class="mb-0 text-sm" style="color:white;"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading</h6></button>
                                                   @endif
+
                                               @endif
 
                                             </td></tr>

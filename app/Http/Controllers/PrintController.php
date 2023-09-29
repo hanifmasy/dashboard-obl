@@ -59,12 +59,7 @@ class PrintController extends Controller
     public function generateDocP0($var_obl_id){
       $docs = DB::connection('pgsql')->table('form_obl')->leftJoin('mitras','mitras.id','=','f1_mitra_id')
       ->select(
-        'form_obl.id',
-        'f1_nama_plggn',
-        'f1_judul_projek',
-        'p0_nomor_p0',
-        'p0_pemeriksa',
-        'f1_witel',
+        'form_obl.*',
         DB::raw("to_char(p0_tgl_submit,'DD Mon YYYY') as tgl_submit"),
         DB::raw("
         case
@@ -76,40 +71,83 @@ class PrintController extends Controller
         end as skema_bayar
         "),
         DB::raw(" date_part('month', age(p1_tgl_kontrak_akhir ,p1_tgl_kontrak_mulai) ) as periode_bulan"),
-        'p1_estimasi_harga',
-        'f1_nilai_kb',
-        'f1_mitra_id',
-        'mitras.nama_mitra',
-        'p0_nik_am',
-        'p0_nik_manager',
-        'p0_nik_gm',
-        'f1_segmen',
-        'f1_folder',
-        'created_at'
-      )
-      ->where('form_obl.id',$var_obl_id)->first();
+        'mitras.nama_mitra'
+      )->where('form_obl.id',$var_obl_id)->first();
+
       $docs_year = new Carbon($docs->created_at);
       $docs_year = $docs_year->translatedFormat('Y');
+
+      $p1_tgl_p1 = new Carbon($docs->p1_tgl_p1);
+      $p1_tgl_p1 = $p1_tgl_p1->translatedFormat('d F Y');
+      $p1_tgl_delivery = new Carbon($docs->p1_tgl_delivery);
+      $p1_tgl_delivery = $p1_tgl_delivery->translatedFormat('d F Y');
+      $p1_tgl_doc_plggn = new Carbon($docs->p1_tgl_doc_plggn);
+      $p1_tgl_doc_plggn = $p1_tgl_doc_plggn->translatedFormat('d F Y');
+
+      $p1_pemeriksa = '';
+      $p1_gm_witel = '';
+      $p1_mgr_pemeriksa = '';
+      if( $docs->f1_segmen === 'DBS' ){
+        $p1_pemeriksa = 'Business Service Witel ' . ucfirst((strtolower($docs->f1_witel)));
+        $p1_mgr_pemeriksa = 'Manager Business Service Witel ' . ucfirst((strtolower($docs->f1_witel)));
+        $p1_gm_witel = 'GM Telkom Witel ' . ucfirst((strtolower($docs->f1_witel)));
+      }
+      if( $docs->f1_segmen === 'DES' ){
+        $p1_pemeriksa = 'Enterprise Service Regional';
+        $p1_mgr_pemeriksa = 'Manager Enterprise Regional';
+        $p1_gm_witel = 'GM RGES';
+      }
+      if( $docs->f1_segmen === 'DGS' ){
+        $p1_pemeriksa = 'Government Service Regional';
+        $p1_mgr_pemeriksa = 'Manager Government Regional';
+        $p1_gm_witel = 'GM RGES';
+      }
+
+      $harga_mrc = '';
+      $harga_otc = '';
+      if( $docs->p1_skema_bayar === 'otc' ){ $harga_otc = $docs->p1_estimasi_harga; }
+      if( $docs->p1_skema_bayar === 'recurring' ){ $harga_mrc = $docs->p1_estimasi_harga; }
+
+      $tgl_submit = new Carbon($docs->p0_tgl_submit);
+      $tgl_submit = $tgl_submit->translatedFormat('d F Y');
+
       $templateProcessor = new TemplateProcessor(public_path() . '/basic_documents/basic_p0_doc.docx');
       $templateProcessor->setValues([
-          'f1_nama_plggn' => $docs->f1_nama_plggn,
-          'f1_judul_projek' => $docs->f1_judul_projek,
-          'p0_nomor_p0' => $docs->p0_nomor_p0,
-          'p0_pemeriksa' => strtoupper(((string)strtok($docs->p0_pemeriksa,'_'))),
-          'f1_witel' =>  ucfirst((strtolower($docs->f1_witel))),
-          'p0_tgl_submit' => $docs->tgl_submit,
-          'f1_skema_bayar' => $docs->skema_bayar,
-          'p1_estimasi_harga' => $docs->p1_estimasi_harga,
-          'string_p1_estimasi_harga' => RupiahFormat::terbilang( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
-          'periode_bulan' => $docs->periode_bulan,
-          'f1_mitra_id' => $docs->nama_mitra,
-          'revenue' =>   RupiahFormat::currency( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ),
-          'harga_ke_mitra' => RupiahFormat::currency( ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) - ( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ) ) ),
-          'p0_nik_am' => $docs->p0_nik_am,
-          'p0_nik_manager' => $docs->p0_nik_manager,
-          'p0_nik_gm' => $docs->p0_nik_gm,
-          'f1_segmen' => $docs->f1_segmen,
-          'f1_folder' => $docs->f1_folder
+        'p0_nomor_p0' => $docs->p0_nomor_p0,
+        'p0_tgl_submit' => $tgl_submit,
+        'p1_pemeriksa' => $p1_pemeriksa,
+        'p1_mgr_pemeriksa' => $p1_mgr_pemeriksa,
+        'p1_gm_witel' => $p1_gm_witel,
+        'f1_witel' =>  ucfirst((strtolower($docs->f1_witel))),
+        'p1_tgl_p1' => $p1_tgl_p1,
+        'p1_tgl_delivery' => $p1_tgl_delivery,
+        'p1_tgl_doc_plggn' => $p1_tgl_doc_plggn,
+        'p1_lokasi_instal' => $docs->p1_lokasi_instal,
+        'p1_skema_bayar' => $docs->skema_bayar,
+        'p1_skema_bisnis' => $docs->skema_bisnis,
+        'p1_mekanisme_bayar' => $docs->mekanisme_bayar,
+        'f1_nama_plggn' => $docs->f1_nama_plggn,
+        'f1_judul_projek' => $docs->f1_judul_projek,
+        'periode_bulan' => $docs->periode_bulan,
+        'string_periode_bulan' => NumberToWords::transformNumber('id', (int)$docs->periode_bulan),
+        'f1_mitra_id' => $docs->nama_mitra,
+        'f1_nilai_kb' => $docs->f1_nilai_kb,
+        'p1_dibuat_am' => $docs->p1_dibuat_am,
+        'p1_diperiksa_manager' => $docs->p1_diperiksa_manager,
+        'p1_disetujui_gm' => $docs->p1_disetujui_gm,
+        'p1_paragraf' => $docs->p1_paragraf,
+        'p1_aspek_strategis' => $docs->p1_aspek_strategis,
+        'p1_lingkup_kerja' => $docs->p1_lingkup_kerja,
+        'p1_slg' => $docs->p1_slg,
+        'harga_mrc' => $harga_mrc,
+        'harga_otc' => $harga_otc,
+        'ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) * 0.11 ),
+        'total_ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) + ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) * 0.11 ) ),
+        'rev_total_telkom' => RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->f1_nilai_kb,',')))) - (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
+        'p1_estimasi_harga' => $docs->p1_estimasi_harga,
+        'string_p1_estimasi_harga' => RupiahFormat::terbilang( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
+        'revenue' =>   RupiahFormat::currency( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ),
+        'harga_ke_mitra' => RupiahFormat::currency( ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) - ( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ) ) )
       ]);
       $filename = Auth::id() . '_' . (string) Str::uuid();
       $file_path = public_path().'/temp_saved_docs';
@@ -123,14 +161,7 @@ class PrintController extends Controller
     public function generateDocP1($var_obl_id){
       $docs = DB::connection('pgsql')->table('form_obl')->leftJoin('mitras','mitras.id','=','f1_mitra_id')
       ->select(
-        'form_obl.id',
-        'f1_nama_plggn',
-        'f1_judul_projek',
-        'p1_nomor_p1',
-        'p1_pemeriksa',
-        'f1_witel',
-        'p1_tgl_delivery',
-        'p1_tgl_p1',
+        'form_obl.*',
         DB::raw("
         case
         when p1_skema_bayar = 'otc' then 'One Time Charge (OTC)'
@@ -156,22 +187,12 @@ class PrintController extends Controller
         end as mekanisme_bayar
         "),
         DB::raw(" date_part('month', age(p1_tgl_kontrak_akhir ,p1_tgl_kontrak_mulai) ) as periode_bulan"),
-        'p1_estimasi_harga',
-        'f1_nilai_kb',
-        'f1_mitra_id',
-        'mitras.nama_mitra',
-        'p1_dibuat_am',
-        'p1_diperiksa_manager',
-        'p1_disetujui_gm',
-        'p1_lokasi_instal',
-        'p1_tgl_doc_plggn',
-        'f1_segmen',
-        'f1_folder',
-        'created_at'
-      )
-      ->where('form_obl.id',$var_obl_id)->first();
+        'mitras.nama_mitra'
+      )->where('form_obl.id',$var_obl_id)->first();
+
       $docs_year = new Carbon($docs->created_at);
       $docs_year = $docs_year->translatedFormat('Y');
+
       $p1_tgl_p1 = new Carbon($docs->p1_tgl_p1);
       $p1_tgl_p1 = $p1_tgl_p1->translatedFormat('d F Y');
       $p1_tgl_delivery = new Carbon($docs->p1_tgl_delivery);
@@ -179,29 +200,66 @@ class PrintController extends Controller
       $p1_tgl_doc_plggn = new Carbon($docs->p1_tgl_doc_plggn);
       $p1_tgl_doc_plggn = $p1_tgl_doc_plggn->translatedFormat('d F Y');
 
+      $p1_pemeriksa = '';
+      $p1_gm_witel = '';
+      $p1_mgr_pemeriksa = '';
+      if( $docs->f1_segmen === 'DBS' ){
+        $p1_pemeriksa = 'Business Service Witel ' . ucfirst((strtolower($docs->f1_witel)));
+        $p1_mgr_pemeriksa = 'Manager Business Service Witel ' . ucfirst((strtolower($docs->f1_witel)));
+        $p1_gm_witel = 'GM Telkom Witel ' . ucfirst((strtolower($docs->f1_witel)));
+      }
+      if( $docs->f1_segmen === 'DES' ){
+        $p1_pemeriksa = 'Enterprise Service Regional';
+        $p1_mgr_pemeriksa = 'Manager Enterprise Regional';
+        $p1_gm_witel = 'GM RGES';
+      }
+      if( $docs->f1_segmen === 'DGS' ){
+        $p1_pemeriksa = 'Government Service Regional';
+        $p1_mgr_pemeriksa = 'Manager Government Regional';
+        $p1_gm_witel = 'GM RGES';
+      }
+
+      $harga_mrc = '';
+      $harga_otc = '';
+      if( $docs->p1_skema_bayar === 'otc' ){ $harga_otc = $docs->p1_estimasi_harga; }
+      if( $docs->p1_skema_bayar === 'recurring' ){ $harga_mrc = $docs->p1_estimasi_harga; }
+
       $templateProcessor = new TemplateProcessor(public_path() . '/basic_documents/basic_p1_doc.docx');
       $templateProcessor->setValues([
-          'p1_nomor_p1' => $docs->p1_nomor_p1,
-          'p1_pemeriksa' => strtoupper(((string)strtok($docs->p1_pemeriksa,'_'))),
-          'f1_witel' =>  ucfirst((strtolower($docs->f1_witel))),
-          'p1_tgl_p1' => $p1_tgl_p1,
-          'p1_tgl_delivery' => $p1_tgl_delivery,
-          'p1_tgl_doc_plggn' => $p1_tgl_doc_plggn,
-          'p1_lokasi_instal' => $docs->p1_lokasi_instal,
-          'p1_skema_bayar' => $docs->skema_bayar,
-          'p1_skema_bisnis' => $docs->skema_bisnis,
-          'p1_mekanisme_bayar' => $docs->mekanisme_bayar,
-          'p1_estimasi_harga' => $docs->p1_estimasi_harga,
-          'string_p1_estimasi_harga' => RupiahFormat::terbilang( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
-          'revenue' =>   RupiahFormat::currency( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ),
-          'harga_ke_mitra' => RupiahFormat::currency( ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) - ( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ) ) ),
-          'f1_nama_plggn' => $docs->f1_nama_plggn,
-          'f1_judul_projek' => $docs->f1_judul_projek,
-          'periode_bulan' => $docs->periode_bulan,
-          'f1_mitra_id' => $docs->nama_mitra,
-          'p1_dibuat_am' => $docs->p1_dibuat_am,
-          'p1_diperiksa_manager' => $docs->p1_diperiksa_manager,
-          'p1_disetujui_gm' => $docs->p1_disetujui_gm
+        'p1_nomor_p1' => $docs->p1_nomor_p1,
+        'p1_pemeriksa' => $p1_pemeriksa,
+        'p1_mgr_pemeriksa' => $p1_mgr_pemeriksa,
+        'p1_gm_witel' => $p1_gm_witel,
+        'f1_witel' =>  ucfirst((strtolower($docs->f1_witel))),
+        'p1_tgl_p1' => $p1_tgl_p1,
+        'p1_tgl_delivery' => $p1_tgl_delivery,
+        'p1_tgl_doc_plggn' => $p1_tgl_doc_plggn,
+        'p1_lokasi_instal' => $docs->p1_lokasi_instal,
+        'p1_skema_bayar' => $docs->skema_bayar,
+        'p1_skema_bisnis' => $docs->skema_bisnis,
+        'p1_mekanisme_bayar' => $docs->mekanisme_bayar,
+        'f1_nama_plggn' => $docs->f1_nama_plggn,
+        'f1_judul_projek' => $docs->f1_judul_projek,
+        'periode_bulan' => $docs->periode_bulan,
+        'string_periode_bulan' => NumberToWords::transformNumber('id', (int)$docs->periode_bulan),
+        'f1_mitra_id' => $docs->nama_mitra,
+        'f1_nilai_kb' => $docs->f1_nilai_kb,
+        'p1_dibuat_am' => $docs->p1_dibuat_am,
+        'p1_diperiksa_manager' => $docs->p1_diperiksa_manager,
+        'p1_disetujui_gm' => $docs->p1_disetujui_gm,
+        'p1_paragraf' => $docs->p1_paragraf,
+        'p1_aspek_strategis' => $docs->p1_aspek_strategis,
+        'p1_lingkup_kerja' => $docs->p1_lingkup_kerja,
+        'p1_slg' => $docs->p1_slg,
+        'harga_mrc' => $harga_mrc,
+        'harga_otc' => $harga_otc,
+        'ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) * 0.11 ),
+        'total_ppn' =>  RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) + ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) * 0.11 ) ),
+        'rev_total_telkom' => RupiahFormat::currency( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->f1_nilai_kb,',')))) - (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
+        'p1_estimasi_harga' => $docs->p1_estimasi_harga,
+        'string_p1_estimasi_harga' => RupiahFormat::terbilang( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) ),
+        'revenue' =>   RupiahFormat::currency( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ),
+        'harga_ke_mitra' => RupiahFormat::currency( ( (float)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,',')))) - ( (int)str_replace('.','',str_replace('Rp. ','',(strtok($docs->p1_estimasi_harga,','))))  * 0.1 ) ) )
       ]);
       $filename = Auth::id() . '_' . (string) Str::uuid();
       $file_path = public_path().'/temp_saved_docs';

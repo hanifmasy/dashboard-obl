@@ -717,13 +717,30 @@
 
                       <div class="row d-flex align-items-center mt-1 mb-1 p-1">
                         <div class="col-md-12">
-                        @if( isset($pralop_files) )
-                          @if( $pralop_files )
-                            @foreach( $pralop_files as $key => $value )
-                              <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
-                            @endforeach
+                          @if( isset($pralop_files) )
+                            @if( $pralop_files )
+                              @foreach( $pralop_files as $key => $value )
+                                <div class="btn-group ps-2" role="group">
+                                  @if( $value->tipe_file === 'file_draf_kb' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> DRAF KB </button>
+                                  @elseif( $value->tipe_file === 'file_rab' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> RAB </button>
+                                  @elseif( $value->tipe_file === 'file_mom' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> MOM </button>
+                                  @elseif( $value->tipe_file === 'file_basplit' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> BA Splitting </button>
+                                  @elseif( $value->tipe_file === 'file_skk' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> SKK </button>
+                                  @elseif( $value->tipe_file === 'file_attachment' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> File Tambahan </button>
+                                  @endif
+                                  <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 btn btn-link bg-gradient-secondary"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                                </div>
+                              @endforeach
+                            @else
+                              <h5 class="text-danger text-xs">[ BELUM ADA FILE ]</h5>
+                            @endif
                           @endif
-                        @endif
                       </div>
                     </div>
 
@@ -816,13 +833,30 @@
 
                       <div class="row d-flex align-items-center mt-1 mb-1 p-1">
                         <div class="col-md-12">
-                        @if( isset($pralop_files) )
-                          @if( $pralop_files )
-                            @foreach( $pralop_files as $key => $value )
-                              <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
-                            @endforeach
+                          @if( isset($pralop_files) )
+                            @if( $pralop_files )
+                              @foreach( $pralop_files as $key => $value )
+                                <div class="btn-group ps-2" role="group">
+                                  @if( $value->tipe_file === 'file_draf_kb' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> DRAF KB </button>
+                                  @elseif( $value->tipe_file === 'file_rab' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> RAB </button>
+                                  @elseif( $value->tipe_file === 'file_mom' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> MOM </button>
+                                  @elseif( $value->tipe_file === 'file_basplit' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> BA Splitting </button>
+                                  @elseif( $value->tipe_file === 'file_skk' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> SKK </button>
+                                  @elseif( $value->tipe_file === 'file_attachment' )
+                                  <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> File Tambahan </button>
+                                  @endif
+                                  <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 btn btn-link bg-gradient-secondary"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                                </div>
+                              @endforeach
+                            @else
+                              <h5 class="text-danger text-xs">[ BELUM ADA FILE ]</h5>
+                            @endif
                           @endif
-                        @endif
                       </div>
                     </div>
 
@@ -1159,15 +1193,30 @@
 
                         <div class="row d-flex align-items-center mt-1 mb-1 p-1">
                           <div class="col-md-12">
-                          @if( isset($pralop_files) )
-                            @if( $pralop_files )
-                              @foreach( $pralop_files as $key => $value )
-                                <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 ms-1 btn btn-link bg-gradient-secondary px-3"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
-                              @endforeach
-                            @else
-                              <h5 class="text-danger text-xs">[ BELUM ADA FILE ]</h5>
+                            @if( isset($pralop_files) )
+                              @if( $pralop_files )
+                                @foreach( $pralop_files as $key => $value )
+                                  <div class="btn-group ps-2" role="group">
+                                    @if( $value->tipe_file === 'file_draf_kb' )
+                                    <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> DRAF KB </button>
+                                    @elseif( $value->tipe_file === 'file_rab' )
+                                    <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> RAB </button>
+                                    @elseif( $value->tipe_file === 'file_mom' )
+                                    <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> MOM </button>
+                                    @elseif( $value->tipe_file === 'file_basplit' )
+                                    <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> BA Splitting </button>
+                                    @elseif( $value->tipe_file === 'file_skk' )
+                                    <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> SKK </button>
+                                    @elseif( $value->tipe_file === 'file_attachment' )
+                                    <button disabled type="button" name="" class="btn btn-link bg-gradient-secondary mt-1"> File Tambahan </button>
+                                    @endif
+                                    <button onclick="downloadKB( {{ $value->id }} )" type="button" class="mt-1 btn btn-link bg-gradient-secondary"> <i class="material-icons text-sm">download</i> {{ $value->nama_asli_files }}</button>
+                                  </div>
+                                @endforeach
+                              @else
+                                <h5 class="text-danger text-xs">[ BELUM ADA FILE ]</h5>
+                              @endif
                             @endif
-                          @endif
                         </div>
                       </div>
 
@@ -1401,7 +1450,7 @@
                     <!-- End Sub Layanan -->
 
                     <!-- Tambah Layanan -->
-                    @if( $user_pralop->role_id === 4 )
+                    @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
                     <div class="row">
                       <div class="card h-100">
                         <form id="formLayanan" action="" method="POST" enctype="multipart/form-data">
