@@ -63,6 +63,7 @@ class PraLopController extends Controller
         if($cl==='h'){ $query->whereRaw(" fp.on_handling = 'final_review_kb' "); }
         if($cl==='j'){ $query->whereRaw(" fp.cekpoin_sol is not null and fp.cekpoin_sol > 0 "); }
         if($cl==='k'){ $query->whereRaw(" fp.cekpoin_leg is not null and fp.cekpoin_leg > 0 "); }
+        if($cl==='m'){ $query->whereRaw(" ( fp.cekpoin_sol is not null and fp.cekpoin_sol > 0 ) and ( fp.cekpoin_leg is not null and fp.cekpoin_leg > 0 ) "); }
       }
 
       $data = $query->whereRaw(" (fp.deleted_at is null or to_char(fp.deleted_at,'yyyy-mm-dd') = '') ")
@@ -110,16 +111,16 @@ class PraLopController extends Controller
     ->select('fp.*','fp.lop_keterangan as keterangan',DB::raw(" to_char(lop_tgl_keterangan,'DD MON YYYY hh24:mi') as tgl_keterangan"),DB::raw(" (case when lop_tgl_keterangan is null then 0 else TO_CHAR(lop_tgl_keterangan,'yyyymmdd.hh24mi')::NUMERIC end) as sort_tgl"),'u.nama_lengkap as user_update','ur.role_id')
     ->where('fp.id',$edit_pralop_id)->first();
 
-    if( ($user_pralop->role_id === 4 || $user_pralop->role_id === 5) && $pralop->on_handling !== 'witel' ){
-      return redirect()->route('witels.pralop');
-    }
-    else if( $user_pralop->role_id === 8 && ( $pralop->on_handling !== 'solution' && $pralop->on_handling !== 'final_pralop' ) ){
-      return redirect()->route('witels.pralop');
-    }
-    else if( $user_pralop->role_id === 13 && $pralop->on_handling !== 'legal' ){
-      return redirect()->route('witels.pralop');
-    }
-    else if( $user_pralop->role_id !== 9 && $user_pralop->role_id !== 4 && $user_pralop->role_id !== 5 && $user_pralop->role_id !== 8 && $user_pralop->role_id !== 13 ){
+    // if( ($user_pralop->role_id === 4 || $user_pralop->role_id === 5) && $pralop->on_handling !== 'witel' ){
+    //   return redirect()->route('witels.pralop');
+    // }
+    // else if( $user_pralop->role_id === 8 && ( $pralop->on_handling !== 'solution' && $pralop->on_handling !== 'final_pralop' ) ){
+    //   return redirect()->route('witels.pralop');
+    // }
+    // else if( $user_pralop->role_id === 13 && $pralop->on_handling !== 'legal' ){
+    //   return redirect()->route('witels.pralop');
+    // }
+    if( $user_pralop->role_id !== 9 && $user_pralop->role_id !== 4 && $user_pralop->role_id !== 5 && $user_pralop->role_id !== 8 && $user_pralop->role_id !== 13 ){
       return redirect()->route('witels.pralop');
     }
 
@@ -167,7 +168,65 @@ class PraLopController extends Controller
     ->where('pralop_id', $pralop->id)
     ->get()->toArray();
 
-    return view('pages.pralop.detail',compact('pralop','pralop_histori','layanan','encrypted','user_pralop','arr_log_histori','pralop_files'));
+    $ceklist_sol = [];
+    $ceklist_leg = [];
+    if( $pralop->cs_list === true ){
+      $query_lop1 = DB::connection('pgsql')->table('form_pralop')
+      ->select('id',DB::raw("to_char(updated_at,'dd Mon YYYY hh24:mi') as cek_ke"))->where('id', $edit_pralop_id )
+      ->whereRaw(" cs_list is true and lop_keterangan ~ 'Checklist Solution' ")
+      ->first();
+      $query_lop2 = DB::connection('pgsql')->table('form_pralop_histori')
+      ->select('id',DB::raw("to_char(updated_at,'dd Mon YYYY hh24:mi') as cek_ke"))->where('lop_id_pralop', $edit_pralop_id )
+      ->whereRaw(" cs_list is true and lop_keterangan ~ 'Checklist Solution' ")
+      ->orderBy('updated_at','desc')->get()->toArray();
+
+      if( $query_lop1 ){
+        array_push($ceklist_sol,[
+                    'id' => $query_lop1->id,
+                    'tipe' => 'pralop',
+                    'cek_ke' => $query_lop1->cek_ke
+                  ]);
+      }
+      if( $query_lop2 ){
+        foreach( $query_lop2 as $key => $value ){
+          array_push($ceklist_sol,[
+            'id' => $value->id,
+            'tipe' => 'histori',
+            'cek_ke' => $value->cek_ke
+          ]);
+        }
+      }
+    }
+    if( $pralop->cl_list === true ){
+      $query_lop1 = DB::connection('pgsql')->table('form_pralop')
+      ->select('id',DB::raw("to_char(updated_at,'dd Mon YYYY hh24:mi') as cek_ke"))->where('id', $edit_pralop_id )
+      ->whereRaw(" cl_list is true and lop_keterangan ~ 'Checklist Legal' ")
+      ->first();
+      $query_lop2 = DB::connection('pgsql')->table('form_pralop_histori')
+      ->select('id',DB::raw("to_char(updated_at,'dd Mon YYYY hh24:mi') as cek_ke"))->where('lop_id_pralop', $edit_pralop_id )
+      ->whereRaw(" cl_list is true and lop_keterangan ~ 'Checklist Legal' ")
+      ->orderBy('updated_at','desc')->get()->toArray();
+
+      if( $query_lop1 ){
+        array_push($ceklist_leg,[
+                    'id' => $query_lop1->id,
+                    'tipe' => 'pralop',
+                    'cek_ke' => $query_lop1->cek_ke
+                  ]);
+      }
+      if( $query_lop2 ){
+        foreach( $query_lop2 as $key => $value ){
+          array_push($ceklist_leg,[
+            'id' => $value->id,
+            'tipe' => 'histori',
+            'cek_ke' => $value->cek_ke
+          ]);
+        }
+      }
+    }
+    // dd( $ceklist_sol, $ceklist_leg );
+
+    return view('pages.pralop.detail',compact('pralop','pralop_histori','layanan','encrypted','user_pralop','arr_log_histori','pralop_files','ceklist_sol','ceklist_leg'));
   }
 
   public function updatePraLopHistori($var_pralop_id){
@@ -376,9 +435,9 @@ class PraLopController extends Controller
           $nama_folder = $cek_quote_kontrak_numeric . $cek_quote_kontrak_alphabet;
         }
         else if( $cek_quote_kontrak_alphabet === "" ){
-          $temp_folder_old_id = $cek_quote_kontrak->id;
+          $temp_folder_old_id = $cek_quote_kontrak[ count($cek_quote_kontrak) - 1 ]->id;
           $temp_alphabet = 'A';
-          $temp_folder_old_name = $cek_quote_kontrak->f1_folder . $temp_alphabet;
+          $temp_folder_old_name = $cek_quote_kontrak[ count($cek_quote_kontrak) - 1 ]->f1_folder . $temp_alphabet;
           $temp_alphabet++;
           $nama_folder = $cek_quote_kontrak_numeric . $temp_alphabet;
         }
@@ -413,8 +472,10 @@ class PraLopController extends Controller
       $data_lama = $this->updatePraLopHistori($request->simpan_layanan_id);
 
       $nama_layanan = '';
-      $alpabet = $nama_folder_alpabet;
+      $alpabet = 'A';
+      if( $nama_folder_alpabet ){ $alpabet = $nama_folder_alpabet; }
       $arr_f1_judul_projek = [];
+
       if( count($request->f1_judul_projek) > 1 ){
         foreach($request->f1_judul_projek as $key => $value){
           array_push($arr_f1_judul_projek,[
@@ -467,7 +528,7 @@ class PraLopController extends Controller
         }
       }
 
-      // dd( $request->all(), $arr_f1_judul_projek );
+      // dd( $request->all(), $arr_f1_judul_projek, $nama_folder_numeric, $nama_folder_alpabet, $temp_folder_old_name, $temp_folder_old_id );
 
       DB::connection('pgsql')->table('form_pralop')->where('id',$request->simpan_layanan_id)->update([
         'on_handling' => $on_handling,

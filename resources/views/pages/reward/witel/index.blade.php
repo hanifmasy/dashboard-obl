@@ -5,6 +5,12 @@
             <x-navbars.navs.auth titlePage="REWARD WITEL"></x-navbars.navs.auth>
             <!-- End Navbar -->
 
+            <style media="screen">
+              #btn_loading {
+                display: none;
+              }
+            </style>
+
             <!-- modal alerts -->
             <div class="modal fade" id="modal-input-obl" tabindex="-1" aria-labelledby="modal-input-obl" aria-hidden="true">
               <div class="modal-dialog">
@@ -25,7 +31,22 @@
 
 
             <div class="container-fluid py-4">
-                <div class="row">
+
+                <div class="row pb-4">
+                    <div class="col-6 ">
+                        <div class="btn-group p-1 d-flex align-items-center" role="group">
+                          <label disabled for="" class="disabled btn btn-sm btn-group bg-gradient-secondary">Mulai</label> <input type="date" class="btn btn-sm btn-group bg-gradient-light" autocomplete="off" name="tgl_mulai" id="tgl_mulai" value="">
+                          <label disabled for="" class="disabled btn btn-sm btn-group bg-gradient-secondary">Hingga</label> <input type="date" class="btn btn-sm btn-group bg-gradient-light" autocomplete="off" name="tgl_akhir" id="tgl_akhir" value="">
+                          <button type="button" name="button" class="btn btn-sm btn-group bg-gradient-info" onclick="filterReward()" id="btn_filter">Filter</button>
+                          <button class="btn btn-sm btn-group btn-gradient-info" type="button" disabled id="btn_loading">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                          </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
                     <div class="col-12 mx-auto">
                       <!-- START PRA LOP -->
                       <div class="card my-4">
@@ -58,6 +79,18 @@
                                             </th>
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                POIN<br>SOLUTION
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                POIN<br>LEGAL
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                TOTAL POIN
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                 TOTAL PRA LOP<br>DI WITEL
                                             </th>
                                             <th
@@ -80,16 +113,6 @@
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                                 TOTAL<br>PROSES REVISI
                                             </th>
-                                            </th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                TOTAL POIN<br>SOLUTION
-                                            </th>
-                                            </th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                TOTAL POIN<br>LEGAL
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-xs" id="data-pra-lop">
@@ -100,7 +123,7 @@
 
                       </div>
                       <!-- END CARD PRA LOP -->
-                      <br><br>
+                      <br>
                       <!-- START OBL -->
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -176,15 +199,17 @@
         </main>
         @push('js')
         <script>
-            function countRewardWitel(user_in_is){
+            function countRewardWitel(user_in_is,tgl_mulai,tgl_akhir){
+              $('#btn_loading').show(); $('#btn_filter').hide();
               $.ajax({
                  type:'GET',
                  url:"{{ route('reward.witel_obl') }}",
-                 // data:{
-                 //   print_obl_id:print_obl_id
-                 // },
+                 data:{
+                   tgl_mulai: tgl_mulai,
+                   tgl_akhir: tgl_akhir
+                 },
                  success:function(data){
-                    // console.log(data);
+                    console.log(tgl_mulai,tgl_akhir,data);
                     let result = ``;
                     let result2 = ``;
                     $.each(data.obl,function(index,value){
@@ -242,14 +267,15 @@
                           <tr >
                             <td><b>`+value.lop_witel+`</b></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('a') }}" class="text-black">`+value.total+`</a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('j') }}" class="text-black">`+value.total_poin_sol+`</a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('k') }}" class="text-black">`+value.total_poin_leg+`</a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('m') }}" class="text-black">`+value.total_poin+`</a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('b') }}" class="text-black">`+value.total_witel+`</a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('c') }}" class="text-black">`+value.total_solution+`</a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('d') }}" class="text-black">`+value.total_legal+`</a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('e') }}" class="text-black">`+value.total_final_pralop+`</a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('f') }}" class="text-black">`+value.total_doc_rev+`</a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('g') }}" class="text-black">`+value.total_prs_rev+`</a></td>
-                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('j') }}" class="text-black">`+value.total_poin_sol+`</a></td>
-                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('k') }}" class="text-black">`+value.total_poin_leg+`</a></td>
                           </tr>
                           `;
                       }
@@ -259,14 +285,15 @@
                           <tr >
                             <td><b>`+value.lop_witel+`</b></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('a') }}" class="text-black"><b>`+value.total+`</b></a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('j') }}" class="text-black"><b>`+value.total_poin_sol+`</b></a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('k') }}" class="text-black"><b>`+value.total_poin_leg+`</b></a></td>
+                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('m') }}" class="text-black"><b>`+value.total_poin+`</b></a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('b') }}" class="text-black"><b>`+value.total_witel+`</b></a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('c') }}" class="text-black"><b>`+value.total_solution+`</b></a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('d') }}" class="text-black"><b>`+value.total_legal+`</b></a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('e') }}" class="text-black"><b>`+value.total_final_pralop+`</b></a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('f') }}" class="text-black"><b>`+value.total_doc_rev+`</b></a></td>
                             <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('g') }}" class="text-black"><b>`+value.total_prs_rev+`</b></a></td>
-                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('j') }}" class="text-black"><b>`+value.total_poin_sol+`</b></a></td>
-                            <td><a href="{{ route('witels.pralop') }}?wl=`+value.lop_witel+`&cl={{ Crypt::encryptstring('k') }}" class="text-black"><b>`+value.total_poin_leg+`</b></a></td>
                           </tr>
                           `;
                         }
@@ -275,14 +302,15 @@
                           <tr >
                             <td>`+value.lop_witel+`</td>
                             <td>`+value.total+`</td>
+                            <td>`+value.total_poin_sol+`</td>
+                            <td>`+value.total_poin_leg+`</td>
+                            <td>`+value.total_poin+`</td>
                             <td>`+value.total_witel+`</td>
                             <td>`+value.total_solution+`</td>
                             <td>`+value.total_legal+`</td>
                             <td>`+value.total_final_pralop+`</td>
                             <td>`+value.total_doc_rev+`</td>
                             <td>`+value.total_prs_rev+`</td>
-                            <td>`+value.total_poin_sol+`</td>
-                            <td>`+value.total_poin_leg+`</td>
                           </tr>
                           `;
                         }
@@ -290,13 +318,23 @@
                     });
                     $('#data-reward-witel').empty(); $('#data-reward-witel').append(result);
                     $('#data-pra-lop').empty(); $('#data-pra-lop').append(result2);
+
+                    $('#btn_filter').show(); $('#btn_loading').hide();
                  }
                });
             }
 
-            $( document ).ready(function() {
+            function filterReward(tgl_mulai,tgl_akhir){
+              if( tgl_mulai === undefined ){ tgl_mulai = $('#tgl_mulai').val(); }
+              if( tgl_akhir === undefined ){ tgl_akhir = $('#tgl_akhir').val(); }
               var user_in_is = @json($user_in_is);
-              countRewardWitel(user_in_is);
+              countRewardWitel(user_in_is,tgl_mulai,tgl_akhir);
+            }
+
+            $( document ).ready(function() {
+              var tgl_mulai = $('#tgl_mulai').val();
+              var tgl_akhir = $('#tgl_akhir').val();
+              filterReward(tgl_mulai,tgl_akhir);
             });
 
         </script>

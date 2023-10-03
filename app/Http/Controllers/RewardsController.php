@@ -48,18 +48,28 @@ class RewardsController extends Controller
         ->select(
           'lop_witel',
           DB::raw("sum(1) as total"),
+          DB::raw("sum(case when cekpoin_sol is null then 0 else cekpoin_sol end) as total_poin_sol"),
+          DB::raw("sum(case when cekpoin_leg is null then 0 else cekpoin_leg end) as total_poin_leg"),
+          DB::raw("sum( cekpoin_sol + cekpoin_leg ) as total_poin"),
           DB::raw("sum(case when on_handling = 'witel' then 1 else 0 end) as total_witel"),
           DB::raw("sum(case when on_handling = 'solution' then 1 else 0 end) as total_solution"),
           DB::raw("sum(case when on_handling = 'legal' then 1 else 0 end) as total_legal"),
           DB::raw("sum(case when on_handling = 'final_pralop' then 1 else 0 end) as total_final_pralop"),
           DB::raw("sum(case when lop_count_revisi > 0 then 1 else 0 end) as total_doc_rev"),
-          DB::raw("sum(lop_count_revisi) as total_prs_rev"),
-          DB::raw("sum(case when cekpoin_sol is null then 0 else cekpoin_sol end) as total_poin_sol"),
-          DB::raw("sum(case when cekpoin_leg is null then 0 else cekpoin_leg end) as total_poin_leg")
+          DB::raw("sum(lop_count_revisi) as total_prs_rev")
         )
         ->whereRaw("
         (deleted_at is null or to_char(deleted_at,'yyyy-mm-dd') = '') and deleted_by is null
         ");
+
+        if( $request->tgl_mulai ){
+          $query->whereRaw(" to_char(created_at,'yyyy-mm-dd') >= '$request->tgl_mulai' ");
+          $query2->whereRaw(" to_char(created_at,'yyyy-mm-dd') >= '$request->tgl_mulai' ");
+        }
+        if( $request->tgl_akhir ){
+          $query->whereRaw(" to_char(created_at,'yyyy-mm-dd') <= '$request->tgl_akhir' ");
+          $query2->whereRaw(" to_char(created_at,'yyyy-mm-dd') <= '$request->tgl_akhir' ");
+        }
 
         $obl = $query->groupBy('f1_witel')->orderBy('f1_witel','asc')->get()->toArray();
         $pralop = $query2->groupBy('lop_witel')->orderBy('lop_witel','asc')->get()->toArray();
@@ -67,7 +77,7 @@ class RewardsController extends Controller
           'obl' => $obl,
           'pralop' => $pralop
         ];
-
+        // dd( $request->all(), $data );
         return response()->json($data);
       }
       $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')

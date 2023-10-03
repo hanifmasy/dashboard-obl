@@ -234,20 +234,19 @@
                                                   class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                   No.</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">on handling</th>
+                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Check Poin<br>Solution</th>
+                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Check Poin<br>Legal</th>
+                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Poin</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">judul projek</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">nama plggn</th>
-                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">alamat plggn</th>
-                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">pic plggn</th>
+                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">segmen</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">witel</th>
+                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">pic plggn</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">id LOP</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">nomor akun</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">estimasi Opportunity</th>
-                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">segmen</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">skema bayar<br>ke pelanggan</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">status order</th>
-                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Check Poin<br>Solution</th>
-                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Check Poin<br>Legal</th>
-                                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">keterangan</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">created at</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">created by</th>
                                               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">updated at</th>
@@ -480,10 +479,7 @@
                          if( is_user === '1' || is_user === '3' || is_user === '5' || is_user === '7' ){
                            return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
                          }
-                         else if( is_user === '4' && row.on_handling !== 'witel' ){
-                           return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
-                         }
-                         else if( is_user === '4' && row.on_handling === 'witel' ){
+                         else if( is_user === '4' ){
                            return `
                                <div class="btn-group" role="group">
                                  <div class="btn-group" role="group">
@@ -495,7 +491,7 @@
                                </div>
                                `;
                          }
-                         else if( is_user === '13' && row.on_handling === 'legal' ){
+                         else if( is_user === '13' ){
                            return `
                                <div class="btn-group" role="group">
                                  <div class="btn-group" role="group">
@@ -507,10 +503,7 @@
                                </div>
                                `;
                          }
-                         else if( is_user === '13' && row.on_handling !== 'legal' ){
-                           return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
-                         }
-                         else if( is_user === '8' && arr_untuk_solution.includes(row.on_handling) === true ){
+                         else if( is_user === '8' ){
                            return `
                                <div class="btn-group" role="group">
                                  <div class="btn-group" role="group">
@@ -521,9 +514,6 @@
                                     </div>
                                </div>
                                `;
-                         }
-                         else if( is_user === '8' && arr_untuk_solution.includes(row.on_handling) === false ){
-                           return `<button type="button" class="btn btn-sm btn-secondary text-white mt-3" onclick="ketDoc('`+row.id+`')">KETERANGAN</button>`;
                          }
                          else if( is_user === '9' ){
                            return `
@@ -556,6 +546,31 @@
                        else { return '-'; }
                      }
                   },
+
+                  {
+                     data: 'cekpoin_sol',name: 'cekpoin_sol',searchable:false,orderable:false,
+                     "render": function ( data, type, row ) {
+                       if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
+                       else{ return '<span style="white-space:normal">-</span>'; }
+                     }
+                  },
+
+                  {
+                     data: 'cekpoin_leg',name: 'cekpoin_leg',searchable:false,orderable:false,
+                     "render": function ( data, type, row ) {
+                       if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
+                       else{ return '<span style="white-space:normal">-</span>'; }
+                     }
+                  },
+
+                  {
+                     data: 'cekpoin_sol',name: 'cekpoin_sol',searchable:false,orderable:false,
+                     "render": function ( data, type, row ) {
+                       if(data){ return '<span style="white-space:normal">'+(data + row.cekpoin_leg)+'</span>'; }
+                       else{ return '<span style="white-space:normal">-</span>'; }
+                     }
+                  },
+
                   {
                      data: 'lop_judul_projek',name: 'lop_judul_projek',searchable:true,orderable:false,
                      "render": function ( data, type, row ) {
@@ -571,10 +586,17 @@
                   },
 
                   {
-                     data: 'lop_alamat_plggn',name: 'lop_alamat_plggn',searchable:true,orderable:false,
+                     data: 'lop_segmen',name: 'lop_segmen',searchable:true,orderable:false,
                      "render": function ( data, type, row ) {
-                       if(data){ return data; }
-                       else{ return '-'; }
+                       if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
+                       else{ return '<span style="white-space:normal">-</span>'; }
+                     }
+                  },
+
+                  {
+                     data: 'lop_witel',name: 'lop_witel',searchable:true,orderable:false,
+                     "render": function ( data, type, row ) {
+                       return '<span style="white-space:normal">'+data+'</span>';
                      }
                   },
 
@@ -586,12 +608,7 @@
                      }
                   },
 
-                  {
-                     data: 'lop_witel',name: 'lop_witel',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       return '<span style="white-space:normal">'+data+'</span>';
-                     }
-                  },
+
 
                   {
                      data: 'lop_id_mytens',name: 'lop_id_mytens',searchable:true,orderable:false,
@@ -618,14 +635,6 @@
                   },
 
                   {
-                     data: 'lop_segmen',name: 'lop_segmen',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
-                       else{ return '<span style="white-space:normal">-</span>'; }
-                     }
-                  },
-
-                  {
                      data: 'lop_skema_bayar',name: 'lop_skema_bayar',searchable:true,orderable:false,
                      "render": function ( data, type, row ) {
                        if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
@@ -641,29 +650,13 @@
                      }
                   },
 
-                  {
-                     data: 'cekpoin_sol',name: 'cekpoin_sol',searchable:false,orderable:false,
-                     "render": function ( data, type, row ) {
-                       if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
-                       else{ return '<span style="white-space:normal">-</span>'; }
-                     }
-                  },
-
-                  {
-                     data: 'cekpoin_leg',name: 'cekpoin_leg',searchable:false,orderable:false,
-                     "render": function ( data, type, row ) {
-                       if(data){ return '<span style="white-space:normal">'+data+'</span>'; }
-                       else{ return '<span style="white-space:normal">-</span>'; }
-                     }
-                  },
-
-                  {
-                     data: 'lop_keterangan',name: 'lop_keterangan',searchable:true,orderable:false,
-                     "render": function ( data, type, row ) {
-                       if( row.lop_tgl_keterangan ){ return '<span white-space:normal><b>'+row.lop_tgl_keterangan+'</b> '+data.substr(0,20)+'</span>'; }
-                       else{ return '-'; }
-                     }
-                  },
+                  // {
+                  //    data: 'lop_keterangan',name: 'lop_keterangan',searchable:true,orderable:false,
+                  //    "render": function ( data, type, row ) {
+                  //      if( row.lop_tgl_keterangan ){ return '<span white-space:normal><b>'+row.lop_tgl_keterangan+'</b> '+data.substr(0,20)+'</span>'; }
+                  //      else{ return '-'; }
+                  //    }
+                  // },
 
                   {
                      data: 'created_at',name: 'created_at',searchable:true,orderable:false,

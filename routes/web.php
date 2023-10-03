@@ -17,6 +17,7 @@ use App\Http\Controllers\SolutionController;
 use App\Http\Controllers\ProsesOblController;
 use App\Http\Controllers\RewardsController;
 use App\Http\Controllers\PraLopController;
+use App\Http\Controllers\CekListController;
 use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\DB;
 use App\Models\MitraVendor;
@@ -91,6 +92,8 @@ Route::get('witels-pralop/detail', [PraLopController::class, 'detail'])->middlew
 Route::get('witels-pralop/detail/layanan', [PraLopController::class, 'layanan'])->middleware(['auth','role_forms'])->name('witels.pralop.detail.layanan');
 Route::get('testing', [TestingController::class, 'index'])->middleware(['auth','role_super'])->name('testing.index');
 
+Route::get('witels-pralop/ceklist-sol', [CekListController::class, 'ceklistSol'])->middleware(['auth','role_pralop'])->name('witels.pralop.ceklist_sol');
+Route::get('witels-pralop/ceklist-leg', [CekListController::class, 'ceklistLeg'])->middleware(['auth','role_pralop'])->name('witels.pralop.ceklist_leg');
 
 // POST METHOD ( PAGES )
 Route::post('/dashboard/excel', [DashboardController::class, 'excel'])->middleware(['auth','cbd'])->name('dashboard.excel');

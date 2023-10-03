@@ -15,6 +15,10 @@
               accent-color : #696;
             }
 
+            #btn_load_sol, #btn_load_leg {
+              display: none;
+            }
+
         </style>
 
         <!-- modal alerts -->
@@ -70,13 +74,13 @@
                         <form class="" action="{{ route('witels.pralop.langkah') }}" method="POST" enctype="multipart/form-data">
                           @csrf
                           @if( $user_pralop )
-                            @if( $user_pralop->role_id === 4 )
+                            @if( $user_pralop->role_id === 4 && $pralop->on_handling === 'witel' )
                             <button type="submit" name="submit_verifikasi" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-info text-white" >LANJUT VERIFIKASI</button>
                             @elseif( $user_pralop->role_id === 5 || $user_pralop->role_id === 7 )
-                            @elseif( $user_pralop->role_id === 13 )
+                            @elseif( $user_pralop->role_id === 13 && $pralop->on_handling === 'legal' )
                             <button type="submit" name="submit_solution" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-secondary text-white" >KEMBALI KE SOLUTION</button>
                             <button type="submit" name="submit_final" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-danger text-white" >FINAL VERIFIKASI</button>
-                            @elseif( $user_pralop->role_id === 8 )
+                            @elseif( $user_pralop->role_id === 8 && ( $pralop->on_handling === 'solution' || $pralop->on_handling === 'final_pralop' ) )
                             <button type="submit" name="submit_witel" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-secondary text-white" >KEMBALI KE WITEL</button>
                             <button type="submit" name="submit_legal" value="{{ $encrypted }}" role="button" class="ms-2 btn btn-md bg-gradient-warning text-white" >LANJUT KE LEGAL</button>
                             @elseif($user_pralop->role_id === 9 )
@@ -112,6 +116,28 @@
                   <div class="row mt-2">
                     <div class="card h-25">
                       <h5 class="text-sm mt-1 bg-warning text-white text-center">REVIEW KB - CHECKLIST LEGAL</h5>
+
+                      <div class="col-4">
+                        <div class="input-group p-2">
+                          <select class="form-select p-1" name="var_list_leg" id="var_list_leg" style="height:32px;" autocomplete="off">
+                            <option value="" disabled selected>Pilih Ceklist</option>
+                            @if( $ceklist_leg )
+                              @foreach( $ceklist_leg as $key => $value )
+                                @if( $key === 0 )
+                                <option selected value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_leg) - $key }}</option>
+                                @else
+                                <option value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_leg) - $key }}</option>
+                                @endif
+                              @endforeach
+                            @endif
+                          </select>
+                          <button id="btn_pilih_leg" type="button" class="btn form-select form-select btn-sm bg-gradient-warning" name="button" onclick="listLeg()">Pilih</button>
+                          <button class="btn btn-gradient-warning btn-sm" type="button" id="btn_load_leg" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                          </button>
+                        </div>
+                      </div>
 
                         <div class="table-responsive">
                           <table class="table thead-dark table-striped text-center">
@@ -185,6 +211,29 @@
                       <div class="card h-50">
                         <div class="card-body p-2">
                           <h5 class="text-sm bg-success text-white text-center">REVIEW KB - CHECKLIST SOLUTION</h5>
+
+                          <div class="col-4">
+                            <div class="input-group p-2">
+                              <select class="form-select p-1" name="var_list_sol" id="var_list_sol" style="height:32px;" autocomplete="off">
+                                <option value="" disabled selected>Pilih Ceklist</option>
+                                @if( $ceklist_sol )
+                                  @foreach( $ceklist_sol as $key => $value )
+                                    @if( $key === 0 )
+                                    <option selected value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_sol) - $key }}</option>
+                                    @else
+                                    <option value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_sol) - $key }}</option>
+                                    @endif
+                                  @endforeach
+                                @endif
+                              </select>
+                              <button id="btn_pilih_sol" type="button" class="btn form-select form-select btn-sm bg-gradient-success" name="button" onclick="listSol()">Pilih</button>
+                              <button class="btn btn-gradient-success btn-sm" type="button" id="btn_load_sol" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                              </button>
+                            </div>
+                          </div>
+
                           <div class="table-responsive">
                             <table class="table thead-dark table-striped text-center">
                               <thead>
@@ -351,8 +400,10 @@
                     @endif
                   <div class="row mt-2">
 
+                    @if( $user_pralop->role_id === 4 && $pralop->on_handling === 'witel' )
                     <div class="card h-75">
                       <div class="card-body p-3">
+
 
                         <form class="" action="{{ route('witels.pralop.review_kb') }}" method="POST" enctype="multipart/form-data">
                           @csrf
@@ -422,6 +473,8 @@
 
                       </div>
                     </div>
+                    @endif
+
                     <div class="card h-50 mt-3">
                       <div class="card-body p-2">
                         <h6 class=" ms-2">ATTACHMENT FILES: </h6>
@@ -470,6 +523,28 @@
                     <div class="row mt-2">
                       <div class="card h-25">
                         <h5 class="text-sm mt-1 bg-warning text-white text-center">REVIEW KB - CHECKLIST LEGAL</h5>
+
+                        <div class="col-4">
+                          <div class="input-group p-2">
+                            <select class="form-select p-1" name="var_list_leg" id="var_list_leg" style="height:32px;" autocomplete="off">
+                              <option value="" disabled selected>Pilih Ceklist</option>
+                              @if( $ceklist_leg )
+                                @foreach( $ceklist_leg as $key => $value )
+                                  @if( $key === 0 )
+                                  <option selected value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_leg) - $key }}</option>
+                                  @else
+                                  <option value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_leg) - $key }}</option>
+                                  @endif
+                                @endforeach
+                              @endif
+                            </select>
+                            <button id="btn_pilih_leg" type="button" class="btn form-select form-select btn-sm bg-gradient-warning" name="button" onclick="listLeg()">Pilih</button>
+                            <button class="btn btn-gradient-warning btn-sm" type="button" id="btn_load_leg" disabled>
+                              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                              Loading...
+                            </button>
+                          </div>
+                        </div>
 
                           <div class="table-responsive">
                             <table class="table thead-dark table-striped text-center">
@@ -541,6 +616,29 @@
                   <div class="row mt-2">
                     <div class="card h-25">
                       <h5 class="text-sm mt-1 bg-success text-white text-center">REVIEW KB - CHECKLIST SOLUTION</h5>
+
+                      <div class="col-4">
+                        <div class="input-group p-2">
+                          <select class="form-select p-1" name="var_list_sol" id="var_list_sol" style="height:32px;" autocomplete="off">
+                            <option value="" disabled selected>Pilih Ceklist</option>
+                            @if( $ceklist_sol )
+                              @foreach( $ceklist_sol as $key => $value )
+                                @if( $key === 0 )
+                                <option selected value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_sol) - $key }}</option>
+                                @else
+                                <option value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_sol) - $key }}</option>
+                                @endif
+                              @endforeach
+                            @endif
+                          </select>
+                          <button id="btn_pilih_sol" type="button" class="btn form-select form-select btn-sm bg-gradient-success" name="button" onclick="listSol()">Pilih</button>
+                          <button class="btn btn-gradient-success btn-sm" type="button" id="btn_load_sol" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                          </button>
+                        </div>
+                      </div>
+
                       <form class="" action="{{ route('witels.pralop.review_kb.checklist_solution') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -704,7 +802,9 @@
                           </table>
                         </div>
                         <input type="text" name="encrypted" value="{{ $encrypted }}" hidden>
+                        @if( $pralop->on_handling === 'solution' || $pralop->on_handling === 'final_pralop' )
                         <button type="submit" name="submit" value="checklist_solution" class="ms-2 btn btn-sm bg-gradient-primary">SIMPAN CHECKLIST</button>
+                        @endif
                       </form>
                     </div>
                   </div>
@@ -753,6 +853,29 @@
                   <div class="row mt-2">
                     <div class="card h-25">
                       <h5 class="text-sm mt-1 text-center bg-warning text-white">REVIEW KB - CHECKLIST LEGAL</h5>
+
+                      <div class="col-4">
+                        <div class="input-group p-2">
+                          <select class="form-select p-1" name="var_list_leg" id="var_list_leg" style="height:32px;" autocomplete="off">
+                            <option value="" disabled selected>Pilih Ceklist</option>
+                            @if( $ceklist_leg )
+                              @foreach( $ceklist_leg as $key => $value )
+                                @if( $key === 0 )
+                                <option selected value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_leg) - $key }}</option>
+                                @else
+                                <option value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_leg) - $key }}</option>
+                                @endif
+                              @endforeach
+                            @endif
+                          </select>
+                          <button id="btn_pilih_leg" type="button" class="btn form-select form-select btn-sm bg-gradient-warning" name="button" onclick="listLeg()">Pilih</button>
+                          <button class="btn btn-gradient-warning btn-sm" type="button" id="btn_load_leg" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                          </button>
+                        </div>
+                      </div>
+
                       <form class="" action="{{ route('witels.pralop.review_kb.checklist_legal') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -820,7 +943,9 @@
                           </table>
                         </div>
                         <input type="text" name="encrypted" value="{{ $encrypted }}" hidden>
+                        @if( $pralop->on_handling === 'legal' )
                         <button type="submit" name="submit" value="checklist_legal" class="ms-2 btn btn-sm bg-gradient-primary">SIMPAN CHECKLIST</button>
+                        @endif
                       </form>
                     </div>
                   </div>
@@ -868,6 +993,29 @@
                   <div class="row mt-2">
                     <div class="card h-25">
                       <h5 class="text-sm mt-1 text-center bg-warning text-white">REVIEW KB - CHECKLIST LEGAL</h5>
+
+                      <div class="col-4">
+                        <div class="input-group p-2">
+                          <select class="form-select p-1" name="var_list_leg" id="var_list_leg" style="height:32px;" autocomplete="off">
+                            <option value="" disabled selected>Pilih Ceklist</option>
+                            @if( $ceklist_leg )
+                              @foreach( $ceklist_leg as $key => $value )
+                                @if( $key === 0 )
+                                <option selected value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_leg) - $key }}</option>
+                                @else
+                                <option value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_leg) - $key }}</option>
+                                @endif
+                              @endforeach
+                            @endif
+                          </select>
+                          <button id="btn_pilih_leg" type="button" class="btn form-select form-select btn-sm bg-gradient-warning" name="button" onclick="listLeg()">Pilih</button>
+                          <button class="btn btn-gradient-warning btn-sm" type="button" id="btn_load_leg" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                          </button>
+                        </div>
+                      </div>
+
                       <form class="" action="{{ route('witels.pralop.review_kb.checklist_legal') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -943,6 +1091,29 @@
                   <div class="row mt-2">
                     <div class="card h-25">
                       <h5 class="text-sm mt-1 text-center bg-success text-white ">REVIEW KB - CHECKLIST SOLUTION</h5>
+
+                      <div class="col-4">
+                        <div class="input-group p-2">
+                          <select class="form-select p-1" name="var_list_sol" id="var_list_sol" style="height:32px;" autocomplete="off">
+                            <option value="" disabled selected>Pilih Ceklist</option>
+                            @if( $ceklist_sol )
+                              @foreach( $ceklist_sol as $key => $value )
+                                @if( $key === 0 )
+                                <option selected value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_sol) - $key }}</option>
+                                @else
+                                <option value="{{ $value['tipe'] }}_{{ $value['id'] }}">Ceklist # {{ count($ceklist_sol) - $key }}</option>
+                                @endif
+                              @endforeach
+                            @endif
+                          </select>
+                          <button id="btn_pilih_sol" type="button" class="btn form-select form-select btn-sm bg-gradient-success" name="button" onclick="listSol()">Pilih</button>
+                          <button class="btn btn-gradient-success btn-sm" type="button" id="btn_load_sol" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                          </button>
+                        </div>
+                      </div>
+
                       <form class="" action="{{ route('witels.pralop.review_kb.checklist_solution') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -1243,9 +1414,11 @@
                                       <h6 class="mb-0">PRA LOP DETAIL</h6>
                                   </div>
                                   <div class="col-6 text-end">
-                                      @if( $user_pralop->role_id === 9 || $user_pralop->role_id === 8 )
+                                      @if( $user_pralop->role_id === 9 )
                                       <button type="submit" name="submit" value="pralop_detail_{{ $pralop->id }}" class="btn bg-gradient-primary mb-0">SIMPAN</button>
-                                      @elseif( $user_pralop->role_id === 4 )
+                                      @elseif( $user_pralop->role_id === 8 && ( $pralop->on_handling === 'solution' || $pralop->on_handling === 'final_pralop' ) )
+                                      <button type="submit" name="submit" value="pralop_detail_{{ $pralop->id }}" class="btn bg-gradient-primary mb-0">SIMPAN</button>
+                                      @elseif( $user_pralop->role_id === 4 && $pralop->on_handling === 'witel' )
                                       <button type="submit" name="submit" value="pralop_detail_{{ $pralop->id }}" class="btn bg-gradient-primary mb-0">SIMPAN</button>
                                       @endif
                                   </div>
@@ -1390,7 +1563,7 @@
                                               <div class="d-flex flex-column">
                                                   <h6 class="mb-3 text-sm">{{ $value->f1_judul_projek ? $value->f1_judul_projek : '-' }}</h6>
                                                   <span class="mb-2 text-xs">Nama Mitra: <span
-                                                          class="text-dark font-weight-bold ms-sm-2">{{ $value->f1_mitra_id ? $value->f1_mitra_id : 'Belum Ada Input' }}</span></span>
+                                                          class="text-dark font-weight-bold ms-sm-2">{{ $value->f1_mitra_id ? $value->nama_mitra : 'Belum Ada Input' }}</span></span>
                                                   <span class="mb-2 text-xs">Nama Folder: <span
                                                           class="text-dark ms-sm-2 font-weight-bold">{{ $value->f1_folder ? $value->f1_folder : 'Kosong' }}</span></span>
                                                   <span class="mb-2 text-xs">Nomor P1: <span
@@ -1409,20 +1582,62 @@
                                               <div class="ms-auto text-end float-right">
                                                   <input name="encrypted[]" value="{{ $encrypted }}" hidden>
                                                   <button type="button" class="btn btn-link bg-gradient-primary px-3 mb-0" onclick="editLayanan( {{ $value->id ? $value->id : '' }} )">Edit</button>
+                                                  @if( $user_pralop->role_id === 9 )
                                                   <button type="button" class="btn btn-link bg-gradient-danger px-3 mb-0" onclick="deleteLayanan( {{ $value->id ? $value->id : '' }} )">Delete</button><br>
+                                                  @elseif( $user_pralop->role_id === 4 && $pralop->on_handling === 'witel' )
+                                                  <button type="button" class="btn btn-link bg-gradient-danger px-3 mb-0" onclick="deleteLayanan( {{ $value->id ? $value->id : '' }} )">Delete</button><br>
+                                                  @elseif( $user_pralop->role_id === 8 && ( $pralop->on_handling === 'solution' || $pralop->on_handling === 'final_pralop' ) )
+                                                  <button type="button" class="btn btn-link bg-gradient-danger px-3 mb-0" onclick="deleteLayanan( {{ $value->id ? $value->id : '' }} )">Delete</button><br>
+                                                  @else
+                                                  <br>
+                                                  @endif
 
+                                                  @if( $user_pralop->role_id === 9 )
                                                   <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p1_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
                                                   <label for="file_p1_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p1_{{ $value->id }}"><span id="label_file_p1_{{ $value->id }}">Pilih File P1</span></label>
                                                   <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p1_{{ $value->id }}" name="file_p1_{{ $value->id }}" type="file">
 
                                                   <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload P1</button><br>
+                                                  @elseif( $user_pralop->role_id === 4 && $pralop->on_handling === 'witel' )
+                                                  <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p1_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
+                                                  <label for="file_p1_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p1_{{ $value->id }}"><span id="label_file_p1_{{ $value->id }}">Pilih File P1</span></label>
+                                                  <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p1_{{ $value->id }}" name="file_p1_{{ $value->id }}" type="file">
+
+                                                  <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload P1</button><br>
+                                                  @elseif( $user_pralop->role_id === 8 && ( $pralop->on_handling === 'solution' || $pralop->on_handling === 'final_pralop' ) )
+                                                  <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p1_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
+                                                  <label for="file_p1_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p1_{{ $value->id }}"><span id="label_file_p1_{{ $value->id }}">Pilih File P1</span></label>
+                                                  <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p1_{{ $value->id }}" name="file_p1_{{ $value->id }}" type="file">
+
+                                                  <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p1', {{ $value->id ? $value->id : '' }} )">Upload P1</button><br>
+                                                  @else
+                                                  @endif
+
+
                                                   @if( $value->p0_nomor_p0 )
 
-                                                    <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p0_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
-                                                    <label for="file_p0_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p0_{{ $value->id }}"><span id="label_file_p0_{{ $value->id }}">Pilih File P0</span></label>
-                                                    <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p0_{{ $value->id }}" name="file_p0_{{ $value->id }}" type="file">
+                                                      @if( $user_pralop->role_id === 9 )
+                                                      <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p0_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
+                                                      <label for="file_p0_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p0_{{ $value->id }}"><span id="label_file_p0_{{ $value->id }}">Pilih File P0</span></label>
+                                                      <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p0_{{ $value->id }}" name="file_p0_{{ $value->id }}" type="file">
 
-                                                    <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload P0</button>
+                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload P0</button>
+                                                      @elseif( $user_pralop->role_id === 4 && $pralop->on_handling === 'witel' )
+                                                      <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p0_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
+                                                      <label for="file_p0_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p0_{{ $value->id }}"><span id="label_file_p0_{{ $value->id }}">Pilih File P0</span></label>
+                                                      <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p0_{{ $value->id }}" name="file_p0_{{ $value->id }}" type="file">
+
+                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload P0</button>
+                                                      @elseif( $user_pralop->role_id === 8 && ( $pralop->on_handling === 'solution' || $pralop->on_handling === 'final_pralop' ) )
+                                                      <button class="btn btn-link px-3 mb-0 mt-2" type="button" id="btn_clear_p0_{{ $value->id }}" ><i class="material-icons opacity-7">backspace</i></button>
+                                                      <label for="file_p0_{{ $value->id }}" class="px-3 mb-0 mt-2 btn btn-sm bg-gradient-light label_p0_{{ $value->id }}"><span id="label_file_p0_{{ $value->id }}">Pilih File P0</span></label>
+                                                      <input style="width:10px;height:6px;visibility:hidden;" class="" id="file_p0_{{ $value->id }}" name="file_p0_{{ $value->id }}" type="file">
+
+                                                      <button class="btn btn-link bg-gradient-secondary px-3 mb-0 mt-2" onclick="uploadLayanan('p0', {{ $value->id ? $value->id : '' }} )">Upload P0</button>
+                                                      @else
+                                                      @endif
+
+
                                                   @endif
 
                                               </div>
@@ -1450,7 +1665,7 @@
                     <!-- End Sub Layanan -->
 
                     <!-- Tambah Layanan -->
-                    @if( $user_pralop->role_id === 4 || $user_pralop->role_id === 8 || $user_pralop->role_id === 9 )
+                    @if( (  $user_pralop->role_id === 4  && $pralop->on_handling === 'witel' ) || ( $user_pralop->role_id === 8 && ( $pralop->on_handling === 'solution' || $pralop->on_handling === 'final_pralop' ) ) || $user_pralop->role_id === 9 )
                     <div class="row">
                       <div class="card h-100">
                         <form id="formLayanan" action="" method="POST" enctype="multipart/form-data">
@@ -1512,6 +1727,8 @@
                                 class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex flex-column">
+
+                                      @if( (  $user_pralop->role_id === 4  && $pralop->on_handling === 'witel' ) || ( $user_pralop->role_id === 8 && ( $pralop->on_handling === 'solution' || $pralop->on_handling === 'final_pralop' ) ) ||  ( $user_pralop->role_id === 13 && $pralop->on_handling === 'legal' ) ||$user_pralop->role_id === 9 )
                                       <form class="" action="{{ route('witels.pralop.detail.update') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="d-flex align-items-center">
@@ -1527,6 +1744,8 @@
                                           </div>
                                         </div>
                                       </form>
+                                      @endif
+
                                     </div>
                                 </div>
 
@@ -1865,6 +2084,120 @@
     @endif
 
     <script>
+
+      function listLeg(){
+        var var_list_leg = $('#var_list_leg').val();
+        // console.log(var_list_leg);
+        $('#btn_pilih_leg').hide(); $('#btn_load_leg').show();
+        $.ajax({
+          type: 'GET',
+          url: "{{ route('witels.pralop.ceklist_leg') }}",
+          data: {
+            var_list_leg: var_list_leg
+          },
+          success:function(data){
+            // console.log(data);
+
+            // cl_cakap_ttd
+            if( data.cl_cakap_ttd === 'ok' ){ $("input[name=cl_cakap_ttd][value='ok']").attr('checked', 'checked'); $("input[name=cl_cakap_ttd][value='nok']").removeAttr('checked'); }
+            if( data.cl_cakap_ttd === 'nok' ){ $("input[name=cl_cakap_ttd][value='nok']").attr('checked', 'checked'); $("input[name=cl_cakap_ttd][value='ok']").removeAttr('checked');  }
+            if( data.cl_remark_cakap_ttd === '' || data.cl_remark_cakap_ttd === null || data.cl_remark_cakap_ttd ){ $("textarea[name=cl_remark_cakap_ttd]").val( '' ); $("textarea[name=cl_remark_cakap_ttd]").val( data.cl_remark_cakap_ttd ); }
+            // cl_jangka_waktu
+            if( data.cl_jangka_waktu === 'ok' ){ $("input[name=cl_jangka_waktu][value='ok']").attr('checked', 'checked'); $("input[name=cl_jangka_waktu][value='nok']").removeAttr('checked'); }
+            if( data.cl_jangka_waktu === 'nok' ){ $("input[name=cl_jangka_waktu][value='nok']").attr('checked', 'checked'); $("input[name=cl_jangka_waktu][value='ok']").removeAttr('checked');  }
+            if( data.cl_remark_jangka_waktu === '' || data.cl_remark_jangka_waktu === null || data.cl_remark_jangka_waktu ){ $("textarea[name=cl_remark_jangka_waktu]").val( '' ); $("textarea[name=cl_remark_jangka_waktu]").val( data.cl_remark_jangka_waktu ); }
+            // cl_skema_bisnis
+            if( data.cl_skema_bisnis === 'ok' ){ $("input[name=cl_skema_bisnis][value='ok']").attr('checked', 'checked'); $("input[name=cl_skema_bisnis][value='nok']").removeAttr('checked'); }
+            if( data.cl_skema_bisnis === 'nok' ){ $("input[name=cl_skema_bisnis][value='nok']").attr('checked', 'checked'); $("input[name=cl_skema_bisnis][value='ok']").removeAttr('checked');  }
+            if( data.cl_remark_skema_bisnis === '' || data.cl_remark_skema_bisnis === null || data.cl_remark_skema_bisnis ){ $("textarea[name=cl_remark_skema_bisnis]").val( '' ); $("textarea[name=cl_remark_skema_bisnis]").val( data.cl_remark_skema_bisnis ); }
+            // cl_cara_bayar
+            if( data.cl_cara_bayar === 'ok' ){ $("input[name=cl_cara_bayar][value='ok']").attr('checked', 'checked'); $("input[name=cl_cara_bayar][value='nok']").removeAttr('checked'); }
+            if( data.cl_cara_bayar === 'nok' ){ $("input[name=cl_cara_bayar][value='nok']").attr('checked', 'checked'); $("input[name=cl_cara_bayar][value='ok']").removeAttr('checked');  }
+            if( data.cl_remark_cara_bayar === '' || data.cl_remark_cara_bayar === null || data.cl_remark_cara_bayar ){ $("textarea[name=cl_remark_cara_bayar]").val( '' ); $("textarea[name=cl_remark_cara_bayar]").val( data.cl_remark_cara_bayar ); }
+            // cl_mom
+            if( data.cl_mom === 'ok' ){ $("input[name=cl_mom][value='ok']").attr('checked', 'checked'); $("input[name=cl_mom][value='nok']").removeAttr('checked'); }
+            if( data.cl_mom === 'nok' ){ $("input[name=cl_mom][value='nok']").attr('checked', 'checked'); $("input[name=cl_mom][value='ok']").removeAttr('checked');  }
+            if( data.cl_remark_mom === '' || data.cl_remark_mom === null || data.cl_remark_mom ){ $("textarea[name=cl_remark_mom]").val( '' ); $("textarea[name=cl_remark_mom]").val( data.cl_remark_mom ); }
+
+            $('#btn_load_leg').hide(); $('#btn_pilih_leg').show();
+          }
+        });
+      }
+
+      function listSol(){
+        var var_list_sol = $('#var_list_sol').val();
+        // console.log(var_list_sol);
+        $('#btn_pilih_sol').hide(); $('#btn_load_sol').show();
+        $.ajax({
+          type: 'GET',
+          url: "{{ route('witels.pralop.ceklist_sol') }}",
+          data:{
+            var_list_sol: var_list_sol
+          },
+          success:function(data){
+            // console.log(data);
+            // cs_jenis_kontrak
+            if( data.cs_jenis_kontrak === 'ok' ){ $("input[name=cs_jenis_kontrak][value='ok']").attr('checked', 'checked'); $("input[name=cs_jenis_kontrak][value='nok']").removeAttr('checked'); }
+            if( data.cs_jenis_kontrak === 'nok' ){ $("input[name=cs_jenis_kontrak][value='nok']").attr('checked', 'checked'); $("input[name=cs_jenis_kontrak][value='ok']").removeAttr('checked');  }
+            if( data.cs_remark_jenis_kontrak === '' || data.cs_remark_jenis_kontrak === null || data.cs_remark_jenis_kontrak ){ $("textarea[name=cs_remark_jenis_kontrak]").val( '' ); $("textarea[name=cs_remark_jenis_kontrak]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_nomor_kontrak
+            if( data.cs_nomor_kontrak === 'ok' ){ $("input[name=cs_nomor_kontrak][value='ok']").attr('checked', 'checked'); $("input[name=cs_nomor_kontrak][value='nok']").removeAttr('checked'); }
+            if( data.cs_nomor_kontrak === 'nok' ){ $("input[name=cs_nomor_kontrak][value='nok']").attr('checked', 'checked'); $("input[name=cs_nomor_kontrak][value='ok']").removeAttr('checked');  }
+            if( data.cs_remark_nomor_kontrak === '' || data.cs_remark_nomor_kontrak === null || data.cs_remark_nomor_kontrak ){ $("textarea[name=cs_remark_nomor_kontrak]").val( '' ); $("textarea[name=cs_remark_nomor_kontrak]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_waktu_instal
+            if( data.cs_waktu_instal === 'ok' ){ $("input[name=cs_waktu_instal][value='ok']").attr('checked', 'checked'); $("input[name=cs_waktu_instal][value='nok']").removeAttr('checked'); }
+            if( data.cs_waktu_instal === 'nok' ){ $("input[name=cs_waktu_instal][value='nok']").attr('checked', 'checked'); $("input[name=cs_waktu_instal][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_waktu_instal === '' || data.cs_remark_waktu_instal === null || data.cs_remark_waktu_instal ){ $("textarea[name=cs_remark_waktu_instal]").val( '' ); $("textarea[name=cs_remark_waktu_instal]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_waktu_layanan
+            if( data.cs_waktu_layanan === 'ok' ){ $("input[name=cs_waktu_layanan][value='ok']").attr('checked', 'checked'); $("input[name=cs_waktu_layanan][value='nok']").removeAttr('checked'); }
+            if( data.cs_waktu_layanan === 'nok' ){ $("input[name=cs_waktu_layanan][value='nok']").attr('checked', 'checked'); $("input[name=cs_waktu_layanan][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_waktu_layanan === '' || data.cs_remark_waktu_layanan === null || data.cs_remark_waktu_layanan ){ $("textarea[name=cs_remark_waktu_layanan]").val( '' ); $("textarea[name=cs_remark_waktu_layanan]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_waktu_kontrak
+            if( data.cs_waktu_kontrak === 'ok' ){ $("input[name=cs_waktu_kontrak][value='ok']").attr('checked', 'checked'); $("input[name=cs_waktu_kontrak][value='nok']").removeAttr('checked'); }
+            if( data.cs_waktu_kontrak === 'nok' ){ $("input[name=cs_waktu_kontrak][value='nok']").attr('checked', 'checked'); $("input[name=cs_waktu_kontrak][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_waktu_kontrak === '' || data.cs_remark_waktu_kontrak === null || data.cs_remark_waktu_kontrak ){ $("textarea[name=cs_remark_waktu_kontrak]").val( '' ); $("textarea[name=cs_remark_waktu_kontrak]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_bayar_otc
+            if( data.cs_bayar_otc === 'ok' ){ $("input[name=cs_bayar_otc][value='ok']").attr('checked', 'checked'); $("input[name=cs_bayar_otc][value='nok']").removeAttr('checked'); }
+            if( data.cs_bayar_otc === 'nok' ){ $("input[name=cs_bayar_otc][value='nok']").attr('checked', 'checked'); $("input[name=cs_bayar_otc][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_bayar_otc === '' || data.cs_remark_bayar_otc === null || data.cs_remark_bayar_otc ){ $("textarea[name=cs_remark_bayar_otc]").val( '' ); $("textarea[name=cs_remark_bayar_otc]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_term_pay
+            if( data.cs_term_pay === 'ok' ){ $("input[name=cs_term_pay][value='ok']").attr('checked', 'checked'); $("input[name=cs_term_pay][value='nok']").removeAttr('checked'); }
+            if( data.cs_term_pay === 'nok' ){ $("input[name=cs_term_pay][value='nok']").attr('checked', 'checked'); $("input[name=cs_term_pay][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_term_pay === '' || data.cs_remark_term_pay === null || data.cs_remark_term_pay ){ $("textarea[name=cs_remark_term_pay]").val( '' ); $("textarea[name=cs_remark_term_pay]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_sesuai_top
+            if( data.cs_sesuai_top === 'ok' ){ $("input[name=cs_sesuai_top][value='ok']").attr('checked', 'checked'); $("input[name=cs_sesuai_top][value='nok']").removeAttr('checked'); }
+            if( data.cs_sesuai_top === 'nok' ){ $("input[name=cs_sesuai_top][value='nok']").attr('checked', 'checked'); $("input[name=cs_sesuai_top][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_sesuai_top === '' || data.cs_remark_sesuai_top === null || data.cs_remark_sesuai_top ){ $("textarea[name=cs_remark_sesuai_top]").val( '' ); $("textarea[name=cs_remark_sesuai_top]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_sesuai_boq
+            if( data.cs_sesuai_boq === 'ok' ){ $("input[name=cs_sesuai_boq][value='ok']").attr('checked', 'checked'); $("input[name=cs_sesuai_boq][value='nok']").removeAttr('checked'); }
+            if( data.cs_sesuai_boq === 'nok' ){ $("input[name=cs_sesuai_boq][value='nok']").attr('checked', 'checked'); $("input[name=cs_sesuai_boq][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_sesuai_boq === '' || data.cs_remark_sesuai_boq === null || data.cs_remark_sesuai_boq ){ $("textarea[name=cs_remark_sesuai_boq]").val( '' ); $("textarea[name=cs_remark_sesuai_boq]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_skema_bisnis
+            if( data.cs_skema_bisnis === 'ok' ){ $("input[name=cs_skema_bisnis][value='ok']").attr('checked', 'checked'); $("input[name=cs_skema_bisnis][value='nok']").removeAttr('checked'); }
+            if( data.cs_skema_bisnis === 'nok' ){ $("input[name=cs_skema_bisnis][value='nok']").attr('checked', 'checked'); $("input[name=cs_skema_bisnis][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_skema_bisnis === '' || data.cs_remark_skema_bisnis === null || data.cs_remark_skema_bisnis ){ $("textarea[name=cs_remark_skema_bisnis]").val( '' ); $("textarea[name=cs_remark_skema_bisnis]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_ruang
+            if( data.cs_ruang === 'ok' ){ $("input[name=cs_ruang][value='ok']").attr('checked', 'checked'); $("input[name=cs_ruang][value='nok']").removeAttr('checked'); }
+            if( data.cs_ruang === 'nok' ){ $("input[name=cs_ruang][value='nok']").attr('checked', 'checked'); $("input[name=cs_ruang][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_ruang === '' || data.cs_remark_ruang === null || data.cs_remark_ruang ){ $("textarea[name=cs_remark_ruang]").val( '' ); $("textarea[name=cs_remark_ruang]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_sla_slg
+            if( data.cs_sla_slg === 'ok' ){ $("input[name=cs_sla_slg][value='ok']").attr('checked', 'checked'); $("input[name=cs_sla_slg][value='nok']").removeAttr('checked'); }
+            if( data.cs_sla_slg === 'nok' ){ $("input[name=cs_sla_slg][value='nok']").attr('checked', 'checked'); $("input[name=cs_sla_slg][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_sla_slg === '' || data.cs_remark_sla_slg === null || data.cs_remark_sla_slg ){ $("textarea[name=cs_remark_sla_slg]").val( '' ); $("textarea[name=cs_remark_sla_slg]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_kb_ba_split
+            if( data.cs_kb_ba_split === 'ok' ){ $("input[name=cs_kb_ba_split][value='ok']").attr('checked', 'checked'); $("input[name=cs_kb_ba_split][value='nok']").removeAttr('checked'); }
+            if( data.cs_kb_ba_split === 'nok' ){ $("input[name=cs_kb_ba_split][value='nok']").attr('checked', 'checked'); $("input[name=cs_kb_ba_split][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_kb_ba_split === '' || data.cs_remark_kb_ba_split === null || data.cs_remark_kb_ba_split ){ $("textarea[name=cs_remark_kb_ba_split]").val( '' ); $("textarea[name=cs_remark_kb_ba_split]").val( data.cs_remark_jenis_kontrak ); }
+            // cs_format_kontrak
+            if( data.cs_format_kontrak === 'ok' ){ $("input[name=cs_format_kontrak][value='ok']").attr('checked', 'checked'); $("input[name=cs_format_kontrak][value='nok']").removeAttr('checked'); }
+            if( data.cs_format_kontrak === 'nok' ){ $("input[name=cs_format_kontrak][value='nok']").attr('checked', 'checked'); $("input[name=cs_format_kontrak][value='ok']").removeAttr('checked'); }
+            if( data.cs_remark_format_kontrak === '' || data.cs_remark_format_kontrak === null || data.cs_remark_format_kontrak ){ $("textarea[name=cs_remark_format_kontrak]").val( '' ); $("textarea[name=cs_remark_format_kontrak]").val( data.cs_remark_jenis_kontrak ); }
+
+            $('#btn_load_sol').hide(); $('#btn_pilih_sol').show();
+          }
+        });
+      }
+
       function simpanLayanan(simpan_layanan_id){
         $('#formLayanan').attr('action', "");
         $("<input />").attr("type", "hidden")

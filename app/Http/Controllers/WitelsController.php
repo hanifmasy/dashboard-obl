@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\MitraVendor;
@@ -157,7 +158,7 @@ class WitelsController extends Controller
     }
 
     public function forms(Request $request){
-      // dd($request->all());
+      // dd($request->all(), str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted[0]))) );
       $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
       ->leftJoin('witels','witels.id','=','users.witel_id')
       ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
@@ -168,6 +169,10 @@ class WitelsController extends Controller
       if( $request->forms_obl_id ){ $obl_id = $request->forms_obl_id; }
       $encrypted = '';
       if( $request->encrypted ){ $encrypted = $request->encrypted[0]; }
+
+      $pralop = DB::connection('pgsql')->table('form_pralop')
+      ->select('id','on_handling')->where('id', str_replace('JANJIJIWA_','',hex2bin(Crypt::decryptString($request->encrypted[0]))) )->first();
+
       $witel_form = DB::connection('pgsql')->table('form_obl as fo')
       ->leftJoin('mitras as m','m.id','=','fo.f1_mitra_id')
       ->select(
@@ -196,7 +201,7 @@ class WitelsController extends Controller
 
       $mitra_vendor = MitraVendor::get()->toArray();
 
-      return view('pages.witel_forms',compact('obl_id','encrypted','witel_form','user_in_is','acc_mgr','mgr_service','gm_witel','mitra_vendor'));
+      return view('pages.witel_forms',compact('obl_id','encrypted','pralop','witel_form','user_in_is','acc_mgr','mgr_service','gm_witel','mitra_vendor'));
     }
 
     public function updateOblHistori($var_obl_id){
