@@ -41,6 +41,7 @@
     </main>
     @push('js')
     <script type="text/javascript">
+
     $('#btn-show-alert').click(function(){
       $('#alertToast').toast('show');
     });

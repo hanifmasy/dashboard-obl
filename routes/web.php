@@ -85,7 +85,7 @@ Route::get('inputs-legacy', function () {
 	$mitra_vendor = MitraVendor::get()->toArray();
 	return view('pages.inputs_legacy',compact('mitra_vendor','list_nomor_kb')); })->middleware(['auth','role_obl_non_view'])->name('inputs_legacy');
 Route::get('master-inputs', [InputsController::class, 'masterInput'])->middleware(['auth','role_obl'])->name('inputs.master');
-Route::get('witels', function () { $mitra_vendor = MitraVendor::get()->toArray(); return view('pages.witels',compact('mitra_vendor')); })->middleware(['auth','role_witel'])->name('witels');
+Route::get('witels', function () { return view('pages.witels'); })->middleware(['auth','role_witel'])->name('witels');
 Route::get('witels-pralop/master-input', [WitelsController::class, 'masterInput'])->middleware(['auth','role_witel'])->name('witels.master_input');
 Route::get('witels-pralop', [PraLopController::class, 'index'])->middleware(['auth','role_pralop'])->name('witels.pralop');
 Route::get('witels-pralop/detail', [PraLopController::class, 'detail'])->middleware(['auth','role_pralop'])->name('witels.pralop.detail');

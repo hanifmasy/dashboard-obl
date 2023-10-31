@@ -25,13 +25,7 @@ class TestingController extends Controller
 {
     public function index(Request $request)
     {
-      $data_lama = DB::connection('pgsql')->table('form_obl')
-      ->where('f1_id_form_pralop','3')
-      ->get()->toArray();
-      $arr = [];
-      foreach( $data_lama as $key => $value ){
-        array_push($arr,$value->id);
-      }
-      dd($data_lama,$data_lama[0]->id,$arr);
+      // dd( $request->all() );
+      return view('pages.testing');
     }
 }

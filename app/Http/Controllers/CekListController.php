@@ -24,7 +24,6 @@ use File;
 class CekListController extends Controller
 {
     public function ceklistSol(Request $request){
-      // dd( $request->all() );
       strtok($request->var_list_sol, '_');
       $id = strtok("");
       $tipe = strtok($request->var_list_sol, '_');
@@ -44,7 +43,6 @@ class CekListController extends Controller
     }
 
     public function ceklistLeg(Request $request){
-      // dd( $request->all() );
       strtok($request->var_list_leg, '_');
       $id = strtok("");
       $tipe = strtok($request->var_list_leg, '_');
