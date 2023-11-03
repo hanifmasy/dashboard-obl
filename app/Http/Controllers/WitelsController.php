@@ -25,7 +25,7 @@ class WitelsController extends Controller
 {
     public function create(Request $request): RedirectResponse
     {
-      dd($request->all());
+      // dd($request->all());
       $user_in_is = User::leftJoin('user_role','user_role.user_id','=','users.id')
       ->leftJoin('witels','witels.id','=','users.witel_id')
       ->leftJoin('user_mitra','user_mitra.user_id','=','users.id')
